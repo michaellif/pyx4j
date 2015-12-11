@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.jsonp.JsonProcessingFeature;
@@ -37,8 +38,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -66,9 +69,13 @@ public class ReCaptchaV2APIClient {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.register(JsonProcessingFeature.class);
         clientConfig.register(JacksonFeature.class);
-        if (ServerSideConfiguration.instance().getConfigProperties().getBooleanValue("recaptcha.debug", false)) {
+        PropertiesConfiguration config = ServerSideConfiguration.instance().getConfigProperties();
+        if (config.getBooleanValue("recaptcha.debug", false)) {
             clientConfig.register(new LoggingFilter(java.util.logging.Logger.getLogger(ReCaptchaV2APIClient.class.getName()), true));
         }
+        client.property(ClientProperties.CONNECT_TIMEOUT, config.getIntegerValue("recaptcha.connectTimeout", (int) (1 * Consts.MIN2MSEC)));
+        client.property(ClientProperties.READ_TIMEOUT, config.getIntegerValue("recaptcha.readTimeout", (int) (1 * Consts.MIN2MSEC)));
+
         client = ClientBuilder.newClient(clientConfig);
         webTarget = client.target("https://www.google.com/recaptcha/api");
     }
