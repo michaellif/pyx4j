@@ -23,13 +23,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.EntityColumnDescriptor;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.DocCreationRequest;
 import com.pyx4j.entity.rpc.DocCreationService;
 import com.pyx4j.entity.rpc.SheetCreationRequest;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.server.CursorSource;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.essentials.server.download.Downloadable;
@@ -65,32 +62,20 @@ public abstract class AbstractDownloadableCrudServiceDtoImpl<BO extends IEntity,
 
     public final DeferredCorrelationId startDocCreation(DocCreationRequest docCreationRequest) {
         if (docCreationRequest instanceof SheetCreationRequest) {
-            SheetCreationRequest sheetCreationRequest = (SheetCreationRequest) docCreationRequest;
-
             @SuppressWarnings("unchecked")
-            EntityListCriteria<TO> criteria = (EntityListCriteria<TO>) sheetCreationRequest.getQeueryCriteria();
+            SheetCreationRequest<TO> sheetCreationRequest = (SheetCreationRequest<TO>) docCreationRequest;
 
-            CursorSource<TO> cursorSource = this;
-            ReportTableFormatter formatter = new ReportTableXLSXFormatter();
-            EntityReportFormatter<TO> entityFormatter = createSheetEntityFormatter(sheetCreationRequest);
+            SheetCreationProcessBuilder<TO, TO> builder = SheetCreationProcessBuilder.create(toClass);
+            builder.withCriteria(sheetCreationRequest.getQeueryCriteria());
+            builder.withCursorSource(this);
+            builder.withSelectedColumns(sheetCreationRequest);
+            builder.withFileName(EntityFactory.getEntityMeta(toClass).getCaption() + "."
+                    + DownloadFormat.fromSheetFormat(sheetCreationRequest.getSheetFormat()).getExtension());
 
-            String fileName = EntityFactory.getEntityMeta(toClass).getCaption() + "."
-                    + DownloadFormat.fromSheetFormat(sheetCreationRequest.getSheetFormat()).getExtension();
-
-            return new DeferredCorrelationId(
-                    DeferredProcessRegistry.fork(new SheetCreationDeferredProcess<TO>(criteria, cursorSource, formatter, entityFormatter, fileName),
-                            DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
+            return new DeferredCorrelationId(DeferredProcessRegistry.fork(builder.build(), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
         } else {
             throw new IllegalArgumentException();
         }
-    }
-
-    private EntityReportFormatter<TO> createSheetEntityFormatter(SheetCreationRequest sheetCreationRequest) {
-        EntityReportFormatter<TO> erf = new EntityReportFormatter<TO>(toClass);
-        for (EntityColumnDescriptor cd : sheetCreationRequest.getColumnDescriptors()) {
-            erf.selectMemeber(cd.getPath(), cd.getTitle());
-        }
-        return erf;
     }
 
 }
