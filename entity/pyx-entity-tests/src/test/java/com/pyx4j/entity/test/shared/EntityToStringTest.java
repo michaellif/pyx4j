@@ -32,11 +32,14 @@ import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.format.FormattedInheritanceChild1;
 import com.pyx4j.entity.test.shared.domain.format.FormattedInheritanceChild2;
+import com.pyx4j.entity.test.shared.domain.format.StringCollectionField;
+import com.pyx4j.entity.test.shared.domain.format.StringCollectionItem;
 import com.pyx4j.entity.test.shared.domain.format.StringFields;
 import com.pyx4j.entity.test.shared.domain.format.StringFieldsFormated;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFields;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFieldsChoiceFormated;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFieldsFormated;
+import com.pyx4j.entity.test.shared.domain.format.StringPrimitiveSetField;
 import com.pyx4j.entity.test.shared.domain.sort.SortBy;
 
 public class EntityToStringTest extends InitializerTestBase {
@@ -95,7 +98,7 @@ public class EntityToStringTest extends InitializerTestBase {
         StringFields ent = EntityFactory.create(StringFields.class);
         ent.strField1().setValue("One");
         ent.strField2().setValue(null);
-        assertEquals("StringView", "One ", ent.getStringView());
+        assertEquals("StringView", "One", ent.getStringView());
 
         ent.strField2().setValue("Two");
         assertEquals("StringView", "One Two", ent.getStringView());
@@ -116,10 +119,70 @@ public class EntityToStringTest extends InitializerTestBase {
         ent.strField().setValue("One");
         ent.intField().setValue(null);
         assertEquals("Primitive.StringView", "", ent.intField().getStringView());
-        assertEquals("StringView", "One ", ent.getStringView());
+        assertEquals("StringView", "One", ent.getStringView());
 
         ent.intField().setValue(2);
         assertEquals("StringView", "One 2", ent.getStringView());
+    }
+
+    public void testToStringFormatDefaultPrimitiveSet() {
+        {
+            StringPrimitiveSetField ent = EntityFactory.create(StringPrimitiveSetField.class);
+            ent.strField1().setValue("One");
+            //TODO
+            //assertEquals("StringView", "One []", ent.getStringView());
+            assertEquals("StringView", "One", ent.getStringView());
+        }
+        {
+            StringPrimitiveSetField ent = EntityFactory.create(StringPrimitiveSetField.class);
+            ent.strField1().setValue("One");
+            ent.setField2().add("Two");
+            assertEquals("StringView", "One [Two]", ent.getStringView());
+        }
+        {
+            StringPrimitiveSetField ent = EntityFactory.create(StringPrimitiveSetField.class);
+            ent.strField1().setValue("One");
+            ent.setField2().add("Two");
+            ent.setField2().add("Three");
+            assertEquals("StringView", "One [Two, Three]", ent.getStringView());
+        }
+    }
+
+    public void testToStringFormatDefaultICollection() {
+        {
+            StringCollectionField ent = EntityFactory.create(StringCollectionField.class);
+            ent.strField1().setValue("One");
+            //TODO
+            //assertEquals("StringView", "One []", ent.getStringView());
+            assertEquals("StringView", "One", ent.getStringView());
+        }
+        {
+            StringCollectionField ent = EntityFactory.create(StringCollectionField.class);
+            ent.strField1().setValue("One");
+            {
+                StringCollectionItem item = ent.collField2().$();
+                item.name().setValue("Two");
+                ent.collField2().add(item);
+            }
+            assertEquals("StringView", "One [Two]", ent.getStringView());
+        }
+
+        {
+            StringCollectionField ent = EntityFactory.create(StringCollectionField.class);
+            ent.strField1().setValue("One");
+            {
+                StringCollectionItem item = ent.collField2().$();
+                item.name().setValue("Two");
+                ent.collField2().add(item);
+            }
+            {
+                StringCollectionItem item = ent.collField2().$();
+                item.name().setValue("Three");
+                ent.collField2().add(item);
+            }
+            assertEquals("StringView", "One [Two, Three]", ent.getStringView());
+        }
+
     }
 
     public void testToStringFormatStringInt() {

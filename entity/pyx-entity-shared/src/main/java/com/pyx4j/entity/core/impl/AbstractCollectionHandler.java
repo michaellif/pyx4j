@@ -43,7 +43,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     private final Class<TYPE> valueClass;
 
-    protected AbstractCollectionHandler(@SuppressWarnings("rawtypes") Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
+    protected AbstractCollectionHandler(@SuppressWarnings("rawtypes")
+    Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
         super(clazz, parent, fieldName);
         this.valueClass = valueClass;
     }
@@ -266,7 +267,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         if (thisValue == null) {
             return mm.getNullString();
         } else {
-            return ConverterUtils.convertCollection(this, new StringConverter());
+            return "[" + ConverterUtils.convertCollection(this, new StringConverter()) + "]";
         }
     }
 
