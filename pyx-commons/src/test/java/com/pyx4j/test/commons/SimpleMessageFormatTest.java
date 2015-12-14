@@ -23,11 +23,12 @@ package com.pyx4j.test.commons;
 import java.util.Date;
 
 import org.junit.Assert;
-import junit.framework.TestCase;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IStringView;
 import com.pyx4j.commons.SimpleMessageFormat;
+
+import junit.framework.TestCase;
 
 public class SimpleMessageFormatTest extends TestCase {
 
@@ -37,7 +38,7 @@ public class SimpleMessageFormatTest extends TestCase {
 
         @Override
         public String toString() {
-            // this is to ensure the implementation doesn't compare enums the wrong way 
+            // this is to ensure the implementation doesn't compare enums the wrong way
             return "The " + this.name().toLowerCase();
         };
 
@@ -100,6 +101,13 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("As Be", "A's' {0}e", "B");
         assertMessageFormat("As {0}e", "A's {0}e", "B");
         assertMessageFormat("As '{0}'e", "A's ''{0}''e", "B");
+    }
+
+    public void testDurationFormat() {
+        assertMessageFormat("02sec 000msec", "{0,duration}", 2000);
+        assertMessageFormat("02sec 000msec", "{0,duration,msec}", 2000);
+        assertMessageFormat("2 seconds", "{0,duration,sec}", 2);
+        assertMessageFormat("1 day", "{0,duration,sec}", 24 * Consts.HOURS2SEC);
     }
 
     public void testNumberFormat() {

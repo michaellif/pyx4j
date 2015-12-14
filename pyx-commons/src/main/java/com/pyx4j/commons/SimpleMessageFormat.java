@@ -196,11 +196,21 @@ public class SimpleMessageFormat {
 
                 }
             } else if (formatType.equals("duration")) {
+                if (formatStyle == null) {
+                    formatStyle = "msec";
+                }
                 if (arg == null) {
                     formatedArg = "";
                 } else {
-                    long duration = Double.valueOf(toDouble(arg)).longValue();
-                    formatedArg = TimeUtils.durationFormat(duration);
+                    Double duration = Double.valueOf(toDouble(arg));
+                    switch (formatStyle) {
+                    case "msec":
+                        formatedArg = TimeUtils.durationFormat(duration.longValue());
+                        break;
+                    case "sec":
+                        formatedArg = TimeUtils.durationFormatSeconds(duration.intValue());
+                        break;
+                    }
                 }
             } else if (formatType.equals("date")) {
                 assert formatStyle != null : "Null formatStyle is unexpected in " + formatPattern;
