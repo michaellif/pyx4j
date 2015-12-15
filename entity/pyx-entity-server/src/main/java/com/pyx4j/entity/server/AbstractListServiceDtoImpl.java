@@ -34,6 +34,7 @@ import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.server.cursor.CursorSource;
 import com.pyx4j.entity.shared.utils.BindingContext;
 import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
 import com.pyx4j.entity.shared.utils.EntityBinder;
@@ -164,7 +165,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Override
-    public final ICursorIterator<TO> getTOCursor(String encodedCursorReference, EntityListCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
+    public final ICursorIterator<TO> getCursor(String encodedCursorReference, EntityQueryCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
         EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
 
         ICursorIterator<TO> toCreateIterator = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
@@ -204,7 +205,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         EntitySearchResult<TO> result = new EntitySearchResult<TO>();
         ICursorIterator<TO> cursor = null;
         try {
-            cursor = getTOCursor(null, toCriteria, AttachLevel.Attached);
+            cursor = getCursor(null, toCriteria, AttachLevel.Attached);
             while (cursor.hasNext()) {
                 TO to = cursor.next();
                 result.getData().add(to);

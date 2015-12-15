@@ -19,14 +19,14 @@
  */
 package com.pyx4j.essentials.server.download;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 public class MimeMap {
 
-    private static final Map<String, String> map = new HashMap<String, String>();
+    private static final BidiMap<String, String> map = new DualHashBidiMap<String, String>();
 
     static {
         map.put("txt", "text/plain");
@@ -74,5 +74,9 @@ public class MimeMap {
 
     public static String getContentType(DownloadFormat downloadFormat) {
         return getContentType(downloadFormat.getExtension());
+    }
+
+    public static String getExtension(String contentType) {
+        return map.getKey(contentType);
     }
 }

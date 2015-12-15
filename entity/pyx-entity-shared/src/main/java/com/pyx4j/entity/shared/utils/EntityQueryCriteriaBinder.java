@@ -142,10 +142,12 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         criteriaEnhancerBinding.put(toMember.getPath(), criteriaEnhancer);
     }
 
-    public final EntityListCriteria<BO> convertListCriteria(EntityListCriteria<TO> toCriteria) {
+    public final EntityListCriteria<BO> convertListCriteria(EntityQueryCriteria<TO> toCriteria) {
         EntityListCriteria<BO> boCriteria = EntityListCriteria.create(binder.boClass());
-        boCriteria.setPageNumber(toCriteria.getPageNumber());
-        boCriteria.setPageSize(toCriteria.getPageSize());
+        if (toCriteria instanceof EntityListCriteria) {
+            boCriteria.setPageNumber(((EntityListCriteria<TO>) toCriteria).getPageNumber());
+            boCriteria.setPageSize(((EntityListCriteria<TO>) toCriteria).getPageSize());
+        }
         boCriteria.setVersionedCriteria(toCriteria.getVersionedCriteria());
         convertCriteria(toCriteria, boCriteria);
         return boCriteria;
