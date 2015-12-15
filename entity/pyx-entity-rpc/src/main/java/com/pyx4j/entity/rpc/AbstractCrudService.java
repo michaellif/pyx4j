@@ -60,12 +60,6 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListCrud
 
     }
 
-//    @Transient
-//    public interface DuplicateData<E extends IEntity> extends InitializationData {
-//
-//        E originalEntityId();
-//    }
-
     @Transient
     public interface DuplicateData extends InitializationData {
 
