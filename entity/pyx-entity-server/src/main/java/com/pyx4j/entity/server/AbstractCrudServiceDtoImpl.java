@@ -74,11 +74,10 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
         }
-//      @SuppressWarnings("unchecked")
-//      Key entityKeyToDuplicate = ((DuplicateData<TO>) duplicateData).originalEntityId().getPrimaryKey();
         Key entityKeyToDuplicate = duplicateData.originalEntityKey().getValue();
         BO bo = retrieve(getBOKey(EntityFactory.createIdentityStub(toClass, entityKeyToDuplicate)), RetrieveOperation.Edit);
         if (bo != null) {
+            Persistence.retrieveOwned(bo);
             onBeforeBind(bo, RetrieveOperation.Edit);
         }
         TO to = binder.createTO(bo, new BindingContext(BindingType.Edit));
