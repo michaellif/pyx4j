@@ -22,7 +22,6 @@ package com.pyx4j.security.test.server;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.pyx4j.commons.Consts;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.server.contexts.AntiDoS;
 import com.pyx4j.server.contexts.AntiDoS.AccessCounter;
@@ -31,7 +30,7 @@ import com.pyx4j.unit.server.mock.MockHttpServletRequest;
 public class AntiDoSTest {
 
     @Test
-    public void testWarmUpRequests() {
+    public void testWarmUpAndCoolDown() {
         ThrottleConfig config = new ThrottleConfig() {
 
             @Override
@@ -41,12 +40,12 @@ public class AntiDoSTest {
 
             @Override
             public long getInterval() {
-                return 1 * Consts.MIN2MSEC;
+                return 1000;
             }
 
             @Override
-            public long getMaxTimeUsage() {
-                return 2 * Consts.MIN2MSEC;
+            public long getSystemCoolDownPeriod() {
+                return 10000;
             }
 
             @Override
@@ -56,17 +55,37 @@ public class AntiDoSTest {
         };
 
         AntiDoS antiDoS = new AntiDoS(config);
-        long requestStart = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         MockHttpServletRequest request = new MockHttpServletRequest("http://test.com");
 
-        for (int i = 0; i < 1100 + 50; i++) {
-            AccessCounter counter = antiDoS.beginRequest(request, requestStart + 1);
-            Assert.assertNotNull(counter);
-            antiDoS.endRequest(counter, requestStart);
+        //WarmUp
+        for (int i = 0; i < 100 + 51; i++) {
+            time += 1;
+            AccessCounter counter = antiDoS.beginRequest(request, time);
+            Assert.assertNotNull("WarmUp Request #" + i + " Should NOT be Blocked", counter);
+            antiDoS.endRequest(counter, time);
         }
-        {
-            AccessCounter counter = antiDoS.beginRequest(request, requestStart + 1);
-            Assert.assertNull("Request Should be Blocked", counter);
+        for (int i = 0; i < 100; i++) {
+            time += 1;
+            AccessCounter counter = antiDoS.beginRequest(request, time);
+            Assert.assertNull("Request #" + i + " Should be Blocked", counter);
+        }
+
+        // TestCoolDown
+        time += config.getSystemCoolDownPeriod() + config.getInterval();
+        // WarmUp
+        for (int i = 0; i < 1 + 100 + 51; i++) {
+            time += 1;
+            AccessCounter counter = antiDoS.beginRequest(request, time);
+            Assert.assertNotNull("WarmUp Request #" + i + " Should NOT be Blocked after CoolDown", counter);
+            antiDoS.endRequest(counter, time);
+        }
+
+        for (int i = 0; i < 100; i++) {
+            time += 1;
+            AccessCounter counter = antiDoS.beginRequest(request, time);
+            Assert.assertNull("Request #" + i + "  Should be Blocked", counter);
         }
     }
+
 }

@@ -124,7 +124,10 @@ public class AntiDoS {
 
                 if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
                     if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                        RequestDebug.debug(request);
+                        try {
+                            RequestDebug.debug(request);
+                        } catch (Throwable ignore) {
+                        }
                     }
                     if (counter.requests == throttleConfig.getMaxRequests() || (counter.requests % 1000 == 0)) {
                         log.error("possible denial-of-service attack from {}; {}; {}", remoteAddr, counter, uri);
