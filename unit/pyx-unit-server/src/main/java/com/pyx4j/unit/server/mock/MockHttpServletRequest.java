@@ -216,7 +216,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getProtocol() {
-        throw new UnsupportedOperationException();
+        return "HTTP/1.1";
     }
 
     @Override
@@ -278,7 +278,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public int getRemotePort() {
-        throw new UnsupportedOperationException();
+        return 80001;
     }
 
     @Override

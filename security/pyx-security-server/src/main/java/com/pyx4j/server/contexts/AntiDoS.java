@@ -58,54 +58,85 @@ public class AntiDoS {
 
     private final ThrottleConfig throttleConfig;
 
-    private static long nextIntervalResetTime;
+    private boolean warm;
 
-    private static Map<String, AccessCounter> accessByIP = new Hashtable<String, AccessCounter>();
+    private int warmUpRequests;
+
+    private long lastRequestStartTime;
+
+    private long nextIntervalResetTime;
+
+    //TODO make is remove static
+    private static Map<String, AccessCounter> accessByIP = new Hashtable<>();
 
     public AntiDoS() {
-        throttleConfig = ServerSideConfiguration.instance().getThrottleConfig();
+        this(ServerSideConfiguration.instance().getThrottleConfig());
+    }
+
+    public AntiDoS(ThrottleConfig throttleConfig) {
+        this.throttleConfig = throttleConfig;
+        if (throttleConfig != null) {
+            warmUpRequests = throttleConfig.getSystemWarmUpRequestsCount();
+        }
     }
 
     public AccessCounter beginRequest(ServletRequest request, long requestStart) {
         if (throttleConfig == null || !throttleConfig.isEnabled()) {
             return new AccessCounter();
         }
-        AccessCounter counter;
-        // Allow for system date change
-        if ((requestStart > nextIntervalResetTime) || (nextIntervalResetTime > requestStart + throttleConfig.getInterval())) {
-            accessByIP.clear();
-            nextIntervalResetTime = requestStart + throttleConfig.getInterval();
-        }
-        String remoteAddr = ServletUtils.getActualRequestRemoteAddr(request);
-        counter = accessByIP.get(remoteAddr);
-        if (counter == null) {
-            counter = new AccessCounter();
-            accessByIP.put(remoteAddr, counter);
-        } else {
-            String uri = "";
-            if (request instanceof HttpServletRequest) {
-                uri = ((HttpServletRequest) request).getRequestURI();
-                String[] split = uri.split("/", 4);
-                if (split.length >= 3) {
-                    String uriPart = "/" + split[1] + "/" + split[2];
-                    if (throttleConfig.whiteRequestURIs().contains(uriPart)) {
-                        return counter;
+        try {
+            if (!warm) {
+                warmUpRequests--;
+                if (warmUpRequests <= 0) {
+                    warm = true;
+                }
+                return new AccessCounter();
+            }
+            AccessCounter counter;
+            // Allow for system date change
+            if ((requestStart > nextIntervalResetTime) || (nextIntervalResetTime > requestStart + throttleConfig.getInterval())) {
+                // Restart Warm Up after a period of inactivity
+                if (lastRequestStartTime + throttleConfig.getSystemCoolDownPeriod() < requestStart) {
+                    warm = false;
+                    warmUpRequests = throttleConfig.getSystemWarmUpRequestsCount();
+                    return new AccessCounter();
+                }
+                accessByIP.clear();
+                nextIntervalResetTime = requestStart + throttleConfig.getInterval();
+            }
+            String remoteAddr = ServletUtils.getActualRequestRemoteAddr(request);
+            counter = accessByIP.get(remoteAddr);
+            if (counter == null) {
+                counter = new AccessCounter();
+                accessByIP.put(remoteAddr, counter);
+            } else {
+                String uri = "";
+                if (request instanceof HttpServletRequest) {
+                    uri = ((HttpServletRequest) request).getRequestURI();
+                    String[] split = uri.split("/", 4);
+                    if (split.length >= 3) {
+                        String uriPart = "/" + split[1] + "/" + split[2];
+                        if (throttleConfig.whiteRequestURIs().contains(uriPart)) {
+                            return counter;
+                        }
                     }
                 }
-            }
 
-            if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
-                if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                    RequestDebug.debug(request);
+                if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
+                    if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                        RequestDebug.debug(request);
+                    }
+                    if (counter.requests == throttleConfig.getMaxRequests() || (counter.requests % 1000 == 0)) {
+                        log.error("possible denial-of-service attack from {}; {}; {}", remoteAddr, counter, uri);
+                    }
+                    counter.requests++;
+                    return null;
                 }
-                if (counter.requests == throttleConfig.getMaxRequests() || (counter.requests % 1000 == 0)) {
-                    log.error("possible denial-of-service attack from {}; {}; {}", remoteAddr, counter, uri);
-                }
-                counter.requests++;
-                return null;
             }
+            return counter;
+        } finally {
+            lastRequestStartTime = requestStart;
         }
-        return counter;
     }
 
     public String debugRequest(ServletRequest request) {
