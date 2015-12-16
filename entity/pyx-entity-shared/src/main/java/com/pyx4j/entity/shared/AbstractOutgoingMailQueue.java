@@ -41,6 +41,8 @@ public interface AbstractOutgoingMailQueue extends IEntity {
 
         Queued,
 
+        Undeliverable,
+
         Success,
 
         Cancelled,
