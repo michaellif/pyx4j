@@ -23,6 +23,9 @@ public interface IMailServiceConfigConfiguration {
 
     String configurationId();
 
+    // Store email as Undeliverable where there are no adress
+    boolean queueUndeliverable();
+
     int maxDeliveryAttempts();
 
     int queuePriority();
