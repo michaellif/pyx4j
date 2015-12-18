@@ -346,6 +346,14 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
     }
 
+    public void cellPercentage(Double value) {
+        Cell cell = createCell();
+        cell.setCellStyle(this.cellStylePercentage);
+        if (value != null) {
+            cell.setCellValue(value.doubleValue());
+        }
+    }
+
     public void cell(double value) {
         Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDouble);
