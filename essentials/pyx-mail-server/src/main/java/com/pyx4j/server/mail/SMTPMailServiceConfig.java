@@ -46,6 +46,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     protected int maxDeliveryAttempts = 40;
 
+    public boolean queueUndeliverable = false;
+
     protected int queuePriority = 0;
 
     protected String allowSendToEmailSufix;
@@ -115,6 +117,11 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         return queuePriority;
     }
 
+    @Override
+    public boolean queueUndeliverable() {
+        return queueUndeliverable;
+    }
+
     public int getConnectionTimeout() {
         return connectionTimeout;
     }
@@ -179,6 +186,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
         this.maxDeliveryAttempts = c.getIntegerValue("maxDeliveryAttempts", this.maxDeliveryAttempts);
         this.queuePriority = c.getIntegerValue("queuePriority", this.queuePriority);
+        this.queueUndeliverable = c.getBooleanValue("queueUndeliverable", this.queueUndeliverable);
 
         this.allowSendToEmailSufix = c.getValue("allowSendToEmailSufix", this.allowSendToEmailSufix);
         this.blockedMailForwardTo = c.getValue("blockedMailForwardTo", this.blockedMailForwardTo);

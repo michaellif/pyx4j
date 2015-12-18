@@ -73,6 +73,29 @@ public class VersionedEntityUtils {
                 && (entity1.getInstanceValueClass().equals(((IEntity) entity2).getInstanceValueClass()));
     }
 
+    public static boolean equalsIgnoreVersionAndTO(IVersionedEntity<?> entity1, IVersionedEntity<?> entity2) {
+        if (entity2 == entity1) {
+            return true;
+        }
+        Map<String, Serializable> thisValue = ((SharedEntityHandler) entity1).getValue();
+        if (thisValue == null) {
+            return false;
+        }
+        Map<String, Serializable> otherValue = ((SharedEntityHandler) entity2).getValue();
+        if (otherValue == null) {
+            return false;
+        }
+        if (otherValue == thisValue) {
+            return true;
+        }
+        Key pk = (Key) thisValue.get(IEntity.PRIMARY_KEY);
+        if (pk == null) {
+            return false;
+        }
+        return pk.equalsIgnoreVersion((Key) otherValue.get(IEntity.PRIMARY_KEY))
+                && (entity1.getEntityMeta().getBOClass().equals(((IEntity) entity2).getEntityMeta().getBOClass()));
+    }
+
     public static <T extends IVersionedEntity<?>> T createNextVersion(T entity) {
         @SuppressWarnings("unchecked")
         Class<T> entityClass = (Class<T>) entity.getValueClass();
