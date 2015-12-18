@@ -155,7 +155,9 @@ public class MailQueue implements Runnable {
         persistable.sender().setValue(mailMessage.getSender());
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
         if (sendTo.isEmpty()) {
-            if (mailMessage.getKeywords().contains("bulk")) {
+            if (((SMTPMailServiceConfig) mailConfig).queueUndeliverable()) {
+                persistable.status().setValue(MailQueueStatus.Undeliverable);
+            } else if (mailMessage.getKeywords().contains("bulk")) {
                 log.debug("No destination E-Mail addresses found in bulk, message delivery canceled");
                 persistable.status().setValue(MailQueueStatus.Cancelled);
             } else {
