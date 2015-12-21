@@ -335,4 +335,8 @@ public class MailMessage implements Serializable {
             return mailMessageObjectId.equals(other.mailMessageObjectId);
         }
     }
+
+    public String generateMessageId() {
+        return "<" + mailMessageObjectId + "." + sender + ">";
+    }
 }
