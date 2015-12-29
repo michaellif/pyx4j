@@ -144,7 +144,7 @@ public class MailMessage implements Serializable {
         this.to.addAll(getAddressList(comaSeparatedAddresses));
     }
 
-    public void addTo(List<String> addresses) {
+    public void addTo(Collection<String> addresses) {
         if (this.to == null) {
             this.to = new ArrayList<>();
         }
