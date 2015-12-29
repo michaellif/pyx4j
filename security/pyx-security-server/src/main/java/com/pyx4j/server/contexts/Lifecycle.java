@@ -335,7 +335,9 @@ public class Lifecycle {
             } catch (IllegalStateException e) {
                 // this method is called already
             }
-            ServerContext.getRequest().setAttribute(END_SESSION_ATR, Boolean.TRUE);
+            if (ServerContext.getRequest() != null) {
+                ServerContext.getRequest().setAttribute(END_SESSION_ATR, Boolean.TRUE);
+            }
         }
     }
 
