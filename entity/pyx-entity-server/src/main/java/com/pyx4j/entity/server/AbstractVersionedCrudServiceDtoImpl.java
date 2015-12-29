@@ -56,6 +56,9 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<BO extends IVersionedE
     protected TO duplicate(DuplicateData duplicateData) {
         TO duplicate = super.duplicate(duplicateData);
 
+        duplicate.version().set(EntityGraph.businessDuplicate(duplicate.version()));
+
+        // Clear version history:
         duplicate.versions().clear();
 
         duplicate.version().versionNumber().setValue(null);
