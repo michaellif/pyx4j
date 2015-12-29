@@ -73,10 +73,9 @@ public class ReCaptchaV2APIClient {
         if (config.getBooleanValue("recaptcha.debug", false)) {
             clientConfig.register(new LoggingFilter(java.util.logging.Logger.getLogger(ReCaptchaV2APIClient.class.getName()), true));
         }
+        client = ClientBuilder.newClient(clientConfig);
         client.property(ClientProperties.CONNECT_TIMEOUT, config.getIntegerValue("recaptcha.connectTimeout", (int) (1 * Consts.MIN2MSEC)));
         client.property(ClientProperties.READ_TIMEOUT, config.getIntegerValue("recaptcha.readTimeout", (int) (1 * Consts.MIN2MSEC)));
-
-        client = ClientBuilder.newClient(clientConfig);
         webTarget = client.target("https://www.google.com/recaptcha/api");
     }
 

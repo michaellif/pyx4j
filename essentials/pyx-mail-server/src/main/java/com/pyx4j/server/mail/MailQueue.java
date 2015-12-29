@@ -262,8 +262,21 @@ public class MailQueue implements Runnable {
                                     mailConfig = Executables.runInTargetNamespace(persistable.namespace().getValue(), selectConfiguration);
                                 }
                             }
+                            MailDeliveryStatus status = null;
+                            if (persistable.namespace().isNull()) {
+                                status = Mail.send(mailMessage, mailConfig);
+                            } else {
+                                final IMailServiceConfigConfiguration targetConfig = mailConfig;
+                                status = Executables.runInTargetNamespace( //
+                                        persistable.namespace().getValue(), //
+                                        new Executable<MailDeliveryStatus, RuntimeException>() {
 
-                            MailDeliveryStatus status = Mail.send(mailMessage, mailConfig);
+                                            @Override
+                                            public MailDeliveryStatus execute() throws RuntimeException {
+                                                return Mail.send(mailMessage, targetConfig);
+                                            }
+                                        });
+                            }
 
                             switch (status) {
                             case Success:
