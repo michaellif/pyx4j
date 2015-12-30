@@ -176,6 +176,8 @@ public class MailQueue implements Runnable {
             }
         }).execute();
 
+        mailMessage.setMailQueueId(persistable.getPrimaryKey().toString());
+
         if (isRunning()) {
             // Transaction is actually completed, wake up the delivery thread.
             Persistence.service().addTransactionCompletionHandler(new Executable<Void, RuntimeException>() {
@@ -242,6 +244,7 @@ public class MailQueue implements Runnable {
                             persistableUpdate.updated().setValue(SystemDateManager.getDate());
 
                             final MailMessage mailMessage = (MailMessage) SerializationUtils.deserialize(persistable.data().getValue());
+                            mailMessage.setMailQueueId(persistable.getPrimaryKey().toString());
 
                             IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
                             if (mailConfig == null) {
