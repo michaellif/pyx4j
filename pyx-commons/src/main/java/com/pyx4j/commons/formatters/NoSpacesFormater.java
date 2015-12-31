@@ -28,7 +28,7 @@ public class NoSpacesFormater implements IFormatter<String, String> {
         if (value == null) {
             return null;
         } else {
-            return value.replaceAll("\\W", "");
+            return value.replaceAll("\\s", "");
         }
     }
 
