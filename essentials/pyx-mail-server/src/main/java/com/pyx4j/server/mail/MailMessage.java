@@ -39,6 +39,9 @@ public class MailMessage implements Serializable {
 
     private static final long serialVersionUID = 3457527924951058240L;
 
+    // Used to debug mailQueue problems
+    private transient String mailQueueId;
+
     private final String mailMessageObjectId;
 
     private String sender;
@@ -73,6 +76,14 @@ public class MailMessage implements Serializable {
 
     public String getMailMessageObjectId() {
         return mailMessageObjectId;
+    }
+
+    public String getMailQueueId() {
+        return mailQueueId;
+    }
+
+    public void setMailQueueId(String mailQueueId) {
+        this.mailQueueId = mailQueueId;
     }
 
     public String getSender() {
@@ -144,7 +155,7 @@ public class MailMessage implements Serializable {
         this.to.addAll(getAddressList(comaSeparatedAddresses));
     }
 
-    public void addTo(List<String> addresses) {
+    public void addTo(Collection<String> addresses) {
         if (this.to == null) {
             this.to = new ArrayList<>();
         }
@@ -335,4 +346,15 @@ public class MailMessage implements Serializable {
             return mailMessageObjectId.equals(other.mailMessageObjectId);
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("MailMessage: ");
+        b.append("ObjectId   : ").append(mailMessageObjectId).append("\t");
+        b.append("QueueId   : ").append(mailQueueId).append("\t");
+        b.append("To   : ").append(to).append("\t");
+        return b.toString();
+    }
+
 }
