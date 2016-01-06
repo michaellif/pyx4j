@@ -27,9 +27,9 @@ import com.google.common.collect.MapMaker;
 
 public class LockFactory<K> {
 
-    private ReentrantLock mapLock = new ReentrantLock();
+    private final ReentrantLock mapLock = new ReentrantLock();
 
-    private Map<K, ReentrantLock> entityMap = new MapMaker().concurrencyLevel(1).weakValues().<K, ReentrantLock> makeMap();
+    private final Map<K, ReentrantLock> entityMap = new MapMaker().concurrencyLevel(1).weakValues().<K, ReentrantLock> makeMap();
 
     public Lock get(K key) {
         ReentrantLock result = entityMap.get(key);
