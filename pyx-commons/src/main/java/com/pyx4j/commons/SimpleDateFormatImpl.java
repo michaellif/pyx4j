@@ -73,4 +73,14 @@ class SimpleDateFormatImpl {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
+
+    public static Date parseStrict(String text, String pattern) throws IllegalArgumentException {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat(pattern);
+            format.setLenient(false);
+            return format.parse(text);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 }

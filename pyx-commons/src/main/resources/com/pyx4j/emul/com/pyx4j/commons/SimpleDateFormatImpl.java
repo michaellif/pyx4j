@@ -71,5 +71,9 @@ public class SimpleDateFormatImpl {
     public static Date parse(String text, String pattern) throws IllegalArgumentException {
         return DateTimeFormat.getFormat(pattern).parse(text);
     }
+    
+    public static Date parseStrict(String text, String pattern) throws IllegalArgumentException {
+        return DateTimeFormat.getFormat(pattern).parseStrict(text);
+    }
 
 }
