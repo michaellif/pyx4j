@@ -44,6 +44,8 @@ public class SimpleDateFormatImpl {
             fmt = DateTimeFormat.getLongDateFormat();
         } else if (pattern.equals("full")) {
             fmt = DateTimeFormat.getFullDateFormat();
+        } else if (pattern.equals("epoch")) {
+            return String.valueOf(date.getTime() / 1000);
         } else {
             fmt = DateTimeFormat.getFormat(pattern);
         }
