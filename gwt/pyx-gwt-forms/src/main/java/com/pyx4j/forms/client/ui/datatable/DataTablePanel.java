@@ -327,7 +327,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         for (E entity : entityes) {
             dataItems.add(entity);
         }
-        getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
+        getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows, null);
         if (delButton != null) {
             delButton.setEnabled(getDataTableModel().isAnyRowSelected());
         }
@@ -401,6 +401,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         criteria.setPageNumber(pageNumber);
         criteria.setPageSize(getDataTableModel().getPageSize());
         criteria.setSorts(getDataTableModel().getSortCriteria());
+        criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(pageNumber));
 
         dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
@@ -412,7 +413,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     public void execute() {
                         List<E> dataItems = new ArrayList<E>();
                         dataItems.addAll(result.getData());
-                        getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows());
+                        getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows(),
+                                result.getEncodedCursorReference());
                         onPopulate();
                     }
                 });
