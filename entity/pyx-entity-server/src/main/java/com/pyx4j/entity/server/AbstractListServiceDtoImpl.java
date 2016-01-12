@@ -134,15 +134,27 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback) {
-        callback.onSuccess(ListerCapability.allCapabilities);
+        boolean hasInMemoryFilter = boFilter(null) != null;
+
+        if (hasInMemoryFilter) {
+            callback.onSuccess(ListerCapability.sequentialPaginationCapabilities);
+        } else {
+            callback.onSuccess(ListerCapability.allCapabilities);
+        }
     }
 
     /**
-     * @param criteria
+     * This can be called two times, once to detect Capabilities of the service, second in regular list retrieval flow
+     *
+     * @param criteria,
+     *            can be null when detecting Capabilities
      * @return null if there are no In Memory Filter. This changes ListerCapabilities @see obtainListerCapabilities
      */
     protected Filter<BO> boFilter(EntityQueryCriteria<BO> criteria) {
-        // TODO remove after initial testing.
+        if (false) {
+            return null;
+        }
+        // TODO remove after initial UI testing.
         return new Filter<BO>() {
             @Override
             public boolean accept(BO input) {
@@ -181,7 +193,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         };
     }
 
-    //TODO this is not properly implemented
+    //TODO this is not properly implemented, If you need it let VladS know
+    @Deprecated
     protected Filter<TO> toFilter(EntityQueryCriteria<TO> criteria) {
         return new Filter<TO>() {
             @Override

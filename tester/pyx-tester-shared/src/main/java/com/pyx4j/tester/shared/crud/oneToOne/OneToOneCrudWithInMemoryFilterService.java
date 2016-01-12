@@ -17,21 +17,12 @@
  * Created on Jan 12, 2016
  * @author vlads
  */
-package com.pyx4j.entity.rpc;
+package com.pyx4j.tester.shared.crud.oneToOne;
 
-import java.util.Arrays;
-import java.util.Vector;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
 
-public enum ListerCapability {
+// Returns on odd names (names are numbers in tests)
+public interface OneToOneCrudWithInMemoryFilterService extends AbstractCrudService<OneToOneReadOwner> {
 
-    /**
-     * In not present Lister UI should use EncodedCursorReference for pagination.
-     * e.g. Jump to last page should not be available in UI.
-     */
-    RandomPageAccess;
-
-    public static final Vector<ListerCapability> allCapabilities = new Vector<ListerCapability>(Arrays.asList(ListerCapability.values()));
-
-    // marker for future extensions
-    public static final Vector<ListerCapability> sequentialPaginationCapabilities = new Vector<ListerCapability>();
 }
