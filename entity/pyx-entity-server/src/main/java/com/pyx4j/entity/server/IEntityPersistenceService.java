@@ -94,6 +94,8 @@ public interface IEntityPersistenceService {
     public interface ICursorIterator<T> extends Iterator<T>, Closeable {
 
         /**
+         * This is the starting point for the next page query. UI is supposed to remember it and send to back-end is it needs next page
+         *
          * @see com.google.appengine.api.datastore.Cursor#toWebSafeString()
          * @return Encoded current cursor as a web safe string that can later be decoded
          */

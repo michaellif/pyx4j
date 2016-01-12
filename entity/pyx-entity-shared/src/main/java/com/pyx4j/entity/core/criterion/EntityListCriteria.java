@@ -29,6 +29,8 @@ public class EntityListCriteria<E extends IEntity> extends EntityQueryCriteria<E
 
     private int pageSize = -1;
 
+    private String encodedCursorReference;
+
     protected EntityListCriteria() {
 
     }
@@ -55,6 +57,14 @@ public class EntityListCriteria<E extends IEntity> extends EntityQueryCriteria<E
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getEncodedCursorReference() {
+        return encodedCursorReference;
+    }
+
+    public void setEncodedCursorReference(String encodedCursorReference) {
+        this.encodedCursorReference = encodedCursorReference;
     }
 
     @SuppressWarnings("unchecked")

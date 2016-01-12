@@ -27,14 +27,19 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 
 public final class CursorIteratorFilter<E extends IEntity> implements ICursorIterator<E> {
 
-    protected final ICursorIterator<E> unfiltered;
+    private final ICursorIterator<E> unfiltered;
 
-    protected final Filter<E> filter;
+    private final int maxResults;
+
+    private final Filter<E> filter;
+
+    private int returnedResultsCount = 0;
 
     private E next;
 
-    protected CursorIteratorFilter(final ICursorIterator<E> unfiltered, Filter<E> filter) {
+    protected CursorIteratorFilter(final ICursorIterator<E> unfiltered, int maxResults, Filter<E> filter) {
         this.unfiltered = unfiltered;
+        this.maxResults = maxResults;
         this.filter = filter;
     }
 
@@ -43,6 +48,10 @@ public final class CursorIteratorFilter<E extends IEntity> implements ICursorIte
         if (next != null) {
             return true;
         }
+        if (maxResults > 0 && returnedResultsCount >= maxResults) {
+            return false;
+        }
+
         while (unfiltered.hasNext()) {
             E ent = unfiltered.next();
             if (filter.accept(ent)) {
@@ -59,6 +68,7 @@ public final class CursorIteratorFilter<E extends IEntity> implements ICursorIte
             throw new NoSuchElementException();
         }
         try {
+            returnedResultsCount++;
             return next;
         } finally {
             next = null;
