@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,22 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 14, 2014
+ * Created on Jan 12, 2016
  * @author vlads
  */
 package com.pyx4j.entity.rpc;
 
+import java.util.Arrays;
 import java.util.Vector;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+public enum ListerCapability {
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.rpc.shared.IService;
+    /**
+     * In not present Lister UI should use EncodedCursorReference for pagination.
+     * e.g. Jump to last page should not be available in UI.
+     */
+    RandomPageAccess;
 
-public interface AbstractListService<E extends IEntity> extends IService {
-
-    public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria);
-
-    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback);
+    public static Vector<ListerCapability> allCapabilities = new Vector<ListerCapability>(Arrays.asList(ListerCapability.values()));
 }

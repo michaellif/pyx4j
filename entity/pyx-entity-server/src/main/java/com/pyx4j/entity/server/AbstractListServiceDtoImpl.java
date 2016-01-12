@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.server;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Filter;
@@ -32,6 +34,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveOperation;
 import com.pyx4j.entity.rpc.AbstractListCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.rpc.ListerCapability;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.cursor.CursorSource;
@@ -129,7 +132,17 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected void onAfterBind(BO bo, TO to, RetrieveOperation retrieveOperation) {
     }
 
+    @Override
+    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback) {
+        callback.onSuccess(ListerCapability.allCapabilities);
+    }
+
+    /**
+     * @param criteria
+     * @return null if there are no In Memory Filter. This changes ListerCapabilities @see obtainListerCapabilities
+     */
     protected Filter<BO> boFilter(EntityQueryCriteria<BO> criteria) {
+        // TODO remove after initial testing.
         return new Filter<BO>() {
             @Override
             public boolean accept(BO input) {
@@ -139,14 +152,22 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     public final ICursorIterator<BO> getBOCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
+        Filter<BO> inMemoryFilter = boFilter(criteria);
+
+        EntityQueryCriteria<BO> actualCriteria = criteria;
+
         int requestedPageSize = -1;
-        if (criteria instanceof EntityListCriteria) {
+        if (inMemoryFilter != null && criteria instanceof EntityListCriteria) {
             EntityListCriteria<BO> criteriaAsListCriteria = (EntityListCriteria<BO>) criteria;
             requestedPageSize = criteriaAsListCriteria.getPageSize();
-            criteriaAsListCriteria.setPageSize(-1);
+            actualCriteria = criteriaAsListCriteria.iclone();
         }
-        CursorIteratorFilter<BO> boFilterIterator = new CursorIteratorFilter<BO>(Persistence.secureQuery(encodedCursorReference, criteria, attachLevel),
-                requestedPageSize, boFilter(criteria));
+
+        ICursorIterator<BO> boFilterIterator = Persistence.secureQuery(encodedCursorReference, actualCriteria, attachLevel);
+        if (inMemoryFilter != null) {
+            // Wrap iterator using InMemory Filter
+            boFilterIterator = new CursorIteratorFilter<BO>(boFilterIterator, requestedPageSize, inMemoryFilter);
+        }
 
         return new CursorIteratorDelegate<BO, BO>(boFilterIterator) {
 
@@ -160,6 +181,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         };
     }
 
+    //TODO this is not properly implemented
     protected Filter<TO> toFilter(EntityQueryCriteria<TO> criteria) {
         return new Filter<TO>() {
             @Override
@@ -172,8 +194,6 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     @Override
     public final ICursorIterator<TO> getCursor(String encodedCursorReference, EntityQueryCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
         EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
-        int requestedPageSize = criteria.getPageSize();
-        criteria.setPageSize(-1);
 
         ICursorIterator<TO> toCreateIterator = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
 
@@ -187,7 +207,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
         };
 
-        return new CursorIteratorFilter<TO>(toCreateIterator, requestedPageSize, toFilter(dtoCriteria));
+        // TODO properly implement InMemory TO filter
+        return new CursorIteratorFilter<TO>(toCreateIterator, -1, toFilter(dtoCriteria));
     }
 
     @Override
