@@ -42,6 +42,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
@@ -103,6 +104,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     private ListerDataSource<E> dataSource;
 
     private List<Criterion> externalFilters;
+
+    private EntityQueryCriteria<E> currentCriteria;
 
     public DataTablePanel(Class<E> clazz) {
         this(clazz, false, false);
@@ -402,8 +405,15 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         criteria.setPageSize(getDataTableModel().getPageSize());
         criteria.setSorts(getDataTableModel().getSortCriteria());
         criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(pageNumber));
+        criteria = updateCriteria(criteria);
 
-        dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
+        EntityQueryCriteria<E> queryCriteria = criteria.asEntityQueryCriteria();
+        if (currentCriteria != null && currentCriteria.equals(queryCriteria)) {
+            getDataTableModel().clearEncodedCursorReferences();
+        }
+        currentCriteria = queryCriteria;
+
+        dataSource.obtain(criteria, new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(final EntitySearchResult<E> result) {
                 log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
@@ -508,7 +518,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataTable.getSelectedItems();
     }
 
-    //TODO Refactor to return list of filters  and unify with ListerDataSource.preDefinedFilters
+    //TODO Refactor to return list of filters and unify with ListerDataSource.preDefinedFilters
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
         if (getFilters() != null) {
             for (Criterion fd : getFilters()) {

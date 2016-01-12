@@ -106,4 +106,8 @@ public class EntityListCriteria<E extends IEntity> extends EntityQueryCriteria<E
         builder.append(" pageNumber=").append(getPageNumber());
         return builder.toString();
     }
+
+    public EntityQueryCriteria<E> asEntityQueryCriteria() {
+        return this.iclone();
+    }
 }
