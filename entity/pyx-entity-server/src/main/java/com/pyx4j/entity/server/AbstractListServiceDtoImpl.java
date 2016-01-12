@@ -139,9 +139,14 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     public final ICursorIterator<BO> getBOCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
-
+        int requestedPageSize = -1;
+        if (criteria instanceof EntityListCriteria) {
+            EntityListCriteria<BO> criteriaAsListCriteria = (EntityListCriteria<BO>) criteria;
+            requestedPageSize = criteriaAsListCriteria.getPageSize();
+            criteriaAsListCriteria.setPageSize(-1);
+        }
         CursorIteratorFilter<BO> boFilterIterator = new CursorIteratorFilter<BO>(Persistence.secureQuery(encodedCursorReference, criteria, attachLevel),
-                boFilter(criteria));
+                requestedPageSize, boFilter(criteria));
 
         return new CursorIteratorDelegate<BO, BO>(boFilterIterator) {
 
@@ -167,6 +172,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     @Override
     public final ICursorIterator<TO> getCursor(String encodedCursorReference, EntityQueryCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
         EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
+        int requestedPageSize = criteria.getPageSize();
+        criteria.setPageSize(-1);
 
         ICursorIterator<TO> toCreateIterator = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
 
@@ -180,7 +187,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
         };
 
-        return new CursorIteratorFilter<TO>(toCreateIterator, toFilter(dtoCriteria));
+        return new CursorIteratorFilter<TO>(toCreateIterator, requestedPageSize, toFilter(dtoCriteria));
     }
 
     @Override
@@ -204,8 +211,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
         EntitySearchResult<TO> result = new EntitySearchResult<TO>();
         ICursorIterator<TO> cursor = null;
+        String criteriaEncodedCursorReference = toCriteria.getEncodedCursorReference();
         try {
-            cursor = getCursor(null, toCriteria, AttachLevel.Attached);
+            cursor = getCursor(criteriaEncodedCursorReference, toCriteria, AttachLevel.Attached);
             while (cursor.hasNext()) {
                 TO to = cursor.next();
                 result.getData().add(to);
