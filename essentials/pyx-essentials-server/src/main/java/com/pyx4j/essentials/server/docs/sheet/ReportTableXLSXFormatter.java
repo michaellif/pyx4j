@@ -34,6 +34,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
@@ -92,6 +93,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     private int columnsCount;
 
     private boolean autosize = true;
+
+    private FormulaEvaluator formulaEvaluator;
 
     private int rowCount = 0;
 
@@ -418,6 +421,17 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
     }
 
+    public void evaluateAllFormulas() {
+        getFormulaEvaluator().evaluateAll();
+    }
+
+    private FormulaEvaluator getFormulaEvaluator() {
+        if (formulaEvaluator == null) {
+            formulaEvaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
+        }
+        return formulaEvaluator;
+    }
+
     @Override
     public int getBinaryDataSize() {
         return -1;
@@ -429,6 +443,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
             autosizeColumns();
         }
         verify();
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             this.workbook.write(out);
