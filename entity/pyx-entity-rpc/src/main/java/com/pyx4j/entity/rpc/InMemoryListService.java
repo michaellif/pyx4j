@@ -118,4 +118,9 @@ public class InMemoryListService<E extends IEntity> implements AbstractListCrudS
         callback.onFailure(new UnsupportedOperationException());
     }
 
+    @Override
+    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback) {
+        callback.onSuccess(ListerCapability.allCapabilities);
+    }
+
 }
