@@ -258,8 +258,12 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             IOUtils.closeQuietly(cursor);
         }
 
-        EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(toCriteria);
-        result.setTotalRows(Persistence.secureCount(criteria));
+        if ((boFilter(null) == null) && toFilter(null) == null) {
+            EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(toCriteria);
+            result.setTotalRows(Persistence.secureCount(criteria));
+        } else {
+            result.setTotalRows(-1);
+        }
 
         return result;
     }
