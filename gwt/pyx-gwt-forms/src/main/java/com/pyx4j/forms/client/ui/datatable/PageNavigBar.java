@@ -75,7 +75,6 @@ public class PageNavigBar extends Toolbar {
         getElement().getStyle().setProperty("textAlign", "right");
 
         firstButton = new Button(DataTableImages.INSTANCE.first(), new Command() {
-
             @Override
             public void execute() {
                 if (firstActionCommand != null) {
@@ -90,7 +89,6 @@ public class PageNavigBar extends Toolbar {
         addItem(firstButton);
 
         prevButton = new Button(DataTableImages.INSTANCE.prev(), new Command() {
-
             @Override
             public void execute() {
                 if (prevActionCommand != null) {
@@ -101,16 +99,13 @@ public class PageNavigBar extends Toolbar {
             }
         });
         prevButton.setVisible(false);
-        prevButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(prevButton);
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
-        countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         addItem(countLabel);
 
         nextButton = new Button(DataTableImages.INSTANCE.next(), new Command() {
-
             @Override
             public void execute() {
                 if (nextActionCommand != null) {
@@ -121,11 +116,9 @@ public class PageNavigBar extends Toolbar {
             }
         });
         nextButton.setVisible(false);
-        nextButton.getElement().getStyle().setMarginRight(0, Unit.PX);
         addItem(nextButton);
 
         lastButton = new Button(DataTableImages.INSTANCE.last(), new Command() {
-
             @Override
             public void execute() {
                 if (lastActionCommand != null) {
@@ -137,6 +130,7 @@ public class PageNavigBar extends Toolbar {
             }
         });
         lastButton.setVisible(false);
+        lastButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
         addItem(lastButton);
 
         pageSizeContentPanel = new HorizontalPanel();
@@ -205,9 +199,9 @@ public class PageNavigBar extends Toolbar {
 
         boolean showNavigationButtons;
         if (randomPageAvailable) {
-            showNavigationButtons = actionsBar.getDataTableModel().getPageSize() >= of;
+            showNavigationButtons = (actionsBar.getDataTableModel().getPageSize() < of);
         } else {
-            showNavigationButtons = actionsBar.getDataTableModel().hasMoreData() || actionsBar.getDataTableModel().getData().size() > 0;
+            showNavigationButtons = (actionsBar.getDataTableModel().hasMoreData() || !actionsBar.getDataTableModel().getData().isEmpty());
         }
         prevButton.setVisible(showNavigationButtons);
         firstButton.setVisible(showNavigationButtons);
