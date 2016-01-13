@@ -1785,6 +1785,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 }
 
                 @Override
+                public boolean hasInMemoryFilter() {
+                    return false;
+                }
+
+                @Override
                 public void close() {
                     iterable.close();
                     endCallContext();
@@ -1842,6 +1847,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                 @Override
                 public String encodedCursorReference() {
                     return iterable.encodedCursorReference();
+                }
+
+                @Override
+                public boolean hasInMemoryFilter() {
+                    return false;
                 }
 
                 @Override

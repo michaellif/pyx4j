@@ -101,6 +101,8 @@ public interface IEntityPersistenceService {
          */
         public String encodedCursorReference();
 
+        public boolean hasInMemoryFilter();
+
         @Override
         public void close();
 

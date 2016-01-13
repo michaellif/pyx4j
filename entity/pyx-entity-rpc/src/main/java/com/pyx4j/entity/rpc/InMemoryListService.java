@@ -49,6 +49,11 @@ public class InMemoryListService<E extends IEntity> implements AbstractListCrudS
     }
 
     @Override
+    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback, EntityListCriteria<E> toCriteria) {
+        callback.onSuccess(ListerCapability.allCapabilities);
+    }
+
+    @Override
     public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria) {
         try {
             EntitySearchResult<E> r = new EntitySearchResult<E>();
@@ -116,11 +121,6 @@ public class InMemoryListService<E extends IEntity> implements AbstractListCrudS
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         callback.onFailure(new UnsupportedOperationException());
-    }
-
-    @Override
-    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback) {
-        callback.onSuccess(ListerCapability.allCapabilities);
     }
 
 }

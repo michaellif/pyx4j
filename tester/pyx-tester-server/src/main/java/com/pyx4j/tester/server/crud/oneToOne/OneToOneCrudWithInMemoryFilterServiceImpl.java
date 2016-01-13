@@ -32,7 +32,7 @@ public class OneToOneCrudWithInMemoryFilterServiceImpl extends AbstractCrudServi
     }
 
     @Override
-    protected Filter<OneToOneReadOwner> boFilter(EntityQueryCriteria<OneToOneReadOwner> criteria) {
+    protected Filter<OneToOneReadOwner> boFilter(EntityQueryCriteria<OneToOneReadOwner> toCriteria, EntityQueryCriteria<OneToOneReadOwner> boCriteria) {
         return new Filter<OneToOneReadOwner>() {
 
             @Override

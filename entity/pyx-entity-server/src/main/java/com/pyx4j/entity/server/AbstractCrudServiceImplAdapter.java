@@ -33,7 +33,7 @@ import com.pyx4j.entity.rpc.ListerCapability;
 public class AbstractCrudServiceImplAdapter<TO extends IEntity> implements AbstractCrudService<TO> {
 
     @Override
-    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback) {
+    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback, EntityListCriteria<TO> toCriteria) {
         throw new UnsupportedOperationException();
     }
 

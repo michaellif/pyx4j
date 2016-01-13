@@ -1634,6 +1634,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     return null;
                 }
             }
+
+            @Override
+            public boolean hasInMemoryFilter() {
+                return false;
+            }
         };
     }
 
@@ -1723,6 +1728,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 } else {
                     return null;
                 }
+            }
+
+            @Override
+            public boolean hasInMemoryFilter() {
+                return false;
             }
         };
     }

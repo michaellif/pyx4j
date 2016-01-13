@@ -133,8 +133,9 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Override
-    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback) {
-        boolean hasInMemoryFilter = boFilter(null) != null;
+    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback, EntityListCriteria<TO> toCriteria) {
+        EntityListCriteria<BO> boCriteria = criteriaBinder.convertListCriteria(toCriteria);
+        boolean hasInMemoryFilter = (boFilter(toCriteria, boCriteria) != null) && (toFilter(toCriteria) != null);
 
         if (hasInMemoryFilter) {
             callback.onSuccess(ListerCapability.sequentialPaginationCapabilities);
@@ -150,12 +151,13 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      *            can be null when detecting Capabilities
      * @return null if there are no In Memory Filter. This changes ListerCapabilities @see obtainListerCapabilities
      */
-    protected Filter<BO> boFilter(EntityQueryCriteria<BO> criteria) {
+    protected Filter<BO> boFilter(EntityQueryCriteria<TO> toCriteria, EntityQueryCriteria<BO> boCriteria) {
         return null;
     }
 
-    public final ICursorIterator<BO> getBOCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
-        Filter<BO> inMemoryFilter = boFilter(criteria);
+    private ICursorIterator<BO> getBOCursor(EntityQueryCriteria<TO> toCriteria, String encodedCursorReference, EntityQueryCriteria<BO> criteria,
+            AttachLevel attachLevel) {
+        Filter<BO> inMemoryFilter = boFilter(toCriteria, criteria);
 
         EntityQueryCriteria<BO> actualCriteria = criteria;
 
@@ -188,10 +190,10 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Override
-    public final ICursorIterator<TO> getCursor(String encodedCursorReference, EntityQueryCriteria<TO> dtoCriteria, AttachLevel attachLevel) {
-        EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(dtoCriteria);
+    public final ICursorIterator<TO> getCursor(String encodedCursorReference, EntityQueryCriteria<TO> toCriteria, AttachLevel attachLevel) {
+        EntityListCriteria<BO> boCriteria = criteriaBinder.convertListCriteria(toCriteria);
 
-        ICursorIterator<TO> toCreateIterator = new CursorIteratorDelegate<TO, BO>(getBOCursor(encodedCursorReference, criteria, attachLevel)) {
+        ICursorIterator<TO> toCreateIterator = new CursorIteratorDelegate<TO, BO>(getBOCursor(toCriteria, encodedCursorReference, boCriteria, attachLevel)) {
 
             @Override
             public TO next() {
@@ -203,7 +205,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
         };
 
-        Filter<TO> inMemoryFilter = toFilter(dtoCriteria);
+        Filter<TO> inMemoryFilter = toFilter(toCriteria);
         if (inMemoryFilter == null) {
             return toCreateIterator;
         } else {
@@ -249,7 +251,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
             IOUtils.closeQuietly(cursor);
         }
 
-        if ((boFilter(null) == null) && toFilter(null) == null) {
+        if (!cursor.hasInMemoryFilter()) {
             EntityListCriteria<BO> criteria = criteriaBinder.convertListCriteria(toCriteria);
             result.setTotalRows(Persistence.secureCount(criteria));
         } else {
