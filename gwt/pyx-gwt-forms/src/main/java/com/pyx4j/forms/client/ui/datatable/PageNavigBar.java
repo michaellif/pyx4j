@@ -193,17 +193,26 @@ public class PageNavigBar extends Toolbar {
         int from = actionsBar.getDataTableModel().getPageNumber() * actionsBar.getDataTableModel().getPageSize() + 1;
         int to = from + actionsBar.getDataTableModel().getData().size() - 1;
         int of = actionsBar.getDataTableModel().getTotalRows();
+        boolean randomPageAvailable = (of != -1);
+
         if (from > to) {
             countLabel.setText(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8));
-        } else {
+        } else if (randomPageAvailable) {
             countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, of));
+        } else {
+            countLabel.setText(i18n.tr("{0}-{1}", from, to));
         }
 
-        boolean fitsOnOnePage = actionsBar.getDataTableModel().getPageSize() >= of;
-        prevButton.setVisible(!fitsOnOnePage);
-        firstButton.setVisible(!fitsOnOnePage);
-        nextButton.setVisible(!fitsOnOnePage);
-        lastButton.setVisible(!fitsOnOnePage);
+        boolean showNavigationButtons;
+        if (randomPageAvailable) {
+            showNavigationButtons = actionsBar.getDataTableModel().getPageSize() >= of;
+        } else {
+            showNavigationButtons = actionsBar.getDataTableModel().hasMoreData() || actionsBar.getDataTableModel().getData().size() > 0;
+        }
+        prevButton.setVisible(showNavigationButtons);
+        firstButton.setVisible(showNavigationButtons);
+        nextButton.setVisible(showNavigationButtons);
+        lastButton.setVisible(showNavigationButtons && randomPageAvailable);
 
         prevButton.setEnabled(actionsBar.getDataTableModel().getPageNumber() > 0);
         firstButton.setEnabled(actionsBar.getDataTableModel().getPageNumber() > 0);

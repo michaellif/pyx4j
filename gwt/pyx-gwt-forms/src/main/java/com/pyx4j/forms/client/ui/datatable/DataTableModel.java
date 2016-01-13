@@ -191,7 +191,7 @@ public class DataTableModel<E extends IEntity> {
         this.pageNumber = pageNumber;
         this.hasMoreData = hasMoreData;
         this.totalRows = totalRows;
-        setEncodedCursorReference(pageNumber, encodedCursorReference);
+        setEncodedCursorReference(pageNumber + 1, encodedCursorReference);
         fireTableChanged(new DataTableModelEvent());
     }
 
