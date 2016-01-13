@@ -168,17 +168,16 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
         EntityQueryCriteria<BO> actualCriteria = criteria;
 
-        int requestedPageSize = -1;
         if (inMemoryFilter != null && criteria instanceof EntityListCriteria) {
             EntityListCriteria<BO> criteriaAsListCriteria = (EntityListCriteria<BO>) criteria;
-            requestedPageSize = criteriaAsListCriteria.getPageSize();
-            actualCriteria = criteriaAsListCriteria.iclone();
+            // Ignore page size and pagination in request.
+            actualCriteria = criteriaAsListCriteria.asEntityQueryCriteria();
         }
 
         ICursorIterator<BO> boFilterIterator = Persistence.secureQuery(encodedCursorReference, actualCriteria, attachLevel);
         if (inMemoryFilter != null) {
             // Wrap iterator using InMemory Filter
-            boFilterIterator = new CursorIteratorFilter<BO>(boFilterIterator, requestedPageSize, inMemoryFilter);
+            boFilterIterator = new CursorIteratorFilter<BO>(boFilterIterator, inMemoryFilter);
         }
 
         return new CursorIteratorDelegate<BO, BO>(boFilterIterator) {
@@ -193,15 +192,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         };
     }
 
-    //TODO this is not properly implemented, If you need it let VladS know
-    @Deprecated
     protected Filter<TO> toFilter(EntityQueryCriteria<TO> criteria) {
-        return new Filter<TO>() {
-            @Override
-            public boolean accept(TO input) {
-                return true;
-            }
-        };
+        return null;
     }
 
     @Override
@@ -220,8 +212,12 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
         };
 
-        // TODO properly implement InMemory TO filter
-        return new CursorIteratorFilter<TO>(toCreateIterator, -1, toFilter(dtoCriteria));
+        Filter<TO> inMemoryFilter = toFilter(dtoCriteria);
+        if (inMemoryFilter == null) {
+            return toCreateIterator;
+        } else {
+            return new CursorIteratorFilter<TO>(toCreateIterator, inMemoryFilter);
+        }
     }
 
     @Override

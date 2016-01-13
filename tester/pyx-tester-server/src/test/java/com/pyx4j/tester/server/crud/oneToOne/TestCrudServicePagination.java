@@ -81,6 +81,7 @@ public class TestCrudServicePagination extends TestCase {
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
                     Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
                     pageCursorReference.put(0, result.getEncodedCursorReference());
@@ -102,6 +103,7 @@ public class TestCrudServicePagination extends TestCase {
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
                     Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "10", result.getData().get(0).name().getValue());
                     Assert.assertEquals("First Result", "11", result.getData().get(1).name().getValue());
@@ -124,6 +126,7 @@ public class TestCrudServicePagination extends TestCase {
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
                     Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "10", result.getData().get(0).name().getValue());
                     Assert.assertEquals("First Result", "11", result.getData().get(1).name().getValue());
@@ -152,6 +155,7 @@ public class TestCrudServicePagination extends TestCase {
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
                     Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
                     Assert.assertEquals("First Result", "2", result.getData().get(1).name().getValue());
@@ -174,6 +178,7 @@ public class TestCrudServicePagination extends TestCase {
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
                     Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "20", result.getData().get(0).name().getValue());
                     Assert.assertEquals("First Result", "22", result.getData().get(1).name().getValue());
@@ -195,6 +200,7 @@ public class TestCrudServicePagination extends TestCase {
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
                     Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
                     Assert.assertEquals("First Result", "2", result.getData().get(1).name().getValue());
