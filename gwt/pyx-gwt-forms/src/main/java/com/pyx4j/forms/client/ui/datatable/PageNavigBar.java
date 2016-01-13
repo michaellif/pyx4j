@@ -221,7 +221,11 @@ public class PageNavigBar extends Toolbar {
 
         if (pageSizeOptions != null) {
             pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(actionsBar.getDataTableModel().getPageSize()));
-            pageSizeContentPanel.setVisible(!randomPageMode || (pageSizeOptions.get(0) < of));
+            if (randomPageMode) {
+                pageSizeContentPanel.setVisible(pageSizeOptions.get(0) < of);
+            } else {
+                pageSizeContentPanel.setVisible(showNavigationButtons);
+            }
         }
     }
 
