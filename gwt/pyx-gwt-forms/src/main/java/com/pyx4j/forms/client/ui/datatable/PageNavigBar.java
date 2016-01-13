@@ -134,7 +134,7 @@ public class PageNavigBar extends Toolbar {
         addItem(lastButton);
 
         pageSizeContentPanel = new HorizontalPanel();
-        pageSizeContentPanel.getElement().getStyle().setMarginRight(12, Unit.PX);
+        pageSizeContentPanel.getElement().getStyle().setMarginRight(10, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
 
@@ -147,7 +147,6 @@ public class PageNavigBar extends Toolbar {
         addItem(pageSizeContentPanel);
 
         pageSizeSelector.addChangeHandler(new ChangeHandler() {
-
             @Override
             public void onChange(ChangeEvent event) {
                 if (actionsBar.getDataTableModel() != null) {
@@ -187,18 +186,18 @@ public class PageNavigBar extends Toolbar {
         int from = actionsBar.getDataTableModel().getPageNumber() * actionsBar.getDataTableModel().getPageSize() + 1;
         int to = from + actionsBar.getDataTableModel().getData().size() - 1;
         int of = actionsBar.getDataTableModel().getTotalRows();
-        boolean randomPageAvailable = (of != -1);
+        boolean randomPageMode = (of != -1);
 
         if (from > to) {
             countLabel.setText(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8));
-        } else if (randomPageAvailable) {
+        } else if (randomPageMode) {
             countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, of));
         } else {
             countLabel.setText(i18n.tr("{0}-{1}", from, to));
         }
 
         boolean showNavigationButtons;
-        if (randomPageAvailable) {
+        if (randomPageMode) {
             showNavigationButtons = (actionsBar.getDataTableModel().getPageSize() < of);
         } else {
             showNavigationButtons = (actionsBar.getDataTableModel().hasMoreData() || !actionsBar.getDataTableModel().getData().isEmpty());
@@ -206,7 +205,7 @@ public class PageNavigBar extends Toolbar {
         prevButton.setVisible(showNavigationButtons);
         firstButton.setVisible(showNavigationButtons);
         nextButton.setVisible(showNavigationButtons);
-        lastButton.setVisible(showNavigationButtons && randomPageAvailable);
+        lastButton.setVisible(showNavigationButtons && randomPageMode);
 
         prevButton.setEnabled(actionsBar.getDataTableModel().getPageNumber() > 0);
         firstButton.setEnabled(actionsBar.getDataTableModel().getPageNumber() > 0);
@@ -215,7 +214,7 @@ public class PageNavigBar extends Toolbar {
 
         if (pageSizeOptions != null) {
             pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(actionsBar.getDataTableModel().getPageSize()));
-            pageSizeContentPanel.setVisible(pageSizeOptions.get(0) < of);
+            pageSizeContentPanel.setVisible(!randomPageMode || (pageSizeOptions.get(0) < of));
         }
     }
 
