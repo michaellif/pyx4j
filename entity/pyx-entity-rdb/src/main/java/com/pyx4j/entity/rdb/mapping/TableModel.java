@@ -1155,25 +1155,41 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria,
-            final AttachLevel attachLevel) {
+    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, final String encodedCursorReference,
+            EntityQueryCriteria<T> criteria, final AttachLevel attachLevel) {
         String sql = null;
         QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        int offset = 0;
         try {
             sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1.*" + qb.getColumnsSQL() + " FROM " + qb.getSQL(getFullTableName());
-            //log.info("query {}", sql);
+            boolean limitCriteriatApplied = false;
             int limit = -1;
-            int offset = 0;
             if (criteria instanceof EntityListCriteria) {
                 EntityListCriteria<T> c = (EntityListCriteria<T>) criteria;
                 if (c.getPageSize() > 0) {
                     offset = c.getPageSize() * c.getPageNumber();
                     limit = c.getPageSize() + 1;
+                    limitCriteriatApplied = true;
                     sql = dialect.applyLimitCriteria(sql);
                 }
             }
+
+            if (encodedCursorReference != null) {
+                int encodedOffset = Integer.valueOf(encodedCursorReference);
+                if (limitCriteriatApplied) {
+                    if (encodedOffset != offset) {
+                        log.error("page restriction present, encodedCursorReference {} ignored", encodedCursorReference, new Error("call stack trace here"));
+                    }
+                } else {
+                    offset = encodedOffset;
+                    limit = 1000; // Apply reasonable in memory filter
+                    limitCriteriatApplied = true;
+                    sql = dialect.applyLimitCriteria(sql);
+                }
+            }
+
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
@@ -1185,7 +1201,7 @@ public class TableModel {
                 stmt.setMaxRows(0);
             }
             int parameterIndex = qb.bindParameters(persistenceContext, stmt);
-            if (limit > 0) {
+            if (limitCriteriatApplied) {
                 switch (dialect.limitCriteriaType()) {
                 case AbsolutCriteria:
                     stmt.setInt(parameterIndex, offset + limit);
@@ -1215,7 +1231,11 @@ public class TableModel {
 
         final PrimaryKeyCriteriaHelper primaryKeyCriteriaHelper = new PrimaryKeyCriteriaHelper(criteria);
 
+        final int initialOffset = offset;
+
         return new ResultSetIterator<T>(stmt, rs) {
+
+            int returnedQueryOffset = initialOffset;
 
             @Override
             protected T retrieve() {
@@ -1235,7 +1255,13 @@ public class TableModel {
                 if (attachLevel.ordinal() > AttachLevel.IdOnly.ordinal()) {
                     subclassModel.retrieveExternal(persistenceContext, entity.cast(), attachLevel);
                 }
+                returnedQueryOffset++;
                 return entity;
+            }
+
+            @Override
+            public String encodedCursorReference() {
+                return String.valueOf(returnedQueryOffset);
             }
         };
 
@@ -1352,24 +1378,43 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> ResultSetIterator<Key> queryKeysIterable(final PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria) {
+    //TODO accept encodedCursorReference
+    public <T extends IEntity> ResultSetIterator<Key> queryKeysIterable(final PersistenceContext persistenceContext, final String encodedCursorReference,
+            EntityQueryCriteria<T> criteria) {
         String sql = null;
         QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        int offset = 0;
         try {
             sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1." + dialect.getNamingConvention().sqlIdColumnName() + qb.getColumnsSQL() + " FROM "
                     + qb.getSQL(getFullTableName());
+            boolean limitCriteriatApplied = false;
             int limit = -1;
-            int offset = 0;
             if (criteria instanceof EntityListCriteria) {
                 EntityListCriteria<T> c = (EntityListCriteria<T>) criteria;
                 if (c.getPageSize() > 0) {
                     offset = c.getPageSize() * c.getPageNumber();
                     limit = c.getPageSize() + 1;
+                    limitCriteriatApplied = true;
                     sql = dialect.applyLimitCriteria(sql);
                 }
             }
+
+            if (encodedCursorReference != null) {
+                int encodedOffset = Integer.valueOf(encodedCursorReference);
+                if (limitCriteriatApplied) {
+                    if (encodedOffset != offset) {
+                        log.error("page restriction present, encodedCursorReference {} ignored", encodedCursorReference, new Error("call stack trace here"));
+                    }
+                } else {
+                    offset = encodedOffset;
+                    limit = 1000; // Apply reasonable in memory filter
+                    limitCriteriatApplied = true;
+                    sql = dialect.applyLimitCriteria(sql);
+                }
+            }
+
             if (PersistenceTrace.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
@@ -1381,7 +1426,7 @@ public class TableModel {
                 stmt.setMaxRows(0);
             }
             int parameterIndex = qb.bindParameters(persistenceContext, stmt);
-            if (limit > 0) {
+            if (limitCriteriatApplied) {
                 switch (dialect.limitCriteriaType()) {
                 case AbsolutCriteria:
                     stmt.setInt(parameterIndex, offset + limit);
@@ -1406,16 +1451,25 @@ public class TableModel {
             throw new RuntimeException(e);
         }
 
+        final int initialOffset = offset;
         return new ResultSetIterator<Key>(stmt, rs) {
+
+            int returnedQueryOffset = initialOffset;
 
             @Override
             protected Key retrieve() {
                 try {
+                    returnedQueryOffset++;
                     return new Key(rs.getLong("id"));
                 } catch (SQLException e) {
                     log.error("{} SQL select error", tableName, e);
                     throw new RuntimeException(e);
                 }
+            }
+
+            @Override
+            public String encodedCursorReference() {
+                return String.valueOf(returnedQueryOffset);
             }
         };
 

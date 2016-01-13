@@ -104,6 +104,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private List<Criterion> externalFilters;
 
+    private EntityListCriteria<E> currentCriteria;
+
     public DataTablePanel(Class<E> clazz) {
         this(clazz, false, false);
     }
@@ -327,7 +329,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         for (E entity : entityes) {
             dataItems.add(entity);
         }
-        getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
+        getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows, null);
         if (delButton != null) {
             delButton.setEnabled(getDataTableModel().isAnyRowSelected());
         }
@@ -401,8 +403,21 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         criteria.setPageNumber(pageNumber);
         criteria.setPageSize(getDataTableModel().getPageSize());
         criteria.setSorts(getDataTableModel().getSortCriteria());
+        criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(pageNumber));
+        criteria = updateCriteria(criteria);
 
-        dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
+        if (currentCriteria != null) {
+            // reset EncodedCursorReference if query criteria is different:
+            if (currentCriteria.getPageSize() != criteria.getPageSize() //
+                    || !currentCriteria.asEntityQueryCriteria().equals(criteria.asEntityQueryCriteria())) {
+                getDataTableModel().clearEncodedCursorReferences();
+                criteria.setEncodedCursorReference(null);
+            }
+        }
+
+        currentCriteria = criteria; // memorize query criteria
+
+        dataSource.obtain(criteria, new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(final EntitySearchResult<E> result) {
                 log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
@@ -412,7 +427,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     public void execute() {
                         List<E> dataItems = new ArrayList<E>();
                         dataItems.addAll(result.getData());
-                        getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows());
+                        getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows(),
+                                result.getEncodedCursorReference());
                         onPopulate();
                     }
                 });
@@ -506,7 +522,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataTable.getSelectedItems();
     }
 
-    //TODO Refactor to return list of filters  and unify with ListerDataSource.preDefinedFilters
+    //TODO Refactor to return list of filters and unify with ListerDataSource.preDefinedFilters
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
         if (getFilters() != null) {
             for (Criterion fd : getFilters()) {
