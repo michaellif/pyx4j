@@ -85,7 +85,7 @@ public class PageNavigBar extends Toolbar {
             }
         });
         firstButton.setVisible(false);
-        firstButton.getElement().getStyle().setMarginRight(0, Unit.PX);
+        firstButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(firstButton);
 
         prevButton = new Button(DataTableImages.INSTANCE.prev(), new Command() {
@@ -99,10 +99,13 @@ public class PageNavigBar extends Toolbar {
             }
         });
         prevButton.setVisible(false);
+        prevButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
+        prevButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(prevButton);
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(countLabel);
 
         nextButton = new Button(DataTableImages.INSTANCE.next(), new Command() {
@@ -116,6 +119,8 @@ public class PageNavigBar extends Toolbar {
             }
         });
         nextButton.setVisible(false);
+        nextButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
+        nextButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(nextButton);
 
         lastButton = new Button(DataTableImages.INSTANCE.last(), new Command() {
@@ -131,10 +136,11 @@ public class PageNavigBar extends Toolbar {
         });
         lastButton.setVisible(false);
         lastButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
+        lastButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(lastButton);
 
         pageSizeContentPanel = new HorizontalPanel();
-        pageSizeContentPanel.getElement().getStyle().setMarginLeft(10, Unit.PX);
+        pageSizeContentPanel.getElement().getStyle().setMarginLeft(5, Unit.PX);
         pageSizeContentPanel.getElement().getStyle().setMarginRight(10, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
