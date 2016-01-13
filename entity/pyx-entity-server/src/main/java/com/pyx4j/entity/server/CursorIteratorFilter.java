@@ -39,6 +39,11 @@ public final class CursorIteratorFilter<E extends IEntity> implements ICursorIte
     }
 
     @Override
+    public boolean hasInMemoryFilter() {
+        return true;
+    }
+
+    @Override
     public boolean hasNext() {
         if (next != null) {
             return true;
