@@ -408,8 +408,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         criteria = updateCriteria(criteria);
 
         EntityQueryCriteria<E> queryCriteria = criteria.asEntityQueryCriteria();
-        if (currentCriteria != null && currentCriteria.equals(queryCriteria)) {
+        if (currentCriteria != null && !currentCriteria.equals(queryCriteria)) {
             getDataTableModel().clearEncodedCursorReferences();
+            criteria.setEncodedCursorReference(null);
         }
         currentCriteria = queryCriteria;
 
