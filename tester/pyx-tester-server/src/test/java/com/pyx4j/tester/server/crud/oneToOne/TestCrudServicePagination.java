@@ -64,7 +64,7 @@ public class TestCrudServicePagination extends TestCase {
         TestLifecycle.tearDown();
     }
 
-    public void OFF_testDBBaseFilter() {
+    public void testDBBaseFilter() {
 
         OneToOneCrudService service = TestServiceFactory.create(OneToOneCrudService.class);
 
