@@ -141,7 +141,7 @@ public class PageNavigBar extends Toolbar {
 
         pageSizeContentPanel = new HorizontalPanel();
         pageSizeContentPanel.getElement().getStyle().setMarginLeft(5, Unit.PX);
-        pageSizeContentPanel.getElement().getStyle().setMarginRight(10, Unit.PX);
+        pageSizeContentPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
 
