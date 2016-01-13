@@ -42,7 +42,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
@@ -105,7 +104,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private List<Criterion> externalFilters;
 
-    private EntityQueryCriteria<E> currentCriteria;
+    private EntityListCriteria<E> currentCriteria;
 
     public DataTablePanel(Class<E> clazz) {
         this(clazz, false, false);
@@ -407,12 +406,16 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(pageNumber));
         criteria = updateCriteria(criteria);
 
-        EntityQueryCriteria<E> queryCriteria = criteria.asEntityQueryCriteria();
-        if (currentCriteria != null && !currentCriteria.equals(queryCriteria)) {
-            getDataTableModel().clearEncodedCursorReferences();
-            criteria.setEncodedCursorReference(null);
+        if (currentCriteria != null) {
+            // reset EncodedCursorReference if query criteria is different:
+            if (currentCriteria.getPageSize() != criteria.getPageSize() //
+                    || !currentCriteria.asEntityQueryCriteria().equals(criteria.asEntityQueryCriteria())) {
+                getDataTableModel().clearEncodedCursorReferences();
+                criteria.setEncodedCursorReference(null);
+            }
         }
-        currentCriteria = queryCriteria;
+
+        currentCriteria = criteria; // memorize query criteria
 
         dataSource.obtain(criteria, new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
