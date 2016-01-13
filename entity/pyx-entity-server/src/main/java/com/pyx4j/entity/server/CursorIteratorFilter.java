@@ -29,17 +29,12 @@ public final class CursorIteratorFilter<E extends IEntity> implements ICursorIte
 
     private final ICursorIterator<E> unfiltered;
 
-    private final int maxResults;
-
     private final Filter<E> filter;
-
-    private int returnedResultsCount = 0;
 
     private E next;
 
-    protected CursorIteratorFilter(final ICursorIterator<E> unfiltered, int maxResults, Filter<E> filter) {
+    protected CursorIteratorFilter(final ICursorIterator<E> unfiltered, Filter<E> filter) {
         this.unfiltered = unfiltered;
-        this.maxResults = maxResults;
         this.filter = filter;
     }
 
@@ -47,9 +42,6 @@ public final class CursorIteratorFilter<E extends IEntity> implements ICursorIte
     public boolean hasNext() {
         if (next != null) {
             return true;
-        }
-        if (maxResults > 0 && returnedResultsCount >= maxResults) {
-            return false;
         }
 
         while (unfiltered.hasNext()) {
@@ -68,7 +60,6 @@ public final class CursorIteratorFilter<E extends IEntity> implements ICursorIte
             throw new NoSuchElementException();
         }
         try {
-            returnedResultsCount++;
             return next;
         } finally {
             next = null;
