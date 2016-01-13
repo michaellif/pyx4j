@@ -21,8 +21,10 @@ package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
@@ -42,6 +44,8 @@ public class DataTableModel<E extends IEntity> {
     private final ArrayList<E> data = new ArrayList<E>();
 
     private final Collection<E> selected = new HashSet<E>();
+
+    private final Map<Integer, String> pageCursorReference = new HashMap<>();
 
     private boolean multipleSelection = false;
 
@@ -178,7 +182,7 @@ public class DataTableModel<E extends IEntity> {
         return data.indexOf(item);
     }
 
-    public void populateData(List<E> dataItems, int pageNumber, boolean hasMoreData, int totalRows) {
+    public void populateData(List<E> dataItems, int pageNumber, boolean hasMoreData, int totalRows, String encodedCursorReference) {
         data.clear();
         clearSelection();
         if (dataItems != null) {
@@ -187,7 +191,7 @@ public class DataTableModel<E extends IEntity> {
         this.pageNumber = pageNumber;
         this.hasMoreData = hasMoreData;
         this.totalRows = totalRows;
-
+        setEncodedCursorReference(pageNumber + 1, encodedCursorReference);
         fireTableChanged(new DataTableModelEvent());
     }
 
@@ -195,6 +199,7 @@ public class DataTableModel<E extends IEntity> {
         this.data.clear();
         this.pageNumber = 0;
         this.hasMoreData = false;
+        clearEncodedCursorReferences();
         fireTableChanged(new DataTableModelEvent());
     }
 
@@ -215,6 +220,18 @@ public class DataTableModel<E extends IEntity> {
             this.pageNumber = (this.pageNumber * this.pageSize) / pageSize;
             this.pageSize = pageSize;
         }
+    }
+
+    public String getEncodedCursorReference(int pageNumber) {
+        return pageCursorReference.get(pageNumber);
+    }
+
+    public void setEncodedCursorReference(int pageNumber, String encodedCursorReference) {
+        this.pageCursorReference.put(pageNumber, encodedCursorReference);
+    }
+
+    public void clearEncodedCursorReferences() {
+        this.pageCursorReference.clear();
     }
 
     public boolean hasMoreData() {

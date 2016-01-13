@@ -27,9 +27,9 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 
 public final class CursorIteratorFilter<E extends IEntity> implements ICursorIterator<E> {
 
-    protected final ICursorIterator<E> unfiltered;
+    private final ICursorIterator<E> unfiltered;
 
-    protected final Filter<E> filter;
+    private final Filter<E> filter;
 
     private E next;
 
@@ -39,10 +39,16 @@ public final class CursorIteratorFilter<E extends IEntity> implements ICursorIte
     }
 
     @Override
+    public boolean hasInMemoryFilter() {
+        return true;
+    }
+
+    @Override
     public boolean hasNext() {
         if (next != null) {
             return true;
         }
+
         while (unfiltered.hasNext()) {
             E ent = unfiltered.next();
             if (filter.accept(ent)) {
