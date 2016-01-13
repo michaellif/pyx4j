@@ -64,11 +64,12 @@ public class TestCrudServicePagination extends TestCase {
         TestLifecycle.tearDown();
     }
 
-    public void testSimplePages() {
+    public void OFF_testDBBaseFilter() {
+
         OneToOneCrudService service = TestServiceFactory.create(OneToOneCrudService.class);
 
         final Map<Integer, String> pageCursorReference = new HashMap<>();
-        // page 1
+        // page #1
         {
             EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
             criteria.eq(criteria.proto().testId(), testId);
@@ -89,7 +90,7 @@ public class TestCrudServicePagination extends TestCase {
             }, criteria);
         }
 
-        // page 2
+        // page #2
         {
             EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
             criteria.eq(criteria.proto().testId(), testId);
@@ -113,8 +114,7 @@ public class TestCrudServicePagination extends TestCase {
         }
 
         // page 2 no CursorReference  -> Still correct result
-        // TODO enable after initial UI testing.
-        if (false) {
+        {
             EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
             criteria.eq(criteria.proto().testId(), testId);
             criteria.setPageNumber(1);
@@ -135,10 +135,74 @@ public class TestCrudServicePagination extends TestCase {
             }, criteria);
         }
 
+        // large single page
+        {
+            EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.setPageNumber(0);
+            criteria.setPageSize(1200);
+
+            service.list(new AsyncCallbackAssertion<EntitySearchResult<OneToOneReadOwner>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
+                    Assert.assertEquals("Returned size", 1000, result.getData().size());
+                    Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", false, result.hasMoreData());
+
+                    Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
+                    Assert.assertEquals("First Result", "1", result.getData().get(1).name().getValue());
+                }
+            }, criteria);
+        }
+
+        // large page #1
+        {
+            EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.setPageNumber(0);
+            criteria.setPageSize(600);
+
+            service.list(new AsyncCallbackAssertion<EntitySearchResult<OneToOneReadOwner>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
+                    Assert.assertEquals("Returned size", 600, result.getData().size());
+                    Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
+
+                    Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
+                    pageCursorReference.put(0, result.getEncodedCursorReference());
+                }
+            }, criteria);
+        }
+
+        // large page #2 (last)
+        {
+            EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.setPageNumber(1);
+            criteria.setPageSize(600);
+            criteria.setEncodedCursorReference(pageCursorReference.get(0));
+
+            service.list(new AsyncCallbackAssertion<EntitySearchResult<OneToOneReadOwner>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
+                    Assert.assertEquals("Returned size", 400, result.getData().size());
+                    Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", false, result.hasMoreData());
+
+                    Assert.assertEquals("First Result", "600", result.getData().get(0).name().getValue());
+                    Assert.assertEquals("First Result", "601", result.getData().get(1).name().getValue());
+                    pageCursorReference.put(1, result.getEncodedCursorReference());
+                }
+            }, criteria);
+        }
+
     }
 
-    // TODO enable after initial UI testing.
-    public void OFF_testInMemoryFilterPages() {
+    public void testInMemoryFilterPages() {
         OneToOneCrudWithInMemoryFilterService service = TestServiceFactory.create(OneToOneCrudWithInMemoryFilterService.class);
 
         final Map<Integer, String> pageCursorReference = new HashMap<>();
@@ -154,7 +218,7 @@ public class TestCrudServicePagination extends TestCase {
                 @Override
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
-                    Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Total Rows", -1, result.getTotalRows());
                     Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
@@ -177,7 +241,7 @@ public class TestCrudServicePagination extends TestCase {
                 @Override
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
-                    Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Total Rows", -1, result.getTotalRows());
                     Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "20", result.getData().get(0).name().getValue());
@@ -199,7 +263,7 @@ public class TestCrudServicePagination extends TestCase {
                 @Override
                 public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
                     Assert.assertEquals("Returned size", 10, result.getData().size());
-                    Assert.assertEquals("Total Rows", 1000, result.getTotalRows());
+                    Assert.assertEquals("Total Rows", -1, result.getTotalRows());
                     Assert.assertEquals("Has More Data", true, result.hasMoreData());
 
                     Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
@@ -209,6 +273,70 @@ public class TestCrudServicePagination extends TestCase {
             }, criteria);
         }
 
+        // large single page
+        {
+            EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.setPageNumber(0);
+            criteria.setPageSize(1200);
+
+            service.list(new AsyncCallbackAssertion<EntitySearchResult<OneToOneReadOwner>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
+                    Assert.assertEquals("Returned size", 500, result.getData().size());
+                    Assert.assertEquals("Total Rows", -1, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", false, result.hasMoreData());
+
+                    Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
+                    Assert.assertEquals("First Result", "2", result.getData().get(1).name().getValue());
+                }
+            }, criteria);
+        }
+
+        // large page #1
+        {
+            EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.setPageNumber(0);
+            criteria.setPageSize(300);
+
+            service.list(new AsyncCallbackAssertion<EntitySearchResult<OneToOneReadOwner>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
+                    Assert.assertEquals("Returned size", 300, result.getData().size());
+                    Assert.assertEquals("Total Rows", -1, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", true, result.hasMoreData());
+
+                    Assert.assertEquals("First Result", "0", result.getData().get(0).name().getValue());
+                    pageCursorReference.put(0, result.getEncodedCursorReference());
+                }
+            }, criteria);
+        }
+
+        // large page #2 (last)
+        {
+            EntityListCriteria<OneToOneReadOwner> criteria = EntityListCriteria.create(OneToOneReadOwner.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.setPageNumber(1);
+            criteria.setPageSize(300);
+            criteria.setEncodedCursorReference(pageCursorReference.get(0));
+
+            service.list(new AsyncCallbackAssertion<EntitySearchResult<OneToOneReadOwner>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<OneToOneReadOwner> result) {
+                    Assert.assertEquals("Returned size", 200, result.getData().size());
+                    Assert.assertEquals("Total Rows", -1, result.getTotalRows());
+                    Assert.assertEquals("Has More Data", false, result.hasMoreData());
+
+                    Assert.assertEquals("First Result", "600", result.getData().get(0).name().getValue());
+                    Assert.assertEquals("First Result", "602", result.getData().get(1).name().getValue());
+                    pageCursorReference.put(1, result.getEncodedCursorReference());
+                }
+            }, criteria);
+        }
     }
 
 }
