@@ -151,16 +151,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
      * @return null if there are no In Memory Filter. This changes ListerCapabilities @see obtainListerCapabilities
      */
     protected Filter<BO> boFilter(EntityQueryCriteria<BO> criteria) {
-        if (false) {
-            return null;
-        }
-        // TODO remove after initial UI testing.
-        return new Filter<BO>() {
-            @Override
-            public boolean accept(BO input) {
-                return true;
-            }
-        };
+        return null;
     }
 
     public final ICursorIterator<BO> getBOCursor(String encodedCursorReference, EntityQueryCriteria<BO> criteria, AttachLevel attachLevel) {
