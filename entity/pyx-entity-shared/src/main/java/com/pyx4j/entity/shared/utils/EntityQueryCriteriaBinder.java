@@ -23,8 +23,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -75,6 +77,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     private final Map<Path, CriteriaValueConverter> valueConverterBinding = new HashMap<>();
 
     private final Map<Class<? extends Criterion>, CriterionConverter<?, BO>> criterionConverterBinding = new HashMap<>();
+
+    private final Set<Path> ignoredTOMember = new HashSet<>();
 
     private final Map<Path, CriteriaEnhancer<BO>> criteriaEnhancerBinding = new HashMap<>();
 
@@ -140,6 +144,11 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
 
     public final void addCriteriaEnhancer(IObject<?> toMember, CriteriaEnhancer<BO> criteriaEnhancer) {
         criteriaEnhancerBinding.put(toMember.getPath(), criteriaEnhancer);
+    }
+
+    // TODO This is in Memory filters.....
+    public final void unboundCriteria(IObject<?> toMember) {
+        ignoredTOMember.add(toMember.getPath());
     }
 
     public final EntityListCriteria<BO> convertListCriteria(EntityQueryCriteria<TO> toCriteria) {
@@ -215,6 +224,10 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         } else if (toCriterion instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) toCriterion;
             Path toPath = propertyCriterion.getPropertyPath();
+
+            if (ignoredTOMember.contains(toPath)) {
+                return null;
+            }
 
             CriteriaEnhancer<BO> valueConvertor = criteriaEnhancerBinding.get(toPath);
             if (valueConvertor != null) {
