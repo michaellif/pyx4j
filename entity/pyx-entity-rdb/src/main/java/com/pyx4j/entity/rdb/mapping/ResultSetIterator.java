@@ -58,6 +58,8 @@ public abstract class ResultSetIterator<T> implements Iterator<T>, Closeable {
 
     protected abstract T retrieve();
 
+    public abstract String encodedCursorReference();
+
     @Override
     public T next() {
         if (hasNext()) {
