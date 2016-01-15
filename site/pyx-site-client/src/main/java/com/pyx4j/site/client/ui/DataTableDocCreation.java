@@ -22,6 +22,7 @@ package com.pyx4j.site.client.ui;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityColumnDescriptor;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.DocCreationService;
@@ -35,11 +36,12 @@ import com.pyx4j.site.client.ReportDialog;
  */
 public class DataTableDocCreation {
 
-    static void createExcelExport(DocCreationService service, EntityQueryCriteria<?> criteria, List<ColumnDescriptor> columnDescriptors) {
+    public static <E extends IEntity> void createExcelExport(DocCreationService service, EntityQueryCriteria<E> criteria,
+            List<ColumnDescriptor> columnDescriptors) {
         // TODO use plural of Entity name
         ReportDialog reportDialog = new ReportDialog("Export", "Exporting...");
 
-        SheetCreationRequest request = new SheetCreationRequest();
+        SheetCreationRequest<E> request = new SheetCreationRequest<E>();
         request.setQeueryCriteria(criteria);
         request.setSheetFormat(SheetFormat.XLSX);
         request.setColumnDescriptors(new Vector<EntityColumnDescriptor>());
