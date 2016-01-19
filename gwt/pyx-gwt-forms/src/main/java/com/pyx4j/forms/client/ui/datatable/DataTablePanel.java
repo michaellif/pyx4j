@@ -136,6 +136,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange() {
+                setPageNumber(0);
                 populate(getPageNumber());
             }
         });
@@ -400,10 +401,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         assert dataSource != null : "dataSource is not installed";
 
         EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
-        criteria.setPageNumber(pageNumber);
+        criteria.setPageNumber(getPageNumber());
         criteria.setPageSize(getDataTableModel().getPageSize());
         criteria.setSorts(getDataTableModel().getSortCriteria());
-        criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(pageNumber));
+        criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(getPageNumber()));
         criteria = updateCriteria(criteria);
 
         if (currentCriteria != null) {
@@ -411,6 +412,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             if (currentCriteria.getPageSize() != criteria.getPageSize() //
                     || !currentCriteria.asEntityQueryCriteria().equals(criteria.asEntityQueryCriteria())) {
                 getDataTableModel().clearEncodedCursorReferences();
+                setPageNumber(0);
+                // update criteria:
+                criteria.setPageNumber(getPageNumber());
                 criteria.setEncodedCursorReference(null);
             }
         }
@@ -427,7 +431,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     public void execute() {
                         List<E> dataItems = new ArrayList<E>();
                         dataItems.addAll(result.getData());
-                        getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows(),
+                        getDataTableModel().populateData(dataItems, getPageNumber(), result.hasMoreData(), result.getTotalRows(),
                                 result.getEncodedCursorReference());
                         onPopulate();
                     }
