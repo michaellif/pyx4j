@@ -398,7 +398,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     protected final void populateInternal() {
-        assert dataSource != null : "dataSource is not installed";
+        assert getDataSource() != null : "dataSource is not installed";
 
         EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
         criteria.setPageNumber(getPageNumber());
@@ -421,7 +421,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
         currentCriteria = criteria; // memorize query criteria
 
-        dataSource.obtain(criteria, new DefaultAsyncCallback<EntitySearchResult<E>>() {
+        getDataSource().obtain(criteria, new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(final EntitySearchResult<E> result) {
                 log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
@@ -472,7 +472,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     @Override
     public void saveState(IMementoOutput memento) {
         if (getDataTableModel() != null) {
-            memento.write(pageNumber);
+            memento.write(getPageNumber());
             memento.write(getFilters());
             memento.write(getDataTableModel().getSortCriteria());
         }
@@ -487,7 +487,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
             if (externalFilters == null) {
                 Integer pageNumberInteger = (Integer) memento.read();
-                pageNumber = pageNumberInteger == null ? 0 : pageNumberInteger;
+                setPageNumber(pageNumberInteger == null ? 0 : pageNumberInteger);
                 List<Criterion> mementoFilters = (List<Criterion>) memento.read();
                 if (mementoFilters != null) {
                     filters = mementoFilters;
