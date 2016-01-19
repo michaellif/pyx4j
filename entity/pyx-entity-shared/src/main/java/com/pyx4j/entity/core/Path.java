@@ -22,6 +22,7 @@ package com.pyx4j.entity.core;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -47,6 +48,15 @@ public class Path implements Serializable, IDebugId, ICloneable<Path> {
     private transient List<String> pathMembers;
 
     public static List<Path> asPath(IObject<?>... protoValues) {
+        // TODO use Lists.transform
+        List<Path> paths = new ArrayList<>();
+        for (IObject<?> protoValue : protoValues) {
+            paths.add(protoValue.getPath());
+        }
+        return paths;
+    }
+
+    public static List<Path> asPath(Collection<IObject<?>> protoValues) {
         // TODO use Lists.transform
         List<Path> paths = new ArrayList<>();
         for (IObject<?> protoValue : protoValues) {

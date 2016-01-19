@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 
 import com.pyx4j.commons.CompareHelper;
@@ -65,10 +67,18 @@ public class EntityComparatorFactory {
     }
 
     public static <E extends IEntity> Comparator<E> createMemberComparator(IObject<?>... protoValues) {
-        return createMemberComparator(Path.asPath(protoValues).toArray(new Path[protoValues.length]));
+        return createMembersStringViewComparator(Path.asPath(protoValues));
+    }
+
+    public static <E extends IEntity> Comparator<E> createMemberComparator(Collection<IObject<?>> protoValues) {
+        return createMembersStringViewComparator(Path.asPath(protoValues));
     }
 
     public static <E extends IEntity> Comparator<E> createMemberComparator(final Path... paths) {
+        return createMembersStringViewComparator(Arrays.asList(paths));
+    }
+
+    public static <E extends IEntity> Comparator<E> createMembersStringViewComparator(final Collection<Path> paths) {
         return new Comparator<E>() {
             @Override
             public int compare(E paramT1, E paramT2) {
