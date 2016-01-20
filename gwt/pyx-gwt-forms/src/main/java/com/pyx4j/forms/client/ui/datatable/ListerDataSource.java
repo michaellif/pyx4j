@@ -67,6 +67,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         }
     }
 
+    // TODO make final
     @Override
     public AsyncLoadingHandler obtain(EntityQueryCriteria<E> criteria, final AsyncCallback<EntitySearchResult<E>> handlingCallback) {
         service.list(new DefaultAsyncCallback<EntitySearchResult<E>>() {
@@ -74,7 +75,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
             public void onSuccess(EntitySearchResult<E> result) {
                 handlingCallback.onSuccess(result);
             }
-        }, updateCriteria((EntityListCriteria<E>) criteria));
+        }, (EntityListCriteria<E>) criteria);
         return null;
     }
 
