@@ -264,8 +264,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             if (exportMenuBar == null) {
                 // Move the Command to Menu of the Same Button
                 exportMenuBar = new ButtonMenuBar();
-                exportButton.setMenu(exportMenuBar);
                 exportMenuBar.addItem(new MenuItem(exportButton.getCaption(), exportButton.getCommand()));
+                exportButton.setMenu(exportMenuBar);
                 exportButton.setTitle(i18n.tr("Export"));
                 exportButton.setCommand(null);
             }
