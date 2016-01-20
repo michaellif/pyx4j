@@ -199,8 +199,10 @@ public class PageNavigBar extends Toolbar {
             countLabel.setText(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8));
         } else if (randomPageMode) {
             countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, of));
+        } else if (actionsBar.getDataTableModel().hasMoreData()) {
+            countLabel.setText(i18n.tr("{0}-{1} of many", from, to));
         } else {
-            countLabel.setText(i18n.tr("{0}-{1}", from, to));
+            countLabel.setText(i18n.tr("{0}-{1} of {1}", from, to));
         }
 
         boolean showNavigationButtons;
