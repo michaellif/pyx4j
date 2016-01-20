@@ -279,18 +279,10 @@ public class WidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DownArrow);
-        style.addProperty("position", "relative");
-        addStyle(style);
-
-        style = new Style(".", StyleName.DownArrow, ":", "after");
-        style.addProperty("content", "\"\"");
         style.addProperty("display", "inline-block");
-        style.addProperty("border-left", "4px solid transparent");
-        style.addProperty("border-right", "4px solid transparent");
-        style.addProperty("border", "4px solid rgba(0, 0, 0, 0)");
-        style.addProperty("border-top-color", ThemeColor.object1, 0.1);
+        style.addProperty("font-size", "0.5em");
         style.addProperty("margin-left", "4px");
-
+        style.addProperty("vertical-align", "top");
         addStyle(style);
 
     }
