@@ -406,6 +406,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         criteria.setSorts(getDataTableModel().getSortCriteria());
         criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(getPageNumber()));
         criteria = updateCriteria(criteria);
+        getDataSource().updateCriteria(criteria);
 
         if (currentCriteria != null) {
             // reset EncodedCursorReference if query criteria is different:
