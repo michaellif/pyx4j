@@ -53,7 +53,7 @@ public class FormPanel extends AbstractFormPanel implements IsWidget {
         return new CompOptions(comp);
     }
 
-    public void append(Location location, IObject<?> member, CComponent<?, ?, ?, ?> comp) {
+    public void append(Location location, IObject<?> member, CComponent<?> comp) {
         comp = getParent().inject(member, comp);
         append(location, comp);
     }

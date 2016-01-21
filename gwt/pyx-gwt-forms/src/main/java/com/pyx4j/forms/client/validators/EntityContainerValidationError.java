@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class EntityContainerValidationError extends BasicValidationError {
 
-    public EntityContainerValidationError(CComponent<?, ?, ?, ?> originator, String message) {
+    public EntityContainerValidationError(CComponent<?> originator, String message) {
         super(originator, message);
     }
 

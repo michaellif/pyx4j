@@ -92,7 +92,7 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
     public static void fire(HasPropertyChangeHandlers source, PropertyName propertyName) {
         if (TYPE != null) {
             if (log.isTraceEnabled() && (source instanceof CComponent)) {
-                log.trace("PropertyChangeEvent.PropertyName.{} fired from {}", propertyName, ((CComponent<?, ?, ?, ?>) source).shortDebugInfo());
+                log.trace("PropertyChangeEvent.PropertyName.{} fired from {}", propertyName, ((CComponent<?>) source).shortDebugInfo());
             }
             PropertyChangeEvent event = new PropertyChangeEvent(propertyName);
             source.fireEvent(event);

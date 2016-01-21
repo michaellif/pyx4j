@@ -368,7 +368,7 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
     }
 
     @Override
-    public void adopt(final CComponent<?, ?, ?, ?> component) {
+    public void adopt(final CComponent<?> component) {
         itemsList.add((CFolderItem<DATA_TYPE>) component);
         container.add(component);
 
@@ -383,7 +383,7 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
     }
 
     @Override
-    public void abandon(final CComponent<?, ?, ?, ?> component) {
+    public void abandon(final CComponent<?> component) {
         super.abandon(component);
         container.remove(component);
         itemsList.remove(component);
@@ -415,7 +415,7 @@ public abstract class CFolder<DATA_TYPE extends IEntity> extends CContainer<CFol
 
     @Override
     protected void onReset() {
-        for (CComponent<?, ?, ?, ?> component : new ArrayList<CComponent<?, ?, ?, ?>>(getComponents())) {
+        for (CComponent<?> component : new ArrayList<CComponent<?>>(getComponents())) {
             abandon(component);
         }
         container.clear();

@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
 public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>>
-        extends CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE, WIDGET_TYPE, IFieldDecorator> {
+        extends CComponentBase<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE, WIDGET_TYPE, IFieldDecorator> {
 
     private Command navigationCommand;
 
@@ -147,7 +147,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
     }
 
     @Override
-    protected String getDebugInfo() {
+    public String getDebugInfo() {
         StringBuilder info = new StringBuilder(super.getDebugInfo());
         info.append("value");
         if (isPopulated()) {

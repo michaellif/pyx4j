@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
  */
 class DevelopmentShortcutUtil {
 
-    static final void attachDevelopmentShortcuts(Widget widget, final CComponent<?, ?, ?, ?> component) {
+    static final void attachDevelopmentShortcuts(Widget widget, final CComponent<?> component) {
 
         widget.addDomHandler(new KeyDownHandler() {
 

@@ -33,7 +33,7 @@ public class CDataTree<E extends IEntity> extends CContainer<CDataTree<E>, ITree
     }
 
     @Override
-    public Collection<? extends CComponent<?, ?, ?, ?>> getComponents() {
+    public Collection<? extends CComponent<?>> getComponents() {
         // TODO Auto-generated method stub
         return null;
     }
