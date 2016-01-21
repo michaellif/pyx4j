@@ -196,7 +196,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
             setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             if (isVersioned) {
                 displayModeButton = new CRadioGroupEnum<VersionDisplayMode>(VersionDisplayMode.class, Layout.HORIZONTAL);
-                displayModeButton.setValue(versionDisplayMode);
+                displayModeButton.populate(versionDisplayMode);
                 displayModeButton.addValueChangeHandler(new ValueChangeHandler<VersionDisplayMode>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<VersionDisplayMode> event) {

@@ -78,6 +78,9 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
             return null;
         }
         assert (value != AttachLevel.Detached) : "Access to detached ISet " + exceptionInfo();
+        if (!(value instanceof Set)) {
+            throw new ClassCastException("Access to detached ISet member " + exceptionInfo());
+        }
         return (Set<Map<String, Serializable>>) value;
     }
 
@@ -172,7 +175,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
     @Override
     public Iterator<TYPE> iterator() {
-        // iterator is also behaves likes Elvis 
+        // iterator is also behaves likes Elvis
         final Set<Map<String, Serializable>> setValue = getValue();
         if (setValue == null) {
             return new Iterator<TYPE>() {

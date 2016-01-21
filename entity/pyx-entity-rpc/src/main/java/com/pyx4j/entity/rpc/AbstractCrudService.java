@@ -27,6 +27,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListCrudService<E> {
@@ -57,6 +58,12 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListCrud
     @AbstractEntity
     public interface InitializationData extends IEntity {
 
+    }
+
+    @Transient
+    public interface DuplicateData extends InitializationData {
+
+        IPrimitive<Key> originalEntityKey();
     }
 
     /**
