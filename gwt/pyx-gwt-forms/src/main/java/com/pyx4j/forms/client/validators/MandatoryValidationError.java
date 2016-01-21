@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class MandatoryValidationError extends BasicValidationError {
 
-    public MandatoryValidationError(CComponent<?, ?, ?, ?> component, String message) {
+    public MandatoryValidationError(CComponent<?> component, String message) {
         super(component, message);
     }
 

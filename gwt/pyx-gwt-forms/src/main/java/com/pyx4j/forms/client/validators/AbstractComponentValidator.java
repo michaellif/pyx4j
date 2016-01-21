@@ -23,17 +23,17 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public abstract class AbstractComponentValidator<DATA_TYPE> implements IValidator<DATA_TYPE> {
 
-    private CComponent<?, DATA_TYPE, ?, ?> component;
+    private CComponent<DATA_TYPE> component;
 
     public AbstractComponentValidator() {
     }
 
-    public CComponent<?, DATA_TYPE, ?, ?> getCComponent() {
+    public CComponent<DATA_TYPE> getCComponent() {
         return component;
     }
 
     @Override
-    public void setComponent(CComponent<?, DATA_TYPE, ?, ?> component) {
+    public void setComponent(CComponent<DATA_TYPE> component) {
         this.component = component;
     }
 

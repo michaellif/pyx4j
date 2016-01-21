@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public interface IDecorator<COMP_TYPE extends CComponent<? extends COMP_TYPE, ?, ?, ?>> extends IsWidget {
+public interface IDecorator<COMP_TYPE extends CComponent<?>> extends IsWidget {
 
     void setContent(IsWidget content);
 

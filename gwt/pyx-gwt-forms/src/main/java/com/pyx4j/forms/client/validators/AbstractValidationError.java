@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public abstract class AbstractValidationError {
 
-    public abstract CComponent<?, ?, ?, ?> getOriginator();
+    public abstract CComponent<?> getOriginator();
 
     public abstract String getMessage();
 
