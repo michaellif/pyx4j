@@ -99,7 +99,7 @@ public class EntityGraph {
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             IObject<?> member = entity.getMember(memberName);
-            if (member.getAttachLevel() == AttachLevel.Detached) {
+            if (member.getAttachLevel() == AttachLevel.Detached || member.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
                 continue;
             }
             if (memberMeta.isEntity()) {

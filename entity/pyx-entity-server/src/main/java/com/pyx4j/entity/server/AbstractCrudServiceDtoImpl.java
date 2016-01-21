@@ -34,6 +34,7 @@ import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.utils.BindingContext;
 import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
 import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -67,6 +68,29 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
             SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
         }
         return EntityFactory.create(toClass);
+    }
+
+    protected TO duplicate(DuplicateData duplicateData) {
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
+            SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
+        }
+        Key entityKeyToDuplicate = duplicateData.originalEntityKey().getValue();
+        BO bo = retrieve(getBOKey(EntityFactory.createIdentityStub(toClass, entityKeyToDuplicate)), RetrieveOperation.Edit);
+        if (bo != null) {
+            Persistence.retrieveOwned(bo);
+            onBeforeBind(bo, RetrieveOperation.Edit);
+        }
+        TO to = binder.createTO(bo, new BindingContext(BindingType.Edit));
+
+        // Allow  for TO to be calculated base on original input
+        to.setPrimaryKey(entityKeyToDuplicate);
+        to.setPrimaryKey(getTOKey(bo, to));
+
+        onAfterBind(bo, to, RetrieveOperation.Edit);
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
+            SecurityController.assertPermission(to, DataModelPermission.permissionRead(to.getValueClass()));
+        }
+        return EntityGraph.businessDuplicate(to);
     }
 
     /**
@@ -127,7 +151,11 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(EntityPermission.permissionCreate(boClass));
         }
-        callback.onSuccess(init(initializationData));
+        if (initializationData.isInstanceOf(DuplicateData.class)) {
+            callback.onSuccess(duplicate((DuplicateData) initializationData));
+        } else {
+            callback.onSuccess(init(initializationData));
+        }
     }
 
     @Override
