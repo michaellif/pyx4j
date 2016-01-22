@@ -92,7 +92,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReceiver {
 
     private boolean trimValues = false;
 
-    private boolean readEnumsUsingToString = true;
+    private boolean readEnumsUsingToString = false;
 
     private int headerLinesCountMin = 1;
 
