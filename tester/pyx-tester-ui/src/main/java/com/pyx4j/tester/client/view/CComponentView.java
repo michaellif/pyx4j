@@ -26,7 +26,7 @@ public interface CComponentView extends IsView {
 
     public void setPresenter(ConsolePresenter presenter);
 
-    public void show(CComponent<?, ?, ?, ?> cComponent);
+    public void show(CComponent<?> cComponent);
 
     public interface ConsolePresenter {
 

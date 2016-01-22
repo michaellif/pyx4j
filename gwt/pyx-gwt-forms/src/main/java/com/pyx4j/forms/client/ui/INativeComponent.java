@@ -25,6 +25,6 @@ import com.pyx4j.forms.client.validators.IValidatable;
 
 public interface INativeComponent<E> extends IsWidget, IValidatable {
 
-    CComponent<?, ?, ?, ?> getCComponent();
+    CComponent<?> getCComponent();
 
 }

@@ -42,7 +42,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeValueBox<DATA>>
     }
 
     @Override
-    protected String getDebugInfo() {
+    public String getDebugInfo() {
         StringBuilder info = new StringBuilder(super.getDebugInfo());
         info.append("watermark").append("=").append(getWatermark()).append(";");
         return info.toString();

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 1, 2011
- * @author michaellif
+ * Created on Dec 5, 2015
+ * @author vlads
  */
-package com.pyx4j.forms.client.ui.decorators;
+package com.google.gwt.user.client.rpc.impl;
 
-import com.google.gwt.user.client.ui.IsWidget;
+public class AbstractSerializationStreamAccess {
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.ui.CComponent;
+    public static String longToBase64(long value) {
+        return AbstractSerializationStream.longToBase64(value);
+    }
 
-public interface IDecorator<COMP_TYPE extends CComponent<?>> extends IsWidget {
-
-    void setContent(IsWidget content);
-
-    void init(COMP_TYPE component);
-
-    void onSetDebugId(IDebugId parentDebugId);
 }

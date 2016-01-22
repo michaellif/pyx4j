@@ -45,14 +45,14 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, NContainer<DATA_TYPE>, DECORATOR_TYPE>, DATA_TYPE extends IObject<?>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
-        extends CComponent<SELF_TYPE, DATA_TYPE, NContainer<DATA_TYPE>, DECORATOR_TYPE> implements IEditableComponentFactory {
+public abstract class CContainer<SELF_TYPE extends CComponentBase<SELF_TYPE, DATA_TYPE, NContainer<DATA_TYPE>, DECORATOR_TYPE>, DATA_TYPE extends IObject<?>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
+        extends CComponentBase<SELF_TYPE, DATA_TYPE, NContainer<DATA_TYPE>, DECORATOR_TYPE> implements IEditableComponentFactory {
 
     private static final Logger log = LoggerFactory.getLogger(CContainer.class);
 
-    private final HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<>();
 
-    private final HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<>();
 
     private ImageResource icon;
 
@@ -81,7 +81,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         addComponentValidator(new EntityContainerValidator());
     }
 
-    public abstract Collection<? extends CComponent<?, ?, ?, ?>> getComponents();
+    public abstract Collection<? extends CComponent<?>> getComponents();
 
     protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
@@ -115,12 +115,12 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return null;
     }
 
-    protected <T> void updateContainer(CComponent<?, T, ?, ?> component) {
+    protected <T> void updateContainer(CComponent<T> component) {
 
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void adopt(final CComponent<?, ?, ?, ?> component) {
+    public void adopt(final CComponent<?> component) {
 
         propertyChangeHandlerRegistrations.put(component, component.addPropertyChangeHandler(new PropertyChangeHandler() {
 
@@ -146,7 +146,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         component.onAdopt(this);
     }
 
-    public void abandon(CComponent<?, ?, ?, ?> component) {
+    public void abandon(CComponent<?> component) {
         propertyChangeHandlerRegistrations.remove(component).removeHandler();
         valueChangeHandlerRegistrations.remove(component).removeHandler();
         component.onAbandon();
@@ -154,7 +154,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public void setVisitedRecursive() {
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?, ?> ccomponent : getComponents()) {
+            for (CComponent<?> ccomponent : getComponents()) {
                 if (ccomponent instanceof CField) {
                     ((CField<?, ?>) ccomponent).setVisited(true);
                 } else if (ccomponent instanceof CContainer) {
@@ -173,7 +173,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     @Override
     protected void onReset() {
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?, ?> ccomponent : getComponents()) {
+            for (CComponent<?> ccomponent : getComponents()) {
                 ccomponent.reset();
             }
         }
@@ -185,7 +185,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         super.applyVisibilityRules();
         asWidget().setVisible(isVisible());
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyVisibilityRules();
             }
         }
@@ -199,7 +199,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyViewabilityRules();
             }
         }
@@ -213,7 +213,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyEnablingRules();
             }
         }
@@ -227,7 +227,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     public void applyEditabilityRules() {
         super.applyEditabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?, ?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyEditabilityRules();
             }
         }
