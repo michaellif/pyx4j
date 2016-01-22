@@ -151,7 +151,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(EntityPermission.permissionCreate(boClass));
         }
-        if (initializationData.isInstanceOf(DuplicateData.class)) {
+        if (initializationData != null && initializationData.isInstanceOf(DuplicateData.class)) {
             callback.onSuccess(duplicate((DuplicateData) initializationData));
         } else {
             callback.onSuccess(init(initializationData));
