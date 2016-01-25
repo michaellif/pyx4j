@@ -106,6 +106,13 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("{0,number} java.lang.IllegalArgumentException: number expected instead of class java.lang.String", "{0,number}", "NotNumber");
     }
 
+    public void testDurationFormat() {
+        assertMessageFormat("02sec 000msec", "{0,duration}", 2000);
+        assertMessageFormat("02sec 000msec", "{0,duration,msec}", 2000);
+        assertMessageFormat("2 seconds", "{0,duration,sec}", 2);
+        assertMessageFormat("1 day", "{0,duration,sec}", 24 * Consts.HOURS2SEC);
+    }
+
     public void testNumberFormat() {
         assertMessageFormat("2,000", "{0,number}", 2000);
         assertMessageFormat("2,000", "{0,number,integer}", 2000);

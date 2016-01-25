@@ -20,13 +20,17 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
@@ -86,6 +90,59 @@ public class EntityMetaUtils {
                     getMembersRecursively((IEntity) member, filter, processed, result);
                 }
                 break;
+            default:
+                break;
+            }
+        }
+    }
+
+    public static interface IEntityClassProcesor {
+
+        Collection<Class<? extends IEntity>> getClasses(IEntity proto, IObject<?> member, Path memberPath, MemberMeta memberMeta);
+
+    }
+
+    public static Set<Class<? extends IEntity>> getRefferences(Class<? extends IEntity> entityClass, IEntityClassProcesor processor) {
+        Set<Class<? extends IEntity>> referencedClasses = new HashSet<>();
+        getRefferencesRecursively(EntityFactory.getEntityPrototype(entityClass), processor, new IdentityHashSet<IEntity>(), referencedClasses);
+        return referencedClasses;
+    }
+
+    private static void getRefferencesRecursively(IEntity proto, IEntityClassProcesor processor, Set<IEntity> processed,
+            Set<Class<? extends IEntity>> referencedClasses) {
+        if (processed.contains(proto)) {
+            return;
+        }
+        processed.add(proto);
+        EntityMeta em = proto.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (ObjectClassType.Primitive == memberMeta.getObjectClassType() || ObjectClassType.PrimitiveSet == memberMeta.getObjectClassType()) {
+                continue;
+            }
+
+            IObject<?> member = proto.getMember(memberName);
+            Path memberPath = proto.getMember(memberName).getPath();
+
+            switch (memberMeta.getObjectClassType()) {
+            case Entity:
+                IEntity memberEntity = (IEntity) member;
+                for (Class<? extends IEntity> entityClass : processor.getClasses(memberEntity, memberEntity, memberPath, memberMeta)) {
+                    referencedClasses.add(entityClass);
+                    getRefferencesRecursively(EntityFactory.getEntityPrototype(entityClass), processor, processed, referencedClasses);
+
+                }
+                break;
+            case EntityList:
+            case EntitySet:
+                @SuppressWarnings("unchecked")
+                ICollection<IEntity, ?> memberCollection = (ICollection<IEntity, ?>) member;
+                for (Class<? extends IEntity> entityClass : processor.getClasses(EntityFactory.getEntityPrototype(memberCollection.getValueClass()),
+                        memberCollection, memberPath, memberMeta)) {
+                    referencedClasses.add(entityClass);
+                    getRefferencesRecursively(EntityFactory.getEntityPrototype(entityClass), processor, processed, referencedClasses);
+
+                }
             default:
                 break;
             }

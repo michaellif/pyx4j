@@ -48,9 +48,17 @@ public class ThrottleConfig {
         return 60;
     }
 
+    public int getSystemWarmUpRequestsCount() {
+        return 100;
+    }
+
+    public long getSystemCoolDownPeriod() {
+        return 10 * Consts.MIN2MSEC;
+    }
+
     /**
      * First two levels of RequestURI that are not counted for DoS.
-     * 
+     *
      * Example: "/_ah/admin"
      */
     public Collection<String> whiteRequestURIs() {

@@ -43,6 +43,8 @@ public class SimpleDateFormatImpl {
             fmt = DateTimeFormat.getLongDateFormat();
         } else if (pattern.equals("full")) {
             fmt = DateTimeFormat.getFullDateFormat();
+        } else if (pattern.equals("epoch")) {
+            return String.valueOf(date.getTime() / 1000);
         } else {
             fmt = DateTimeFormat.getFormat(pattern);
         }
@@ -69,6 +71,10 @@ public class SimpleDateFormatImpl {
 
     public static Date parse(String text, String pattern) throws IllegalArgumentException {
         return DateTimeFormat.getFormat(pattern).parse(text);
+    }
+    
+    public static Date parseStrict(String text, String pattern) throws IllegalArgumentException {
+        return DateTimeFormat.getFormat(pattern).parseStrict(text);
     }
 
 }
