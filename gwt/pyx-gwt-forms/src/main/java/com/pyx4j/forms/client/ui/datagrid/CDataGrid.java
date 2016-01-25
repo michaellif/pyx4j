@@ -34,7 +34,7 @@ public class CDataGrid<E extends IEntity> extends CContainer<CDataGrid<E>, IList
     }
 
     @Override
-    public Collection<? extends CComponent<?, ?, ?, ?>> getComponents() {
+    public Collection<? extends CComponent<?>> getComponents() {
         // TODO Auto-generated method stub
         return null;
     }

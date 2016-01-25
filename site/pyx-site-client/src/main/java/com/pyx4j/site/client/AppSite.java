@@ -31,6 +31,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -64,6 +65,8 @@ public abstract class AppSite implements EntryPoint {
     }
 
     private static final Logger log = LoggerFactory.getLogger(AppSite.class);
+
+    protected static boolean applicationInitializationAborded = false;
 
     private static AppSite instance;
 
@@ -128,10 +131,23 @@ public abstract class AppSite implements EntryPoint {
             }
             urlBuilder.setHash(hash.toString());
             log.debug("redirect {}", urlBuilder);
-            Window.Location.assign(urlBuilder.buildString());
+            setLoadingIndicatorMessage("You will be redirected to the new location automatically");
+
+            // Hide the error message and terminate initialization
+            GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
+                @Override
+                public void onUncaughtException(Throwable e) {
+                }
+            });
+
+            Window.Location.replace(urlBuilder.buildString());
+            // Nice to throw but it will be shown in some browsers as error
+            //throw new RuntimeException("You will be redirected to the new location automatically");
+            applicationInitializationAborded = true;
         }
 
         instance = this;
+
         Element head = Document.get().getElementsByTagName("html").getItem(0);
         head.setPropertyString("xmlns:pyx", "");
 
@@ -140,6 +156,7 @@ public abstract class AppSite implements EntryPoint {
         placeController = new AppPlaceContorller(ClientEventBus.instance, dispatcher);
 
         userAgentDetection = new UserAgentDetection(Window.Navigator.getUserAgent());
+
     }
 
     public AppSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory) {
@@ -240,6 +257,13 @@ public abstract class AppSite implements EntryPoint {
             elem.getParentElement().removeChild(elem);
         }
         DefaultUnrecoverableErrorHandler.setApplicationInitialized();
+    }
+
+    public void setLoadingIndicatorMessage(String htmMessage) {
+        Element loadingBar = DOM.getElementById("loading-bdr");
+        if (loadingBar != null) {
+            loadingBar.setInnerHTML(htmMessage);
+        }
     }
 
     /**

@@ -31,6 +31,11 @@ public abstract class CursorIteratorDelegate<T extends IEntity, B extends IEntit
     }
 
     @Override
+    public boolean hasInMemoryFilter() {
+        return unfiltered.hasInMemoryFilter();
+    }
+
+    @Override
     public boolean hasNext() {
         return unfiltered.hasNext();
     }

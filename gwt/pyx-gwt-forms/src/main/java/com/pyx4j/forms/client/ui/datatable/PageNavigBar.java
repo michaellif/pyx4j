@@ -75,7 +75,6 @@ public class PageNavigBar extends Toolbar {
         getElement().getStyle().setProperty("textAlign", "right");
 
         firstButton = new Button(DataTableImages.INSTANCE.first(), new Command() {
-
             @Override
             public void execute() {
                 if (firstActionCommand != null) {
@@ -86,11 +85,10 @@ public class PageNavigBar extends Toolbar {
             }
         });
         firstButton.setVisible(false);
-        firstButton.getElement().getStyle().setMarginRight(0, Unit.PX);
+        firstButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(firstButton);
 
         prevButton = new Button(DataTableImages.INSTANCE.prev(), new Command() {
-
             @Override
             public void execute() {
                 if (prevActionCommand != null) {
@@ -101,16 +99,16 @@ public class PageNavigBar extends Toolbar {
             }
         });
         prevButton.setVisible(false);
+        prevButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
         prevButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(prevButton);
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
-        countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(countLabel);
 
         nextButton = new Button(DataTableImages.INSTANCE.next(), new Command() {
-
             @Override
             public void execute() {
                 if (nextActionCommand != null) {
@@ -121,11 +119,11 @@ public class PageNavigBar extends Toolbar {
             }
         });
         nextButton.setVisible(false);
-        nextButton.getElement().getStyle().setMarginRight(0, Unit.PX);
+        nextButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
+        nextButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(nextButton);
 
         lastButton = new Button(DataTableImages.INSTANCE.last(), new Command() {
-
             @Override
             public void execute() {
                 if (lastActionCommand != null) {
@@ -137,10 +135,13 @@ public class PageNavigBar extends Toolbar {
             }
         });
         lastButton.setVisible(false);
+        lastButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
+        lastButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(lastButton);
 
         pageSizeContentPanel = new HorizontalPanel();
-        pageSizeContentPanel.getElement().getStyle().setMarginRight(12, Unit.PX);
+        pageSizeContentPanel.getElement().getStyle().setMarginLeft(5, Unit.PX);
+        pageSizeContentPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
 
@@ -153,7 +154,6 @@ public class PageNavigBar extends Toolbar {
         addItem(pageSizeContentPanel);
 
         pageSizeSelector.addChangeHandler(new ChangeHandler() {
-
             @Override
             public void onChange(ChangeEvent event) {
                 if (actionsBar.getDataTableModel() != null) {
@@ -193,17 +193,28 @@ public class PageNavigBar extends Toolbar {
         int from = actionsBar.getDataTableModel().getPageNumber() * actionsBar.getDataTableModel().getPageSize() + 1;
         int to = from + actionsBar.getDataTableModel().getData().size() - 1;
         int of = actionsBar.getDataTableModel().getTotalRows();
+        boolean randomPageMode = (of != -1);
+
         if (from > to) {
             countLabel.setText(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8));
-        } else {
+        } else if (randomPageMode) {
             countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, of));
+        } else if (actionsBar.getDataTableModel().hasMoreData()) {
+            countLabel.setText(i18n.tr("{0}-{1} of many", from, to));
+        } else {
+            countLabel.setText(i18n.tr("{0}-{1} of {1}", from, to));
         }
 
-        boolean fitsOnOnePage = actionsBar.getDataTableModel().getPageSize() >= of;
-        prevButton.setVisible(!fitsOnOnePage);
-        firstButton.setVisible(!fitsOnOnePage);
-        nextButton.setVisible(!fitsOnOnePage);
-        lastButton.setVisible(!fitsOnOnePage);
+        boolean showNavigationButtons;
+        if (randomPageMode) {
+            showNavigationButtons = (actionsBar.getDataTableModel().getPageSize() < of);
+        } else {
+            showNavigationButtons = (actionsBar.getDataTableModel().hasMoreData() || !actionsBar.getDataTableModel().getData().isEmpty());
+        }
+        prevButton.setVisible(showNavigationButtons);
+        firstButton.setVisible(showNavigationButtons);
+        nextButton.setVisible(showNavigationButtons);
+        lastButton.setVisible(showNavigationButtons && randomPageMode);
 
         prevButton.setEnabled(actionsBar.getDataTableModel().getPageNumber() > 0);
         firstButton.setEnabled(actionsBar.getDataTableModel().getPageNumber() > 0);
@@ -212,7 +223,11 @@ public class PageNavigBar extends Toolbar {
 
         if (pageSizeOptions != null) {
             pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(actionsBar.getDataTableModel().getPageSize()));
-            pageSizeContentPanel.setVisible(pageSizeOptions.get(0) < of);
+            if (randomPageMode) {
+                pageSizeContentPanel.setVisible(pageSizeOptions.get(0) < of);
+            } else {
+                pageSizeContentPanel.setVisible(showNavigationButtons);
+            }
         }
     }
 

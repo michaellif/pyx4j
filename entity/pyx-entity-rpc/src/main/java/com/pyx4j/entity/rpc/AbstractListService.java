@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.rpc;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
@@ -29,4 +31,5 @@ public interface AbstractListService<E extends IEntity> extends IService {
 
     public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria);
 
+    public void obtainListerCapabilities(AsyncCallback<Vector<ListerCapability>> callback, EntityListCriteria<E> criteria);
 }

@@ -63,13 +63,13 @@ public class UIAclBuilder extends ServletContainerAclBuilder {
     }
 
     protected void grant(Behavior behavior, Class<? extends IEntity> entityClass1, Class<? extends IEntity> entityClass2, int actions) {
-        grant(behavior, DataModelPermission.create(entityClass1, actions));
-        grant(behavior, DataModelPermission.create(entityClass2, actions));
+        grant(behavior, entityClass1, actions);
+        grant(behavior, entityClass2, actions);
     }
 
     protected void grant(Behavior behavior, List<Class<? extends IEntity>> entities, int actions) {
         for (Class<? extends IEntity> entityClass : entities) {
-            grant(behavior, DataModelPermission.create(entityClass, actions));
+            grant(behavior, entityClass, actions);
         }
     }
 

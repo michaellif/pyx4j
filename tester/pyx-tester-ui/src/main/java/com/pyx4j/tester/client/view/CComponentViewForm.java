@@ -36,7 +36,7 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
 
     private static final I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 
-    private CComponent<?, ?, ?, ?> component;
+    private CComponent<?> component;
 
     public CComponentViewForm() {
         super(CComponentProperties.class);

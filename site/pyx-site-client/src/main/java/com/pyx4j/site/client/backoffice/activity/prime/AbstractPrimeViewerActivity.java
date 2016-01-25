@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.DuplicateData;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -191,6 +192,13 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
     }
 
     @Override
+    public void duplicate() {
+        if (canEdit()) {
+            goToDuplicate(entityId);
+        }
+    }
+
+    @Override
     public void cancel() {
         History.back();
     }
@@ -219,5 +227,12 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
 
     protected void goToEditor(Key entityID) {
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formEditorPlace(entityID, getView().getActiveTab()));
+    }
+
+    protected void goToDuplicate(Key entityID) {
+        DuplicateData duplicateData = EntityFactory.create(DuplicateData.class);
+//        duplicateData.originalEntityId().set(EntityFactory.createIdentityStub(entityClass, entityID.asCurrentKey()));
+        duplicateData.originalEntityKey().setValue(entityID.asCurrentKey());
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formNewItemPlace(duplicateData));
     }
 }

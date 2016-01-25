@@ -53,6 +53,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.impl.EnumHelper;
 import com.pyx4j.entity.core.impl.PrimitiveHandler;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
@@ -90,6 +91,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReceiver {
     private boolean verifyRequiredValues = false;
 
     private boolean trimValues = false;
+
+    private boolean readEnumsUsingToString = false;
 
     private int headerLinesCountMin = 1;
 
@@ -203,6 +206,20 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReceiver {
 
     public void setTrimValues(boolean trimValues) {
         this.trimValues = trimValues;
+    }
+
+    public boolean isReadEnumsUsingToString() {
+        return readEnumsUsingToString;
+    }
+
+    /**
+     * Determines deserialization mechanism used for
+     * Enum values: if enabled, Enums are assumed to have been serialized using
+     * return value of <code>Enum.toString()</code>;
+     * if disabled, return value of <code>Enum.name()</code> is assumed to have been used.
+     */
+    public void setReadEnumsUsingToString(boolean readEnumsUsingToString) {
+        this.readEnumsUsingToString = readEnumsUsingToString;
     }
 
     public EntityCSVReciver<E> verifyRequiredValues(boolean verifyRequiredValues) {
@@ -552,6 +569,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReceiver {
                     return parseAndValidate(value, importColumn.format());
                 }
             }
+        } else if (isReadEnumsUsingToString() && valueClass.isEnum()) {
+            return EnumHelper.parsString((Class<Enum>) valueClass, value);
         } else if (Number.class.isAssignableFrom(valueClass)) {
             if ("".equals(value)) {
                 return null;

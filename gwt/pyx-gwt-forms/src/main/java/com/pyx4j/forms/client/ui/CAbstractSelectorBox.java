@@ -134,7 +134,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
     }
 
     @Override
-    protected String getDebugInfo() {
+    public String getDebugInfo() {
         StringBuilder info = new StringBuilder(super.getDebugInfo());
         info.append("watermark").append("=").append(getWatermark()).append(";");
         return info.toString();

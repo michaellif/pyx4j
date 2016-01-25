@@ -23,8 +23,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -75,6 +77,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     private final Map<Path, CriteriaValueConverter> valueConverterBinding = new HashMap<>();
 
     private final Map<Class<? extends Criterion>, CriterionConverter<?, BO>> criterionConverterBinding = new HashMap<>();
+
+    private final Set<Path> ignoredTOMember = new HashSet<>();
 
     private final Map<Path, CriteriaEnhancer<BO>> criteriaEnhancerBinding = new HashMap<>();
 
@@ -142,10 +146,17 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         criteriaEnhancerBinding.put(toMember.getPath(), criteriaEnhancer);
     }
 
-    public final EntityListCriteria<BO> convertListCriteria(EntityListCriteria<TO> toCriteria) {
+    // TODO This is in Memory filters.....
+    public final void unboundCriteria(IObject<?> toMember) {
+        ignoredTOMember.add(toMember.getPath());
+    }
+
+    public final EntityListCriteria<BO> convertListCriteria(EntityQueryCriteria<TO> toCriteria) {
         EntityListCriteria<BO> boCriteria = EntityListCriteria.create(binder.boClass());
-        boCriteria.setPageNumber(toCriteria.getPageNumber());
-        boCriteria.setPageSize(toCriteria.getPageSize());
+        if (toCriteria instanceof EntityListCriteria) {
+            boCriteria.setPageNumber(((EntityListCriteria<TO>) toCriteria).getPageNumber());
+            boCriteria.setPageSize(((EntityListCriteria<TO>) toCriteria).getPageSize());
+        }
         boCriteria.setVersionedCriteria(toCriteria.getVersionedCriteria());
         convertCriteria(toCriteria, boCriteria);
         return boCriteria;
@@ -213,6 +224,10 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
         } else if (toCriterion instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) toCriterion;
             Path toPath = propertyCriterion.getPropertyPath();
+
+            if (ignoredTOMember.contains(toPath)) {
+                return null;
+            }
 
             CriteriaEnhancer<BO> valueConvertor = criteriaEnhancerBinding.get(toPath);
             if (valueConvertor != null) {

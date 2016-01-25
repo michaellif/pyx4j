@@ -86,4 +86,19 @@ public final class Executables {
         };
     }
 
+    public static <R, E extends Throwable> Executable<R, E> wrapInElevatedUserContext(final Executable<R, E> task) {
+        return new Executable<R, E>() {
+
+            @Override
+            public R execute() throws E {
+                Lifecycle.startElevatedUserContext();
+                try {
+                    return task.execute();
+                } finally {
+                    Lifecycle.endElevatedUserContext();
+                }
+            }
+        };
+    }
+
 }

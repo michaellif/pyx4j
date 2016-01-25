@@ -19,7 +19,8 @@
  */
 package com.pyx4j.site.client;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -35,7 +36,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 public class AppPlaceHistoryHandler {
 
-    private static final Logger log = Logger.getLogger(AppPlaceHistoryHandler.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(AppPlaceHistoryHandler.class.getName());
 
     /**
      * Default implementation of {@link Historian}, based on {@link History}.
@@ -65,7 +66,7 @@ public class AppPlaceHistoryHandler {
     public interface Historian {
         /**
          * Adds a {@link com.google.gwt.event.logical.shared.ValueChangeEvent} handler to be informed of changes to the browser's history stack.
-         * 
+         *
          * @param valueChangeHandler
          *            the handler
          * @return the registration used to remove this value change handler
@@ -97,7 +98,7 @@ public class AppPlaceHistoryHandler {
      * DefaultHistorian is created via a call to GWT.create(), so an alternative
      * default implementation can be provided through &lt;replace-with&gt; rules
      * in a {@code gwt.xml} file.
-     * 
+     *
      * @param mapper
      *            a {@link PlaceHistoryMapper} instance
      */
@@ -107,7 +108,7 @@ public class AppPlaceHistoryHandler {
 
     /**
      * Create a new PlaceHistoryHandler.
-     * 
+     *
      * @param mapper
      *            a {@link PlaceHistoryMapper} instance
      * @param historian
@@ -128,7 +129,7 @@ public class AppPlaceHistoryHandler {
 
     /**
      * Initialize this place history handler.
-     * 
+     *
      * @return a registration object to de-register the handler
      */
     public HandlerRegistration register(AppPlaceContorller placeController, EventBus eventBus) {
@@ -170,13 +171,6 @@ public class AppPlaceHistoryHandler {
         historian.newItem(lastStablePlaceToken, false);
     }
 
-    /**
-     * Visible for testing.
-     */
-    Logger log() {
-        return log;
-    }
-
     private void handleHistoryToken(String token) {
 
         Place newPlace = null;
@@ -190,7 +184,7 @@ public class AppPlaceHistoryHandler {
         }
 
         if (newPlace == null) {
-            log().warning("Unrecognized history token: " + token);
+            log.warn("Unrecognized history token: " + token);
             newPlace = AppPlace.NOWHERE;
         }
 
@@ -204,7 +198,7 @@ public class AppPlaceHistoryHandler {
             return token;
         }
 
-        log().warning("Place not mapped to a token: " + newPlace);
+        log.warn("Place not mapped to a token: " + newPlace);
         return "";
     }
 }

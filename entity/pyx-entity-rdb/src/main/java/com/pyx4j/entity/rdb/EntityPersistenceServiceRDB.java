@@ -510,6 +510,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     }
 
     @Override
+    public void executeSql(String sql) throws SQLException {
+        startCallContext(ConnectionReason.forUpdate);
+        try {
+            SQLUtils.execute(this.getPersistenceContext().getConnection(), sql);
+        } finally {
+            endCallContext();
+        }
+    }
+
+    @Override
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
         startCallContext(ConnectionReason.forRead);
         try {
@@ -1748,12 +1758,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorReference, EntityQueryCriteria<T> criteria, final AttachLevel attachLevel) {
         startCallContext(ConnectionReason.forRead);
         final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
-        if (encodedCursorReference != null) {
-            log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
-            // TODO
-        }
+
         try {
-            final ResultSetIterator<T> iterable = tm.queryIterable(getPersistenceContext(), criteria, attachLevel);
+            final ResultSetIterator<T> iterable = tm.queryIterable(getPersistenceContext(), encodedCursorReference, criteria, attachLevel);
 
             return new ICursorIterator<T>() {
 
@@ -1774,8 +1781,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
 
                 @Override
                 public String encodedCursorReference() {
-                    // TODO proper encoded cursor reference has to be passed, this is just temporary
-                    return "" + encodedCursorReference + "a";
+                    return iterable.encodedCursorReference();
+                }
+
+                @Override
+                public boolean hasInMemoryFilter() {
+                    return false;
                 }
 
                 @Override
@@ -1813,12 +1824,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     public <T extends IEntity> ICursorIterator<Key> queryKeys(final String encodedCursorReference, EntityQueryCriteria<T> criteria) {
         startCallContext(ConnectionReason.forRead);
         final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
-        if (encodedCursorReference != null) {
-            log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
-            // TODO
-        }
         try {
-            final ResultSetIterator<Key> iterable = tm.queryKeysIterable(getPersistenceContext(), criteria);
+            final ResultSetIterator<Key> iterable = tm.queryKeysIterable(getPersistenceContext(), encodedCursorReference, criteria);
 
             return new ICursorIterator<Key>() {
 
@@ -1839,8 +1846,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
 
                 @Override
                 public String encodedCursorReference() {
-                    // TODO proper encoded cursor reference has to be passed, this is just temporary
-                    return "" + encodedCursorReference + "a";
+                    return iterable.encodedCursorReference();
+                }
+
+                @Override
+                public boolean hasInMemoryFilter() {
+                    return false;
                 }
 
                 @Override

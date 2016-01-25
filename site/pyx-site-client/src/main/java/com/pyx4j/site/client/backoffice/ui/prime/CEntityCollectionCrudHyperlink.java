@@ -126,7 +126,7 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
     }
 
     @Override
-    protected String getDebugInfo() {
+    public String getDebugInfo() {
         //TODO overrides CField.getDebugInfo() because of error - investigate
         //  java.lang.ClassCastException: java.lang.Integer cannot be cast to java.util.Set
         //  at com.pyx4j.entity.core.impl.SetHandler.getValue(SetHandler.java:90)

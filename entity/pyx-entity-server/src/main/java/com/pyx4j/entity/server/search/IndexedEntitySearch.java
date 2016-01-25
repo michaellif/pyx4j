@@ -418,6 +418,11 @@ public class IndexedEntitySearch<E extends IEntity> {
             }
 
             @Override
+            public boolean hasInMemoryFilter() {
+                return !inMemoryFilters.isEmpty();
+            }
+
+            @Override
             public String encodedCursorReference() {
                 return unfiltered.encodedCursorReference();
             }

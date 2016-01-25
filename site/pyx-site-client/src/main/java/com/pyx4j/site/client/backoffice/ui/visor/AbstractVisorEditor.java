@@ -71,8 +71,8 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
     }
 
     private void apply() {
+        getForm().setVisitedRecursive();
         if (!getForm().isValid()) {
-            getForm().setVisitedRecursive();
             showValidationDialog();
         } else {
             getController().apply();

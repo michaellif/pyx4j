@@ -123,7 +123,7 @@ public class PropertyCriterionEditor extends CFolderRowEditor<PropertyCriterionE
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         if (tableProto != null) {
-            CComponent<?, ?, ?, ?> comp = get(proto().restriction());
+            CComponent<?> comp = get(proto().restriction());
             if (comp instanceof CComboBox) {
                 CComboBox<PropertyCriterion.Restriction> comboBox = (CComboBox<PropertyCriterion.Restriction>) comp;
                 IObject<?> member = tableProto.getMember(new Path(getValue().path().getValue()));

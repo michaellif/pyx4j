@@ -26,6 +26,7 @@ import java.util.Set;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.PropertiesConfiguration;
+import com.pyx4j.entity.shared.AbstractOutgoingMailQueue;
 
 public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
 
@@ -44,6 +45,8 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
     protected boolean debug;
 
     protected int maxDeliveryAttempts = 40;
+
+    public boolean queueUndeliverable = false;
 
     protected int queuePriority = 0;
 
@@ -100,6 +103,10 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         return starttls;
     }
 
+    public Class<? extends AbstractOutgoingMailQueue> persistableQueueEntityClass() {
+        return null;
+    }
+
     @Override
     public int maxDeliveryAttempts() {
         return maxDeliveryAttempts;
@@ -108,6 +115,11 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
     @Override
     public int queuePriority() {
         return queuePriority;
+    }
+
+    @Override
+    public boolean queueUndeliverable() {
+        return queueUndeliverable;
     }
 
     public int getConnectionTimeout() {
@@ -174,6 +186,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
         this.maxDeliveryAttempts = c.getIntegerValue("maxDeliveryAttempts", this.maxDeliveryAttempts);
         this.queuePriority = c.getIntegerValue("queuePriority", this.queuePriority);
+        this.queueUndeliverable = c.getBooleanValue("queueUndeliverable", this.queueUndeliverable);
 
         this.allowSendToEmailSufix = c.getValue("allowSendToEmailSufix", this.allowSendToEmailSufix);
         this.blockedMailForwardTo = c.getValue("blockedMailForwardTo", this.blockedMailForwardTo);

@@ -50,20 +50,12 @@ public abstract class FiltersBuilder {
 
     protected abstract FiltersBuilder addCriterion(Criterion criterion);
 
-    @Deprecated
-    /**
-     * @deprecated Explicitly create OrCriterion
-     */
     public OrCriterion or() {
         OrCriterion criterion = new OrCriterion();
         addCriterion(criterion);
         return criterion;
     }
 
-    @Deprecated
-    /**
-     * @deprecated Explicitly create AndCriterion
-     */
     public AndCriterion and() {
         AndCriterion criterion = new AndCriterion();
         addCriterion(criterion);

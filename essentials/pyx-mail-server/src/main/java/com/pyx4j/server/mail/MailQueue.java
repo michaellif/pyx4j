@@ -135,7 +135,11 @@ public class MailQueue implements Runnable {
     }
 
     static void queue(MailMessage mailMessage, Class<? extends MailDeliveryCallback> callbackClass, IMailServiceConfigConfiguration mailConfig) {
-        final AbstractOutgoingMailQueue persistable = EntityFactory.create(persistableEntities.get(mailConfig.configurationId()));
+        Class<? extends AbstractOutgoingMailQueue> persistableClass = persistableEntities.get(mailConfig.configurationId());
+        if (persistableClass == null) {
+            persistableClass = ((SMTPMailServiceConfig) mailConfig).persistableQueueEntityClass();
+        }
+        final AbstractOutgoingMailQueue persistable = EntityFactory.create(persistableClass);
         if (persistable == null) {
             throw new Error("MailQueue Persistence not configured for '" + mailConfig.configurationId() + "'");
         }
@@ -148,9 +152,12 @@ public class MailQueue implements Runnable {
         if (callbackClass != null) {
             persistable.statusCallbackClass().setValue(callbackClass.getName());
         }
+        persistable.sender().setValue(mailMessage.getSender());
         Collection<String> sendTo = CollectionUtils.union(CollectionUtils.union(mailMessage.getTo(), mailMessage.getCc()), mailMessage.getBcc());
         if (sendTo.isEmpty()) {
-            if (mailMessage.getKeywords().contains("bulk")) {
+            if (((SMTPMailServiceConfig) mailConfig).queueUndeliverable()) {
+                persistable.status().setValue(MailQueueStatus.Undeliverable);
+            } else if (mailMessage.getKeywords().contains("bulk")) {
                 log.debug("No destination E-Mail addresses found in bulk, message delivery canceled");
                 persistable.status().setValue(MailQueueStatus.Cancelled);
             } else {
@@ -168,6 +175,8 @@ public class MailQueue implements Runnable {
                 return null;
             }
         }).execute();
+
+        mailMessage.setMailQueueId(persistable.getPrimaryKey().toString());
 
         if (isRunning()) {
             // Transaction is actually completed, wake up the delivery thread.
@@ -234,9 +243,13 @@ public class MailQueue implements Runnable {
                             persistableUpdate.status().setValue(persistable.status().getValue());
                             persistableUpdate.updated().setValue(SystemDateManager.getDate());
 
-                            IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
                             final MailMessage mailMessage = (MailMessage) SerializationUtils.deserialize(persistable.data().getValue());
+                            mailMessage.setMailQueueId(persistable.getPrimaryKey().toString());
 
+                            IMailServiceConfigConfiguration mailConfig = configurations.get(persistable.configurationId().getValue());
+                            if (mailConfig == null) {
+                                mailConfig = ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+                            }
                             if (mailConfig instanceof SMTPMailServiceConfig) {
                                 final SMTPMailServiceConfig origConfig = (SMTPMailServiceConfig) mailConfig;
                                 Executable<IMailServiceConfigConfiguration, RuntimeException> selectConfiguration = new Executable<IMailServiceConfigConfiguration, RuntimeException>() {
@@ -252,8 +265,21 @@ public class MailQueue implements Runnable {
                                     mailConfig = Executables.runInTargetNamespace(persistable.namespace().getValue(), selectConfiguration);
                                 }
                             }
+                            MailDeliveryStatus status = null;
+                            if (persistable.namespace().isNull()) {
+                                status = Mail.send(mailMessage, mailConfig);
+                            } else {
+                                final IMailServiceConfigConfiguration targetConfig = mailConfig;
+                                status = Executables.runInTargetNamespace( //
+                                        persistable.namespace().getValue(), //
+                                        new Executable<MailDeliveryStatus, RuntimeException>() {
 
-                            MailDeliveryStatus status = Mail.send(mailMessage, mailConfig);
+                                            @Override
+                                            public MailDeliveryStatus execute() throws RuntimeException {
+                                                return Mail.send(mailMessage, targetConfig);
+                                            }
+                                        });
+                            }
 
                             switch (status) {
                             case Success:
@@ -283,6 +309,7 @@ public class MailQueue implements Runnable {
                                     trunkLength(mailMessage.getDeliveryErrorMessage(), persistableUpdate.lastAttemptErrorMessage().getMeta().getLength()));
                             EntityFormatUtils.trimToLength(persistableUpdate.lastAttemptErrorMessage());
                             persistableUpdate.attempts().setValue(persistable.attempts().getValue(0) + 1);
+                            persistableUpdate.sender().setValue(mailMessage.getSender());
                             if ((persistable.attempts().getValue() > mailConfig.maxDeliveryAttempts())
                                     && (persistableUpdate.status().getValue() != MailQueueStatus.Success)) {
                                 persistableUpdate.status().setValue(MailQueueStatus.GiveUp);

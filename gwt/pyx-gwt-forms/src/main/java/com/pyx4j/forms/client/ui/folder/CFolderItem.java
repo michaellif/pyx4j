@@ -218,16 +218,16 @@ public abstract class CFolderItem<DATA_TYPE extends IEntity> extends CContainer<
     }
 
     @Override
-    public Collection<CComponent<?, ?, ?, ?>> getComponents() {
+    public Collection<CComponent<?>> getComponents() {
         if (entityForm == null) {
             return null;
         }
-        return Arrays.asList(new CComponent<?, ?, ?, ?>[] { entityForm });
+        return Arrays.asList(new CComponent<?>[] { entityForm });
     }
 
     public ValidationResults getComponentsValidationResults() {
         ValidationResults results = new ValidationResults();
-        for (CComponent<?, ?, ?, ?> component : entityForm.getComponents()) {
+        for (CComponent<?> component : entityForm.getComponents()) {
             if (!component.isValid()) {
                 results.appendValidationResults(component.getValidationResults());
             }

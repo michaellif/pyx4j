@@ -85,6 +85,11 @@ class SMTPMailServiceImpl implements IMailService {
             return true;
         }
         IMailServiceConfigConfiguration config = (mailConfig != null) ? mailConfig : ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        if (config instanceof SMTPMailServiceConfig) {
+            SMTPMailServiceConfig origConfig = (SMTPMailServiceConfig) config;
+            config = origConfig.selectConfigurationInstance(mailMessage);
+        }
+
         try {
             mailMessage = filter(mailMessage, config);
         } catch (AddressException e) {
@@ -103,7 +108,7 @@ class SMTPMailServiceImpl implements IMailService {
         }
 
         if ((mailConfig == null) || (!(mailConfig instanceof SMTPMailServiceConfig))) {
-            log.error("E-mail delivery SMTP not configured");
+            log.error("E-mail delivery SMTP not configured for {}", mailMessage);
             return MailDeliveryStatus.ConfigurationError;
         }
         SMTPMailServiceConfig config = (SMTPMailServiceConfig) mailConfig;
@@ -142,44 +147,51 @@ class SMTPMailServiceImpl implements IMailService {
         try {
             message.setFrom(email(mailMessage.getSender()));
         } catch (MessagingException e) {
-            log.error("email address error", e);
+            log.error("email address error in {}", mailMessage, e);
             return MailDeliveryStatus.MessageDataError;
         }
 
         try {
             mailMessage = filter(mailMessage, config);
         } catch (AddressException e) {
-            log.error("email address error", e);
+            log.error("email address error in {}", mailMessage, e);
             return MailDeliveryStatus.MessageDataError;
         }
 
         try {
-            List<InternetAddress> address = emails(mailMessage.getTo());
-            List<InternetAddress> recipientsCc = emails(mailMessage.getCc());
-            List<InternetAddress> recipientsBcc = emails(mailMessage.getBcc());
+            try {
+                List<InternetAddress> address = emails(mailMessage.getTo());
+                List<InternetAddress> recipientsCc = emails(mailMessage.getCc());
+                List<InternetAddress> recipientsBcc = emails(mailMessage.getBcc());
 
-            if (isEmptyList(address) && isEmptyList(recipientsCc) && isEmptyList(recipientsBcc)) {
-                log.debug("addresses filtered {} {} {}", mailMessage.getTo(), mailMessage.getCc(), mailMessage.getBcc());
-                log.error("No destination E-Mail addresses found");
+                if (isEmptyList(address) && isEmptyList(recipientsCc) && isEmptyList(recipientsBcc)) {
+                    log.debug("addresses filtered {} {} {}", mailMessage.getTo(), mailMessage.getCc(), mailMessage.getBcc());
+                    log.error("No destination E-Mail addresses found in {}", mailMessage);
+                    return MailDeliveryStatus.MessageDataError;
+                }
+
+                if (!isEmptyList(address)) {
+                    message.setRecipients(Message.RecipientType.TO, address.toArray(new InternetAddress[address.size()]));
+                }
+                if (!isEmptyList(recipientsCc)) {
+                    message.setRecipients(Message.RecipientType.CC, recipientsCc.toArray(new InternetAddress[recipientsCc.size()]));
+                }
+                if (!isEmptyList(recipientsBcc)) {
+                    message.setRecipients(Message.RecipientType.BCC, recipientsBcc.toArray(new InternetAddress[recipientsBcc.size()]));
+                }
+
+                if (mailMessage.getReplyTo().size() > 0) {
+                    message.setReplyTo(emails(mailMessage.getReplyTo()).toArray(new InternetAddress[mailMessage.getReplyTo().size()]));
+                }
+            } catch (Throwable e) {
+                log.error("email address error in {}", mailMessage, e);
                 return MailDeliveryStatus.MessageDataError;
-            }
-
-            if (!isEmptyList(address)) {
-                message.setRecipients(Message.RecipientType.TO, address.toArray(new InternetAddress[address.size()]));
-            }
-            if (!isEmptyList(recipientsCc)) {
-                message.setRecipients(Message.RecipientType.CC, recipientsCc.toArray(new InternetAddress[recipientsCc.size()]));
-            }
-            if (!isEmptyList(recipientsBcc)) {
-                message.setRecipients(Message.RecipientType.BCC, recipientsBcc.toArray(new InternetAddress[recipientsBcc.size()]));
             }
 
             message.setSubject(mailMessage.getSubject());
             message.setSentDate(new Date());
             message.addHeader("MIME-Version", "1.0");
-            if (mailMessage.getReplyTo().size() > 0) {
-                message.setReplyTo(emails(mailMessage.getReplyTo()).toArray(new InternetAddress[mailMessage.getReplyTo().size()]));
-            }
+
             for (Map.Entry<String, String> me : mailMessage.getHeaders()) {
                 message.addHeader(me.getKey(), me.getValue());
             }
@@ -248,7 +260,7 @@ class SMTPMailServiceImpl implements IMailService {
             }
 
         } catch (MessagingException e) {
-            log.error("Error", e);
+            log.error("Error while preparing {}", mailMessage, e);
             return MailDeliveryStatus.MessageDataError;
         }
 
@@ -287,15 +299,15 @@ class SMTPMailServiceImpl implements IMailService {
         } catch (SendFailedException e) {
             mailMessage.setDeliveryErrorMessage(e.getMessage());
             if ((e.getInvalidAddresses() != null) && (e.getInvalidAddresses().length > 0)) {
-                log.error("send mail invalid addresses error", e);
+                log.error("send mail invalid addresses error in {}", mailMessage, e);
                 return MailDeliveryStatus.MessageDataError;
             } else {
-                log.error("send mail error", e);
+                log.error("send mail error for {}", mailMessage, e);
                 return MailDeliveryStatus.ConnectionError;
             }
         } catch (MessagingException e) {
             mailMessage.setDeliveryErrorMessage(e.getMessage());
-            log.error("send mail error", e);
+            log.error("send mail error for {}", mailMessage, e);
             return MailDeliveryStatus.ConnectionError;
         } finally {
             try {

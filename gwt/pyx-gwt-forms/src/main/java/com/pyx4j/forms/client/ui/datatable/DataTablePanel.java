@@ -31,6 +31,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,6 +56,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 import com.pyx4j.widgets.client.memento.IMementoAware;
 import com.pyx4j.widgets.client.memento.IMementoInput;
@@ -102,6 +104,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private List<Criterion> externalFilters;
 
+    private EntityListCriteria<E> currentCriteria;
+
     public DataTablePanel(Class<E> clazz) {
         this(clazz, false, false);
     }
@@ -132,6 +136,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange() {
+                setPageNumber(0);
                 populate(getPageNumber());
             }
         });
@@ -251,6 +256,24 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     protected void onItemsDelete(Collection<E> items) {
     }
 
+    public void addExportAction(String text, Command command) {
+        if (exportButton == null) {
+            exportButton = new Button(i18n.tr("Export"), command);
+            topActionsBar.getToolbar().insertItem(exportButton, 0);
+        } else {
+            ButtonMenuBar exportMenuBar = exportButton.getMenu();
+            if (exportMenuBar == null) {
+                // Move the Command to Menu of the Same Button
+                exportMenuBar = new ButtonMenuBar();
+                exportMenuBar.addItem(new MenuItem(exportButton.getCaption(), exportButton.getCommand()));
+                exportButton.setMenu(exportMenuBar);
+                exportButton.setTitle(i18n.tr("Export"));
+                exportButton.setCommand(null);
+            }
+            exportMenuBar.addItem(new MenuItem(text, command));
+        }
+    }
+
     public void setExportActionEnabled(boolean enabled) {
         if (exportButton == null && enabled) {
             topActionsBar.getToolbar().insertItem(exportButton = new Button(i18n.tr("Export"), new Command() {
@@ -307,7 +330,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         for (E entity : entityes) {
             dataItems.add(entity);
         }
-        getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
+        getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows, null);
         if (delButton != null) {
             delButton.setEnabled(getDataTableModel().isAnyRowSelected());
         }
@@ -375,14 +398,31 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     protected final void populateInternal() {
-        assert dataSource != null : "dataSource is not installed";
+        assert getDataSource() != null : "dataSource is not installed";
 
         EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
-        criteria.setPageNumber(pageNumber);
+        criteria.setPageNumber(getPageNumber());
         criteria.setPageSize(getDataTableModel().getPageSize());
         criteria.setSorts(getDataTableModel().getSortCriteria());
+        criteria.setEncodedCursorReference(getDataTableModel().getEncodedCursorReference(getPageNumber()));
+        criteria = updateCriteria(criteria);
+        getDataSource().updateCriteria(criteria);
 
-        dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
+        if (currentCriteria != null) {
+            // reset EncodedCursorReference if query criteria is different:
+            if (currentCriteria.getPageSize() != criteria.getPageSize() //
+                    || !currentCriteria.asEntityQueryCriteria().equals(criteria.asEntityQueryCriteria())) {
+                getDataTableModel().clearEncodedCursorReferences();
+                setPageNumber(0);
+                // update criteria:
+                criteria.setPageNumber(getPageNumber());
+                criteria.setEncodedCursorReference(null);
+            }
+        }
+
+        currentCriteria = criteria; // memorize query criteria
+
+        getDataSource().obtain(criteria, new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(final EntitySearchResult<E> result) {
                 log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
@@ -392,7 +432,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     public void execute() {
                         List<E> dataItems = new ArrayList<E>();
                         dataItems.addAll(result.getData());
-                        getDataTableModel().populateData(dataItems, pageNumber, result.hasMoreData(), result.getTotalRows());
+                        getDataTableModel().populateData(dataItems, getPageNumber(), result.hasMoreData(), result.getTotalRows(),
+                                result.getEncodedCursorReference());
                         onPopulate();
                     }
                 });
@@ -432,7 +473,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     @Override
     public void saveState(IMementoOutput memento) {
         if (getDataTableModel() != null) {
-            memento.write(pageNumber);
+            memento.write(getPageNumber());
             memento.write(getFilters());
             memento.write(getDataTableModel().getSortCriteria());
         }
@@ -447,7 +488,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
             if (externalFilters == null) {
                 Integer pageNumberInteger = (Integer) memento.read();
-                pageNumber = pageNumberInteger == null ? 0 : pageNumberInteger;
+                setPageNumber(pageNumberInteger == null ? 0 : pageNumberInteger);
                 List<Criterion> mementoFilters = (List<Criterion>) memento.read();
                 if (mementoFilters != null) {
                     filters = mementoFilters;
@@ -486,7 +527,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataTable.getSelectedItems();
     }
 
-    //TODO Refactor to return list of filters  and unify with ListerDataSource.preDefinedFilters
+    //TODO Refactor to return list of filters and unify with ListerDataSource.preDefinedFilters
     protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
         if (getFilters() != null) {
             for (Criterion fd : getFilters()) {

@@ -120,10 +120,13 @@ public class Button extends ButtonBase {
 
     public void setMenu(ButtonMenuBar menu) {
         this.menu = menu;
-        if (menu != null) {
-            getTextLabel().addStyleName(WidgetsTheme.StyleName.DownArrow.name());
-            getTextLabel().addStyleName(WidgetsTheme.StyleName.DownArrow + ":after");
-        }
+        String label = getTextLabel().getText();
+        //this will call local setTextLabel and reset the label text if the menu is not null
+        setTextLabel(label);
+    }
+
+    public ButtonMenuBar getMenu() {
+        return menu;
     }
 
     @Override
@@ -260,5 +263,16 @@ public class Button extends ButtonBase {
             super.setVisible(visible.getDecision());
         }
 
+    }
+
+    @Override
+    public void setTextLabel(String label) {
+        if (menu != null) {
+            Label downArrow = new Label("\u25bc");
+            downArrow.setStyleName(WidgetsTheme.StyleName.DownArrow.name());
+            super.setTextLabel(label + downArrow);
+        } else {
+            super.setTextLabel(label);
+        }
     }
 }

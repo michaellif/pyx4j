@@ -19,9 +19,12 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 
 import com.pyx4j.commons.CompareHelper;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
@@ -47,14 +50,48 @@ public class EntityComparatorFactory {
         };
     }
 
-    public static <E extends IEntity> Comparator<E> createMemberComparator(final Path path) {
+    /**
+     * @see BusinessEqualValue
+     */
+    public static <E extends IEntity> Comparator<E> createBusinessEqualComparator() {
         return new Comparator<E>() {
             @Override
             public int compare(E paramT1, E paramT2) {
-                return getValue(paramT1).compareTo(getValue(paramT2));
+                if (paramT1.businessEquals(paramT2)) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        };
+    }
+
+    public static <E extends IEntity> Comparator<E> createMemberComparator(IObject<?>... protoValues) {
+        return createMembersStringViewComparator(Path.asPath(protoValues));
+    }
+
+    public static <E extends IEntity> Comparator<E> createMemberComparator(Collection<IObject<?>> protoValues) {
+        return createMembersStringViewComparator(Path.asPath(protoValues));
+    }
+
+    public static <E extends IEntity> Comparator<E> createMemberComparator(final Path... paths) {
+        return createMembersStringViewComparator(Arrays.asList(paths));
+    }
+
+    public static <E extends IEntity> Comparator<E> createMembersStringViewComparator(final Collection<Path> paths) {
+        return new Comparator<E>() {
+            @Override
+            public int compare(E paramT1, E paramT2) {
+                for (Path path : paths) {
+                    int cmp = getValue(path, paramT1).compareTo(getValue(path, paramT2));
+                    if (cmp != 0) {
+                        return cmp;
+                    }
+                }
+                return 0;
             }
 
-            String getValue(E entity) {
+            String getValue(Path path, E entity) {
                 IObject<?> valueMember = entity.getMember(path);
                 if (valueMember instanceof IEntity) {
                     return valueMember.getStringView();

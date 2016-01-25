@@ -34,6 +34,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
@@ -85,11 +86,15 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     protected final CellStyle cellStyleDouble;
 
+    protected final CellStyle cellStylePercentage;
+
     private Stack<GroupStart> groupRows = null;
 
     private int columnsCount;
 
     private boolean autosize = true;
+
+    private FormulaEvaluator formulaEvaluator;
 
     private int rowCount = 0;
 
@@ -161,6 +166,10 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.cellStyleDouble = this.workbook.createCellStyle();
         this.cellStyleDouble.setFont(font);
         this.cellStyleDouble.setDataFormat((short) BuiltinFormats.getBuiltinFormat("0.00"));
+
+        this.cellStylePercentage = this.workbook.createCellStyle();
+        this.cellStylePercentage.setFont(font);
+        this.cellStylePercentage.setDataFormat(format.getFormat("0.00%"));
     }
 
     public boolean isAutosize() {
@@ -331,6 +340,23 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
     }
 
+    public void cellPercentage(BigDecimal value) {
+        Cell cell = createCell();
+        //cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+        cell.setCellStyle(this.cellStylePercentage);
+        if (value != null) {
+            cell.setCellValue(value.doubleValue());
+        }
+    }
+
+    public void cellPercentage(Double value) {
+        Cell cell = createCell();
+        cell.setCellStyle(this.cellStylePercentage);
+        if (value != null) {
+            cell.setCellValue(value.doubleValue());
+        }
+    }
+
     public void cell(double value) {
         Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDouble);
@@ -403,6 +429,17 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
     }
 
+    public void evaluateAllFormulas() {
+        getFormulaEvaluator().evaluateAll();
+    }
+
+    private FormulaEvaluator getFormulaEvaluator() {
+        if (formulaEvaluator == null) {
+            formulaEvaluator = this.workbook.getCreationHelper().createFormulaEvaluator();
+        }
+        return formulaEvaluator;
+    }
+
     @Override
     public int getBinaryDataSize() {
         return -1;
@@ -414,6 +451,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
             autosizeColumns();
         }
         verify();
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             this.workbook.write(out);
@@ -446,7 +484,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     }
 
     /*
-     * 
+     *
      * @see http://jakarta.apache.org/poi/hssf/quick-guide.html#Outlining
      */
     public void groupRowStart(boolean collapsed) {

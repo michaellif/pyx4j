@@ -21,56 +21,87 @@ package com.pyx4j.essentials.server.docs.sheet;
 
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.ConnectionTarget;
-import com.pyx4j.entity.server.CursorSource;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Executables;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.server.cursor.CursorSource;
+import com.pyx4j.entity.shared.utils.BindingContext;
+import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
-public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDeferredProcess {
+public final class SheetCreationDeferredProcess<TO extends IEntity, MODEL extends IEntity> extends AbstractDeferredProcess {
 
     private static final long serialVersionUID = 1L;
 
-    private final EntityListCriteria<E> criteria;
+    private final EntityQueryCriteria<TO> criteria;
 
-    private final CursorSource<E> cursorSource;
+    private final CursorSource<TO> cursorSource;
 
     private final ReportTableFormatter formatter;
 
-    private final EntityReportFormatter<E> entityFormatter;
+    private final EntityBinder<TO, MODEL> modelBinder;
+
+    private final ReportModelFormatter<MODEL> modelFormatter;
 
     private final String fileName;
 
-    public SheetCreationDeferredProcess(EntityListCriteria<E> criteria, CursorSource<E> cursorSource, ReportTableFormatter formatter,
-            EntityReportFormatter<E> entityFormatter, String fileName) {
+    /**
+     * Better uSe SheetCreationProcessBuilder
+     *
+     * @param criteria
+     *            TO criteria
+     * @param cursorSource
+     *            CrudService
+     * @param formatter
+     *            XLSX or HML table formatter.
+     * @param binder
+     *            Optional converted from TO to MODLE if they are of a different type.
+     * @param modelFormatter
+     * @param fileName
+     */
+    public SheetCreationDeferredProcess(EntityQueryCriteria<TO> criteria, CursorSource<TO> cursorSource, //
+            ReportTableFormatter formatter, EntityBinder<TO, MODEL> modelBinder, ReportModelFormatter<MODEL> modelFormatter, //
+            String fileName) {
         super();
         this.criteria = criteria;
         this.cursorSource = cursorSource;
         this.formatter = formatter;
-        this.entityFormatter = entityFormatter;
+        this.modelBinder = modelBinder;
+        this.modelFormatter = modelFormatter;
         this.fileName = fileName;
     }
 
     @Override
     public void execute() {
-        entityFormatter.createHeader(formatter);
+        modelFormatter.createHeader(formatter);
         Executable<Void, RuntimeException> task = new Executable<Void, RuntimeException>() {
+
+            @SuppressWarnings("unchecked")
             @Override
             public Void execute() throws RuntimeException {
-                ICursorIterator<E> cursor = null;
+                // TODO maximum = Persistence.service().count(criteria);
+
+                ICursorIterator<TO> cursor = null;
                 try {
-                    cursor = cursorSource.getTOCursor(null, criteria, AttachLevel.Attached);
+                    cursor = cursorSource.getCursor(null, criteria, AttachLevel.Attached);
                     while (cursor.hasNext()) {
-                        E model = cursor.next();
-                        entityFormatter.reportEntity(formatter, model);
+                        TO to = cursor.next();
+                        MODEL model;
+                        if (modelBinder == null) {
+                            model = (MODEL) to;
+                        } else {
+                            model = modelBinder.createTO(to, new BindingContext(BindingType.List));
+                        }
+                        modelFormatter.reportEntity(formatter, model);
 
                         progress.progress.addAndGet(1);
 
@@ -88,6 +119,8 @@ public class SheetCreationDeferredProcess<E extends IEntity> extends AbstractDef
         task = Executables.wrapInEntityNamespace(criteria.getEntityClass(), task);
 
         new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(task);
+
+        modelFormatter.createFooter(formatter);
 
         if (!canceled) {
             Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());

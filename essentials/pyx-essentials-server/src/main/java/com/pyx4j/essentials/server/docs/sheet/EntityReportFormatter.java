@@ -19,6 +19,8 @@
  */
 package com.pyx4j.essentials.server.docs.sheet;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,17 +31,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.commons.ConverterUtils;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.shared.utils.EntityMetaUtils;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
 
-public class EntityReportFormatter<E extends IEntity> {
+public class EntityReportFormatter<E extends IEntity> implements ReportModelFormatter<E> {
 
     private final Class<? extends E> entityClass;
 
@@ -140,6 +145,7 @@ public class EntityReportFormatter<E extends IEntity> {
         formatter.newRow();
     }
 
+    @Override
     public void createHeader(ReportTableFormatter formatter) {
         if (selectedMemberNames == null) {
             selectMemebers();
@@ -151,9 +157,16 @@ public class EntityReportFormatter<E extends IEntity> {
                 formatter.header(getMemberCaption(memberPath, memberMeta));
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 formatter.header(getMemberCaption(memberPath, memberMeta));
+            } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                formatter.header(getMemberCaption(memberPath, memberMeta));
             }
         }
         createHeaderEnds(formatter);
+    }
+
+    @Override
+    public void createFooter(ReportTableFormatter formatter) {
+
     }
 
     protected boolean reportMember(E entity, Path memberPath, MemberMeta memberMeta) {
@@ -170,6 +183,7 @@ public class EntityReportFormatter<E extends IEntity> {
         }
     }
 
+    @Override
     public void reportEntity(ReportTableFormatter formatter, E entity) {
         if (selectedMemberNames == null) {
             selectMemebers();
@@ -184,6 +198,12 @@ public class EntityReportFormatter<E extends IEntity> {
             if (memberMeta.isEntity()) {
                 formatter.cell(((IEntity) entity.getMember(memberPath)).getStringView());
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                if (memberMeta.getEditorType() == EditorType.percentage && (formatter instanceof ReportTableXLSXFormatter)) {
+                    ((ReportTableXLSXFormatter) formatter).cellPercentage((BigDecimal) memberValue(entity.getMember(memberPath)));
+                } else {
+                    formatter.cell(memberValue(entity.getMember(memberPath)));
+                }
+            } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 formatter.cell(memberValue(entity.getMember(memberPath)));
             }
         }
@@ -194,7 +214,13 @@ public class EntityReportFormatter<E extends IEntity> {
         if (memberValueUseStringView) {
             return member.getStringView();
         } else {
-            return member.getValue();
+            if (member instanceof IPrimitiveSet) {
+                @SuppressWarnings("unchecked")
+                IPrimitiveSet<Serializable> ps = ((IPrimitiveSet<Serializable>) member);
+                return ConverterUtils.convertCollection(ps.getValue(), ", ");
+            } else {
+                return member.getValue();
+            }
         }
     }
 
