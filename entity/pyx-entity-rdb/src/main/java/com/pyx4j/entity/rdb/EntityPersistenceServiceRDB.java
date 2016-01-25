@@ -1144,7 +1144,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
                             baseChildEntity = baseChildEntity.cast();
                             TableModel childTM = tableModel(childEntity.getEntityMeta());
                             updated |= retrieveAndApplyModifications(childTM, baseChildEntity, childEntity);
-                        } else if (!childEntity.isNull()) {
+                        } else if (childEntity.hasValues() || member.isOwnedForceCreation()) {
                             childEntity = childEntity.cast();
                             TableModel childTM = tableModel(childEntity.getEntityMeta());
                             fireModificationAdaptersNewEntity(childTM, childEntity);

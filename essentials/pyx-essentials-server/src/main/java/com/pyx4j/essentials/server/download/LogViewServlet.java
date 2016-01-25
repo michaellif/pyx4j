@@ -459,6 +459,7 @@ public class LogViewServlet extends HttpServlet {
     protected void setFileResponseHeaders(File file, HttpServletResponse response) {
         response.setContentType(fileMimeType(file.getName()));
         response.setContentLength((int) file.length());
+        response.setDateHeader("Last-Modified", file.lastModified());
         if (attachment) {
             response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
         }

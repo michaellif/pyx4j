@@ -273,4 +273,8 @@ public class TimeUtils {
     public static Date simpleParse(String text, String pattern) throws IllegalArgumentException {
         return SimpleDateFormatImpl.parse(text, pattern);
     }
+
+    public static Date strictDateParse(String text, String pattern) throws IllegalArgumentException {
+        return SimpleDateFormatImpl.parseStrict(text, pattern);
+    }
 }

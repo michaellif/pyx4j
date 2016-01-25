@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,19 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-04-18
+ * Created on Dec 14, 2015
  * @author vlads
  */
-package com.pyx4j.quartz;
+package com.pyx4j.entity.test.shared.domain.format;
 
-public interface QuartzConfiguration {
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
-    // Place all the configuration options we need to define here.
+public interface StringCollectionItem extends IEntity {
 
-    Integer threadPoolThreadCount();
-
-    boolean isClustered();
-
-    String schedulerInstanceId();
+    @ToString
+    IPrimitive<String> name();
 
 }
