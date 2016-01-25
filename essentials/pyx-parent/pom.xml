@@ -146,11 +146,11 @@
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
-        <jerseyVersion>2.22</jerseyVersion>
+        <jerseyVersion>2.22.1</jerseyVersion>
 
-        <jettyVersion>9.3.3.v20150827</jettyVersion>
+        <jettyVersion>9.3.7.v20160115</jettyVersion>
 
-        <slf4jVersion>1.7.12</slf4jVersion>
+        <slf4jVersion>1.7.14</slf4jVersion>
 
         <jasperreportsVersion>6.1.1</jasperreportsVersion>
         <dynamicreportsVersion>4.0.1</dynamicreportsVersion>
@@ -238,13 +238,13 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava-gwt</artifactId>
-                <version>18.0</version>
+                <version>19.0</version>
             </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>18.0</version>
+                <version>19.0</version>
             </dependency>
 
             <dependency>
@@ -339,7 +339,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.189</version>
+                <version>1.4.191</version>
             </dependency>
 
             <dependency>
@@ -351,7 +351,7 @@
             <dependency>
                 <groupId>com.mchange</groupId>
                 <artifactId>c3p0</artifactId>
-                <version>0.9.5.1</version>
+                <version>0.9.5.2</version>
             </dependency>
 
             <dependency>
@@ -430,7 +430,7 @@
             <dependency>
                 <groupId>org.apache.derby</groupId>
                 <artifactId>derby</artifactId>
-                <version>10.11.1.1</version>
+                <version>10.12.1.1</version>
             </dependency>
 
             <dependency>
@@ -595,13 +595,13 @@
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
-                <version>3.12</version>
+                <version>3.13</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
-                <version>3.12</version>
+                <version>3.13</version>
             </dependency>
 
             <!-- use the latest version instead of one ref by poi -->
@@ -791,7 +791,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.3</version>
+                    <version>3.5</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
@@ -817,7 +817,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.18.1</version>
+                    <version>2.19.1</version>
                     <configuration>
                         <!--parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount-->
@@ -828,7 +828,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.6.1</version>
+                    <version>3.0.0</version>
                 </plugin>
 
                 <plugin>
