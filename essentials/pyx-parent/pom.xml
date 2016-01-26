@@ -451,7 +451,7 @@
                 <version>3.10.0-alpha-7</version>
                 <exclusions>
                     <exclusion><groupId>junit</groupId><artifactId>junit</artifactId></exclusion>
-                    <groupId>com.google.gwt</groupId><artifactId>gwt-user</artifactId>
+                    <exclusion><groupId>com.google.gwt</groupId><artifactId>gwt-user</artifactId></exclusion>
 	            </exclusions>
             </dependency>
         
