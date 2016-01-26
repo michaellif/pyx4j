@@ -67,9 +67,10 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.gwt.google-apis</groupId>
-            <artifactId>gwt-maps</artifactId>
+            <groupId>com.github.branflake2267</groupId>
+            <artifactId>gwt-maps-api</artifactId>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

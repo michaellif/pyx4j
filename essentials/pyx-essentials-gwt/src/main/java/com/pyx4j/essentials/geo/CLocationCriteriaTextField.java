@@ -19,8 +19,7 @@
  */
 package com.pyx4j.essentials.geo;
 
-import com.google.gwt.maps.client.geocode.LatLngCallback;
-import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.IFormatter;
@@ -32,6 +31,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IAcceptsText;
 import com.pyx4j.forms.client.ui.NTextBox;
 import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
+import com.pyx4j.gwt.geo.LatLngCallback;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -114,8 +114,8 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTex
             }
 
             @Override
-            public void onFailure() {
-                callback.onFailure(new UnrecoverableClientWarning(i18n.tr("We Are Unable To Find This Location")));
+            public void onFailure(Throwable caught) {
+                callback.onFailure(new UnrecoverableClientWarning(i18n.tr("We Are Unable To Find This Location. {1}", caught.getMessage())));
             }
         });
 

@@ -19,11 +19,14 @@
  */
 package com.pyx4j.gwt.geo;
 
-import com.google.gwt.ajaxloader.client.AjaxLoader;
-import com.google.gwt.maps.client.geocode.Geocoder;
-import com.google.gwt.maps.client.geocode.LatLngCallback;
-import com.google.gwt.maps.client.geocode.LocationCallback;
-import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.maps.client.LoadApi;
+import com.google.gwt.maps.client.base.LatLng;
+import com.google.gwt.maps.client.services.Geocoder;
+import com.google.gwt.maps.client.services.GeocoderRequest;
+import com.google.gwt.maps.client.services.GeocoderRequestHandler;
+import com.google.gwt.maps.client.services.GeocoderResult;
+import com.google.gwt.maps.client.services.GeocoderStatus;
 
 import com.pyx4j.geo.GeoPoint;
 
@@ -31,26 +34,40 @@ public class MapUtils {
 
     public static void obtainLatLang(final String address, final LatLngCallback callback) {
         GoogleAPI.ensureInitialized();
-        AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
-        settings.setOtherParms("sensor=false");
-        AjaxLoader.loadApi("maps", GoogleAPI.getMapApiVersion(), new Runnable() {
-            @Override
-            public void run() {
-                new Geocoder().getLatLng(address, callback);
-            }
-        }, settings);
-    }
 
-    public static void obtainLocations(final String address, final LocationCallback callback) {
-        GoogleAPI.ensureInitialized();
-        AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
-        settings.setOtherParms("sensor=false");
-        AjaxLoader.loadApi("maps", GoogleAPI.getMapApiVersion(), new Runnable() {
+        final GeocoderRequest request = GeocoderRequest.newInstance();
+        request.setAddress(address);
+
+        final GeocoderRequestHandler handler = new GeocoderRequestHandler() {
+
+            @Override
+            public void onCallback(JsArray<GeocoderResult> results, GeocoderStatus status) {
+                switch (status) {
+                case ZERO_RESULTS:
+                    callback.onSuccess(null);
+                    break;
+                case OK:
+                    if (results.length() > 0) {
+                        GeocoderResult result = results.get(0);
+                        callback.onSuccess(result.getGeometry().getLocation());
+                    } else {
+                        callback.onSuccess(null);
+                    }
+                    break;
+                default:
+                    callback.onFailure(new Error(status.name()));
+                }
+            }
+        };
+
+        Runnable onLoad = new Runnable() {
             @Override
             public void run() {
-                new Geocoder().getLocations(address, callback);
+                Geocoder.newInstance().geocode(request, handler);
             }
-        }, settings);
+        };
+
+        LoadApi.go(onLoad, false);
     }
 
     public static LatLng newLatLngInstance(GeoPoint geoPoint) {
