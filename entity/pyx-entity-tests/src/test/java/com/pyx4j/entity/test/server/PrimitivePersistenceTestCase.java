@@ -162,6 +162,7 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Value", s.endsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).endsOn().getValue());
     }
 
+    //TODO Make it work on GAE
     public void testLogicalTime() {
         Schedule s = EntityFactory.create(Schedule.class);
         Assert.assertNull("Initial value", s.localTime().getValue());
