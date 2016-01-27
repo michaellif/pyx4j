@@ -52,6 +52,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.core.ISet;
+import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.impl.SetHandler.ElementsComparator;
 import com.pyx4j.entity.core.meta.EntityMeta;
@@ -848,6 +849,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         MemberMeta mm = getEntityMeta().getMemberMeta(memberName);
         if (mm.isEntity()) {
             return ((IEntity) getMember(memberName)).getStringView();
+        } else if ((mm.getObjectClassType() == ObjectClassType.EntityList) || (mm.getObjectClassType() == ObjectClassType.EntitySet)) {
+            return ((ICollection<?, ?>) getMember(memberName)).getStringView();
         } else if (IPrimitive.class.equals(mm.getObjectClass())) {
             IPrimitive<?> member = ((IPrimitive<?>) getMember(memberName));
             if (forMessageFormatFormat && (mm.isNumberValueClass())) {
@@ -900,8 +903,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
                 return getEntityMeta().getNullString();
             case 1:
                 return CommonsStringUtils.nvl(getMemberStringView(sm.get(0), false));
-            case 2:
-                return CommonsStringUtils.nvl_concat(getMemberStringView(sm.get(0), false), getMemberStringView(sm.get(1), false), " ");
             default:
                 Map<String, Serializable> entityValue = getValue();
                 if (entityValue == null) {

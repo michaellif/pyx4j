@@ -266,7 +266,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         if (thisValue == null) {
             return mm.getNullString();
         } else {
-            return ConverterUtils.convertCollection(this, new StringConverter());
+            return "[" + ConverterUtils.convertCollection(this, new StringConverter()) + "]";
         }
     }
 
