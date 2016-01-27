@@ -29,6 +29,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompareHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.TimeUtils;
@@ -179,6 +180,8 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
             return (value instanceof java.sql.Date);
         } else if (valueClass.equals(java.sql.Time.class)) {
             return (value instanceof java.sql.Time);
+        } else if (valueClass.equals(LogicalTime.class)) {
+            return (value instanceof LogicalTime);
         } else if (valueClass.equals(LogicalDate.class)) {
             return (value instanceof LogicalDate);
         } else if (valueClass.isEnum()) {

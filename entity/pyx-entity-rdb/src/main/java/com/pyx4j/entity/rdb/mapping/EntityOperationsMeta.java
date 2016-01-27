@@ -33,6 +33,7 @@ import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
@@ -133,9 +134,9 @@ public class EntityOperationsMeta {
             {
                 MemberMeta memberMeta = entityMeta.getMemberMeta(IEntity.CONCRETE_TYPE_DATA_ATTR);
                 ValueAdapter valueAdapter = new ValueAdapterEntityPolymorphic(dialect, entityMeta.getEntityClass());
-                MemberOperationsMeta member = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.CONCRETE_TYPE_DATA_ATTR), valueAdapter, dialect
-                        .getNamingConvention().sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.CONCRETE_TYPE_DATA_ATTR
-                        + Path.PATH_SEPARATOR);
+                MemberOperationsMeta member = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.CONCRETE_TYPE_DATA_ATTR), valueAdapter,
+                        dialect.getNamingConvention().sqlIdColumnName(), memberMeta,
+                        path + Path.PATH_SEPARATOR + IEntity.CONCRETE_TYPE_DATA_ATTR + Path.PATH_SEPARATOR);
                 membersByPath.put(member.getMemberPath(), member);
             }
 
@@ -147,8 +148,8 @@ public class EntityOperationsMeta {
         {
             MemberMeta memberMeta = entityMeta.getMemberMeta(IEntity.PRIMARY_KEY);
             ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta);
-            pkMember = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.PRIMARY_KEY), valueAdapter, dialect.getNamingConvention()
-                    .sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
+            pkMember = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.PRIMARY_KEY), valueAdapter,
+                    dialect.getNamingConvention().sqlIdColumnName(), memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
             membersByPath.put(pkMember.getMemberPath(), pkMember);
         }
     }
@@ -388,8 +389,8 @@ public class EntityOperationsMeta {
                             sqlName = namingConvention.sqlFieldName(indexedPropertyName);
                         }
 
-                        indexMembers.add(new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, null, adapterClass, adapter.getIndexValueClass(),
-                                false));
+                        indexMembers.add(
+                                new MemberOperationsMeta(memberAccess, null, sqlName, memberMeta, null, adapterClass, adapter.getIndexValueClass(), false));
                     }
                 }
 
@@ -488,6 +489,8 @@ public class EntityOperationsMeta {
             return new ValueAdapterTimestamp(dialect);
         } else if (valueClass.equals(java.sql.Time.class)) {
             return new ValueAdapterTime(dialect);
+        } else if (valueClass.equals(LogicalTime.class)) {
+            return new ValueAdapterLogicalTime(dialect);
         } else if (valueClass.isEnum()) {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             Class<Enum> enumValueClass = (Class<Enum>) valueClass;

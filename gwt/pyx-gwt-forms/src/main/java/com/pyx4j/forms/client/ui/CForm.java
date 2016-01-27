@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.EntityFactory;
@@ -236,8 +237,8 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
                 } catch (ClassCastException e) {
                     log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
                     log.error("Error", e);
-                    throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
-                            + e.getMessage());
+                    throw new UnrecoverableClientError(
+                            "Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:" + e.getMessage());
                 }
             }
         }
@@ -437,6 +438,8 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
                     // Synchronize the value in Editor with model
                     if (cls.equals(LogicalDate.class)) {
                         value = (T) new LogicalDate((Date) value);
+                    } else if (cls.equals(LogicalTime.class)) {
+                        value = (T) new LogicalTime((Date) value);
                     } else if (cls.equals(java.sql.Date.class)) {
                         value = (T) new java.sql.Date(((Date) value).getTime());
                     }

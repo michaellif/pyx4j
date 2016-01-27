@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared.domain.temporal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -38,6 +39,8 @@ public interface Schedule extends IEntity {
     @MemberColumn(name = "tm")
     @Indexed
     IPrimitive<java.sql.Time> time();
+
+    IPrimitive<LogicalTime> localTime();
 
     @Format("MM/dd/yyyy")
     @Indexed

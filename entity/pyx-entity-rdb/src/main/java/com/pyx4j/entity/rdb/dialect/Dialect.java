@@ -29,6 +29,7 @@ import java.util.Map;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -72,6 +73,7 @@ public abstract class Dialect {
         addTypeMeta(java.sql.Date.class, "date");
         addTypeMeta(LogicalDate.class, "date");
         addTypeMeta(java.sql.Time.class, "time");
+        addTypeMeta(LogicalTime.class, "time");
     }
 
     public DatabaseType databaseType() {
@@ -198,6 +200,8 @@ public abstract class Dialect {
         } else if (valueClass.equals(java.util.Date.class)) {
             return Types.TIMESTAMP;
         } else if (valueClass.equals(java.sql.Time.class)) {
+            return Types.TIME;
+        } else if (valueClass.equals(LogicalTime.class)) {
             return Types.TIME;
         } else if (valueClass.isEnum()) {
             return Types.VARCHAR;
