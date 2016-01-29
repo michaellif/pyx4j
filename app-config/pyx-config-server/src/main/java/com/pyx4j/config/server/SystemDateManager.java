@@ -67,7 +67,7 @@ public class SystemDateManager {
     }
 
     public static LocalDate getLocalDate() {
-        return new Date(getTimeMillis()).toInstant().atZone((ZoneId.systemDefault())).toLocalDate();
+        return new Date(getTimeMillis()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public static void setDate(Date date) {
