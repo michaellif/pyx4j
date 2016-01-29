@@ -32,8 +32,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Owner {
 
-    //TODO REMOVE
-    @Deprecated
-    Class<? extends ColumnId> mappedby() default ColumnId.class;
-
 }
