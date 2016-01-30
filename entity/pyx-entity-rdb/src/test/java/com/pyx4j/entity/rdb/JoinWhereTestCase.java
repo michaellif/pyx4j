@@ -32,6 +32,10 @@ import com.pyx4j.entity.test.shared.domain.join.org5where.Employee5.Employee5Typ
 import com.pyx4j.entity.test.shared.domain.join.org6where.Department6;
 import com.pyx4j.entity.test.shared.domain.join.org6where.Employee6;
 import com.pyx4j.entity.test.shared.domain.join.org6where.Employee6.Employee6Type;
+import com.pyx4j.entity.test.shared.domain.join.org7where.Department7;
+import com.pyx4j.entity.test.shared.domain.join.org7where.Department7Employee;
+import com.pyx4j.entity.test.shared.domain.join.org7where.Department7Employee.Employee7Type;
+import com.pyx4j.entity.test.shared.domain.join.org7where.Employee7;
 
 public abstract class JoinWhereTestCase extends DatastoreTestBase {
 
@@ -147,6 +151,148 @@ public abstract class JoinWhereTestCase extends DatastoreTestBase {
             criteria.in(criteria.proto().employees().$().name(), emp12Name);
 
             List<Department6> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+        }
+    }
+
+    public void testJoinWhereMultipeOneToOneJonTable() {
+        String testId = uniqueString();
+
+        Department7 department1 = EntityFactory.create(Department7.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(testId);
+        department1.name().setValue(dep1name);
+        srv.persist(department1);
+
+        Employee7 emp11 = EntityFactory.create(Employee7.class);
+        String emp11Name = "manager 1.1 " + uniqueString();
+        emp11.testId().setValue(testId);
+        emp11.name().setValue(emp11Name);
+        emp11.department().set(department1);
+        srv.persist(emp11);
+        {
+            Department7Employee join = EntityFactory.create(Department7Employee.class);
+            join.employee().set(emp11);
+            join.type().setValue(Employee7Type.manager);
+            join.department().set(department1);
+            srv.persist(join);
+        }
+
+        Employee7 emp12 = EntityFactory.create(Employee7.class);
+        String emp12Name = "director 1.2 " + uniqueString();
+        emp12.testId().setValue(testId);
+        emp12.name().setValue(emp12Name);
+        srv.persist(emp12);
+        {
+            Department7Employee join = EntityFactory.create(Department7Employee.class);
+            join.employee().set(emp12);
+            join.type().setValue(Employee7Type.director);
+            join.department().set(department1);
+            srv.persist(join);
+        }
+
+        // See if retrieval works
+        {
+            Department7 department1r = srv.retrieve(Department7.class, department1.getPrimaryKey());
+
+            Assert.assertEquals("Member retrieved using JoinWhere", emp11, department1r.manager());
+            Assert.assertEquals("Member retrieved using JoinWhere", emp12, department1r.director());
+        }
+
+        // See if query works
+        {
+            EntityQueryCriteria<Department7> criteria = EntityQueryCriteria.create(Department7.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().director().name(), emp12Name);
+
+            List<Department7> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+        }
+
+        {
+            EntityQueryCriteria<Department7> criteria = EntityQueryCriteria.create(Department7.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().employees().$().name(), emp12Name);
+
+            List<Department7> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 0, retrived.size());
+        }
+    }
+
+    public void testJoinWhereOneToManyJonTable() {
+        String testId = uniqueString();
+
+        Department7 department1 = EntityFactory.create(Department7.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(testId);
+        department1.name().setValue(dep1name);
+        srv.persist(department1);
+
+        Employee7 emp11 = EntityFactory.create(Employee7.class);
+        String emp11Name = "manager 1.1 " + uniqueString();
+        emp11.testId().setValue(testId);
+        emp11.name().setValue(emp11Name);
+        srv.persist(emp11);
+        {
+            Department7Employee join = EntityFactory.create(Department7Employee.class);
+            join.employee().set(emp11);
+            join.type().setValue(Employee7Type.manager);
+            join.department().set(department1);
+            srv.persist(join);
+        }
+
+        Employee7 emp12 = EntityFactory.create(Employee7.class);
+        String emp12Name = "employee 1.2 " + uniqueString();
+        emp12.testId().setValue(testId);
+        emp12.name().setValue(emp12Name);
+        srv.persist(emp12);
+        {
+            Department7Employee join = EntityFactory.create(Department7Employee.class);
+            join.employee().set(emp12);
+            join.type().setValue(Employee7Type.employee);
+            join.department().set(department1);
+            srv.persist(join);
+        }
+
+        Employee7 emp13 = EntityFactory.create(Employee7.class);
+        String emp13Name = "employee 1.3 " + uniqueString();
+        emp13.testId().setValue(testId);
+        emp13.name().setValue(emp13Name);
+        srv.persist(emp13);
+        {
+            Department7Employee join = EntityFactory.create(Department7Employee.class);
+            join.employee().set(emp13);
+            join.type().setValue(Employee7Type.employee);
+            join.department().set(department1);
+            srv.persist(join);
+        }
+
+        // See if retrieval works
+        {
+            Department7 department1r = srv.retrieve(Department7.class, department1.getPrimaryKey());
+
+            Assert.assertEquals("Member retrieved using JoinWhere", emp11, department1r.manager());
+            Assert.assertTrue("Member retrieved using JoinWhere", department1r.director().isNull());
+
+            Assert.assertEquals("Collection retrieved using JoinWhere", 2, department1r.employees().size());
+        }
+
+        // See if query works
+        {
+            EntityQueryCriteria<Department7> criteria = EntityQueryCriteria.create(Department7.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().director().name(), emp12Name);
+
+            List<Department7> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 0, retrived.size());
+        }
+
+        {
+            EntityQueryCriteria<Department7> criteria = EntityQueryCriteria.create(Department7.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().employees().$().name(), emp12Name);
+
+            List<Department7> retrived = srv.query(criteria);
             Assert.assertEquals("result set size", 1, retrived.size());
         }
     }

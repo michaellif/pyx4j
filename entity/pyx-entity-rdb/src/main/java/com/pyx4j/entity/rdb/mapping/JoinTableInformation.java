@@ -109,7 +109,7 @@ class JoinTableInformation extends JoinInformation {
             sqlChildJoinContition.add(buildPolymorphicChildJoinContition(dialect, entityClass));
         }
         if (joinTable.where().length != 0) {
-            sqlChildJoinContition.addAll(buildChildJoinWhereContition(dialect, entityClass, joinTable.where()));
+            sqlChildJoinContition.addAll(buildChildJoinWhereContition(dialect, joinTableClass, joinTable.where()));
         }
     }
 
