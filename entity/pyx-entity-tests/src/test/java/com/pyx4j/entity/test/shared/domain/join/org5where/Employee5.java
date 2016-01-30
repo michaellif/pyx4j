@@ -37,7 +37,7 @@ public interface Employee5 extends IEntity {
 
         manager,
 
-        managerFormer,
+        director,
 
         employee
 
@@ -50,5 +50,6 @@ public interface Employee5 extends IEntity {
     IPrimitive<Employee5Type> type();
 
     @Owner
+    @JoinColumn
     Department5 department();
 }

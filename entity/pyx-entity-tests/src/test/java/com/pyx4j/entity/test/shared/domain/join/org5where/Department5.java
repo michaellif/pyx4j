@@ -37,8 +37,8 @@ public interface Department5 extends IEntity {
     @Owned(where = { @JoinWhere(column = Employee5TypeColumnId.class, value = "manager") })
     Employee5 manager();
 
-    @Owned(where = { @JoinWhere(column = Employee5TypeColumnId.class, value = "managerFormer") })
-    Employee5 managerFormer();
+    @Owned(where = { @JoinWhere(column = Employee5TypeColumnId.class, value = "director") })
+    Employee5 director();
 
     @Owned(where = { @JoinWhere(column = Employee5TypeColumnId.class, value = "employee") })
     ISet<Employee5> employees();

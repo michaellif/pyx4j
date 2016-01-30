@@ -25,7 +25,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ISet;
-import com.pyx4j.entity.test.shared.domain.join.org5where.Employee5.Employee5TypeColumnId;
+import com.pyx4j.entity.test.shared.domain.join.org6where.Employee6.Employee6TypeColumnId;
 
 @Table(prefix = "test")
 public interface Department6 extends IEntity {
@@ -34,12 +34,12 @@ public interface Department6 extends IEntity {
 
     IPrimitive<String> name();
 
-    @JoinTable(value = Employee6.class, where = { @JoinWhere(column = Employee5TypeColumnId.class, value = "manager") })
+    @JoinTable(value = Employee6.class, where = { @JoinWhere(column = Employee6TypeColumnId.class, value = "manager") })
     Employee6 manager();
 
-    @JoinTable(value = Employee6.class, where = { @JoinWhere(column = Employee5TypeColumnId.class, value = "managerFormer") })
-    Employee6 managerFormer();
+    @JoinTable(value = Employee6.class, where = { @JoinWhere(column = Employee6TypeColumnId.class, value = "director") })
+    Employee6 director();
 
-    @JoinTable(value = Employee6.class, where = { @JoinWhere(column = Employee5TypeColumnId.class, value = "employee") })
+    @JoinTable(value = Employee6.class, where = { @JoinWhere(column = Employee6TypeColumnId.class, value = "employee") })
     ISet<Employee6> employees();
 }

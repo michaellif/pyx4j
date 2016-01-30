@@ -19,6 +19,8 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.List;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.meta.MemberMeta;
 
@@ -32,20 +34,24 @@ public class MemberExternalOperationsMeta extends MemberOperationsMeta {
 
     private final String sqlValueName;
 
-    private final String sqlChildJoinContition;
+    private final List<String> sqlChildJoinContition;
 
     private final ValueAdapter ownerValueAdapter;
 
     public MemberExternalOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
             Class<? extends IEntity> joinTableClass, boolean joinTableSameAsTarget, String sqlOwnerName, ValueAdapter ownerValueAdapter, String sqlValueName,
-            String sqlChildJoinContition) {
+            List<String> sqlChildJoinContition) {
         super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath);
         this.joinTableClass = joinTableClass;
         this.joinTableSameAsTarget = joinTableSameAsTarget;
         this.sqlOwnerName = sqlOwnerName;
         this.ownerValueAdapter = ownerValueAdapter;
         this.sqlValueName = sqlValueName;
-        this.sqlChildJoinContition = sqlChildJoinContition;
+        if (sqlChildJoinContition != null && !sqlChildJoinContition.isEmpty()) {
+            this.sqlChildJoinContition = sqlChildJoinContition;
+        } else {
+            this.sqlChildJoinContition = null;
+        }
     }
 
     @Override
@@ -77,7 +83,7 @@ public class MemberExternalOperationsMeta extends MemberOperationsMeta {
         return sqlChildJoinContition != null;
     }
 
-    public String getSqlChildJoinContition() {
+    public List<String> getSqlChildJoinContition() {
         return sqlChildJoinContition;
     }
 

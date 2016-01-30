@@ -22,10 +22,12 @@ package com.pyx4j.entity.rdb.mapping;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.JoinWhere;
 import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -53,7 +55,7 @@ abstract class JoinInformation {
 
     MemberCollectionOrderMeta collectionOrderMeta = null;
 
-    String sqlChildJoinContition = null;
+    List<String> sqlChildJoinContition = new ArrayList<>();
 
     ValueAdapter ownerValueAdapter;
 
@@ -148,7 +150,7 @@ abstract class JoinInformation {
         return false;
     }
 
-    protected static String buildChildJoinContition(Dialect dialect, Class<? extends IEntity> entityClass) {
+    protected static String buildPolymorphicChildJoinContition(Dialect dialect, Class<? extends IEntity> entityClass) {
         List<String> discriminatorStrings = new ArrayList<String>();
         for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityClass)) {
             DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
@@ -173,6 +175,35 @@ abstract class JoinInformation {
             sqlChildJoinContition.append(") ");
             return sqlChildJoinContition.toString();
         }
+    }
+
+    protected static List<String> buildChildJoinWhereContition(Dialect dialect, Class<? extends IEntity> entityClass, JoinWhere[] joinWheres) {
+        List<String> sqlChildJoinContitions = new ArrayList<>();
+        for (JoinWhere joinWhere : joinWheres) {
+            MemberMeta memberMeta = findJoinColumnMember(entityClass, joinWhere.column());
+            String sqlChildJoinContition = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(memberMeta));
+            if (joinWhere.value() == null) {
+                sqlChildJoinContition += " IS NULL ";
+            } else {
+                sqlChildJoinContition += " = '" + joinWhere.value() + "'";
+            }
+            sqlChildJoinContitions.add(sqlChildJoinContition);
+        }
+        return sqlChildJoinContitions;
+    }
+
+    protected static MemberMeta findJoinColumnMember(Class<? extends IEntity> entityClass, Class<? extends ColumnId> columnId) {
+        EntityMeta childEntityMeta = EntityFactory.getEntityMeta(entityClass);
+        for (String jmemberName : childEntityMeta.getMemberNames()) {
+            MemberMeta jmemberMeta = childEntityMeta.getMemberMeta(jmemberName);
+            if (!jmemberMeta.isTransient()) {
+                JoinColumn joinColumn = jmemberMeta.getAnnotation(JoinColumn.class);
+                if (joinColumn != null && joinColumn.value() == columnId) {
+                    return jmemberMeta;
+                }
+            }
+        }
+        throw new AssertionError("Unmapped @JoinColumn member in table '" + childEntityMeta.getCaption() + "' '" + columnId + "'");
     }
 
 }
