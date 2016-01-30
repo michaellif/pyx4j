@@ -41,7 +41,8 @@ public @interface Owned {
     CascadeType[] cascade() default { CascadeType.ALL };
 
     /**
-     * Additional restriction on created join
+     * Additional restriction on created join.
+     * In child entity column value is initialized and enforced by Persistence
      */
     JoinWhere[] where() default {};
 

@@ -26,6 +26,8 @@ import java.lang.annotation.RetentionPolicy;
  * Analog to hibernate annotation WhereJoinTable.
  *
  * Only used inside @Owned and @JoinTable
+ *
+ * For @Owned entities in cascade persist the column value is initialized and enforced by Persistence
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JoinWhere {
