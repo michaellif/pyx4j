@@ -21,8 +21,6 @@ package com.pyx4j.config.server;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -69,25 +67,12 @@ public class SystemDateManager {
     }
 
     public static LocalDate getLocalDate() {
-        return getZonedDateTime(null).toLocalDate();
+        LogicalDate date = getLogicalDate();
+        return LocalDate.of(date.getYear() + 1900, date.getMonth() + 1, date.getDate());
     }
 
     public static LocalDateTime getLocalDateTime() {
-        return getZonedDateTime(null).toLocalDateTime();
-    }
-
-    /**
-     * Returns zonedDateTime at specified zone
-     *
-     * @param zone
-     *            A concrete zone, or null for default system zone.
-     * @return
-     */
-    public static ZonedDateTime getZonedDateTime(ZoneId zone) {
-        if (zone == null) {
-            zone = ZoneId.systemDefault();
-        }
-        return getDate().toInstant().atZone(zone);
+        return LocalDateTime.from(getLocalDate());
     }
 
     public static void setDate(Date date) {
