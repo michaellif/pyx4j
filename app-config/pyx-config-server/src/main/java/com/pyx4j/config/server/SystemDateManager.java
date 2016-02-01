@@ -72,7 +72,7 @@ public class SystemDateManager {
     }
 
     public static LocalDateTime getLocalDateTime() {
-        return LocalDateTime.from(getLocalDate());
+        return LocalDateTime.from(getDate().toInstant().atZone(ZoneId.systemDefault()));
     }
 
     public static void setDate(Date date) {
