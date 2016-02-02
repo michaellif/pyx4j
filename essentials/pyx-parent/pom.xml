@@ -146,6 +146,7 @@
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
+        <cxf.version>3.1.4</cxf.version>
         <jerseyVersion>2.22.1</jerseyVersion>
 
         <jettyVersion>9.3.7.v20160115</jettyVersion>
@@ -452,7 +453,7 @@
                 <exclusions>
                     <exclusion><groupId>junit</groupId><artifactId>junit</artifactId></exclusion>
                     <exclusion><groupId>com.google.gwt</groupId><artifactId>gwt-user</artifactId></exclusion>
-	            </exclusions>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -557,21 +558,21 @@
             </dependency>
 
             <!-- The version shuld match jasperreports -->
-	        <dependency>
-	            <groupId>net.sourceforge.dynamicreports</groupId>
-	            <artifactId>dynamicreports-core</artifactId>
-	            <version>${dynamicreportsVersion}</version>
-	            <exclusions>
+            <dependency>
+                <groupId>net.sourceforge.dynamicreports</groupId>
+                <artifactId>dynamicreports-core</artifactId>
+                <version>${dynamicreportsVersion}</version>
+                <exclusions>
                     <exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion>
                     <exclusion><groupId>avalon-framework</groupId><artifactId>avalon-framework-impl</artifactId></exclusion>
                 </exclusions>
-	        </dependency>
+            </dependency>
 
-	        <dependency>
-	            <groupId>net.sourceforge.dynamicreports</groupId>
-	            <artifactId>dynamicreports-adhoc</artifactId>
-	            <version>${dynamicreportsVersion}</version>
-	        </dependency>
+            <dependency>
+                <groupId>net.sourceforge.dynamicreports</groupId>
+                <artifactId>dynamicreports-adhoc</artifactId>
+                <version>${dynamicreportsVersion}</version>
+            </dependency>
 
             <!-- Version not from jasperreports repository. e.g. not 2.1.7.js2; The  transparent charts/graphics in PDF fixed are not applied -->
             <dependency>
@@ -647,10 +648,16 @@
             </dependency>
 
             <dependency>
-				<groupId>org.jsoup</groupId>
-				<artifactId>jsoup</artifactId>
-				<version>1.8.3</version>
-			</dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.8.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-client</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
