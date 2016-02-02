@@ -42,10 +42,12 @@ public class PropertyBaseHTTPConduitConfigurer implements HTTPConduitConfigurer 
     }
 
     @Override
-    public void configure(String name, String address, HTTPConduit c) {
+    public void configure(String name, String address, HTTPConduit httpConduit) {
         HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
         httpClientPolicy.setConnectionTimeout(connectionTimeout);
         httpClientPolicy.setReceiveTimeout(receiveTimeout);
+
+        httpConduit.setClient(httpClientPolicy);
     }
 
 }
