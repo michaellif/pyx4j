@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://maven.apache.org/POM/4.0.0">
-    <!-- @version $Revision$ ($Author$) $Date$ -->
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -144,7 +144,7 @@
             <artifactId>cxf-rt-rs-client</artifactId>
             <optional>true</optional>
         </dependency>
-        
+
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-json-provider</artifactId>
@@ -155,7 +155,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <optional>true</optional>
-        </dependency>        
+        </dependency>
 
         <dependency>
             <groupId>net.sourceforge.saxon</groupId>
