@@ -7,51 +7,19 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.formatters.NumberFormatter;
+import com.pyx4j.commons.formatters.SimpleMessageFormatter;
 
 public class CNumberLabel extends CLabel<Number> {
 
     public void setNumberFormat(String format, boolean useMessageFormat) {
         if (format != null) {
             if (useMessageFormat) {
-                setFormatter(new ViewNumberSimpleMessageFormat<Number>(format));
+                setFormatter(new SimpleMessageFormatter<Number>(format));
             } else {
-                setFormatter(new ViewNumberFormat<Number>(format));
+                setFormatter(new NumberFormatter<Number>(format));
             }
         }
-    }
-
-    public static class ViewNumberFormat<T extends Number> implements IFormatter<T, String> {
-
-        private final NumberFormat formatter;
-
-        ViewNumberFormat(String format) {
-            formatter = NumberFormat.getFormat(format);
-        }
-
-        @Override
-        public String format(T value) {
-            return formatter.format(value);
-        }
-
-    }
-
-    public static class ViewNumberSimpleMessageFormat<T extends Number> implements IFormatter<T, String> {
-
-        private final String format;
-
-        ViewNumberSimpleMessageFormat(String format) {
-            this.format = format;
-        }
-
-        @Override
-        public String format(T value) {
-            return SimpleMessageFormat.format(format, value);
-        }
-
     }
 
 }
