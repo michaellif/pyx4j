@@ -147,7 +147,7 @@
         <gae.version>${gaeVersion}</gae.version>
 
         <cxf.version>3.1.4</cxf.version>
-        <jerseyVersion>2.22.1</jerseyVersion>
+        <jackson.version>2.5.4</jackson.version>
 
         <jettyVersion>9.3.7.v20160115</jettyVersion>
 
@@ -492,12 +492,6 @@
             </dependency>
 
             <dependency>
-                <groupId>net.tanesha.recaptcha4j</groupId>
-                <artifactId>recaptcha4j</artifactId>
-                <version>0.0.7</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
                 <version>3.20.0-GA</version>
@@ -660,21 +654,21 @@
             </dependency>
 
             <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-client</artifactId>
-                <version>${jerseyVersion}</version>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-base</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-json-processing</artifactId>
-                <version>${jerseyVersion}</version>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-json-jackson</artifactId>
-                <version>${jerseyVersion}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <dependency>
