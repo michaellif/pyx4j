@@ -3,6 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://maven.apache.org/POM/4.0.0">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.pyx4j</groupId>
@@ -146,7 +147,8 @@
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
-        <jerseyVersion>2.22.1</jerseyVersion>
+        <cxf.version>3.1.4</cxf.version>
+        <jackson.version>2.5.4</jackson.version>
 
         <jettyVersion>9.3.7.v20160115</jettyVersion>
 
@@ -452,9 +454,9 @@
                 <exclusions>
                     <exclusion><groupId>junit</groupId><artifactId>junit</artifactId></exclusion>
                     <exclusion><groupId>com.google.gwt</groupId><artifactId>gwt-user</artifactId></exclusion>
-	            </exclusions>
+                </exclusions>
             </dependency>
-        
+
             <dependency>
                 <groupId>com.google.gwt.google-apis</groupId>
                 <artifactId>gwt-ajaxloader</artifactId>
@@ -488,12 +490,6 @@
                         <artifactId>gwt-user</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>net.tanesha.recaptcha4j</groupId>
-                <artifactId>recaptcha4j</artifactId>
-                <version>0.0.7</version>
             </dependency>
 
             <dependency>
@@ -557,21 +553,21 @@
             </dependency>
 
             <!-- The version shuld match jasperreports -->
-	        <dependency>
-	            <groupId>net.sourceforge.dynamicreports</groupId>
-	            <artifactId>dynamicreports-core</artifactId>
-	            <version>${dynamicreportsVersion}</version>
-	            <exclusions>
+            <dependency>
+                <groupId>net.sourceforge.dynamicreports</groupId>
+                <artifactId>dynamicreports-core</artifactId>
+                <version>${dynamicreportsVersion}</version>
+                <exclusions>
                     <exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion>
                     <exclusion><groupId>avalon-framework</groupId><artifactId>avalon-framework-impl</artifactId></exclusion>
                 </exclusions>
-	        </dependency>
+            </dependency>
 
-	        <dependency>
-	            <groupId>net.sourceforge.dynamicreports</groupId>
-	            <artifactId>dynamicreports-adhoc</artifactId>
-	            <version>${dynamicreportsVersion}</version>
-	        </dependency>
+            <dependency>
+                <groupId>net.sourceforge.dynamicreports</groupId>
+                <artifactId>dynamicreports-adhoc</artifactId>
+                <version>${dynamicreportsVersion}</version>
+            </dependency>
 
             <!-- Version not from jasperreports repository. e.g. not 2.1.7.js2; The  transparent charts/graphics in PDF fixed are not applied -->
             <dependency>
@@ -606,6 +602,10 @@
                 <groupId>org.apache.xmlbeans</groupId>
                 <artifactId>xmlbeans</artifactId>
                 <version>2.6.0</version>
+                <exclusions>
+                    <!-- We need need stax2-api -->
+                    <exclusion><groupId>stax</groupId><artifactId>stax-api</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <!-- poi need this  -->
@@ -643,27 +643,33 @@
             </dependency>
 
             <dependency>
-				<groupId>org.jsoup</groupId>
-				<artifactId>jsoup</artifactId>
-				<version>1.8.3</version>
-			</dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-client</artifactId>
-                <version>${jerseyVersion}</version>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.8.3</version>
             </dependency>
 
             <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-json-processing</artifactId>
-                <version>${jerseyVersion}</version>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-client</artifactId>
+                <version>${cxf.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-json-jackson</artifactId>
-                <version>${jerseyVersion}</version>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-base</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <dependency>
