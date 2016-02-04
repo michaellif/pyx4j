@@ -19,14 +19,15 @@
  */
 package com.pyx4j.rpc.server;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.config.server.rpc.ServiceFilter;
 import com.pyx4j.entity.server.RpcEntityServiceFilter;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.Service;
@@ -39,10 +40,13 @@ public class ReflectionServiceFactory implements IServiceFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ReflectionServiceFactory.class);
 
-    private final List<IServiceFilter> filters;
+    private final List<ServiceFilter> filters;
+
+    private final List<IServiceFilter> serviceFilter;
 
     public ReflectionServiceFactory() {
-        filters = new Vector<IServiceFilter>();
+        serviceFilter = new ArrayList<>();
+        filters = new ArrayList<ServiceFilter>();
         filters.add(new RpcEntityServiceFilter());
     }
 
@@ -90,12 +94,21 @@ public class ReflectionServiceFactory implements IServiceFactory {
     }
 
     @Override
-    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
+    public List<ServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
         return filters;
     }
 
-    protected void addFilter(IServiceFilter filter) {
+    protected void addFilter(ServiceFilter filter) {
         filters.add(filter);
+    }
+
+    protected void addServiceFilter(IServiceFilter filter) {
+        serviceFilter.add(filter);
+    }
+
+    @Override
+    public List<IServiceFilter> getIServiceFilterChain(Class<? extends IService> serviceInterfaceClass) {
+        return serviceFilter;
     }
 
 }
