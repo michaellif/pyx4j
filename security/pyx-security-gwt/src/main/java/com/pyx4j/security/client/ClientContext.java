@@ -43,11 +43,13 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.client.ClientApplicationBackendConfig;
 import com.pyx4j.config.client.ClientApplicationMode;
 import com.pyx4j.config.client.ClientApplicationVersion;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IUserPreferences;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
+import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableBlockingAsyncCallback;
@@ -276,6 +278,9 @@ public class ClientContext extends Context {
             ClientApplicationMode.setDevelopment(authenticationResponse.isDevelopmentBehavior());
             ClientApplicationMode.setQa(authenticationResponse.isQaBehavior());
             ClientApplicationMode.setDemo(authenticationResponse.isDemoBehavior());
+            // This initialization to done to late to debug all initialization, find a better way to trigger this
+            ClientLogger.setDebugOn(ApplicationMode.isDevelopment());
+
             authenticationObtained = true;
             userVisit = authenticationResponse.getUserVisit();
             if (authenticationResponse.getLogoutURL() != null) {
