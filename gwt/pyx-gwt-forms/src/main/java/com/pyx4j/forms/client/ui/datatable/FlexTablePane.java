@@ -145,7 +145,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
         if (!BrowserType.isIE()) {
             for (int i = 0; i < 30; i++) {
-                flexTable.getColumnFormatter().setWidth(i, "0");
+                flexTable.getColumnFormatter().setWidth(i, "1px");
             }
         } else {
             for (int i = 0; i < 30; i++) {
