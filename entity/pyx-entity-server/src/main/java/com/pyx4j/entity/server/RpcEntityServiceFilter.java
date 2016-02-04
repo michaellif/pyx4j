@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.config.server.rpc.ServiceFilter;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
@@ -42,7 +42,7 @@ import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.Service;
 
-public class RpcEntityServiceFilter implements IServiceFilter {
+public class RpcEntityServiceFilter implements ServiceFilter {
 
     private static final Logger log = LoggerFactory.getLogger(RpcEntityServiceFilter.class);
 
