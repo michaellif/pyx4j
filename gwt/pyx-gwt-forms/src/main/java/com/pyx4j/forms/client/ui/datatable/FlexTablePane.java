@@ -149,7 +149,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
             }
         } else {
             for (int i = 0; i < 30; i++) {
-                flexTable.getColumnFormatter().getElement(i).getStyle().setWidth(0, Unit.PX);
+                flexTable.getColumnFormatter().getElement(i).getStyle().setWidth(1, Unit.PX);
             }
 
         }
