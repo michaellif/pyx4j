@@ -22,10 +22,11 @@ package com.pyx4j.rpc.client;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.ServiceExecution.OperationType;
+import com.pyx4j.rpc.shared.ServiceQueueId;
 
 /**
  * This class instance is generated for each server base on data in annotation @ServiceExecution
- * 
+ *
  */
 public class ServiceExecutionInfo {
 
@@ -35,15 +36,18 @@ public class ServiceExecutionInfo {
 
     private final String waitCaption;
 
+    private final Class<? extends ServiceQueueId> queueId;
+
     @I18nComment("Default message at the top of the screen, when server operation is in progress")
-    public static ServiceExecutionInfo DEFAULT = new ServiceExecutionInfo(OperationType.Transparent, i18n.tr("Loading..."));
+    public static ServiceExecutionInfo DEFAULT = new ServiceExecutionInfo(OperationType.Transparent, i18n.tr("Loading..."), null);
 
-    static ServiceExecutionInfo BACKGROUND = new ServiceExecutionInfo(OperationType.NonBlocking, null);
+    static ServiceExecutionInfo BACKGROUND = new ServiceExecutionInfo(OperationType.NonBlocking, null, null);
 
-    public ServiceExecutionInfo(OperationType operationType, String waitCaption) {
+    public ServiceExecutionInfo(OperationType operationType, String waitCaption, Class<? extends ServiceQueueId> queueId) {
         super();
         this.operationType = operationType;
         this.waitCaption = waitCaption;
+        this.queueId = queueId;
     }
 
     public OperationType operationType() {
@@ -52,6 +56,10 @@ public class ServiceExecutionInfo {
 
     public String waitCaption() {
         return waitCaption;
+    }
+
+    public Class<? extends ServiceQueueId> getQueueId() {
+        return queueId;
     }
 
 }
