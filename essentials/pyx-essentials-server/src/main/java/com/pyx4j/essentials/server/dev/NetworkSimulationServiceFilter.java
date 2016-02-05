@@ -21,12 +21,12 @@ package com.pyx4j.essentials.server.dev;
 
 import java.io.Serializable;
 
-import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.config.server.rpc.ServiceFilter;
 import com.pyx4j.essentials.rpc.admin.IsIgnoreNetworkSimulationService;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 import com.pyx4j.rpc.shared.Service;
 
-public class NetworkSimulationServiceFilter implements IServiceFilter {
+public class NetworkSimulationServiceFilter implements ServiceFilter {
 
     private static NetworkSimulation networkSimulationConfig;
 
@@ -40,6 +40,9 @@ public class NetworkSimulationServiceFilter implements IServiceFilter {
     @Override
     public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response) {
         if (IsIgnoreNetworkSimulationService.class.isAssignableFrom(serviceClass)) {
+            return response;
+        }
+        if (!networkSimulationConfig.enabled().getValue(false)) {
             return response;
         }
 

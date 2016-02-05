@@ -23,19 +23,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.config.server.rpc.ServiceFilter;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
+import com.pyx4j.essentials.server.dev.NetworkSimulationIServiceFilter;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.essentials.server.dev.RpcEntityDumpServiceFilter;
 import com.pyx4j.rpc.server.ReflectionServiceFactory;
+import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.Service;
 
 public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
 
+    public EssentialsRPCServiceFactory() {
+    }
+
     @Override
-    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
-        //List<IServiceFilter> filters = super.getServiceFilterChain(serviceClass);
-        List<IServiceFilter> filters = new ArrayList<>();
+    public List<ServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
+        List<ServiceFilter> filters = new ArrayList<>();
 
         if (ApplicationBackend.getBackendType() == ApplicationBackendType.RDB) {
             filters.add(new RpcEntityDumpServiceFilter());
@@ -47,6 +52,18 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
                 && (NetworkSimulationServiceFilter.getNetworkSimulationConfig().enabled().getValue(false))) {
             filters.add(new NetworkSimulationServiceFilter());
         }
+        return filters;
+    }
+
+    @Override
+    public List<IServiceFilter> getIServiceFilterChain(Class<? extends IService> serviceInterfaceClass) {
+        List<IServiceFilter> filters = new ArrayList<>();
+        filters.addAll(super.getIServiceFilterChain(serviceInterfaceClass));
+
+        if (NetworkSimulationIServiceFilter.getNetworkSimulationConfig().enabled().getValue(false)) {
+            filters.add(new NetworkSimulationIServiceFilter());
+        }
+
         return filters;
     }
 }

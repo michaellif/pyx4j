@@ -45,4 +45,10 @@ public @interface ServiceExecution {
 
     String waitCaption() default "";
 
+    /**
+     * Single file processing of Requests.
+     * TODO We can add multiple queues.
+     */
+    Class<? extends ServiceQueueId> queue() default ServiceQueueId.class;
+
 }
