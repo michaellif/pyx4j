@@ -184,7 +184,6 @@ public class DataTableModel<E extends IEntity> {
 
     public void populateData(List<E> dataItems, int pageNumber, boolean hasMoreData, int totalRows, String encodedCursorReference) {
         data.clear();
-        clearSelection();
         if (dataItems != null) {
             data.addAll(dataItems);
         }
@@ -200,6 +199,7 @@ public class DataTableModel<E extends IEntity> {
         this.pageNumber = 0;
         this.hasMoreData = false;
         clearEncodedCursorReferences();
+        clearSelection();
         fireTableChanged(new DataTableModelEvent());
     }
 
@@ -270,9 +270,10 @@ public class DataTableModel<E extends IEntity> {
     }
 
     public void setAllRowsSelected(boolean checked) {
-        selected.clear();
         if (checked) {
             selected.addAll(data);
+        } else {
+            selected.removeAll(data);
         }
         fireTableChanged(new DataTableModelEvent(DataTableModelEvent.Type.SELECTION));
     }
