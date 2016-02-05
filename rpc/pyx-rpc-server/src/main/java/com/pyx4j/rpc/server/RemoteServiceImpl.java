@@ -33,7 +33,7 @@ import com.pyx4j.commons.IsWarningException;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.rpc.IServiceFactory;
-import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.config.server.rpc.ServiceFilter;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
@@ -134,9 +134,9 @@ public class RemoteServiceImpl implements RemoteService {
                 visit.getSessionGuardLock().readLock().lock();
             }
             try {
-                List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
+                List<ServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
                 if (filters != null) {
-                    for (IServiceFilter filter : filters) {
+                    for (ServiceFilter filter : filters) {
                         serviceRequest = filter.filterIncomming(clazz, serviceRequest);
                     }
                 }
@@ -145,7 +145,7 @@ public class RemoteServiceImpl implements RemoteService {
                 inService = false;
                 if (filters != null) {
                     // Run filters in reverse order
-                    ListIterator<IServiceFilter> li = filters.listIterator(filters.size());
+                    ListIterator<ServiceFilter> li = filters.listIterator(filters.size());
                     while (li.hasPrevious()) {
                         returnValue = li.previous().filterOutgoing(clazz, returnValue);
                     }

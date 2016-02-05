@@ -17,17 +17,8 @@
  * Created on Feb 4, 2016
  * @author vlads
  */
-package com.pyx4j.config.server.rpc;
+package com.pyx4j.rpc.shared;
 
-import java.io.Serializable;
-
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.IServiceRequest;
-
-public interface IServiceFilter {
-
-    public void filterIncomming(IServiceRequest request, String serviceInterfaceClassName, IService serviceInstance);
-
-    public Serializable filterOutgoing(IServiceRequest request, String serviceInterfaceClassName, IService serviceInstance, Serializable result);
+public interface ServiceQueueId {
 
 }
