@@ -19,6 +19,9 @@
  */
 package com.pyx4j.config.server;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -62,6 +65,14 @@ public class SystemDateManager {
 
     public static LogicalDate getLogicalDate() {
         return new LogicalDate(getTimeMillis());
+    }
+
+    public static LocalDate getLocalDate() {
+        return LocalDate.from(getDate().toInstant().atZone(ZoneId.systemDefault()));
+    }
+
+    public static LocalDateTime getLocalDateTime() {
+        return LocalDateTime.from(getDate().toInstant().atZone(ZoneId.systemDefault()));
     }
 
     public static void setDate(Date date) {
