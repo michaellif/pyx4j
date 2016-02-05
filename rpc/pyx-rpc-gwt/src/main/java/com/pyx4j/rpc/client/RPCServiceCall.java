@@ -17,17 +17,30 @@
  * Created on Feb 4, 2016
  * @author vlads
  */
-package com.pyx4j.config.server.rpc;
+package com.pyx4j.rpc.client;
 
 import java.io.Serializable;
 
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.IServiceRequest;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface IServiceFilter {
+import com.pyx4j.rpc.shared.Service;
 
-    public void filterIncomming(IServiceRequest request, String serviceInterfaceClassName, IService serviceInstance);
+class RPCServiceCall {
 
-    public Serializable filterOutgoing(IServiceRequest request, String serviceInterfaceClassName, IService serviceInstance, Serializable result);
+    final ServiceExecutionInfo info;
+
+    final Class<? extends Service<?, ?>> serviceInterface;
+
+    final Serializable request;
+
+    final AsyncCallback<?> callback;
+
+    public RPCServiceCall(ServiceExecutionInfo info, Class<? extends Service<?, ?>> serviceInterface, Serializable request, AsyncCallback<?> callback) {
+        super();
+        this.info = info;
+        this.serviceInterface = serviceInterface;
+        this.request = request;
+        this.callback = callback;
+    }
 
 }

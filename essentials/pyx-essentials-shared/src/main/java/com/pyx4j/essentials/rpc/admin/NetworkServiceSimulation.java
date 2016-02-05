@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,35 +14,42 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-09-15
+ * Created on Feb 4, 2016
  * @author vlads
  */
 package com.pyx4j.essentials.rpc.admin;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface NetworkSimulation extends IEntity {
+public interface NetworkServiceSimulation extends IEntity {
 
     IPrimitive<Boolean> enabled();
 
     @Caption(name = "Delay", description = "milliseconds")
     IPrimitive<Integer> delay();
 
-    @Caption(name = "URI Pattern", description = "regular expression: .*/Service.function")
-    IPrimitive<String> httpRequestURIPattern();
+    @Transient
+    @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+    public interface InterfaceClassNamePattern extends IEntity {
 
-    @Caption(name = "Start Number")
-    IPrimitive<Integer> httpRequestStartNumber();
+        IPrimitive<String> classNamePattern();
 
-    @Caption(name = "Request Count")
-    IPrimitive<Integer> httpRequestCount();
+        IPrimitive<String> methodNamePattern();
+    }
 
-    IPrimitive<Integer> httpResponseCode();
+    @Owned
+    IList<InterfaceClassNamePattern> interfacePatterns();
+
+//    IPrimitive<Integer> requestStartNumber();
+//
+//    IPrimitive<Integer> requestCount();
 
 }

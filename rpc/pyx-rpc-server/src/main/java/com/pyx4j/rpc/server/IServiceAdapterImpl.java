@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.shared.I18n;
@@ -103,12 +105,15 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             }
             throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
         }
+        filterIncomming(serviceFactory, serviceInterfaceClass, request, serviceInterfaceClassName, serviceInstance);
 
         for (Method method : serviceInterfaceClass.getMethods()) {
             if ((method.getName().equals(serviceMethodName)) && (request.getServiceMethodSignature() == getMethodSignature(method))) {
                 assertToken(serviceImplClass, method);
                 assertMethodPermission(method);
-                return runMethod(serviceInstance, method, request.getArgs());
+                Serializable rc = runMethod(serviceInstance, method, request.getArgs());
+                rc = filterOutgoing(serviceFactory, serviceInterfaceClass, request, serviceInterfaceClassName, serviceInstance, rc);
+                return rc;
             }
         }
         throw new UnRecoverableRuntimeException("Fatal system error, Method [" + serviceMethodName + "] not found");
@@ -155,6 +160,27 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             }
         }
         return s;
+    }
+
+    private void filterIncomming(IServiceFactory serviceFactory, Class<? extends IService> serviceInterfaceClass, IServiceRequest request,
+            String serviceInterfaceClassName, IService serviceInstance) {
+        List<IServiceFilter> filters = serviceFactory.getIServiceFilterChain(serviceInterfaceClass);
+        if (filters != null) {
+            for (IServiceFilter filter : filters) {
+                filter.filterIncomming(request, serviceInterfaceClassName, serviceInstance);
+            }
+        }
+    }
+
+    private Serializable filterOutgoing(IServiceFactory serviceFactory, Class<? extends IService> serviceInterfaceClass, IServiceRequest request,
+            String serviceInterfaceClassName, IService serviceInstance, Serializable returnValue) {
+        // Run filters in reverse order
+        List<IServiceFilter> filters = serviceFactory.getIServiceFilterChain(serviceInterfaceClass);
+        ListIterator<IServiceFilter> li = filters.listIterator(filters.size());
+        while (li.hasPrevious()) {
+            returnValue = li.previous().filterOutgoing(request, serviceInterfaceClassName, serviceInstance, returnValue);
+        }
+        return returnValue;
     }
 
     static class ServerAsyncCallback implements AsyncCallback<Serializable> {
