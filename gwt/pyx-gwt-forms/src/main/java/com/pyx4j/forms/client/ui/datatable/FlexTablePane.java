@@ -160,7 +160,6 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     public void clearTable() {
-        dataTable.getDataTableModel().clearSelection();
         selectionCheckBoxes.clear();
         for (int row = flexTable.getRowCount() - 1; row > 0; row--) {
             flexTable.removeRow(row);
