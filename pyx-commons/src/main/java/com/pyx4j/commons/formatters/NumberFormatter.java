@@ -19,21 +19,20 @@
  */
 package com.pyx4j.commons.formatters;
 
-import com.google.gwt.i18n.client.NumberFormat;
-
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleFormat;
 
 public class NumberFormatter<T extends Number> implements IFormatter<T, String> {
 
-    private final NumberFormat formatter;
+    private final String format;
 
     public NumberFormatter(String format) {
-        formatter = NumberFormat.getFormat(format);
+        this.format = format;
     }
 
     @Override
     public String format(T value) {
-        return formatter.format(value);
+        return SimpleFormat.numberFormat(value, format);
     }
 
 }
