@@ -21,6 +21,7 @@ package com.pyx4j.entity.shared;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -28,6 +29,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface IHasFile<E extends AbstractIFileBlob> extends IEntity {
 
+    @ToString(index = 0)
     @EmbeddedEntity
     IFile<E> file();
 
