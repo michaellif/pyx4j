@@ -33,13 +33,13 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E>
         setNavigationCommand(new ExtendedNavigationCommand() {
             @Override
             public void execute() {
-                execute(false);
+                execute(false, false, false);
             }
 
             @Override
-            public void execute(boolean controlKeyDown) {
+            public void execute(boolean controlKeyDown, boolean altKeyDown, boolean shiftKeyDown) {
                 if (getValue().getPrimaryKey() != null) {
-                    assert(place != null);
+                    assert (place != null);
                     AppSite.getPlaceController().open(place.formViewerPlace(getValue().getPrimaryKey()), controlKeyDown);
                 }
 

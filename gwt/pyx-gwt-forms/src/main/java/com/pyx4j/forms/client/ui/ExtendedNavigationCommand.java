@@ -23,6 +23,6 @@ import com.google.gwt.user.client.Command;
 
 public interface ExtendedNavigationCommand extends Command {
 
-    void execute(boolean controlKeyDown);
+    void execute(boolean controlKeyDown, boolean altKeyDown, boolean shiftKeyDown);
 
 }

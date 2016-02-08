@@ -243,7 +243,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             return;
         }
 
-        assert(debugId != null) : "Unassigned DebugId in native component of " + getCComponent().shortDebugInfo();
+        assert (debugId != null) : "Unassigned DebugId in native component of " + getCComponent().shortDebugInfo();
         if (editor != null) {
             editor.setDebugId(debugId);
         }
@@ -474,8 +474,8 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        if (event.isControlKeyDown() && navigationCommand instanceof ExtendedNavigationCommand) {
-                            ((ExtendedNavigationCommand) navigationCommand).execute(true);
+                        if (navigationCommand instanceof ExtendedNavigationCommand) {
+                            ((ExtendedNavigationCommand) navigationCommand).execute(event.isControlKeyDown(), event.isAltKeyDown(), event.isShiftKeyDown());
                         } else {
                             navigationCommand.execute();
                         }
