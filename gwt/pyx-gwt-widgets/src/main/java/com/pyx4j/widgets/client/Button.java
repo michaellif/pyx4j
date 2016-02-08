@@ -161,7 +161,13 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
                 } else {
                     if (isEnabled() && (command != null)) {
                         active = !active;
-                        command.execute();
+                        // start changes to merge
+                        if (command instanceof HumanInputCommand) {
+                            ((HumanInputCommand) command).execute(new HumanInputInfo(event));
+                        } else {
+                            command.execute();
+                        }
+                        // end changes to merge
                         if (isActive()) {
                             addStyleDependentName(WidgetTheme.StyleDependent.active.name());
                         } else {
@@ -447,7 +453,7 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
 
         private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
-        private boolean controlKeyDown = false;
+        private HumanInputInfo humanInputInfo = HumanInputInfo.robot;
 
         public ButtonMenuBar() {
             super(true);
@@ -466,7 +472,11 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
                     @Override
                     public void execute() {
                         popup.hide();
-                        origCommand.execute();
+                        if (origCommand instanceof HumanInputCommand) {
+                            ((HumanInputCommand) origCommand).execute(humanInputInfo);
+                        } else {
+                            origCommand.execute();
+                        }
 
                     }
                 });
@@ -475,6 +485,18 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
                 secureConcerns.addSecureConcern((HasSecureConcern) item);
             }
             return super.insertItem(item, beforeIndex);
+        }
+
+        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Permission... permissions) {
+            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, permissions);
+            addItem(menuItem);
+            return menuItem;
+        }
+
+        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
+            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, actionId);
+            addItem(menuItem);
+            return menuItem;
         }
 
         public boolean isMenuEmpty() {
@@ -491,15 +513,15 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
         }
 
         public boolean isControlKeyDown() {
-            return controlKeyDown;
+            return humanInputInfo.isControlKeyDown();
         }
 
         @Override
         public void onBrowserEvent(Event event) {
             if ((DOM.eventGetType(event) == Event.ONCLICK) && (event.getCtrlKey())) {
-                controlKeyDown = true;
+                humanInputInfo = new HumanInputInfo(event);
             } else {
-                controlKeyDown = false;
+                humanInputInfo = HumanInputInfo.robot;
             }
             super.onBrowserEvent(event);
         }
@@ -534,8 +556,8 @@ public class Button extends FocusPanel implements IFocusWidget, HasSecureConcern
             setPermission(permissions);
         }
 
-        public SecureMenuItem(String tr, Command cmd, Class<? extends ActionId> actionId) {
-            this(tr, cmd, new ActionPermission(actionId));
+        public SecureMenuItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
+            this(text, cmd, new ActionPermission(actionId));
         }
 
         public void setPermission(Permission... permission) {
