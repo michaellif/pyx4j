@@ -304,13 +304,13 @@ public abstract class JoinWhereTestCase extends DatastoreTestBase {
         String emp11Name = "manager 1.1 " + uniqueString();
         emp11.testId().setValue(testId);
         emp11.name().setValue(emp11Name);
-        emp11.type().setValue(Employee5Type.manager); // TODO remove
+        //emp11.type().setValue(Employee5Type.manager);  // This is initialized by framework
 
         Employee5 emp12 = EntityFactory.create(Employee5.class);
         String emp12Name = "director 1.2 " + uniqueString();
         emp12.testId().setValue(testId);
         emp12.name().setValue(emp12Name);
-        emp12.type().setValue(Employee5Type.director); // TODO remove
+        //emp12.type().setValue(Employee5Type.director); // This is initialized by framework
 
         Department5 department1 = EntityFactory.create(Department5.class);
         String dep1name = "D1 " + uniqueString();
@@ -357,19 +357,19 @@ public abstract class JoinWhereTestCase extends DatastoreTestBase {
         String emp11Name = "manager 1.1 " + uniqueString();
         emp11.testId().setValue(testId);
         emp11.name().setValue(emp11Name);
-        emp11.type().setValue(Employee5Type.manager);// TODO remove
+        //emp11.type().setValue(Employee5Type.manager); // This is initialized by framework
 
         Employee5 emp12 = EntityFactory.create(Employee5.class);
         String emp12Name = "employee 1.2 " + uniqueString();
         emp12.testId().setValue(testId);
         emp12.name().setValue(emp12Name);
-        emp12.type().setValue(Employee5Type.employee);// TODO remove
+        //emp12.type().setValue(Employee5Type.employee); // This is initialized by framework
 
         Employee5 emp13 = EntityFactory.create(Employee5.class);
         String emp13Name = "employee 1.3 " + uniqueString();
         emp13.testId().setValue(testId);
         emp13.name().setValue(emp13Name);
-        emp13.type().setValue(Employee5Type.employee);// TODO remove
+        //emp13.type().setValue(Employee5Type.employee); // This is initialized by framework
 
         Department5 department1 = EntityFactory.create(Department5.class);
         String dep1name = "D1 " + uniqueString();

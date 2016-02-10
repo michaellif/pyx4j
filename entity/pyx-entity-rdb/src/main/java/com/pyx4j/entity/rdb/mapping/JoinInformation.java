@@ -39,6 +39,7 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.server.impl.EntityImplReflectionHelper;
 
 abstract class JoinInformation {
 
@@ -193,17 +194,12 @@ abstract class JoinInformation {
     }
 
     protected static MemberMeta findJoinColumnMember(Class<? extends IEntity> entityClass, Class<? extends ColumnId> columnId) {
-        EntityMeta childEntityMeta = EntityFactory.getEntityMeta(entityClass);
-        for (String jmemberName : childEntityMeta.getMemberNames()) {
-            MemberMeta jmemberMeta = childEntityMeta.getMemberMeta(jmemberName);
-            if (!jmemberMeta.isTransient()) {
-                JoinColumn joinColumn = jmemberMeta.getAnnotation(JoinColumn.class);
-                if (joinColumn != null && joinColumn.value() == columnId) {
-                    return jmemberMeta;
-                }
-            }
+        MemberMeta jmemberMeta = EntityImplReflectionHelper.findJoinColumnMember(entityClass, columnId);
+        if (jmemberMeta == null) {
+            throw new AssertionError("Unmapped @JoinColumn member in table '" + EntityFactory.getEntityMeta(entityClass).getCaption() + "' '" + columnId + "'");
+        } else {
+            return jmemberMeta;
         }
-        throw new AssertionError("Unmapped @JoinColumn member in table '" + childEntityMeta.getCaption() + "' '" + columnId + "'");
     }
 
 }

@@ -20,6 +20,7 @@
 package com.pyx4j.entity.client.impl;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.meta.OwnedConstraint;
 import com.pyx4j.entity.core.validator.Validator;
 
 public class ClientMemberMetaImpl implements MemberMeta {
@@ -62,10 +64,10 @@ public class ClientMemberMetaImpl implements MemberMeta {
      * Generic constructor
      */
     public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, Class<?> valueClass,
-            @SuppressWarnings("rawtypes")
-    Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber, boolean persistenceTransient, boolean rpcTransient,
-            boolean logTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean cascadePersist, boolean owner, boolean embedded, boolean indexed,
-            int stringLength, String format, boolean useMessageFormat, String nullString, boolean isToStringMember) {
+            @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
+            boolean persistenceTransient, boolean rpcTransient, boolean logTransient, AttachLevel attachLevel, boolean ownedRelationships,
+            boolean cascadePersist, boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat,
+            String nullString, boolean isToStringMember, List<OwnedConstraint> ownedConstraints) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -95,6 +97,9 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.data.useMessageFormat = useMessageFormat;
         this.data.nullString = nullString;
         this.data.isToStringMember = isToStringMember;
+        if (ownedConstraints != null) {
+            this.data.ownedConstraints = Collections.unmodifiableList(ownedConstraints);
+        }
     }
 
     public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, boolean indexed,
@@ -164,6 +169,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public boolean isOwnedRelationships() {
         return data.ownedRelationships;
+    }
+
+    @Override
+    public List<OwnedConstraint> getOwnedConstraints() {
+        return data.ownedConstraints;
     }
 
     @Override

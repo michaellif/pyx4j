@@ -21,6 +21,7 @@ package com.pyx4j.entity.test.shared.domain.join.org7where;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -46,6 +47,7 @@ public interface Department7Employee extends IEntity {
     }
 
     @JoinColumn(Employee7TypeColumnId.class)
+    @MemberColumn(name = "tp")
     IPrimitive<Employee7Type> type();
 
 }
