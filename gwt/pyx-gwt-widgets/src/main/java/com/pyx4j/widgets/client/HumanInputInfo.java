@@ -39,9 +39,15 @@ public class HumanInputInfo {
     }
 
     public HumanInputInfo(HumanInputEvent<?> event) {
-        controlKeyDown = event.isControlKeyDown();
-        altKeyDown = event.isAltKeyDown();
-        shiftKeyDown = event.isShiftKeyDown();
+        if (event.getNativeEvent() != null) {
+            controlKeyDown = event.isControlKeyDown();
+            altKeyDown = event.isAltKeyDown();
+            shiftKeyDown = event.isShiftKeyDown();
+        } else {
+            controlKeyDown = false;
+            altKeyDown = false;
+            shiftKeyDown = false;
+        }
     }
 
     public HumanInputInfo(NativeEvent event) {
