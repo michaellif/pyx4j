@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Types;
 
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 
@@ -45,15 +46,25 @@ public class OracleDialect extends Dialect {
 
         addTypeMeta(byte[].class, "blob");
 
-        TypeMeta dateTypeMeta = new TypeMeta(java.util.Date.class, "timestamp", 0, -1);
-        dateTypeMeta.setCompatibleTypeNames("timestamp(0)");
-        addTypeMeta(dateTypeMeta);
+        {
+            TypeMeta dateTypeMeta = new TypeMeta(java.util.Date.class, "timestamp", 0, -1);
+            dateTypeMeta.setCompatibleTypeNames("timestamp(0)");
+            addTypeMeta(dateTypeMeta);
+        }
 
         addTypeMeta(java.sql.Date.class, "date");
 
-        TypeMeta timeTypeMeta = new TypeMeta(java.sql.Time.class, "timestamp", 0, -1);
-        timeTypeMeta.setCompatibleTypeNames("timestamp(0)");
-        addTypeMeta(timeTypeMeta);
+        {
+            TypeMeta timeTypeMeta = new TypeMeta(java.sql.Time.class, "timestamp", 0, -1);
+            timeTypeMeta.setCompatibleTypeNames("timestamp(0)");
+            addTypeMeta(timeTypeMeta);
+        }
+
+        {
+            TypeMeta timeTypeMeta = new TypeMeta(LogicalTime.class, "timestamp", 0, -1);
+            timeTypeMeta.setCompatibleTypeNames("timestamp(0)");
+            addTypeMeta(timeTypeMeta);
+        }
     }
 
     @Override

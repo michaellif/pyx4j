@@ -46,6 +46,8 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
+import com.pyx4j.widgets.client.HumanInputCommand;
+import com.pyx4j.widgets.client.HumanInputInfo;
 import com.pyx4j.widgets.client.IWidget;
 import com.pyx4j.widgets.client.WidgetDebugId;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -464,8 +466,8 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        if (event.isControlKeyDown() && navigationCommand instanceof ExtendedNavigationCommand) {
-                            ((ExtendedNavigationCommand) navigationCommand).execute(true);
+                        if (navigationCommand instanceof HumanInputCommand) {
+                            ((HumanInputCommand) navigationCommand).execute(new HumanInputInfo(event));
                         } else {
                             navigationCommand.execute();
                         }

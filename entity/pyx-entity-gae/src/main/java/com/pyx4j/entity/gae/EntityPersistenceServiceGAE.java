@@ -240,6 +240,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public ConnectionTarget getTransactionConnectionTarget() {
+        // TODO
+        return null;
+    }
+
+    @Override
     public Date getTransactionTime() {
         // TODO
         return new Date();

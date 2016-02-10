@@ -17,12 +17,12 @@
  * Created on Sep 27, 2015
  * @author vlads
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
 import com.google.gwt.user.client.Command;
 
-public interface ExtendedNavigationCommand extends Command {
+public interface HumanInputCommand extends Command {
 
-    void execute(boolean controlKeyDown);
+    void execute(HumanInputInfo humanInputInfo);
 
 }

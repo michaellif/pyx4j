@@ -27,6 +27,7 @@ import java.util.GregorianCalendar;
 import org.junit.Assert;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
@@ -158,6 +159,28 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
         s.endsOn().setValue(createLogicalDate(1962, 03, 29));
         srv.persist(s);
         Assert.assertEquals("Value", s.endsOn().getValue(), srv.retrieve(Schedule.class, s.getPrimaryKey()).endsOn().getValue());
+    }
+
+    //TODO Make it work on GAE
+    public void testLogicalTime() {
+        Schedule s = EntityFactory.create(Schedule.class);
+        Assert.assertNull("Initial value", s.localTime().getValue());
+        Assert.assertEquals("Class of Value", LogicalTime.class, s.localTime().getValueClass());
+        // Round to seconds
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTime(DateUtils.getRoundedNow());
+        c.set(Calendar.YEAR, 1970);
+        c.set(Calendar.DAY_OF_YEAR, 1);
+
+        LogicalTime time = new LogicalTime(c.getTime().getTime());
+
+        s.localTime().setValue(time);
+
+        srv.persist(s);
+        Schedule s2 = srv.retrieve(Schedule.class, s.getPrimaryKey());
+        Assert.assertNotNull("retrieve by PK " + s.getPrimaryKey(), s2);
+        Assert.assertEquals("Class of Value", LogicalTime.class, s2.localTime().getValue().getClass());
+        Assert.assertEquals("Value", time, s2.localTime().getValue());
     }
 
     //TODO Make it work on GAE
