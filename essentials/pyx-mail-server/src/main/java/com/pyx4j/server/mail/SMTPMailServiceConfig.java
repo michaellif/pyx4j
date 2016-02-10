@@ -40,7 +40,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
 
     protected String password;
 
-    protected boolean starttls;
+    protected StartTTLS starttls;
 
     protected boolean debug;
 
@@ -99,7 +99,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         return password;
     }
 
-    public boolean isStarttls() {
+    public StartTTLS getStarttls() {
         return starttls;
     }
 
@@ -178,7 +178,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
         this.host = c.getValue("host", this.host);
         this.port = c.getIntegerValue("port", this.port);
-        this.starttls = c.getBooleanValue("starttls", this.starttls);
+        this.starttls = c.getEnumValue("starttls", StartTTLS.class, this.starttls);
 
         this.sender = c.getValue("sender", this.sender);
 
@@ -210,7 +210,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         b.append("host                                              : ").append(getHost()).append("\n");
         b.append("sender                                            : ").append(getSender()).append("\n");
         b.append("port                                              : ").append(getPort()).append("\n");
-        b.append("starttls                                          : ").append(isStarttls()).append("\n");
+        b.append("starttls                                          : ").append(getStarttls()).append("\n");
         b.append("user                                              : ").append(getUser()).append("\n");
         b.append("allowSendToEmailSufix                             : ").append(getAllowSendToEmailSufix()).append("\n");
         b.append("blockedMailForwardTo                              : ").append(getBlockedMailForwardTo()).append("\n");
