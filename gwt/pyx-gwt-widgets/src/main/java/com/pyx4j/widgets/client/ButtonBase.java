@@ -79,15 +79,21 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         super.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                execute();
+                execute(new HumanInputInfo(event));
             }
         });
     }
 
-    protected void execute() {
-        if (isEnabled() && (ButtonBase.this.command != null)) {
+    protected void execute(HumanInputInfo humanInputInfo) {
+        if (isEnabled() && (command != null)) {
             active = !active;
-            ButtonBase.this.command.execute();
+
+            if (command instanceof HumanInputCommand) {
+                ((HumanInputCommand) command).execute(humanInputInfo);
+            } else {
+                command.execute();
+            }
+
             if (isActive()) {
                 addStyleDependentName(WidgetsTheme.StyleDependent.active.name());
             } else {

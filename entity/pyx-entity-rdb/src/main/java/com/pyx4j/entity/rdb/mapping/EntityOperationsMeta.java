@@ -36,6 +36,7 @@ import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.LogicalTime;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
@@ -544,6 +545,8 @@ public class EntityOperationsMeta {
             return new ValueAdapterTimestamp(dialect);
         } else if (valueClass.equals(java.sql.Time.class)) {
             return new ValueAdapterTime(dialect);
+        } else if (valueClass.equals(LogicalTime.class)) {
+            return new ValueAdapterLogicalTime(dialect);
         } else if (valueClass.isEnum()) {
             @SuppressWarnings({ "rawtypes", "unchecked" })
             Class<Enum> enumValueClass = (Class<Enum>) valueClass;
