@@ -65,6 +65,11 @@ public interface IEntityPersistenceService {
     public Boolean getTransactionScopeOption();
 
     /**
+     * @return null if there are no transaction
+     */
+    public ConnectionTarget getTransactionConnectionTarget();
+
+    /**
      * Return the Timestamp that will be stored as @Timestamp members and fromDate for versioned entity IVersionData
      * N.B. DB does not store Milliseconds
      */
