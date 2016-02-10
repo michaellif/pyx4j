@@ -410,8 +410,11 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
         if (currentCriteria != null) {
             // reset EncodedCursorReference if query criteria is different:
-            if (currentCriteria.getPageSize() != criteria.getPageSize() //
-                    || !currentCriteria.asEntityQueryCriteria().equals(criteria.asEntityQueryCriteria())) {
+            boolean criteriaChanged = !currentCriteria.asEntityQueryCriteria().equals(criteria.asEntityQueryCriteria());
+            if (criteriaChanged) {
+                getDataTableModel().clearSelection();
+            }
+            if (criteriaChanged || currentCriteria.getPageSize() != criteria.getPageSize()) {
                 getDataTableModel().clearEncodedCursorReferences();
                 setPageNumber(0);
                 // update criteria:

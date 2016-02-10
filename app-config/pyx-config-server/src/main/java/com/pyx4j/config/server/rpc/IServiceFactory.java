@@ -30,6 +30,7 @@ public interface IServiceFactory {
 
     public Class<? extends IService> getIServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException;
 
-    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass);
+    public List<ServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass);
 
+    public List<IServiceFilter> getIServiceFilterChain(Class<? extends IService> serviceInterfaceClass);
 }

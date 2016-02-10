@@ -22,13 +22,13 @@ package com.pyx4j.essentials.server.dev;
 import java.io.Serializable;
 import java.util.List;
 
-import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.config.server.rpc.ServiceFilter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.Service;
 
-public class RpcEntityDumpServiceFilter implements IServiceFilter {
+public class RpcEntityDumpServiceFilter implements ServiceFilter {
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {

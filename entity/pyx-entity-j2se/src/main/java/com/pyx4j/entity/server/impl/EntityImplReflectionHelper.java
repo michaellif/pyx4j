@@ -29,6 +29,9 @@ import java.lang.reflect.TypeVariable;
 import java.util.Hashtable;
 import java.util.Map;
 
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
@@ -36,10 +39,12 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.core.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
 /**
  * We do use runtime reflection to collect meta data.
- * 
+ *
  * Ideally EntityImplGenerator can be made much more complex to move this to compile time.
  */
 public class EntityImplReflectionHelper {
@@ -61,7 +66,7 @@ public class EntityImplReflectionHelper {
             // Allow to use  our Pair<,> class
             return (Class<?>) ((ParameterizedType) type).getRawType();
         } else {
-            // e.g. generic Collection<String> 
+            // e.g. generic Collection<String>
             return resolveGenericType(type, interfaceClass);
         }
     }
@@ -190,5 +195,19 @@ public class EntityImplReflectionHelper {
         } else {
             throw new RuntimeException("Unknown member '" + memberName + "' type " + methodInfo.klass);
         }
+    }
+
+    public static MemberMeta findJoinColumnMember(Class<? extends IEntity> entityClass, Class<? extends ColumnId> columnId) {
+        EntityMeta childEntityMeta = EntityFactory.getEntityMeta(entityClass);
+        for (String jmemberName : childEntityMeta.getMemberNames()) {
+            MemberMeta jmemberMeta = childEntityMeta.getMemberMeta(jmemberName);
+            if (!jmemberMeta.isTransient()) {
+                JoinColumn joinColumn = jmemberMeta.getAnnotation(JoinColumn.class);
+                if (joinColumn != null && joinColumn.value() == columnId) {
+                    return jmemberMeta;
+                }
+            }
+        }
+        return null;
     }
 }

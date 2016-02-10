@@ -25,6 +25,7 @@ import java.text.ParseException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.formatters.PercentageFormat;
+import com.pyx4j.commons.formatters.SimpleMessageFormatter;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
@@ -40,7 +41,17 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
     }
 
     public void setPercentageFormat(String pattern) {
-        setFormatter(new PercentageFormat(pattern));
+        setPercentageFormat(pattern, false);
+    }
+
+    public void setPercentageFormat(String pattern, boolean useMessageFormat) {
+        if (pattern != null) {
+            if (useMessageFormat) {
+                setFormatter(new SimpleMessageFormatter<BigDecimal>(pattern));
+            } else {
+                setFormatter(new PercentageFormat(pattern));
+            }
+        }
     }
 
     public static class PercentageParser implements IParser<BigDecimal> {

@@ -20,6 +20,10 @@
 package com.pyx4j.rpc.client;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +48,7 @@ import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.RemoteServiceAsync;
 import com.pyx4j.rpc.shared.RuntimeExceptionNotificationsWrapper;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.ServiceQueueId;
 import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
 import com.pyx4j.serialization.client.RemoteServiceSerializer;
 
@@ -66,6 +71,10 @@ public class RPCManager {
     private static PyxRpcRequestBuilder requestBuilder;
 
     private static String userVisitHashCode;
+
+    private static Map<Class<? extends ServiceQueueId>, Integer> queueRunningCount = new HashMap<>();
+
+    private static Map<Class<? extends ServiceQueueId>, Queue<RPCServiceCall>> queuedCalls = new HashMap<>();
 
     static {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
@@ -113,6 +122,17 @@ public class RPCManager {
 
     private static void executeImpl(final ServiceExecutionInfo info, final Class<? extends Service<?, ?>> serviceInterface, Serializable request,
             AsyncCallback<?> callback, int retryAttempt) {
+        // Queue request until previous request is completed
+        if (info.getQueueId() != null && retryAttempt == 0) {
+            int running = queueRunningCount(info.getQueueId());
+            if (running > 0) {
+                queuedCall(info.getQueueId(), new RPCServiceCall(info, serviceInterface, request, callback));
+                return;
+            } else {
+                queueRunningCount.put(info.getQueueId(), running + 1);
+            }
+        }
+
         final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(info, serviceInterface, request, callback, retryAttempt);
         try {
             runningServicesCount++;
@@ -122,6 +142,42 @@ public class RPCManager {
             service.execute(name, request, userVisitHashCode, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);
+        }
+    }
+
+    private static int queueRunningCount(Class<? extends ServiceQueueId> queueId) {
+        Integer running = queueRunningCount.get(queueId);
+        if (running == null) {
+            running = Integer.valueOf(0);
+        }
+        return running.intValue();
+    }
+
+    private static void queuedCall(Class<? extends ServiceQueueId> queueId, RPCServiceCall rpcServiceCall) {
+        Queue<RPCServiceCall> queue = queuedCalls.get(queueId);
+        if (queue == null) {
+            queue = new LinkedList<>();
+            queuedCalls.put(queueId, queue);
+        }
+        queue.add(rpcServiceCall);
+    }
+
+    private static void processQueue(ServiceExecutionInfo info) {
+        if (info.getQueueId() == null) {
+            return;
+        }
+        int running = queueRunningCount(info.getQueueId());
+        running--;
+        queueRunningCount.put(info.getQueueId(), running);
+        if (running <= 0) {
+            RPCServiceCall queuedServiceCall = null;
+            Queue<RPCServiceCall> queue = queuedCalls.get(info.getQueueId());
+            if (queue != null) {
+                queuedServiceCall = queue.poll();
+            }
+            if (queuedServiceCall != null) {
+                executeImpl(queuedServiceCall.info, queuedServiceCall.serviceInterface, queuedServiceCall.request, queuedServiceCall.callback, 0);
+            }
         }
     }
 
@@ -187,6 +243,7 @@ public class RPCManager {
                 callback = null;
                 request = null;
                 fireStatusChangeEvent(When.FAILURE, info, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
+                processQueue(info);
             }
         }
 
@@ -214,6 +271,7 @@ public class RPCManager {
                 callback = null;
                 request = null;
                 fireStatusChangeEvent(When.SUCCESS, info, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
+                processQueue(info);
             }
         }
     }

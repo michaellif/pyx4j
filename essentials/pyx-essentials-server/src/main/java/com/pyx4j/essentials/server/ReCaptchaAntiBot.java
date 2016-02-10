@@ -40,7 +40,7 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
         if (challenge.equals("reCAPTCHA-v2")) {
             ReCaptchaV2APIClient.instance().assertCaptcha(response, getRequestRemoteAddr());
         } else {
-            ReCaptchaV1APIClient.assertCaptchaV1(challenge, response, getRequestRemoteAddr());
+            throw new Error("Internal Protocol error");
         }
         log.debug("CAPTCHA Ok");
     }

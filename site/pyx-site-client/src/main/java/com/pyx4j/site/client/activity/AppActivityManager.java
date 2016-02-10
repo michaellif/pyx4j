@@ -22,6 +22,9 @@ package com.pyx4j.site.client.activity;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.ResettableEventBus;
@@ -39,11 +42,16 @@ import com.pyx4j.site.rpc.AppPlace;
 
 public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChangeRequestEvent.Handler {
 
+    private final static Logger log = LoggerFactory.getLogger(AppActivityManager.class);
+
     private static final Activity NULL_ACTIVITY = new AbstractActivity() {
         @Override
         public void start(AcceptsOneWidget panel, com.google.gwt.event.shared.EventBus eventBus) {
         }
     };
+
+    // This will not be much use in obfuscated mode. The change shuld nto be commited.
+    private final boolean debugActivityCalls = false;
 
     private final AppActivityMapper mapper;
 
@@ -61,7 +69,7 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
 
     /**
      * Create an ActivityManager. Next call {@link #setDisplay}.
-     * 
+     *
      * @param mapper
      *            finds the {@link Activity} for a given {@link com.google.gwt.place.shared.Place}
      * @param eventBus
@@ -80,7 +88,7 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
      * <p>
      * The current activity's widget will be hidden immediately, which can cause flicker if the next activity provides its widget asynchronously. That can be
      * minimized by decent caching. Perenially slow activities might mitigate this by providing a widget immediately, with some kind of "loading" treatment.
-     * 
+     *
      * @see com.google.gwt.place.shared.PlaceChangeEvent.Handler#onPlaceChange(PlaceChangeEvent)
      */
     @Override
@@ -101,8 +109,10 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
                 }
 
                 if (startingNext) {
-                    // The place changed again before the new current activity showed its
-                    // widget
+                    if (debugActivityCalls) {
+                        log.debug("{}.onCancel()", currentActivity.getClass().getName());
+                    }
+                    // The place changed again before the new current activity showed its widget
                     currentActivity.onCancel();
                     currentActivity = NULL_ACTIVITY;
                     startingNext = false;
@@ -114,6 +124,10 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
                      * them accidentally firing as a side effect of its tear down
                      */
                     stopperedEventBus.removeHandlers();
+
+                    if (debugActivityCalls) {
+                        log.debug("{}.onStop()", currentActivity.getClass().getName());
+                    }
 
                     try {
                         currentActivity.onStop();
@@ -142,6 +156,9 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
                  * that protects the display from canceled or stopped activities, and which
                  * maintains our startingNext state.
                  */
+                if (debugActivityCalls) {
+                    log.debug("{}.start()", currentActivity.getClass().getName());
+                }
                 try {
                     currentActivity.start(new ProtectedDisplay(currentActivity), stopperedEventBus);
                 } catch (Throwable t) {
@@ -166,7 +183,7 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
 
     /**
      * Reject the place change if the current activity is not willing to stop.
-     * 
+     *
      * @see com.google.gwt.place.shared.PlaceChangeRequestEvent.Handler#onPlaceChangeRequest(PlaceChangeRequestEvent)
      */
     @Override
@@ -182,7 +199,7 @@ public class AppActivityManager implements PlaceChangeEvent.Handler, PlaceChange
      * <p>
      * If you are disposing of an ActivityManager, it is important to call setDisplay(null) to get it to deregister from the event bus, so that it can be
      * garbage collected.
-     * 
+     *
      * @param display
      *            an instance of AcceptsOneWidget
      */

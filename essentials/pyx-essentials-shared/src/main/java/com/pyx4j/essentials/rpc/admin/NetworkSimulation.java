@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface NetworkSimulation extends IEntity {
 
     IPrimitive<Boolean> enabled();
@@ -34,11 +34,13 @@ public interface NetworkSimulation extends IEntity {
     @Caption(name = "Delay", description = "milliseconds")
     IPrimitive<Integer> delay();
 
-    @Caption(description = "regular expression: .*/Service.function")
+    @Caption(name = "URI Pattern", description = "regular expression: .*/Service.function")
     IPrimitive<String> httpRequestURIPattern();
 
+    @Caption(name = "Start Number")
     IPrimitive<Integer> httpRequestStartNumber();
 
+    @Caption(name = "Request Count")
     IPrimitive<Integer> httpRequestCount();
 
     IPrimitive<Integer> httpResponseCode();

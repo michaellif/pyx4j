@@ -280,7 +280,9 @@ public class TableModelCollections {
                 sql.append(name).append(" = ?");
             }
             if (member.hasChildJoinContition()) {
-                sql.append(" AND ").append(member.getSqlChildJoinContition());
+                for (String childJoinContition : member.getSqlChildJoinContition()) {
+                    sql.append(" AND ").append(childJoinContition);
+                }
             }
 
             if (dialect.isMultitenantSharedSchema()) {
@@ -409,7 +411,9 @@ public class TableModelCollections {
                 sql.append(name).append(" = ?");
             }
             if (member.hasChildJoinContition()) {
-                sql.append(" AND ").append(member.getSqlChildJoinContition());
+                for (String childJoinContition : member.getSqlChildJoinContition()) {
+                    sql.append(" AND ").append(childJoinContition);
+                }
             }
 
             if (dialect.isMultitenantSharedSchema()) {

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,19 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 7, 2010
+ * Created on Feb 4, 2016
  * @author vlads
  */
 package com.pyx4j.config.server.rpc;
 
 import java.io.Serializable;
 
-import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.IServiceRequest;
 
 public interface IServiceFilter {
 
-    public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request);
+    public void filterIncomming(IServiceRequest request, String serviceInterfaceClassName, IService serviceInstance);
 
-    public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response);
+    public Serializable filterOutgoing(IServiceRequest request, String serviceInterfaceClassName, IService serviceInstance, Serializable result);
 
 }

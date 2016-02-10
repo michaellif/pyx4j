@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.formatters.PercentageFormat;
+import com.pyx4j.commons.formatters.SimpleMessageFormatter;
 
 public class CPercentageLabel extends CLabel<BigDecimal> {
 
@@ -31,6 +32,16 @@ public class CPercentageLabel extends CLabel<BigDecimal> {
     }
 
     public void setPercentageFormat(String pattern) {
-        setFormatter(new PercentageFormat(pattern));
+        setPercentageFormat(pattern, false);
+    }
+
+    public void setPercentageFormat(String pattern, boolean useMessageFormat) {
+        if (pattern != null) {
+            if (useMessageFormat) {
+                setFormatter(new SimpleMessageFormatter<BigDecimal>(pattern));
+            } else {
+                setFormatter(new PercentageFormat(pattern));
+            }
+        }
     }
 }

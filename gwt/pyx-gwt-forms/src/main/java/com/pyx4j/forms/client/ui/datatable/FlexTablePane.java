@@ -143,13 +143,17 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
         flexTable.removeAllRows();
 
-        if (!BrowserType.isIE()) {
+        if (BrowserType.isFirefox()) {
             for (int i = 0; i < 30; i++) {
-                flexTable.getColumnFormatter().setWidth(i, "0");
+                flexTable.getColumnFormatter().setWidth(i, "0px");
+            }
+        } else if (!BrowserType.isIE()) {
+            for (int i = 0; i < 30; i++) {
+                flexTable.getColumnFormatter().setWidth(i, "1px");
             }
         } else {
             for (int i = 0; i < 30; i++) {
-                flexTable.getColumnFormatter().getElement(i).getStyle().setWidth(0, Unit.PX);
+                flexTable.getColumnFormatter().getElement(i).getStyle().setWidth(1, Unit.PX);
             }
 
         }
@@ -160,7 +164,6 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     public void clearTable() {
-        dataTable.getDataTableModel().clearSelection();
         selectionCheckBoxes.clear();
         for (int row = flexTable.getRowCount() - 1; row > 0; row--) {
             flexTable.removeRow(row);

@@ -41,6 +41,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.client.ServiceExecutionInfo;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.ServiceExecution.OperationType;
+import com.pyx4j.rpc.shared.ServiceQueueId;
 
 public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
@@ -87,6 +88,13 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
             print(operationType.name());
             print(",");
             print(i18nEscapeSourceString(serviceExecution.waitCaption()));
+
+            print(",");
+            if (serviceExecution.queue() != null && serviceExecution.queue() != ServiceQueueId.class) {
+                print(serviceExecution.queue().getName() + ".class");
+            } else {
+                print("null");
+            }
 
             print("), ");
         }
