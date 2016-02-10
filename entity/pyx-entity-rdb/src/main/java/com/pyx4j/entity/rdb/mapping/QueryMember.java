@@ -25,11 +25,11 @@ class QueryMember {
 
     final String memberSqlName;
 
-    final MemberOperationsMeta memberOper;
+    final MemberOperationsMeta member;
 
     QueryMember(String joinAlias, MemberOperationsMeta memberOper) {
         this.joinAlias = joinAlias;
-        this.memberOper = memberOper;
+        this.member = memberOper;
         if (memberOper instanceof MemberExternalOperationsMeta) {
             memberSqlName = joinAlias + "." + ((MemberExternalOperationsMeta) memberOper).sqlValueName();
         } else {
@@ -39,7 +39,7 @@ class QueryMember {
 
     @Override
     public String toString() {
-        return memberSqlName + " " + memberOper.toString();
+        return memberSqlName + " " + member.toString();
     }
 
 }

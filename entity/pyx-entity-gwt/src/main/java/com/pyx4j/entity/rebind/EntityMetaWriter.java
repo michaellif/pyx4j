@@ -24,6 +24,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.CascadeType;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -51,7 +53,9 @@ import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GwtAnnotation;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.JoinWhere;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Owned;
@@ -69,6 +73,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.meta.OwnedConstraint;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 public class EntityMetaWriter {
@@ -412,15 +417,15 @@ public class EntityMetaWriter {
                 data.attachLevel = detachedAnnotation.level();
             }
 
-            Owned aOwned = method.getAnnotation(Owned.class);
+            Owned owned = method.getAnnotation(Owned.class);
 
-            data.ownedRelationships = (aOwned != null) || (data.embedded) || (data.objectClassType == ObjectClassType.PrimitiveSet);
+            data.ownedRelationships = (owned != null) || (data.embedded) || (data.objectClassType == ObjectClassType.PrimitiveSet);
 
             data.owner = (method.getAnnotation(Owner.class) != null);
             assert (!(data.owner == true && data.ownedRelationships == true));
 
-            if (aOwned != null) {
-                for (CascadeType ct : aOwned.cascade()) {
+            if (owned != null) {
+                for (CascadeType ct : owned.cascade()) {
                     switch (ct) {
                     case ALL:
                         data.cascadePersist = true;
@@ -433,6 +438,17 @@ public class EntityMetaWriter {
                         data.cascadeDelete = true;
                         break;
                     }
+                }
+                if (owned.where().length != 0) {
+                    List<OwnedConstraint> ownedConstraints = new ArrayList<>();
+                    for (JoinWhere joinWhere : owned.where()) {
+                        String memberName = findJoinColumnMemberName(contextHelper, valueClass, joinWhere.column());
+                        if (memberName == null) {
+                            throw new AssertionError("Unmapped @JoinColumn member in Entity '" + valueClass.getName() + "' '" + joinWhere.column() + "'");
+                        }
+                        ownedConstraints.add(new OwnedConstraint(memberName, joinWhere.value()));
+                    }
+                    data.ownedConstraints = Collections.unmodifiableList(ownedConstraints);
                 }
             } else {
                 JoinTable joinTable = method.getAnnotation(JoinTable.class);
@@ -559,6 +575,17 @@ public class EntityMetaWriter {
         }
     }
 
+    private static String findJoinColumnMemberName(ContextHelper contextHelper, JClassType valueClass, Class<? extends ColumnId> columnId) {
+        List<JMethod> allMethods = contextHelper.getAllEntityMethods(valueClass, true);
+        for (JMethod method : allMethods) {
+            JoinColumn joinColumn = method.getAnnotation(JoinColumn.class);
+            if (joinColumn != null && joinColumn.value() == columnId) {
+                return method.getName();
+            }
+        }
+        return null;
+    }
+
     private static void writeDataParams(SourceWriter writer, MemberMetaData data, boolean indexed) {
         if (data instanceof MemberMetaDataGeneration) {
             writer.print(((MemberMetaDataGeneration) data).valueClassSourceName + ".class, ");
@@ -588,6 +615,24 @@ public class EntityMetaWriter {
         writer.print(i18nEscapeSourceString(data.format) + ", ");
         writer.print(Boolean.valueOf(data.useMessageFormat).toString() + ", ");
         writer.print(i18nEscapeSourceString(data.nullString) + ", ");
-        writer.print(Boolean.valueOf(data.isToStringMember).toString());
+        writer.print(Boolean.valueOf(data.isToStringMember).toString() + ", ");
+        if (data.ownedConstraints.isEmpty()) {
+            writer.print("null");
+        } else {
+            writer.println();
+            writer.print("java.util.Arrays.asList(");
+            boolean first = true;
+            for (OwnedConstraint oc : data.ownedConstraints) {
+                if (first) {
+                    first = false;
+                } else {
+                    writer.print(",");
+                }
+                writer.print("new " + OwnedConstraint.class.getName() + "(" + escapeSourceString(oc.getMemberName()) + ", "
+                        + escapeSourceString(oc.getMemberValue()) + ")");
+            }
+            writer.print(")");
+        }
+
     }
 }

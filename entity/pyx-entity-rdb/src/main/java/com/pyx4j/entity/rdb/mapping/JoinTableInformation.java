@@ -106,7 +106,10 @@ class JoinTableInformation extends JoinInformation {
         }
 
         if (EntityFactory.getEntityMeta(entityClass).getPersistableSuperClass() != null) {
-            sqlChildJoinContition = buildChildJoinContition(dialect, entityClass);
+            sqlChildJoinContition.add(buildPolymorphicChildJoinContition(dialect, entityClass));
+        }
+        if (joinTable.where().length != 0) {
+            sqlChildJoinContition.addAll(buildChildJoinWhereContition(dialect, joinTableClass, joinTable.where()));
         }
     }
 

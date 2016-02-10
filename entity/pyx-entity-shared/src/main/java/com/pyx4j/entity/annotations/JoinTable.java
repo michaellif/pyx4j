@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.IEntity;
 
 /**
  * Define the join table between entities for many(one) to many(one) relationship.
- * 
+ *
  * @OrderBy Required for IList collections
  */
 @Target({ ElementType.METHOD })
@@ -40,7 +40,7 @@ public @interface JoinTable {
     /**
      * The operations that must be cascaded to the the association table (value).
      * The operations are not cascaded to member unless they are @Owned
-     * 
+     *
      * By default no operations are cascaded.
      */
     CascadeType[] cascade() default {};
@@ -51,6 +51,8 @@ public @interface JoinTable {
      */
     Class<? extends ColumnId> mappedBy() default ColumnId.class;
 
-    //?
-    //Class<? extends ColumnId> mapsTo() default ColumnId.class;
+    /**
+     * Additional restriction on created join queries
+     */
+    JoinWhere[] where() default {};
 }

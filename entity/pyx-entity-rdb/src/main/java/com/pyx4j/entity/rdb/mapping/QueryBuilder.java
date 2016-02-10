@@ -153,8 +153,8 @@ public class QueryBuilder<T extends IEntity> {
                     throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + operationsMeta.entityMeta().getEntityClass().getName());
                 }
                 String sqlName = queryMember.memberSqlName;
-                if (queryMember.memberOper.getSortMemberOperationsMeta() != null) {
-                    sqlName = queryMember.joinAlias + "." + queryMember.memberOper.getSortMemberOperationsMeta().sqlName();
+                if (queryMember.member.getSortMemberOperationsMeta() != null) {
+                    sqlName = queryMember.joinAlias + "." + queryMember.member.getSortMemberOperationsMeta().sqlName();
                 }
 
                 sortsSql.append(sqlName);
@@ -283,7 +283,7 @@ public class QueryBuilder<T extends IEntity> {
                 throw new RuntimeException(
                         "Unknown member " + propertyCriterion.getPropertyPath() + " in " + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
             }
-            bindHolder.adapter = queryMember.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(), bindHolder.bindValue);
+            bindHolder.adapter = queryMember.member.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(), bindHolder.bindValue);
 
             sqlColumnNames.addAll(bindHolder.adapter.getColumnNames(queryMember.memberSqlName));
         }
@@ -299,7 +299,7 @@ public class QueryBuilder<T extends IEntity> {
             if (queryMember2 == null) {
                 throw new RuntimeException("Unknown member " + property2Path + " in " + joinBuilder.operationsMeta.entityMeta().getEntityClass().getName());
             }
-            ValueBindAdapter adapter2 = queryMember2.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),
+            ValueBindAdapter adapter2 = queryMember2.member.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),
                     bindHolder.bindValue);
             List<String> sqlColumnNames2 = adapter2.getColumnNames(queryMember2.memberSqlName);
 

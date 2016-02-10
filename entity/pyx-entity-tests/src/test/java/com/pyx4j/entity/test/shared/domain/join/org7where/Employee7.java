@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,22 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Jan 30, 2016
  * @author vlads
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.test.shared.domain.join.org7where;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
-/**
- * Maps to javax.persistence.OneToOne or javax.persistence.OneToMany with CascadeType.ALL
- * Effectively enforce the Member as ReadOnly
- */
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Owner {
+@Table(prefix = "test")
+public interface Employee7 extends IEntity {
+
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
+
+    @JoinTable(value = Department7Employee.class)
+    @Detached
+    Department7 department();
 
 }

@@ -39,7 +39,7 @@ public interface MemberMeta {
 
     /**
      * Localized user preventable filed name
-     * 
+     *
      * @see com.pyx4j.entity.annotations.Caption
      */
     public String getCaption();
@@ -51,14 +51,14 @@ public interface MemberMeta {
 
     /**
      * Localized user preventable filed description
-     * 
+     *
      * @see com.pyx4j.entity.annotations.Caption
      */
     public String getDescription();
 
     /**
      * Localized watermark
-     * 
+     *
      * @see com.pyx4j.entity.annotations.Caption
      */
     public String getWatermark();
@@ -80,7 +80,7 @@ public interface MemberMeta {
 
     /**
      * When @Indexed indexPrimaryValue != false
-     * 
+     *
      * @see com.pyx4j.entity.annotations.Indexed
      */
     public boolean isIndexed();
@@ -95,12 +95,19 @@ public interface MemberMeta {
 
     /**
      * @see com.pyx4j.entity.annotations.Owned
-     * 
+     *
      * @see com.pyx4j.entity.annotations.EmbeddedEntity
-     * 
+     *
      *      or IPrimitiveSet
      */
     public boolean isOwnedRelationships();
+
+    /**
+     * @see com.pyx4j.entity.annotations.JoinWhere
+     *
+     * @return empty collection of there are no constraints
+     */
+    public List<OwnedConstraint> getOwnedConstraints();
 
     public boolean isCascadePersist();
 
@@ -123,7 +130,7 @@ public interface MemberMeta {
     public boolean isNumberValueClass();
 
     /**
-     * 
+     *
      * @return IList, ISet, IPrimitive, or extends IEntity
      */
     @SuppressWarnings("rawtypes")
@@ -138,10 +145,10 @@ public interface MemberMeta {
 
     /*
      * Works only on server side.
-     * 
+     *
      * Returns this element's annotation for the specified type if such an annotation is
      * present, else null.
-     * 
+     *
      * in GWT use isAnnotationPresent
      */
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
