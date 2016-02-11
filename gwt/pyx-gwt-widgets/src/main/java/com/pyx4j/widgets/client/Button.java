@@ -89,7 +89,7 @@ public class Button extends ButtonBase {
     }
 
     @Override
-    protected void execute(HumanInputInfo humanInputInfo) {
+    protected final void execute(HumanInputInfo humanInputInfo) {
         if (menu != null) {
             if (menu.getMenuPopup().isShowing()) {
                 menu.getMenuPopup().hide();
