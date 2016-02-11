@@ -32,32 +32,33 @@ public class BrowserType {
         UNKNOWN, IE, MOZILLA, SAFARI, OPERA, IPHONE
     };
 
+    public static native boolean isIE8Native() /*-{ return ($doc.documentMode != null); }-*/;
+
     //This return true in Firefox and Google chrome
     @Deprecated
-    public static native boolean isIENative() /*-{
-                                                 return ($doc.body.insertAdjacentHTML != null);
-                                                 }-*/;
+    public static native boolean isIENative() /*-{ return ($doc.body.insertAdjacentHTML != null); }-*/;
 
     // true in Microsoft Edge
-    public static native boolean isIE11Native() /*-{
-                                                        return !!window.MSStream;
-                                                        }-*/;
+    public static native boolean isIE11Native() /*-{ return !!window.MSStream; }-*/;
 
+    @Deprecated
     public native static boolean isFirefoxNative() /*-{
                                                    var agt = $wnd.navigator.userAgent.toLowerCase();
                                                    return (agt.indexOf("firefox") != -1);
                                                    }-*/;
 
-    public native static String getUserAgent() /*-{
-                                               return $wnd.navigator.userAgent;
-                                               }-*/;
+    public native static String getUserAgent() /*-{ return $wnd.navigator.userAgent; }-*/;
 
-    public static final boolean isFirefox() {
+    public static final boolean isMozillaPermutation() {
         return (impl.getType() == Browser.MOZILLA);
     }
 
+    public static final boolean isFirefox() {
+        return isMozillaPermutation() && !isIE11Native();
+    }
+
     public static final boolean isIE() {
-        return (impl.getType() == Browser.IE) || (isFirefox() && isIE11Native());
+        return (impl.getType() == Browser.IE) || (isMozillaPermutation() && isIE11Native());
     }
 
     public static final boolean isOpera() {
@@ -99,6 +100,9 @@ public class BrowserType {
         }
         if (isMsEdge()) {
             b.append(", isMsEdge");
+        }
+        if (isFirefox()) {
+            b.append(", isFirefox");
         }
         return b.toString();
     }
@@ -158,10 +162,6 @@ public class BrowserType {
         }
         return isMsEdge;
     }
-
-    public static native boolean isIE8Native() /*-{
-                                               return ($doc.documentMode != null);
-                                               }-*/;
 
     public static final boolean isMobile() {
         if (isMobile == null) {
