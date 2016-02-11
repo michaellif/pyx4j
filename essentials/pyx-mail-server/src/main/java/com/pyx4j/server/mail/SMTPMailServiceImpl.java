@@ -141,7 +141,7 @@ class SMTPMailServiceImpl implements IMailService {
             }
             break;
         case NONE:
-//            mailProperties.setProperty("mail.smtp.starttls.enable", "true"); // NOTE: gmail need starttls even for port 25
+            // NOTE: gmail need starttls enabled even for non encrypted port 25
         default:
             break;
         }
