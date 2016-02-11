@@ -34,7 +34,9 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.meta.OwnedConstraint;
 
 public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE> extends ObjectHandler<VALUE_TYPE> implements ICollection<TYPE, VALUE_TYPE> {
 
@@ -42,8 +44,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     private final Class<TYPE> valueClass;
 
-    protected AbstractCollectionHandler(@SuppressWarnings("rawtypes")
-    Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
+    protected AbstractCollectionHandler(@SuppressWarnings("rawtypes") Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent,
+            String fieldName) {
         super(clazz, parent, fieldName);
         this.valueClass = valueClass;
     }
@@ -154,6 +156,14 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
             value.put(ownerMemberName, (Serializable) ownerValue);
             if (!entity.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
                 ownerValue.put(IEntity.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
+            }
+            // enforced OwnedConstraints
+            if (!entity.isValueDetached()) {
+                for (OwnedConstraint oc : getMeta().getOwnedConstraints()) {
+                    @SuppressWarnings("unchecked")
+                    IPrimitive<Serializable> member = (IPrimitive<Serializable>) entity.getMember(oc.getMemberName());
+                    member.setValue(member.parse(oc.getMemberValue()));
+                }
             }
         }
 

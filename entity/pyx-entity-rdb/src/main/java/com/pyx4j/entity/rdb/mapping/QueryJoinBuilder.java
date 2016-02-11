@@ -53,7 +53,7 @@ class QueryJoinBuilder {
 
     static class JoinDef {
 
-        MemberOperationsMeta memberOper;
+        MemberOperationsMeta member;
 
         String alias;
 
@@ -63,8 +63,8 @@ class QueryJoinBuilder {
 
         String sqlTableName;
 
-        JoinDef(MemberOperationsMeta memberOper, String alias, boolean leftJoin) {
-            this.memberOper = memberOper;
+        JoinDef(MemberOperationsMeta member, String alias, boolean leftJoin) {
+            this.member = member;
             this.alias = alias;
             this.leftJoin = leftJoin;
         }
@@ -111,7 +111,7 @@ class QueryJoinBuilder {
     QueryMember buildQueryMember(Path propertyPath, boolean leftJoin, boolean usedInSort) {
         JoinDef join = buildJoin(null, operationsMeta, mainTableSqlAlias, propertyPath.toString(), leftJoin, usedInSort, false);
         if (join != null) {
-            return new QueryMember(join.alias, join.memberOper);
+            return new QueryMember(join.alias, join.member);
         } else {
             return null;
         }
@@ -192,59 +192,66 @@ class QueryJoinBuilder {
         return String.valueOf(++nextJoinAliaseId);
     }
 
-    private JoinDef createDirectJoin(String accessPath, MemberOperationsMeta memberOper, String fromAlias, boolean leftJoin) {
-        JoinDef memberJoin = getMemberJoin(accessPath, memberOper.getMemberPath());
+    private JoinDef createDirectJoin(String accessPath, MemberOperationsMeta member, String fromAlias, boolean leftJoin) {
+        JoinDef memberJoin = getMemberJoin(accessPath, member.getMemberPath());
         if (memberJoin == null) {
-            memberJoin = new JoinDef(memberOper, "jd" + nextJoinAliaseId(), leftJoin);
+            memberJoin = new JoinDef(member, "jd" + nextJoinAliaseId(), leftJoin);
 
             @SuppressWarnings("unchecked")
-            Class<? extends IEntity> entityClass = (Class<IEntity>) memberOper.getMemberMeta().getValueClass();
+            Class<? extends IEntity> entityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
             memberJoin.sqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(entityClass));
 
-            putMemberJoin(accessPath, memberOper.getMemberPath(), memberJoin);
+            putMemberJoin(accessPath, member.getMemberPath(), memberJoin);
 
             StringBuilder condition = new StringBuilder();
             condition.append(memberJoin.alias).append('.').append(dialect.getNamingConvention().sqlIdColumnName());
             condition.append(" = ");
-            condition.append(fromAlias).append('.').append(memberOper.sqlName());
+            condition.append(fromAlias).append('.').append(member.sqlName());
             memberJoin.condition = condition.toString();
         }
         return memberJoin;
     }
 
-    private JoinDef createExternalJoin(String accessPath, MemberExternalOperationsMeta memberOper, String fromAlias, boolean leftJoin, boolean usedInSort) {
-        if ((memberOper instanceof MemberCollectionOperationsMeta) && (!memberOper.isJoinTableSameAsTarget())) {
-            return createJoinViaJoinTable(accessPath, (MemberCollectionOperationsMeta) memberOper, fromAlias, leftJoin, usedInSort);
-        } else if (!memberOper.isJoinTableSameAsTarget()) {
-            return createJoinViaBackReference(accessPath, memberOper, fromAlias, leftJoin, usedInSort);
+    private JoinDef createExternalJoin(String accessPath, MemberExternalOperationsMeta member, String fromAlias, boolean leftJoin, boolean usedInSort) {
+        if ((member instanceof MemberCollectionOperationsMeta) && (!member.isJoinTableSameAsTarget())) {
+            return createJoinViaJoinTable(accessPath, (MemberCollectionOperationsMeta) member, fromAlias, leftJoin, usedInSort);
+        } else if (!member.isJoinTableSameAsTarget()) {
+            return createJoinViaBackReference(accessPath, member, fromAlias, leftJoin, usedInSort);
         } else {
-            return createJoinBackReference(accessPath, memberOper, fromAlias, leftJoin, usedInSort);
+            return createJoinBackReference(accessPath, member, fromAlias, leftJoin, usedInSort);
         }
     }
 
-    private JoinDef createJoinBackReference(String accessPath, MemberExternalOperationsMeta memberOper, String fromAlias, boolean leftJoin,
+    private JoinDef createJoinBackReference(String accessPath, MemberExternalOperationsMeta member, String fromAlias, boolean leftJoin,
             boolean usedInSort) {
-        JoinDef memberJoin = getMemberJoin(accessPath, memberOper.getMemberPath());
+        JoinDef memberJoin = getMemberJoin(accessPath, member.getMemberPath());
         if (memberJoin == null) {
-            memberJoin = new JoinDef(memberOper, "jbr" + nextJoinAliaseId(), leftJoin);
+            memberJoin = new JoinDef(member, "jbr" + nextJoinAliaseId(), leftJoin);
 
-            putMemberJoin(accessPath, memberOper.getMemberPath(), memberJoin);
+            putMemberJoin(accessPath, member.getMemberPath(), memberJoin);
 
-            memberJoin.sqlTableName = memberOper.sqlName();
+            memberJoin.sqlTableName = member.sqlName();
 
             StringBuilder condition = new StringBuilder();
-            condition.append(memberJoin.alias).append('.').append(memberOper.sqlOwnerName());
+            condition.append(memberJoin.alias).append('.').append(member.sqlOwnerName());
             condition.append(" = ");
             condition.append(fromAlias).append('.').append(dialect.getNamingConvention().sqlIdColumnName());
 
-            if (memberOper.hasChildJoinContition()) {
+            if (member.hasChildJoinContition()) {
                 condition.append(" AND (");
-                condition.append(memberJoin.alias).append('.').append(memberOper.getSqlChildJoinContition());
+                boolean multiple = false;
+                for (String childJoinContition : member.getSqlChildJoinContition()) {
+                    if (multiple) {
+                        condition.append(" AND ");
+                    }
+                    condition.append(memberJoin.alias).append('.').append(childJoinContition);
+                    multiple = true;
+                }
                 condition.append(")");
             }
 
-            if (memberOper instanceof MemberVersionDataOperationsMeta) {
-                MemberVersionDataOperationsMeta memberVersionDataOper = (MemberVersionDataOperationsMeta) memberOper;
+            if (member instanceof MemberVersionDataOperationsMeta) {
+                MemberVersionDataOperationsMeta memberVersionDataOper = (MemberVersionDataOperationsMeta) member;
                 condition.append(" AND (");
                 switch (versionedCriteria) {
                 case onlyFinalized:
@@ -273,7 +280,7 @@ class QueryJoinBuilder {
 
             }
 
-            if (memberOper instanceof MemberCollectionOperationsMeta) {
+            if (member instanceof MemberCollectionOperationsMeta) {
                 addDistinct = true;
             }
 

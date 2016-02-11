@@ -14,15 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 27, 2015
+ * Created on Jan 30, 2016
  * @author vlads
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.entity.test.shared.domain.join.org7where;
 
-import com.google.gwt.user.client.Command;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 
-public interface ExtendedNavigationCommand extends Command {
+@Table(prefix = "test")
+public interface Employee7 extends IEntity {
 
-    void execute(boolean controlKeyDown);
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
+
+    @JoinTable(value = Department7Employee.class)
+    @Detached
+    Department7 department();
 
 }

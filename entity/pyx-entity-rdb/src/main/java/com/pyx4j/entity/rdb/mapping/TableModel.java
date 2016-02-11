@@ -300,17 +300,17 @@ public class TableModel {
         TableMetadata tableMetadata = TableMetadata.getTableMetadata(persistenceContext, mappings.getConfiguration(), tableName);
         tableMetadata.readForeignKeys(persistenceContext);
         try {
-            for (MemberOperationsMeta member : operationsMeta().getColumnMembers()) {
-                if (!member.getMemberMeta().isEntity()) {
+            for (MemberOperationsMeta memberOper : operationsMeta().getColumnMembers()) {
+                if (!memberOper.getMemberMeta().isEntity()) {
                     continue;
                 }
-                MemberColumn memberColumn = member.getMemberMeta().getAnnotation(MemberColumn.class);
+                MemberColumn memberColumn = memberOper.getMemberMeta().getAnnotation(MemberColumn.class);
                 if ((memberColumn != null) && (!memberColumn.createForeignKey())) {
                     continue;
                 }
 
                 @SuppressWarnings("unchecked")
-                Class<? extends IEntity> entityClass = (Class<IEntity>) member.getMemberMeta().getValueClass();
+                Class<? extends IEntity> entityClass = (Class<IEntity>) memberOper.getMemberMeta().getValueClass();
                 EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
                 if (entityMeta.getPersistableSuperClass() != null) {
                     entityClass = entityMeta.getPersistableSuperClass();
@@ -323,9 +323,9 @@ public class TableModel {
 
                 String refSqlTableName = TableModel.getTableName(dialect, entityMeta);
 
-                String constraintName = dialect.getNamingConvention().sqlForeignKeyName(this.tableName, member.sqlName(), refSqlTableName);
+                String constraintName = dialect.getNamingConvention().sqlForeignKeyName(this.tableName, memberOper.sqlName(), refSqlTableName);
                 if (!tableMetadata.hasForeignKey(constraintName)) {
-                    String sql = TableDDL.sqlCreateForeignKey(dialect, this, this.getTableName(), member.sqlName(), refSqlTableName,
+                    String sql = TableDDL.sqlCreateForeignKey(dialect, this, this.getTableName(), memberOper.sqlName(), refSqlTableName,
                             mappings.getConfiguration().allowForeignKeyDeferrable());
                     logApplicationVersionOnce();
                     ddlLog.info("{}", sql);
@@ -915,18 +915,18 @@ public class TableModel {
 
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
         entity.setValuePopulated();
-        for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
-            Serializable value = member.getValueAdapter().retrieveValue(rs, member.sqlName());
+        for (MemberOperationsMeta memberOper : entityOperationsMeta.getColumnMembers()) {
+            Serializable value = memberOper.getValueAdapter().retrieveValue(rs, memberOper.sqlName());
             if (value != null) {
-                if (member.getMemberMeta().isEntity()) {
+                if (memberOper.getMemberMeta().isEntity()) {
                     IEntity valueEntity = (IEntity) value;
-                    IEntity memberValue = (IEntity) member.getMember(entity);
-                    if (member.isOwnerColumn()) {
+                    IEntity memberValue = (IEntity) memberOper.getMember(entity);
+                    if (memberOper.isOwnerColumn()) {
                         // Special handling for recursive retrieve of Owner
                         if ((entity.getOwner() != null) && (entity.getMeta() != null) && entity.getMeta().isOwnedRelationships()) {
                             // verify graph integrity
                             if (entity.getOwner().getPrimaryKey().asLong() != valueEntity.getPrimaryKey().asLong()) {
-                                throw new RuntimeException("Unexpected owner " + member.getMemberPath() + " '" + valueEntity.getDebugExceptionInfoString()
+                                throw new RuntimeException("Unexpected owner " + memberOper.getMemberPath() + " '" + valueEntity.getDebugExceptionInfoString()
                                         + "' != '" + entity.getOwner().getDebugExceptionInfoString() + "' in entity '" + entity.getDebugExceptionInfoString()
                                         + "'");
                             }
@@ -937,7 +937,7 @@ public class TableModel {
                         memberValue.set(valueEntity);
                     }
                 } else {
-                    member.setMemberValue(entity, value);
+                    memberOper.setMemberValue(entity, value);
                 }
             }
         }

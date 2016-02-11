@@ -22,6 +22,8 @@ package com.pyx4j.entity.server.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -36,6 +38,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.JoinWhere;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Owned;
@@ -53,6 +56,7 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.impl.PrimitiveHandler;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.meta.OwnedConstraint;
 import com.pyx4j.entity.core.validator.Validator;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.shared.I18n;
@@ -74,6 +78,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final AttachLevel attachLevel;
 
     private final boolean ownedRelationships;
+
+    public final List<OwnedConstraint> ownedConstraints;
 
     public final boolean cascadePersist;
 
@@ -112,6 +118,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final int length;
 
     private final boolean isToStringMember;
+
+    private static List<OwnedConstraint> emptyOwnedConstraints = Collections.unmodifiableList(new ArrayList<>());
 
     @SuppressWarnings("unchecked")
     public MemberMetaImpl(Class<? extends IEntity> interfaceClass, Method method) {
@@ -200,7 +208,7 @@ public class MemberMetaImpl implements MemberMeta {
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
         rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
         logTransient = (method.getAnnotation(LogTransient.class) != null);
-        Owned aOwned = method.getAnnotation(Owned.class);
+        Owned owned = method.getAnnotation(Owned.class);
         boolean hasEmbedded = (method.getAnnotation(EmbeddedEntity.class) != null);
         if (hasEmbedded && ((objectClassType == ObjectClassType.Primitive) || (objectClassType == ObjectClassType.PrimitiveSet))) {
             throw new RuntimeException("Unexpected @EmbeddedEntity annotation in member '" + fieldName + "' of " + method.getDeclaringClass().getSimpleName());
@@ -209,14 +217,15 @@ public class MemberMetaImpl implements MemberMeta {
             hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null);
         }
         embedded = hasEmbedded;
-        ownedRelationships = embedded || (aOwned != null) || (objectClassType == ObjectClassType.PrimitiveSet);
+        ownedRelationships = embedded || (owned != null) || (objectClassType == ObjectClassType.PrimitiveSet);
         owner = (method.getAnnotation(Owner.class) != null);
         assert (!(owner == true && ownedRelationships == true));
 
         boolean cascadePersist = false;
         boolean cascadeDelete = false;
-        if (aOwned != null) {
-            for (CascadeType ct : aOwned.cascade()) {
+        List<OwnedConstraint> ownedConstraints = emptyOwnedConstraints;
+        if (owned != null) {
+            for (CascadeType ct : owned.cascade()) {
                 switch (ct) {
                 case ALL:
                     cascadePersist = true;
@@ -229,6 +238,17 @@ public class MemberMetaImpl implements MemberMeta {
                     cascadeDelete = true;
                     break;
                 }
+            }
+            if (owned.where().length != 0) {
+                ownedConstraints = new ArrayList<>();
+                for (JoinWhere joinWhere : owned.where()) {
+                    MemberMeta jmemberMeta = EntityImplReflectionHelper.findJoinColumnMember((Class<? extends IEntity>) valueClass, joinWhere.column());
+                    if (jmemberMeta == null) {
+                        throw new AssertionError("Unmapped @JoinColumn member in Entity '" + valueClass.getName() + "' '" + joinWhere.column() + "'");
+                    }
+                    ownedConstraints.add(new OwnedConstraint(jmemberMeta.getFieldName(), joinWhere.value()));
+                }
+                ownedConstraints = Collections.unmodifiableList(ownedConstraints);
             }
         } else {
             JoinTable joinTable = method.getAnnotation(JoinTable.class);
@@ -254,6 +274,7 @@ public class MemberMetaImpl implements MemberMeta {
         }
         this.cascadePersist = cascadePersist;
         this.cascadeDelete = cascadeDelete;
+        this.ownedConstraints = ownedConstraints;
 
         Detached detachedAnnotation = method.getAnnotation(Detached.class);
         if (detachedAnnotation == null) {
@@ -327,6 +348,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public final boolean isOwnedRelationships() {
         return ownedRelationships;
+    }
+
+    @Override
+    public List<OwnedConstraint> getOwnedConstraints() {
+        return ownedConstraints;
     }
 
     @Override

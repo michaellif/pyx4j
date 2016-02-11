@@ -57,6 +57,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.impl.SetHandler.ElementsComparator;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.entity.core.meta.OwnedConstraint;
 import com.pyx4j.entity.core.validator.Validator;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.i18n.annotations.I18n;
@@ -318,6 +319,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
                 value.put(ownerMemberName, (Serializable) ownerValue);
                 if (!this.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
                     ownerValue.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
+                }
+                if (!this.isValueDetached()) {
+                    // enforced OwnedConstraints
+                    for (OwnedConstraint oc : getMeta().getOwnedConstraints()) {
+                        @SuppressWarnings("unchecked")
+                        IPrimitive<Serializable> member = (IPrimitive<Serializable>) this.getMember(oc.getMemberName());
+                        member.setValue(member.parse(oc.getMemberValue()));
+                    }
                 }
             }
         } else if ((this.data != null) && (getParent() instanceof ICollection<?, ?>)) {

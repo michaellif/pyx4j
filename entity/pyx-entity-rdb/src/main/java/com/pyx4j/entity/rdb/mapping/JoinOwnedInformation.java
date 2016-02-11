@@ -19,6 +19,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.ObjectClassType;
@@ -52,9 +53,13 @@ public class JoinOwnedInformation extends JoinInformation {
         }
 
         if (EntityFactory.getEntityMeta(childEntityClass).getPersistableSuperClass() != null) {
-            sqlChildJoinContition = buildChildJoinContition(dialect, childEntityClass);
+            sqlChildJoinContition.add(buildPolymorphicChildJoinContition(dialect, childEntityClass));
         }
 
+        Owned owned = memberMeta.getAnnotation(Owned.class);
+        if (owned.where().length != 0) {
+            sqlChildJoinContition.addAll(buildChildJoinWhereContition(dialect, childEntityClass, owned.where()));
+        }
     }
 
 }
