@@ -50,6 +50,9 @@ class LoggerDefaultConfiguration {
 
         @Override
         public void setUp() {
+            if (AppenderConsole.isSupported()) {
+                ClientLogger.addAppender(new AppenderConsole());
+            }
         }
 
     }
