@@ -19,6 +19,6 @@
  */
 package com.pyx4j.server.mail;
 
-public enum StartTTLS {
+public enum SMTPEncryption {
     TLS, SSL
 }

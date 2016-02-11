@@ -126,7 +126,7 @@ class SMTPMailServiceImpl implements IMailService {
         mailProperties.put("mail.smtp.timeout", config.getTimeout());
 
         // Enable SSL or TSL connection
-        switch (config.getStarttls()) {
+        switch (config.getSMTPEncryption()) {
         case SSL:
             mailProperties.setProperty("mail.smtp.starttls.enable", "true");
             mailProperties.setProperty("mail.smtp.socketFactory.port", String.valueOf(config.getPort()));
@@ -136,7 +136,9 @@ class SMTPMailServiceImpl implements IMailService {
             break;
         case TLS:
             mailProperties.setProperty("mail.smtp.starttls.enable", "true");
-            mailProperties.setProperty("mail.smtp.ssl.trust", config.getHost());
+            if (config.getSSLTrustHost()) {
+                mailProperties.setProperty("mail.smtp.ssl.trust", config.getHost());
+            }
             break;
         default:
             break;

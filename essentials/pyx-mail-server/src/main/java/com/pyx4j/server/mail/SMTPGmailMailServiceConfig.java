@@ -25,6 +25,6 @@ public abstract class SMTPGmailMailServiceConfig extends SMTPMailServiceConfig {
 
     public SMTPGmailMailServiceConfig(Credentials credentials) {
         super("smtp.gmail.com", 465, credentials.userName, credentials.password);
-        starttls = StartTTLS.SSL;
+        smtpEncryption = SMTPEncryption.SSL;
     }
 }
