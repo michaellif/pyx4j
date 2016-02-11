@@ -23,33 +23,41 @@ import com.google.gwt.core.client.GWT;
 
 public class BrowserType {
 
+    // This is in fact GWT permutations.
+
+    //** Microsoft IE 11 works as MOZILLA. ! Unless X-UA-Compatible = IE=EmulateIE10 is set.
+    //** Microsoft Edge (Windows 10) works as SAFARI
     public enum Browser {
         UNKNOWN, IE, MOZILLA, SAFARI, OPERA, IPHONE
     };
 
-    public static native boolean isIENative() /*-{
-                                                 return ($doc.body.insertAdjacentHTML != null);
-                                                 }-*/;
+    public static native boolean isIE8Native() /*-{ return ($doc.documentMode != null); }-*/;
 
-    public static native boolean isIE11AndLaterNative() /*-{ 
-                                                        return !!window.MSStream; 
-                                                        }-*/;
+    //This return true in Firefox and Google chrome
+    @Deprecated
+    public static native boolean isIENative() /*-{ return ($doc.body.insertAdjacentHTML != null); }-*/;
 
+    // true in Microsoft Edge
+    public static native boolean isIE11Native() /*-{ return !!window.MSStream; }-*/;
+
+    @Deprecated
     public native static boolean isFirefoxNative() /*-{
                                                    var agt = $wnd.navigator.userAgent.toLowerCase();
                                                    return (agt.indexOf("firefox") != -1);
                                                    }-*/;
 
-    public native static String getUserAgent() /*-{
-                                               return $wnd.navigator.userAgent;
-                                               }-*/;
+    public native static String getUserAgent() /*-{ return $wnd.navigator.userAgent; }-*/;
 
-    public static final boolean isFirefox() {
+    public static final boolean isMozillaPermutation() {
         return (impl.getType() == Browser.MOZILLA);
     }
 
+    public static final boolean isFirefox() {
+        return isMozillaPermutation() && !isIE11Native();
+    }
+
     public static final boolean isIE() {
-        return (impl.getType() == Browser.IE) || (isFirefox() && isIE11AndLaterNative());
+        return (impl.getType() == Browser.IE) || (isMozillaPermutation() && isIE11Native());
     }
 
     public static final boolean isOpera() {
@@ -86,6 +94,15 @@ public class BrowserType {
         if (isIE11()) {
             b.append(", isIE11");
         }
+        if (isIE11Native()) {
+            b.append(", isIE11Native");
+        }
+        if (isMsEdge()) {
+            b.append(", isMsEdge");
+        }
+        if (isFirefox()) {
+            b.append(", isFirefox");
+        }
         return b.toString();
     }
 
@@ -98,6 +115,8 @@ public class BrowserType {
     private static Boolean isIE10;
 
     private static Boolean isIE11;
+
+    private static Boolean isMsEdge;
 
     private static Boolean isMobile;
 
@@ -136,9 +155,12 @@ public class BrowserType {
         return isIE11;
     }
 
-    public static native boolean isIE8Native() /*-{
-                                               return ($doc.documentMode != null);
-                                               }-*/;
+    public static final boolean isMsEdge() {
+        if (isMsEdge == null) {
+            isMsEdge = isSafari() && getUserAgent().toLowerCase().contains("edge/");
+        }
+        return isMsEdge;
+    }
 
     public static final boolean isMobile() {
         if (isMobile == null) {
