@@ -89,7 +89,7 @@ public class Button extends ButtonBase {
     }
 
     @Override
-    protected void execute() {
+    protected final void execute(HumanInputInfo humanInputInfo) {
         if (menu != null) {
             if (menu.getMenuPopup().isShowing()) {
                 menu.getMenuPopup().hide();
@@ -98,7 +98,7 @@ public class Button extends ButtonBase {
                 menu.getElement().getStyle().setProperty("minWidth", getOffsetWidth() + "px");
             }
         } else {
-            super.execute();
+            super.execute(humanInputInfo);
         }
     }
 
@@ -149,7 +149,7 @@ public class Button extends ButtonBase {
 
         private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
-        private boolean controlKeyDown = false;
+        private HumanInputInfo humanInputInfo = HumanInputInfo.robot;
 
         public ButtonMenuBar() {
             super(true);
@@ -168,7 +168,11 @@ public class Button extends ButtonBase {
                     @Override
                     public void execute() {
                         popup.hide();
-                        origCommand.execute();
+                        if (origCommand instanceof HumanInputCommand) {
+                            ((HumanInputCommand) origCommand).execute(humanInputInfo);
+                        } else {
+                            origCommand.execute();
+                        }
 
                     }
                 });
@@ -177,6 +181,18 @@ public class Button extends ButtonBase {
                 secureConcerns.addSecureConcern((HasSecureConcern) item);
             }
             return super.insertItem(item, beforeIndex);
+        }
+
+        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Permission... permissions) {
+            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, permissions);
+            addItem(menuItem);
+            return menuItem;
+        }
+
+        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
+            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, actionId);
+            addItem(menuItem);
+            return menuItem;
         }
 
         public boolean isMenuEmpty() {
@@ -193,15 +209,15 @@ public class Button extends ButtonBase {
         }
 
         public boolean isControlKeyDown() {
-            return controlKeyDown;
+            return humanInputInfo.isControlKeyDown();
         }
 
         @Override
         public void onBrowserEvent(Event event) {
             if ((DOM.eventGetType(event) == Event.ONCLICK) && (event.getCtrlKey())) {
-                controlKeyDown = true;
+                humanInputInfo = new HumanInputInfo(event);
             } else {
-                controlKeyDown = false;
+                humanInputInfo = HumanInputInfo.robot;
             }
             super.onBrowserEvent(event);
         }
@@ -236,8 +252,8 @@ public class Button extends ButtonBase {
             setPermission(permissions);
         }
 
-        public SecureMenuItem(String tr, Command cmd, Class<? extends ActionId> actionId) {
-            this(tr, cmd, new ActionPermission(actionId));
+        public SecureMenuItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
+            this(text, cmd, new ActionPermission(actionId));
         }
 
         public void setPermission(Permission... permission) {

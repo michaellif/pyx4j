@@ -45,6 +45,9 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.MultipleInheritanceDTO;
+import com.pyx4j.entity.test.shared.domain.join.org5where.Department5;
+import com.pyx4j.entity.test.shared.domain.join.org5where.Employee5;
+import com.pyx4j.entity.test.shared.domain.join.org5where.Employee5.Employee5Type;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParent;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParentDTO;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
@@ -284,5 +287,24 @@ public class EntityMetaTest extends InitializerTestBase {
 
         ent1.name().setValue("aValue");
         assertEquals("javaEscape in generated code", "\"aValue\"", ent1.getStringView());
+    }
+
+    public void testOwnedConstraintInOwnedJoinWhere() {
+        Employee5 emp11 = EntityFactory.create(Employee5.class);
+        Employee5 emp12 = EntityFactory.create(Employee5.class);
+        Employee5 emp13 = EntityFactory.create(Employee5.class);
+
+        assertTrue("managed member is null", emp11.type().isNull());
+        assertTrue("managed member is null", emp12.type().isNull());
+        assertTrue("managed member is null", emp13.type().isNull());
+
+        Department5 department1 = EntityFactory.create(Department5.class);
+        department1.manager().set(emp11);
+        department1.director().set(emp12);
+        department1.employees().add(emp13);
+
+        assertEquals("managed member initialized", Employee5Type.manager, emp11.type().getValue());
+        assertEquals("managed member initialized", Employee5Type.director, emp12.type().getValue());
+        assertEquals("managed member initialized", Employee5Type.employee, emp13.type().getValue());
     }
 }

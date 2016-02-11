@@ -21,25 +21,26 @@ package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
-import com.pyx4j.forms.client.ui.ExtendedNavigationCommand;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.HumanInputCommand;
+import com.pyx4j.widgets.client.HumanInputInfo;
 
 public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E> {
 
     public CEntityCrudHyperlink(final CrudAppPlace place) {
         super();
-        setNavigationCommand(new ExtendedNavigationCommand() {
+        setNavigationCommand(new HumanInputCommand() {
             @Override
             public void execute() {
-                execute(false);
+                execute(HumanInputInfo.robot);
             }
 
             @Override
-            public void execute(boolean controlKeyDown) {
+            public void execute(HumanInputInfo humanInputInfo) {
                 if (getValue().getPrimaryKey() != null) {
-                    assert(place != null);
-                    AppSite.getPlaceController().open(place.formViewerPlace(getValue().getPrimaryKey()), controlKeyDown);
+                    assert (place != null);
+                    AppSite.getPlaceController().open(place.formViewerPlace(getValue().getPrimaryKey()), humanInputInfo.isControlKeyDown());
                 }
 
             }

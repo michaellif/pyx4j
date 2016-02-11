@@ -409,6 +409,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceServiceRDB
     }
 
     @Override
+    public ConnectionTarget getTransactionConnectionTarget() {
+        PersistenceContext persistenceContext = getPersistenceContext();
+        if (persistenceContext != null) {
+            return persistenceContext.getConnectionTarget();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public Date getTransactionTime() {
         assert getPersistenceContext() != null : "Transaction Context was not started";
         if (PersistenceTrace.traceTransaction) {

@@ -19,10 +19,15 @@
  */
 package com.pyx4j.entity.client.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
+import com.pyx4j.entity.core.meta.OwnedConstraint;
 
 public class MemberMetaData {
 
@@ -35,6 +40,8 @@ public class MemberMetaData {
     public AttachLevel attachLevel;
 
     public boolean ownedRelationships;
+
+    public List<OwnedConstraint> ownedConstraints;
 
     public boolean cascadePersist;
 
@@ -66,8 +73,10 @@ public class MemberMetaData {
 
     public boolean isToStringMember;
 
-    public MemberMetaData() {
+    private static List<OwnedConstraint> emptyOwnedConstraints = Collections.unmodifiableList(new ArrayList<>());
 
+    public MemberMetaData() {
+        ownedConstraints = emptyOwnedConstraints;
     }
 
     @SuppressWarnings("unchecked")
@@ -81,6 +90,7 @@ public class MemberMetaData {
         this.attachLevel = AttachLevel.Attached;
         this.cascadePersist = true;
         this.isToStringMember = false;
+        ownedConstraints = emptyOwnedConstraints;
     }
 
     // Most commonly used definitions are shared here for code size and memory optimization.

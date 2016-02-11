@@ -35,8 +35,15 @@ public @interface Owned {
 
     /**
      * The operations that must be cascaded to the target of the association.
-     * 
+     *
      * By default All operations are cascaded.
      */
     CascadeType[] cascade() default { CascadeType.ALL };
+
+    /**
+     * Additional restriction on created join.
+     * In child entity column value is initialized and enforced by Persistence
+     */
+    JoinWhere[] where() default {};
+
 }

@@ -220,6 +220,10 @@ public class TimeUtils {
         return new Date(year, month, day);
     }
 
+    public static Date createDate(Date date, Time time) {
+        return new Date(date.getYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds());
+    }
+
     public static Date dayStart(Date d) {
         return new Date(d.getYear(), d.getMonth(), d.getDate());
     }
