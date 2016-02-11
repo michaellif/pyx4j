@@ -275,9 +275,16 @@ public class ClientContext extends Context {
 
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         try {
+            String modeInfoOrig = ApplicationMode.getModeInfo();
+
             ClientApplicationMode.setDevelopment(authenticationResponse.isDevelopmentBehavior());
             ClientApplicationMode.setQa(authenticationResponse.isQaBehavior());
             ClientApplicationMode.setDemo(authenticationResponse.isDemoBehavior());
+
+            if (!ApplicationMode.getModeInfo().equals(modeInfoOrig)) {
+                ClientEventBus.fireEvent(new ApplicationModeChangeEvent());
+            }
+
             // This initialization to done to late to debug all initialization, find a better way to trigger this
             ClientLogger.setDebugOn(ApplicationMode.isDevelopment());
 
