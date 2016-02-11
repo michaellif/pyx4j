@@ -20,5 +20,5 @@
 package com.pyx4j.server.mail;
 
 public enum SMTPEncryption {
-    TLS, SSL
+    TLS, SSL, NONE
 }
