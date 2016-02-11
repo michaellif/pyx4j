@@ -33,8 +33,6 @@ public class LegendItem implements IsSvgElement {
 
     private final LegendIconType iconType;
 
-    private final SvgFactory svgFactory;
-
     private Shape icon;
 
     private final Text text;
@@ -49,11 +47,10 @@ public class LegendItem implements IsSvgElement {
 
     private final Group group;
 
-    //private 
+    //private
 
     public LegendItem(SvgFactory svgFactory, String text, LegendIconType iconType, int x, int y) {
         this.iconType = iconType;
-        this.svgFactory = svgFactory;
 
         group = svgFactory.createGroup();
         xc = x;
@@ -62,21 +59,25 @@ public class LegendItem implements IsSvgElement {
         //move Y to be in the middle of the text
         String fs = this.text.getAttribute("font-size");
 
-        if (fs == null)
+        if (fs == null) {
             yc = y - Text.DEFAULT_FONT_SIZE / 2;
-        else
-            //assume that font size contains digits only 
+        } else {
+            if (fs.endsWith("px")) {
+                // MsEgde again
+                fs = fs.substring(0, fs.length() - 2).trim();
+            }
+            //assume that font size contains digits only
             yc = y - Integer.valueOf(fs) / 2;
+        }
 
         switch (iconType) {
-        case Rect: {
+        case Rect:
             length = 14;
             this.icon = svgFactory.createRect(xc - length / 2, yc - length / 2, length, length, 0, 0);
             break;
-        }
-        default: {
+        default:
             this.icon = svgFactory.createCircle(xc, yc, length);
-        }
+            break;
         }
         this.setColor(color);
         group.add(this.icon);
