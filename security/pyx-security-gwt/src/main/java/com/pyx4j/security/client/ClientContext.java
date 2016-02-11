@@ -49,7 +49,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IUserPreferences;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
-import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableBlockingAsyncCallback;
@@ -284,9 +283,6 @@ public class ClientContext extends Context {
             if (!ApplicationMode.getModeInfo().equals(modeInfoOrig)) {
                 ClientEventBus.fireEvent(new ApplicationModeChangeEvent());
             }
-
-            // This initialization to done to late to debug all initialization, find a better way to trigger this
-            ClientLogger.setDebugOn(ApplicationMode.isDevelopment());
 
             authenticationObtained = true;
             userVisit = authenticationResponse.getUserVisit();

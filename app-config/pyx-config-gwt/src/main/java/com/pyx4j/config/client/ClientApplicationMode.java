@@ -19,6 +19,8 @@
  */
 package com.pyx4j.config.client;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 /**
  * To access Application mode use ApplicationMode.isDevelopment()
  */
@@ -60,6 +62,11 @@ public class ClientApplicationMode implements com.pyx4j.config.shared.Applicatio
     @Override
     public boolean isDemo() {
         return demo;
+    }
+
+    @Override
+    public String toString() {
+        return ApplicationMode.getModeInfo();
     }
 
 }
