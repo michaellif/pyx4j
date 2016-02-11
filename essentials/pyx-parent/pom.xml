@@ -822,9 +822,16 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.19.1</version>
                     <configuration>
+                        <excludedGroups>com.pyx4j.commons.unit.GWTTest</excludedGroups>
                         <!--parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount-->
                         <argLine>-Xms64m -Xmx128m</argLine>
+                        <systemProperties>
+                            <property>
+                                <name>java.awt.headless</name>
+                                <value>true</value>
+                            </property>
+                        </systemProperties>
                     </configuration>
                 </plugin>
 
@@ -1091,16 +1098,11 @@
         </pluginManagement>
 
         <plugins>
+<!--
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>**/*GWTTest.java</exclude>
-                    </excludes>
-                    <includes>
-                        <include>**/*Test.java</include>
-                        <include>**/*Tests.java</include>
-                    </includes>
+                    <excludedGroups>com.pyx4j.commons.unit.GWTTest</excludedGroups>
                     <systemProperties>
                         <property>
                             <name>java.awt.headless</name>
@@ -1109,7 +1111,7 @@
                     </systemProperties>
                 </configuration>
             </plugin>
-
+-->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
@@ -1199,5 +1201,44 @@
         </profile>
     </profiles>
 -->
+
+    <profiles>
+
+        <!-- This is set in CI build -->
+        <profile>
+            <id>test-regression-only</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <groups>com.pyx4j.commons.unit.Regression</groups>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- This is set in local developer-env  -->
+        <profile>
+            <id>dev</id>
+            <build>
+                <pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <groups>com.pyx4j.commons.unit.Regression</groups>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
+    </profiles>
+
 
 </project>

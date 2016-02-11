@@ -22,10 +22,12 @@ package com.pyx4j.test.commons;
 import java.util.Date;
 
 import org.junit.Assert;
+import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IStringView;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.unit.Regression;
 
 import junit.framework.TestCase;
 
@@ -68,6 +70,7 @@ public class SimpleMessageFormatTest extends TestCase {
         assertEquals(pattern, expected, result);
     }
 
+    @Category({ Regression.class })
     public void testReplacements() {
         assertMessageFormat("A, B, C", "{0}, {1}, {2}", "A", "B", "C");
         assertMessageFormat("A, B, A", "{0}, {1}, {0}", "A", "B", "C");

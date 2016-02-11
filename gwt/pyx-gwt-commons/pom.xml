@@ -48,7 +48,7 @@
             <artifactId>pyx-log-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
-<!-- 
+<!--
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-shared</artifactId>
@@ -76,8 +76,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

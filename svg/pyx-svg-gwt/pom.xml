@@ -17,7 +17,7 @@
     <name>pyx-svg-gwt</name>
     <description>pyx SVG GWT implementations</description>
 
-	<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -29,6 +29,12 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
