@@ -125,13 +125,25 @@ class SMTPMailServiceImpl implements IMailService {
         mailProperties.put("mail.smtp.connectiontimeout", config.getConnectionTimeout());
         mailProperties.put("mail.smtp.timeout", config.getTimeout());
 
-        // Enable SSL connection
-        if (config.isStarttls()) {
+        // Enable SSL or TSL connection
+        switch (config.getSMTPEncryption()) {
+        case SSL:
             mailProperties.setProperty("mail.smtp.starttls.enable", "true");
             mailProperties.setProperty("mail.smtp.socketFactory.port", String.valueOf(config.getPort()));
             mailProperties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             mailProperties.setProperty("mail.smtp.socketFactory.fallback", "false");
             mailProperties.setProperty("mail.smtp.ssl", "true");
+            break;
+        case TLS:
+            mailProperties.setProperty("mail.smtp.starttls.enable", "true");
+            if (config.getSSLTrustHost()) {
+                mailProperties.setProperty("mail.smtp.ssl.trust", config.getHost());
+            }
+            break;
+        case NONE:
+            // NOTE: gmail need starttls enabled even for non encrypted port 25
+        default:
+            break;
         }
 
         Authenticator authenticator = null;
