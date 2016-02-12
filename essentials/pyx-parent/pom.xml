@@ -828,7 +828,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.19.1</version>
                     <configuration>
-                        <excludedGroups>com.pyx4j.junitcategories.GWTTest,com.pyx4j.junitcategories.MavenIgnore</excludedGroups>
+                        <excludedGroups>${test.categories.excluded}</excludedGroups>
                         <!--parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount-->
                         <argLine>-Xms64m -Xmx128m</argLine>
@@ -1210,9 +1210,27 @@
 
     <profiles>
 
+        <profile>
+            <id>test-categories-default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <test.categories.excluded>com.pyx4j.junitcategories.GWTTest,com.pyx4j.junitcategories.MavenIgnore,com.pyx4j.junitcategories.LongTest</test.categories.excluded>
+            </properties>
+        </profile>
+
+        <!-- Adds Long and Slow tests (remove exclusion)-->
+        <profile>
+            <id>test-categories-all</id>
+            <properties>
+                <test.categories.excluded>com.pyx4j.junitcategories.GWTTest,com.pyx4j.junitcategories.MavenIgnore</test.categories.excluded>
+            </properties>
+        </profile>
+
         <!-- This is set in CI build -->
         <profile>
-            <id>test-regression-only</id>
+            <id>test-categories-regression</id>
             <build>
                 <plugins>
                     <plugin>

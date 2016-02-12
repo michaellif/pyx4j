@@ -20,11 +20,17 @@
 package com.pyx4j.junitcategories;
 
 /**
- * JUnit Category is excluded from running tests in maven build.
+ * JUnit Category is excluded from running tests in default maven build.
+ * - Excluded in WAR build
+ * - Excluded in CI build
+ * - Excluded in -P !dev build (b-all-tests.cmd)
+ *
  * Intended for:
- * - new functionality that is not completed yet
- * - testing something very specific : Manual Tests
+ * - functionality that needs to be tested before production
+ * - slow and time consuming tests that can't be optimized
+ * - testing timeouts
+ * - testing realtime flows
  */
-public interface MavenIgnore {
+public interface LongTest {
 
 }
