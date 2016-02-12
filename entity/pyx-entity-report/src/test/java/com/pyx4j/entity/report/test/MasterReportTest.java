@@ -24,13 +24,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.report.master.MasterReportEntry;
 import com.pyx4j.entity.report.master.MasterReportModel;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.junitcategories.Regression;
 
+@Category({ Regression.class })
 public class MasterReportTest extends ReportsTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(MasterReportTest.class);

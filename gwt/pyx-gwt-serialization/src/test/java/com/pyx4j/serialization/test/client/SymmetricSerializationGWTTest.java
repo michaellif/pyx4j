@@ -23,8 +23,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
 
-import junit.framework.TestCase;
-
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +33,12 @@ import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 import com.google.gwt.user.client.rpc.impl.Serializer;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.junitcategories.GWTTest;
 import com.pyx4j.serialization.client.SymmetricClientSerializationStreamWriter;
 
+import junit.framework.TestCase;
+
+@Category({ GWTTest.class })
 public class SymmetricSerializationGWTTest extends TestCase {
 
     private static final Logger log = LoggerFactory.getLogger(SymmetricSerializationGWTTest.class);

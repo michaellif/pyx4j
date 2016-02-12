@@ -22,18 +22,21 @@ package com.pyx4j.security.test.shared;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.junitcategories.Regression;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.AclBuilder;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.PermissionAntipode;
 
+import junit.framework.TestCase;
+
+@Category({ Regression.class })
 public class AclBuilderTest extends TestCase {
 
     private static final Logger log = LoggerFactory.getLogger(AclBuilderTest.class);
