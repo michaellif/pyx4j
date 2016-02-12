@@ -66,27 +66,20 @@ public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E> {
         addFooterToolbarWidget(btnSave);
 
         setWidth("100%");
-
     }
 
     @Override
     public void init(CForm<E> component) {
         super.init(component);
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
-
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.viewable ||
-
-                event.getPropertyName() == PropertyChangeEvent.PropertyName.editable ||
-
-                event.getPropertyName() == PropertyChangeEvent.PropertyName.enabled) {
-
+                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.viewable || //
+                        event.getPropertyName() == PropertyChangeEvent.PropertyName.editable || //
+                        event.getPropertyName() == PropertyChangeEvent.PropertyName.enabled) {
                     calculateButtonsState();
                 }
-
             }
-
         });
         calculateButtonsState();
 

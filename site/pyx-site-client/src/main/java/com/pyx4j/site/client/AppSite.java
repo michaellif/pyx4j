@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.web.bindery.event.shared.EventBus;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.UserAgentDetection;
 import com.pyx4j.config.client.ClientApplicationVersion;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -46,6 +47,10 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.log4gwt.rpcappender.RPCAppender;
+import com.pyx4j.log4gwt.shared.Level;
+import com.pyx4j.security.client.ApplicationModeChangeEvent;
+import com.pyx4j.security.client.ApplicationModeChangeHandler;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
@@ -81,6 +86,8 @@ public abstract class AppSite implements EntryPoint {
     private RootPane<?> rootPane;
 
     private final ViewFactory viewFactory;
+
+    private RPCAppender rpcLogAppender;
 
     public final long applicationStartTime = System.currentTimeMillis();
 
@@ -218,20 +225,41 @@ public abstract class AppSite implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
+        AppDevStartTimeMonitor.start();
+        rpcLogAppender = new RPCAppender(Level.WARN, true);
+        ClientLogger.addAppender(rpcLogAppender);
+
+        ClientEventBus.addHandler(ApplicationModeChangeEvent.getType(), new ApplicationModeChangeHandler() {
+            @Override
+            public void onApplicationModeChange(ApplicationModeChangeEvent event) {
+                clientLoggerInitialization();
+            }
+        });
+
+        String debug = Window.Location.getParameter("debug");
+        if ((debug != null) && (debug.equals(ClientApplicationVersion.instance().getScmRevision()))) {
+            ClientLogger.setDebugOn(true);
+        }
+
+        onSiteLoad();
+    }
+
+    protected void clientLoggerInitialization() {
         if (ApplicationMode.isDevelopment()) {
             ClientLogger.setDebugOn(true);
             if (Window.Location.getParameter("trace") != null) {
                 ClientLogger.setTraceOn(true);
+                rpcLogAppender.setLevel(Level.TRACE);
+                rpcLogAppender.autoFlush(2 * Consts.SEC2MILLISECONDS);
+            } else {
+                rpcLogAppender.setLevel(Level.INFO);
             }
             if (Window.Location.getParameter("usec") != null) {
                 ClientSecurityController.setUnsecure();
             }
-            AppDevStartTimeMonitor.start();
         } else {
-            String debug = Window.Location.getParameter("debug");
-            if ((debug != null) && (debug.equals(ClientApplicationVersion.instance().getScmRevision()))) {
-                ClientLogger.setDebugOn(true);
-            }
+            ClientLogger.setDebugOn(false);
+            rpcLogAppender.setLevel(Level.WARN);
         }
         log.debug("{}", BrowserType.getCompiledType());
         if (ApplicationMode.isDevelopment()) {
@@ -243,7 +271,6 @@ public abstract class AppSite implements EntryPoint {
             log.debug("NavigationUri.getDeploymentBaseURL {}", getDeploymentBaseURL());
             log.debug("NavigationUri.getHostPageURL       {}", getHostPageURL());
         }
-        onSiteLoad();
     }
 
     public void hideLoadingIndicator() {

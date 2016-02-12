@@ -61,6 +61,14 @@ public abstract class CrudAppPlace extends AppPlace {
         return Type.valueOf(getFirstArg(ARG_NAME_CRUD_TYPE));
     }
 
+    public Key getParentId() {
+        String val;
+        if ((val = getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
+            return new Key(val);
+        }
+        return null;
+    }
+
     public CrudAppPlace formListerPlace() {
         setType(Type.lister);
         return this;

@@ -41,14 +41,18 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
     private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
     public AbstractPrimeFormView() {
-        super();
         secureConcerns.addAll(secureConcerns());
     }
 
     @Override
     public void setPresenter(PRESENTER presenter) {
         this.presenter = presenter;
-        captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
+
+        if (presenter != null && presenter.getPlace() != null) {
+            captionBase = AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() + ": ";
+        } else {
+            captionBase = "";
+        }
     }
 
     @Override
