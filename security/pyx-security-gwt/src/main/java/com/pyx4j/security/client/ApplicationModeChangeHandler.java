@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 16, 2013
+ * Created on Feb 11, 2016
  * @author vlads
  */
-package com.pyx4j.entity.shared;
+package com.pyx4j.security.client;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.i18n.annotations.I18n;
+import com.google.gwt.event.shared.EventHandler;
 
-@AbstractEntity
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface IHasFile<E extends AbstractIFileBlob> extends IEntity {
+public interface ApplicationModeChangeHandler extends EventHandler {
 
-    @ToString(index = 0)
-    @EmbeddedEntity
-    IFile<E> file();
+    void onApplicationModeChange(ApplicationModeChangeEvent event);
 
 }

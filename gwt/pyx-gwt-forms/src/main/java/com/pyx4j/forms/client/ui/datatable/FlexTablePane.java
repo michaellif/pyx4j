@@ -143,19 +143,15 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
         flexTable.removeAllRows();
 
-        if (BrowserType.isFirefox()) {
+        if (BrowserType.isIE()) {
             for (int i = 0; i < 30; i++) {
-                flexTable.getColumnFormatter().setWidth(i, "0px");
-            }
-        } else if (!BrowserType.isIE()) {
-            for (int i = 0; i < 30; i++) {
-                flexTable.getColumnFormatter().setWidth(i, "1px");
+                flexTable.getColumnFormatter().getElement(i).getStyle().setWidth(0, Unit.PX);
             }
         } else {
+            String width = BrowserType.isMsEdge() ? "1px" : "0px";
             for (int i = 0; i < 30; i++) {
-                flexTable.getColumnFormatter().getElement(i).getStyle().setWidth(1, Unit.PX);
+                flexTable.getColumnFormatter().setWidth(i, width);
             }
-
         }
 
         renderHeader();

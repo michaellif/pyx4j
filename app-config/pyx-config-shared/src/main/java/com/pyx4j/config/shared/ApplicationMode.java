@@ -32,7 +32,7 @@ public class ApplicationMode {
 
     /**
      * Use this for testing application on computer completely disconnected from network.
-     * 
+     *
      * Change this if you want to make it work temporary. Tests in Build will fail!
      * local build run like this: mvn -Dmaven.test.failure.ignore=true
      */
@@ -54,7 +54,7 @@ public class ApplicationMode {
 
     /**
      * Server side helper to avoid missing GWTBridge
-     * 
+     *
      * @see GWT#isClient()
      */
     public static final boolean isGWTClient() {
@@ -85,7 +85,7 @@ public class ApplicationMode {
 
     /**
      * Used as dev/demo/prod switch.
-     * 
+     *
      * Affects:
      * - error message visibility to application user
      * - Ctrl+Q helpers
@@ -107,5 +107,12 @@ public class ApplicationMode {
 
     public final static boolean isProduction() {
         return !impl.isDevelopment() && !impl.isDemo();
+    }
+
+    public final static String getModeInfo() {
+        return (isDevelopment() ? "Development" : " ") //
+                + (isDemo() ? "Demo" : " ") //
+                + (isQa() ? "Qa" : " ") //
+                + (isProduction() ? "Production" : " ");
     }
 }

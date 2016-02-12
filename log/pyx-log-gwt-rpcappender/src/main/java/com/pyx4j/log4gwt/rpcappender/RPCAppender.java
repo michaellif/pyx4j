@@ -80,6 +80,10 @@ public class RPCAppender implements AppenderRemote {
     }
 
     public void autoFlush(int periodMillis) {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
         timer = new Timer() {
             @Override
             public void run() {
