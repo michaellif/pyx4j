@@ -17,11 +17,11 @@
  * Created on Feb 11, 2016
  * @author vlads
  */
-package com.pyx4j.commons.unit;
+package com.pyx4j.junitcategories;
 
 /**
- * JUnit Category is excluded from running tests in maven build
+ * JUnit Category used to run tests in development environment
  */
-public interface GWTTest {
+public interface Regression {
 
 }

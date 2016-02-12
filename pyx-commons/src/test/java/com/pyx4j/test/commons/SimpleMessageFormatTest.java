@@ -27,7 +27,7 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.IStringView;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.commons.unit.Regression;
+import com.pyx4j.junitcategories.Regression;
 
 import junit.framework.TestCase;
 

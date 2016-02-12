@@ -29,7 +29,7 @@ import java.util.Vector;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.commons.unit.Regression;
+import com.pyx4j.junitcategories.Regression;
 
 import junit.framework.TestCase;
 
