@@ -828,7 +828,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.19.1</version>
                     <configuration>
-                        <excludedGroups>com.pyx4j.junitcategories.GWTTest</excludedGroups>
+                        <excludedGroups>com.pyx4j.junitcategories.GWTTest,com.pyx4j.junitcategories.MavenIgnore</excludedGroups>
                         <!--parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount-->
                         <argLine>-Xms64m -Xmx128m</argLine>
