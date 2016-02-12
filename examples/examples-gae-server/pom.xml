@@ -159,6 +159,18 @@
                 <artifactId>maven-gae-plugin</artifactId>
             </plugin>
 
+            <!-- skip install to local repository -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-install</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
