@@ -346,7 +346,7 @@
         </profile>
 
         <profile>
-            <id>developer-env</id>
+            <id>dev</id>
             <properties>
                 <gwtDraftCompile>true</gwtDraftCompile>
             </properties>

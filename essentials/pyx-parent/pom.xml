@@ -1186,7 +1186,7 @@
 <!--
     <profiles>
         <profile>
-            <id>developer-env</id>
+            <id>dev</id>
             <build>
                 <plugins>
                     <plugin>
