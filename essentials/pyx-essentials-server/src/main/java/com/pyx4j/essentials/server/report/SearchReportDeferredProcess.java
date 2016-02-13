@@ -52,7 +52,7 @@ public class SearchReportDeferredProcess<E extends IEntity> extends AbstractDefe
 
     private final static Logger log = LoggerFactory.getLogger(SearchReportDeferredProcess.class);
 
-    protected ReportTableFormatter formatter;
+    protected transient ReportTableFormatter formatter;
 
     protected final ReportRequest request;
 
