@@ -175,6 +175,12 @@ public class TimeUtils {
     }
 
     public static String durationFormatSeconds(int seconds) {
+        return durationFormatSeconds(seconds, true);
+    }
+
+    // detailed: 16 hours 13 minutes 56 seconds
+    // not detailed: 16 hours 13 minutes
+    public static String durationFormatSeconds(int seconds, boolean detailed) {
         Map<String, Integer> timeUnits = new LinkedHashMap<String, Integer>();
         timeUnits.put("years:year", 365 * Consts.DAY2HOURS * Consts.HOURS2SEC);
         timeUnits.put("month:months", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
@@ -184,6 +190,7 @@ public class TimeUtils {
         timeUnits.put("second:seconds", 1);
 
         StringBuilder b = new StringBuilder();
+        int unitsFormated = 0;
         for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
             int value = seconds / me.getValue();
             if (value != 0) {
@@ -197,6 +204,13 @@ public class TimeUtils {
                 } else {
                     b.append(me.getKey().split(":")[1]);
                 }
+                unitsFormated++;
+            } else if (unitsFormated > 0) {
+                unitsFormated++;
+            }
+
+            if (!detailed && unitsFormated >= 2) {
+                break;
             }
         }
         return b.toString();
