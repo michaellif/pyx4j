@@ -47,9 +47,9 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 
 /**
- * 
+ *
  * Runs the GWT Java to Javascript Compiler
- * 
+ *
  * use phase compile or prepare-package
  */
 @Mojo(name = "compile", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
@@ -57,11 +57,11 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * Compiler class name
-     * 
+     *
      * Use 'com.google.gwt.dev.Compiler' to switch to GWT 2 arguments style.
-     * 
+     *
      * Use 'com.google.gwt.dev.GWTCompiler' for old GWT 1.5 compiler
-     * 
+     *
      */
     @Parameter(defaultValue = "com.google.gwt.dev.Compiler")
     private String compilerClass;
@@ -86,7 +86,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * GWT 2.0 Enable faster, but less-optimized, compilations
-     * 
+     *
      * @since GWT 2.0
      */
     @Parameter(defaultValue = "false")
@@ -94,7 +94,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * Disables run-time checking of cast operations
-     * 
+     *
      * @since GWT 2.0
      */
     @Parameter(defaultValue = "false")
@@ -102,7 +102,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * Disables getName() java.lang.Class method.
-     * 
+     *
      * @since GWT 2.0
      */
     @Parameter(defaultValue = "false")
@@ -110,7 +110,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * GWT 2.0 Enable Story Of Your Compile
-     * 
+     *
      * @since GWT 2.0
      */
     @Parameter(defaultValue = "false")
@@ -118,7 +118,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * Create Compile Report
-     * 
+     *
      * @since GWT 2.0
      */
     @Parameter(defaultValue = "false")
@@ -127,14 +127,14 @@ public class GwtCompileMojo extends AbstractGWTMojo {
     /**
      * Additional compiler arguments. e.g. -XdisableClassMetadata -XdisableCastChecking
      * -XdisableAggressiveOptimization -XdisableRunAsync -XsoycDetailed
-     * 
+     *
      */
     @Parameter
     private List<String> args;
 
     /**
      * Additional static setter for compilerClass
-     * 
+     *
      */
     @Parameter
     private Map<String, String> compilerSet;
@@ -147,21 +147,21 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * Location of the source files.
-     * 
+     *
      */
     @Parameter
     private List<String> sourceDirectories;
 
     /**
      * Allows to disable GWT compilation cache.
-     * 
+     *
      */
     @Parameter(property = "gwt.persistentunitcache", defaultValue = "true")
-    private final boolean persistentUnitCache = true;
+    private boolean persistentUnitCache;
 
     /**
      * GWT Compiler now cache compilation artifacts between runs.
-     * 
+     *
      */
     @Parameter(defaultValue = "${project.build.directory}")
     private File persistentUnitCacheDir;
@@ -169,21 +169,21 @@ public class GwtCompileMojo extends AbstractGWTMojo {
     /**
      * Use plugin dependencies for GWT compilation. A comma-separated list of artifacts.
      * The artifact syntax is defined by StrictPatternIncludesArtifactFilter.
-     * 
+     *
      */
     @Parameter
     protected String usePluginDependencies;
 
     /**
      * Pass project properties as Java system, properties.
-     * 
+     *
      */
     @Parameter
     private List<String> systemProperties;
 
     /**
      * The maven project descriptor
-     * 
+     *
      */
     @Component
     private MavenProject project;
@@ -194,7 +194,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
      * The plugin dependencies.
-     * 
+     *
      */
     @Component
     protected List<Artifact> pluginArtifacts;
@@ -387,6 +387,9 @@ public class GwtCompileMojo extends AbstractGWTMojo {
             }
         }
 
+        if (!persistentUnitCache) {
+            getLog().info("gwt.persistentunitcache = " + persistentUnitCache);
+        }
         System.setProperty("gwt.persistentunitcache", String.valueOf(persistentUnitCache));
         System.setProperty("gwt.persistentunitcachedir", persistentUnitCacheDir.toString());
         if (systemProperties != null) {
