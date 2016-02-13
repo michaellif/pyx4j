@@ -831,7 +831,7 @@
                         <excludedGroups>${test.categories.excluded}</excludedGroups>
                         <!--parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount-->
-                        <argLine>-Xms64m -Xmx128m</argLine>
+                        <argLine>-Xms64m -Xmx256m</argLine>
                         <systemProperties>
                             <property>
                                 <name>java.awt.headless</name>
