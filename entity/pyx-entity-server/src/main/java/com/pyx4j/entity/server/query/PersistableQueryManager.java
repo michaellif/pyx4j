@@ -69,7 +69,7 @@ class PersistableQueryManager {
      *            persists and update this object so app can save pointer.
      */
     static <Q extends IQuery<? extends IEntity>> void persistQuery(Q query, QueryStorage queryStorage) {
-        if (!queryStorage.isNull()) {
+        if (queryStorage.getPrimaryKey() != null) {
             Persistence.ensureRetrieve(queryStorage, AttachLevel.Attached);
         }
         query = query.detach(); // Use short/local Path
