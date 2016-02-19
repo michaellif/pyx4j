@@ -77,7 +77,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
                 return new BasicValidationError(getCComponent(), i18n.tr("Reference data unavailable"));
             }
         };
-        retriveOptions(null);
+        // Do not load the Data here. We don't know if it is isViewable component of not.
+        // retriveOptions(null);
     }
 
     public E proto() {

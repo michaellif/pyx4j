@@ -99,7 +99,11 @@ public class AsyncOptionLoadingDelegate<E extends IEntity> {
         return optionsLoaded;
     }
 
+    // Do not process old requests when forms are detached of criteria was changed.
     public void resetOptions() {
+        if (optionLoadingHandler != null) {
+            optionLoadingHandler.cancel();
+        }
         optionsLoaded = false;
     }
 
@@ -109,17 +113,11 @@ public class AsyncOptionLoadingDelegate<E extends IEntity> {
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
         resetOptions();
-        if (optionLoadingHandler != null) {
-            optionLoadingHandler.cancel();
-        }
         return criteria.add(criterion);
     }
 
     public void resetCriteria() {
         resetOptions();
-        if (optionLoadingHandler != null) {
-            optionLoadingHandler.cancel();
-        }
         criteria.resetCriteria();
     }
 
