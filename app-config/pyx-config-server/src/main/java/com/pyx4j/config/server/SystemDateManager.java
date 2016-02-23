@@ -25,13 +25,13 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LoggerFactoryLocationAware;
 import com.pyx4j.commons.LogicalDate;
 
 public class SystemDateManager {
 
-    private static final Logger log = LoggerFactory.getLogger(SystemDateManager.class);
+    private static final Logger log = LoggerFactoryLocationAware.getLogger(SystemDateManager.class);
 
     private static class DateContext {
 
