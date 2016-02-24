@@ -38,6 +38,8 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
 
     private final Class<E> entityClass;
 
+    private Key parentEntityId;
+
     private List<Criterion> externalFilters;
 
     private boolean populateOnStart = true;
@@ -49,7 +51,10 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
 
         this.entityClass = entityClass;
 
-        view.setPresenter(this);
+        String val;
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
+            parentEntityId = new Key(val);
+        }
 
         EntityFiltersBuilder<E> filters = EntityFiltersBuilder.create(entityClass);
         parseExternalFilters(place, entityClass, filters);
@@ -109,17 +114,15 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
     }
 
     protected void parseExternalFilters(AppPlace place, Class<E> entityClass, EntityFiltersBuilder<E> filters) {
-        String val;
-        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
-            getView().getDataTablePanel().getDataSource().setParentEntityId(new Key(val));
-        }
     }
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         getView().discard();
+        getView().getDataTablePanel().getDataSource().setParentEntityId(parentEntityId);
         getView().getDataTablePanel().setExternalFilters(externalFilters);
         getView().setPresenter(this);
+
         MementoManager.restoreState(getView(), getPlace());
         if (populateOnStart) {
             populate();
@@ -129,9 +132,11 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
 
     public void onDiscard() {
         MementoManager.saveState(getView(), getPlace());
-        getView().discard();
-        getView().setPresenter(null);
 
+        getView().setPresenter(null);
+        getView().getDataTablePanel().setExternalFilters(null);
+        getView().getDataTablePanel().getDataSource().setParentEntityId(null);
+        getView().discard();
     }
 
     @Override

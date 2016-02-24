@@ -88,18 +88,21 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     public void setParentEntityId(Key parentID, Class<? extends IEntity> parentClass) {
         this.parentEntityID = parentID;
         this.parentEntityClass = parentClass;
-        String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
-        assert (ownerMemberName != null) : "No @Owner in " + entityClass;
 
-        Serializable searchBy;
-        if (parentClass != null) {
-            searchBy = EntityFactory.create(parentClass);
-            ((IEntity) searchBy).setPrimaryKey(parentID);
-        } else {
-            searchBy = parentID;
+        if (parentEntityID != null) {
+            String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
+            assert (ownerMemberName != null) : "No @Owner in " + entityClass;
+
+            Serializable searchBy;
+            if (parentClass != null) {
+                searchBy = EntityFactory.create(parentClass);
+                ((IEntity) searchBy).setPrimaryKey(parentID);
+            } else {
+                searchBy = parentID;
+            }
+
+            parentFiltering = new PropertyCriterion(new Path(entityClass, ownerMemberName), Restriction.EQUAL, searchBy);
         }
-
-        parentFiltering = new PropertyCriterion(new Path(entityClass, ownerMemberName), Restriction.EQUAL, searchBy);
     }
 
     public Key getParentEntityId() {
@@ -108,10 +111,6 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     public Class<? extends IEntity> getParentEntityClass() {
         return parentEntityClass;
-    }
-
-    public void clearParentFiltering() {
-        parentFiltering = null;
     }
 
     public void setPreDefinedFilters(List<Criterion> preDefinedFilters) {
@@ -127,8 +126,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     }
 
     public void clearPreDefinedFilters() {
-//        this.preDefinedFilters.clear(); // not implemented in GWT - replace on:
-        this.preDefinedFilters = new LinkedList<Criterion>();
+        this.preDefinedFilters.clear();
     }
 
     public List<Criterion> getPreDefinedFilters() {
