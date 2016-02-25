@@ -37,10 +37,10 @@ import com.pyx4j.log4j.LoggerConfig;
 
 /**
  * System property "com.pyx4j.appConfig" defines Config suffix class to use.
- * 
+ *
  * contextName in <context-param> can redefine what configuration to use if
  * ServerSideConfiguration.selectInstanceByContextName is overriden
- * 
+ *
  */
 public class InitializationServletContextListener implements ServletContextListener {
 
@@ -52,7 +52,7 @@ public class InitializationServletContextListener implements ServletContextListe
             if (CommonsStringUtils.isStringSet(configClass)) {
                 try {
                     configClass += System.getProperty("com.pyx4j.appConfig", "");
-                    String configContextName = getContextName(servletContext);
+                    String configContextName = LoggerConfig.getContextName(servletContext);
                     LoggerConfig.setContextName(configContextName);
                     ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
                     ServerSideConfiguration selectedConfig = defaultConfig.selectInstanceByContextName(servletContext, configContextName);
@@ -83,22 +83,7 @@ public class InitializationServletContextListener implements ServletContextListe
     }
 
     public static String getContextName(ServletContext servletContext) {
-        // Can define this in web.xml
-        String configContextName = servletContext.getInitParameter("contextName");
-        if (CommonsStringUtils.isStringSet(configContextName)) {
-            return configContextName;
-        }
-        // Version 2.5
-        configContextName = servletContext.getContextPath();
-        if (CommonsStringUtils.isStringSet(configContextName)) {
-            int idx = configContextName.lastIndexOf('/');
-            if (idx != -1) {
-                return configContextName.substring(idx + 1);
-            } else {
-                System.err.println("WARN unexpected context path [" + configContextName + "]");
-            }
-        }
-        return null;
+        return LoggerConfig.getContextName(servletContext);
     }
 
     @Override
