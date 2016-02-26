@@ -30,6 +30,9 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface NetworkSimulation extends IEntity {
 
+    // Available by system configuration properties
+    IPrimitive<Boolean> available();
+
     IPrimitive<Boolean> enabled();
 
     @Caption(name = "Delay", description = "milliseconds")

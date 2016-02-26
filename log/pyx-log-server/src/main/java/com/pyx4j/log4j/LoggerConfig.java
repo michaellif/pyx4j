@@ -23,8 +23,6 @@ package com.pyx4j.log4j;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.MDC50486;
 import org.slf4j.MDC;
@@ -55,25 +53,6 @@ public class LoggerConfig {
             containerHome = System.getProperty("container.home");
         }
         setVariable("container.home", containerHome);
-    }
-
-    public static String getContextName(ServletContext servletContext) {
-        // Can define this in web.xml
-        String configContextName = servletContext.getInitParameter("contextName");
-        if (CommonsStringUtils.isStringSet(configContextName)) {
-            return configContextName;
-        }
-        // Version 2.5
-        configContextName = servletContext.getContextPath();
-        if (CommonsStringUtils.isStringSet(configContextName)) {
-            int idx = configContextName.lastIndexOf('/');
-            if (idx != -1) {
-                return configContextName.substring(idx + 1);
-            } else {
-                System.err.println("WARN unexpected context path [" + configContextName + "]");
-            }
-        }
-        return null;
     }
 
     public static void setContextName(String name) {

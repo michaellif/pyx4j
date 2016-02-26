@@ -28,8 +28,10 @@ import java.util.Vector;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.security.server.AclRevalidator;
@@ -109,6 +111,51 @@ public class ServerSideConfiguration {
         // Initialize the UnitTest detection
         ServerSideConfiguration.isStartedUnderUnitTest();
         instanceDefinedFrom = new Throwable("ServerSideConfiguration initialized from");
+    }
+
+    public static boolean isInitialized() {
+        return instance != null;
+    }
+
+    public static final <E extends ServerSideConfiguration> E initialize(ServletContext servletContext, Class<E> serverSideConfigurationClass) {
+        ServerSideConfiguration defaultApplicationConfig;
+        String configClassSuffix = System.getProperty("com.pyx4j.appConfig");
+
+        try {
+            if (configClassSuffix == null) {
+                defaultApplicationConfig = serverSideConfigurationClass.newInstance();
+            } else {
+                String configClass = serverSideConfigurationClass.getName() + configClassSuffix;
+                defaultApplicationConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
+            }
+            ServerSideConfiguration selectedConfig = defaultApplicationConfig.selectInstanceByContextName(servletContext, getContextName(servletContext));
+            ServerSideConfiguration.setInstance(selectedConfig);
+        } catch (Throwable e) {
+            Logger log = LoggerFactory.getLogger(ServerSideConfiguration.class);
+            log.error("ServerSideConfiguration creation error", e);
+            throw new Error("ServerSideConfiguration not available");
+        }
+
+        return instance(serverSideConfigurationClass);
+    }
+
+    public static String getContextName(ServletContext servletContext) {
+        // Can define this in web.xml
+        String configContextName = servletContext.getInitParameter("contextName");
+        if (CommonsStringUtils.isStringSet(configContextName)) {
+            return configContextName;
+        }
+        // Version 2.5
+        configContextName = servletContext.getContextPath();
+        if (CommonsStringUtils.isStringSet(configContextName)) {
+            int idx = configContextName.lastIndexOf('/');
+            if (idx != -1) {
+                return configContextName.substring(idx + 1);
+            } else {
+                System.err.println("WARN unexpected context path [" + configContextName + "]");
+            }
+        }
+        return null;
     }
 
     public static long getStartTime() {
@@ -338,6 +385,10 @@ public class ServerSideConfiguration {
 
     public PropertiesConfiguration getConfigProperties() {
         return new PropertiesConfiguration(Collections.<String, String> emptyMap());
+    }
+
+    public boolean isNetworkSimulationAvailable() {
+        return getConfigProperties().getBooleanValue("networkSimulation.available", false);
     }
 
     public static String getSystemProperties() {

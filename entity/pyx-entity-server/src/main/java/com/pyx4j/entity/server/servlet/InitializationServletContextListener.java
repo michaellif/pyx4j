@@ -36,10 +36,10 @@ import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.log4j.LoggerConfig;
 
 /**
- * System property "com.pyx4j.appConfig" defines Config suffix class to use.
+ * System property "com.pyx4j.appConfig" defines Config suffix for class to use.
  *
- * contextName in <context-param> can redefine what configuration to use if
- * ServerSideConfiguration.selectInstanceByContextName is overriden
+ * contextName in <context-param> of web.xml can redefine what configuration to use if
+ * ServerSideConfiguration.selectInstanceByContextName is overridden
  *
  */
 public class InitializationServletContextListener implements ServletContextListener {
@@ -47,24 +47,26 @@ public class InitializationServletContextListener implements ServletContextListe
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            String configClass = sce.getServletContext().getInitParameter(ServerSideConfiguration.class.getName());
             ServletContext servletContext = sce.getServletContext();
-            if (CommonsStringUtils.isStringSet(configClass)) {
-                try {
-                    configClass += System.getProperty("com.pyx4j.appConfig", "");
-                    String configContextName = LoggerConfig.getContextName(servletContext);
-                    LoggerConfig.setContextName(configContextName);
-                    ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
-                    ServerSideConfiguration selectedConfig = defaultConfig.selectInstanceByContextName(servletContext, configContextName);
-                    ServerSideConfiguration.setInstance(selectedConfig);
-                } catch (Throwable e) {
-                    Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
-                    log.error("ServerSideConfiguration creation error", e);
-                    throw new ServletException("ServerSideConfiguration not available");
+            // Old web.xml not used in modern applications
+            if (!ServerSideConfiguration.isInitialized()) {
+                LoggerConfig.setContextName(ServerSideConfiguration.getContextName(servletContext));
+                String configClassName = sce.getServletContext().getInitParameter(ServerSideConfiguration.class.getName());
+                if (CommonsStringUtils.isStringSet(configClassName)) {
+                    Class<ServerSideConfiguration> serverSideConfigurationClass;
+                    try {
+                        @SuppressWarnings("unchecked")
+                        Class<ServerSideConfiguration> configClass = (Class<ServerSideConfiguration>) Class.forName(configClassName);
+                        serverSideConfigurationClass = configClass;
+                    } catch (Throwable e) {
+                        Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
+                        log.error("ServerSideConfiguration creation error", e);
+                        throw new ServletException("ServerSideConfiguration not available");
+                    }
+                    ServerSideConfiguration.initialize(servletContext, serverSideConfigurationClass);
+                } else {
+                    ServerSideConfiguration.setInstance(new ServerSideConfiguration());
                 }
-            } else {
-                LoggerConfig.setContextName(getContextName(servletContext));
-                ServerSideConfiguration.setInstance(new ServerSideConfiguration());
             }
 
             Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
@@ -83,7 +85,7 @@ public class InitializationServletContextListener implements ServletContextListe
     }
 
     public static String getContextName(ServletContext servletContext) {
-        return LoggerConfig.getContextName(servletContext);
+        return ServerSideConfiguration.getContextName(servletContext);
     }
 
     @Override
