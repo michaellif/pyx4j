@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
@@ -48,6 +49,7 @@ import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.CrudDebugId;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
@@ -199,6 +201,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                     onItemNew();
                 }
             }), 0);
+            addButton.ensureDebugId(CompositeDebugId.debugId(CrudDebugId.Crud_New, entityPrototype.getPath()));
 
             if (isSecurityEnabled()) {
                 addButton.setPermission((DataModelPermission.permissionCreate(getEntityClass())));
