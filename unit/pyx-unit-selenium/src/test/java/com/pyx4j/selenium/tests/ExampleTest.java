@@ -20,7 +20,7 @@
 package com.pyx4j.selenium.tests;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
 import com.pyx4j.selenium.ISeleniumTestConfiguration;

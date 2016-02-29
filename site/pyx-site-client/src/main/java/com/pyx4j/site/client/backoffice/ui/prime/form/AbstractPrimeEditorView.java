@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.ILooseVersioning;
 import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.IPrimeEditorPresenter;
 import com.pyx4j.widgets.client.Button;
