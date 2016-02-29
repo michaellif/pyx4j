@@ -17,7 +17,7 @@
  * Created on 2011-01-28
  * @author vlads
  */
-package com.pyx4j.essentials.client.crud;
+package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.IDebugId;
 
