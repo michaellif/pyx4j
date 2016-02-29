@@ -342,9 +342,14 @@ public class SeleniumExtended extends WebDriverWrapper {
     public void click(By by) {
         WebElement element = driver.findElement(by);
         log("click on element <{}> id={} ", element.getTagName(), element.getAttribute("id"));
+        // Looks like this is fixed in current selenium version 2.52.0 .
         //To fix the focus reset problem from the previous element we have to use additional clickAndHold action for buttons and divs.
         //This is the fix for Selenium FireFox Drive bug. Was tested on FirefoxDrive and ChromeDrive.
-        if (element.getTagName().equals("div") || element.getTagName().equals("button")) {
+        boolean alloMoveAsClick = false;
+//        if ("SideMenuItemPanel".equals(element.getAttribute("class"))) {
+//            alloMoveAsClick = false;
+//        }
+        if (alloMoveAsClick && element.getTagName().equals("div") || element.getTagName().equals("button")) {
             Actions actions = new Actions(driver);
             actions.moveToElement(element).clickAndHold(element).click();
             actions.release();
