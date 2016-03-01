@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.utils.BindingContext.BindingType;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListCrudService<E> {
@@ -48,6 +49,20 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListCrud
 
         public boolean isEdit() {
             return this == Edit || this == Save;
+        }
+
+        public BindingType getBindingType() {
+            switch (this) {
+            case View:
+                return BindingType.View;
+            case Edit:
+                return BindingType.Edit;
+            case List:
+                return BindingType.List;
+            case Save:
+                return BindingType.Save;
+            }
+            return null;
         }
     }
 
