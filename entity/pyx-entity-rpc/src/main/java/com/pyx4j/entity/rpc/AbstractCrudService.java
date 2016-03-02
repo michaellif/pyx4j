@@ -61,8 +61,9 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListCrud
                 return BindingType.List;
             case Save:
                 return BindingType.Save;
+            default:
+                throw new IllegalArgumentException(this.name());
             }
-            return null;
         }
     }
 
