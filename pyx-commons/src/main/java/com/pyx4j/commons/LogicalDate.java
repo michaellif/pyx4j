@@ -70,6 +70,11 @@ public class LogicalDate extends java.sql.Date {
         return super.getDate();
     }
 
+    @SuppressWarnings("deprecation")
+    public Date asDate() {
+        return new Date(getYear(), getMonth(), getDate());
+    }
+
     /**
      * this > other
      */
