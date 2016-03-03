@@ -22,6 +22,10 @@ package com.pyx4j.gwt.server;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -131,6 +135,18 @@ public class DateUtils extends TimeUtils {
         } else {
             return (d1.get(Calendar.YEAR) == d2.get(Calendar.YEAR) && d1.get(Calendar.DAY_OF_YEAR) == d2.get(Calendar.DAY_OF_YEAR));
         }
+    }
+
+    public static LocalDate toLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static LocalDate toLocalDate(LogicalDate date) {
+        return date.asDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static int daysBetween(LogicalDate d1, LogicalDate d2) {
+        return (int) Duration.ofDays(d1.toLocalDate().until(d2.toLocalDate(), ChronoUnit.DAYS)).toDays() + 1;
     }
 
     public static Date detectDateformat(String str) {
