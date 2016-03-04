@@ -76,4 +76,7 @@ public class LogicalTime extends Time {
         super.setSeconds(seconds);
     }
 
+    public static LogicalTime valueOf(String time) {
+        return new LogicalTime(Time.valueOf(time));
+    }
 }
