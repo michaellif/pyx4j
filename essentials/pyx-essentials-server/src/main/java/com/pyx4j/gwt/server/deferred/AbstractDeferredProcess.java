@@ -19,6 +19,7 @@
  */
 package com.pyx4j.gwt.server.deferred;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -28,7 +29,9 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     private static final long serialVersionUID = -7013680464201337453L;
 
-    public static class RunningProcess {
+    public static class RunningProcess implements Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         public final AtomicInteger progress = new AtomicInteger();
 
