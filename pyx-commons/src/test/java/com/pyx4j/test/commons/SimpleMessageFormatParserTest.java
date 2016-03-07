@@ -45,9 +45,9 @@ public class SimpleMessageFormatParserTest extends TestCase {
     }
 
     public void TODO_testNumberFormat() throws ParseException {
-        assertMessageFormat("2,000", "{0,number}", 2000);
+        assertMessageFormat("2,000", "{0,number}", 2000l);
         assertMessageFormat("2,000", "{0,number,integer}", 2000);
-        assertMessageFormat("2000", "{0,number,#}", 2000);
+        assertMessageFormat("2000", "{0,number,#}", 2000); // This is inconsistent with pars
 
         assertMessageFormat("12.3%", "{0,number,percent}", 0.123);
         assertMessageFormat("12%", "{0,number,percent}", 0.12);

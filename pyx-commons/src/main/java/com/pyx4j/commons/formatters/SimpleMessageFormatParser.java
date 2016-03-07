@@ -20,10 +20,12 @@
 package com.pyx4j.commons.formatters;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.commons.SimpleFormat;
 import com.pyx4j.commons.TimeUtils;
 
 /**
@@ -72,9 +74,12 @@ public class SimpleMessageFormatParser<E extends Serializable> implements IParse
             }
             break;
         case "number":
-            if (formatStyle == null) {
-                formatStyle = "#";
+            if ("#".equals(formatStyle)) {
+                formatStyle = null;
             }
+            break;
+        case "date":
+        case "time":
             break;
         default:
             throw new IllegalArgumentException("Unsupported '" + formatType + "' in '" + formatPattern + "' format pattern");
@@ -97,10 +102,12 @@ public class SimpleMessageFormatParser<E extends Serializable> implements IParse
             default:
                 throw new UnsupportedOperationException();
             }
-// TODO in pyx 2.2.10 merge
-//        case "number":
-//            return SimpleFormat.numberParse(string);
-
+        case "number":
+            return (E) SimpleFormat.numberParse(string, formatStyle);
+        case "date":
+            return (E) SimpleFormat.dateParse(string, formatStyle);
+        case "time":
+            return (E) new Time(SimpleFormat.dateParse(string, formatStyle).getTime());
         default:
             throw new UnsupportedOperationException();
         }
