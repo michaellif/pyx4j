@@ -63,8 +63,13 @@ public abstract class IPojoImpl<E extends IEntity> implements IPojo<E> {
         return this.entity.id().getValue();
     }
 
-    public void setStatus(Key id) {
+    public void setId(Key id) {
         this.entity.id().setValue(id);
+    }
+
+    @Override
+    public String toString() {
+        return this.entity.getStringView();
     }
 
     protected static final <T extends IEntity> IPojo<T>[] toArray(IPojo<T>[] pojoArray, ICollection<T, ?> entityList) {
