@@ -20,6 +20,10 @@
 package com.pyx4j.essentials.server.admin;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -54,7 +58,7 @@ public class ConfigInfo {
         } catch (NoSuchMethodError ignoreOldTomcat) {
         }
         b.append("System Date              : ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z").format(SystemDateManager.getDate())).append("\n");
-        b.append("System Uptime            : ").append(systemUptime()).append("\n");
+        b.append("JVM Uptime               : ").append(systemUptime()).append("\n");
         b.append("Application Uptime       : ").append(applicationUptime()).append("\n");
         b.append("\n");
 
@@ -80,13 +84,65 @@ public class ConfigInfo {
         b.append("\n");
         b.append("\n");
 
-        b.append("System:\n");
-        b.append("Free memory              : ").append(Runtime.getRuntime().freeMemory() / (1024 * 1024)).append(" MB\n");
-        b.append("Total memory             : ").append(Runtime.getRuntime().totalMemory() / (1024 * 1024)).append(" MB\n");
-        b.append("Max memory               : ").append(Runtime.getRuntime().maxMemory() / (1024 * 1024)).append(" MB\n");
+        b.append("System:\n  ");
+        b.append(systemInformation().replaceAll("\n", "\n  "));
         b.append("\n");
 
         b.append("System Properties:\n").append(ServerSideConfiguration.getSystemProperties());
+
+        return b.toString();
+    }
+
+    private String systemInformation() {
+        StringBuilder b = new StringBuilder();
+
+        NumberFormat format = new DecimalFormat("#,##0.00");
+        double mb = 1024 * 1024;
+
+        {
+            Runtime rt = Runtime.getRuntime();
+
+            b.append("JVM Heap Memory Free     : ").append(format.format(rt.freeMemory() / mb)).append(" MB\n");
+            b.append("JVM Heap Memory Total    : ").append(format.format(rt.totalMemory() / mb)).append(" MB\n");
+            b.append("JVM Heap Memory Max      : ").append(format.format(rt.maxMemory() / mb)).append(" MB\n");
+        }
+
+        {
+            MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+            MemoryUsage mu = memoryMXBean.getNonHeapMemoryUsage();
+
+            b.append("JVM NonHeap Memory Used  : ").append(format.format(mu.getUsed() / mb)).append(" MB\n");
+            b.append("JVM NonHeap Committed    : ").append(format.format(mu.getCommitted() / mb)).append(" MB\n");
+            String total;
+            if (mu.getMax() != -1) {
+                total = format.format(mu.getMax() / mb) + " MB";
+            } else {
+                total = "(unbounded)";
+            }
+            b.append("JVM NonHeap Memory Total : ").append(total).append("\n");
+        }
+
+        try {
+            b.append(systemOSInformation());
+        } catch (Throwable ignoreNonOracleVM) {
+        }
+
+        return b.toString();
+    }
+
+    private String systemOSInformation() {
+        StringBuilder b = new StringBuilder();
+
+        NumberFormat format = new DecimalFormat("#,##0.00");
+        double mb = 1024 * 1024;
+
+        java.lang.management.OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+        if (operatingSystemMXBean instanceof com.sun.management.OperatingSystemMXBean) {
+            com.sun.management.OperatingSystemMXBean sunBean = (com.sun.management.OperatingSystemMXBean) operatingSystemMXBean;
+
+            b.append("OS Physical Memory Free  : ").append(format.format(sunBean.getFreePhysicalMemorySize() / mb)).append(" MB\n");
+            b.append("OS Physical Memory Total : ").append(format.format(sunBean.getTotalPhysicalMemorySize() / mb)).append(" MB\n");
+        }
 
         return b.toString();
     }

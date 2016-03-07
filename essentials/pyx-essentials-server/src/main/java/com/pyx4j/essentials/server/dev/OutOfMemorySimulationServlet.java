@@ -190,9 +190,13 @@ public class OutOfMemorySimulationServlet extends HttpServlet {
             double free = total - used;
 
             w(out, "JVM NonHeap: used ", format.format(used / mb), " MB");
-            w(out, " (", format.format(100.0 * used / total), "%)");
-            w(out, ", total ", format.format(total / mb), " MB");
-            w(out, ", free ", format.format(free / mb), " MB");
+            if (total == -1) {
+                w(out, " (unbounded)");
+            } else {
+                w(out, " (", format.format(100.0 * used / total), "%)");
+                w(out, ", total ", format.format(total / mb), " MB");
+                w(out, ", free ", format.format(free / mb), " MB");
+            }
         }
         w(out, "</pre>");
     }
@@ -297,7 +301,7 @@ public class OutOfMemorySimulationServlet extends HttpServlet {
 
         cw.visitMethod(Opcodes.ACC_PUBLIC + Opcodes.ACC_ABSTRACT, "addListener", // method name
                 "(Ljava/lang/String;)V", // method descriptor
-                null, // exceptions       
+                null, // exceptions
                 null); // method attributes
 
         cw.visitEnd();
