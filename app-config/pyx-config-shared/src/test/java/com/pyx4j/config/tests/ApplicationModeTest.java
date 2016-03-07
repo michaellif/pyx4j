@@ -19,13 +19,17 @@
  */
 package com.pyx4j.config.tests;
 
-import junit.framework.TestCase;
+import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.junitcategories.Regression;
 
+import junit.framework.TestCase;
+
+@Category({ Regression.class })
 public class ApplicationModeTest extends TestCase {
 
     public void testOfflineDevelopmentNotInSVN() {
-        assertFalse("ApplicationMode.offlineDevelopment = true; should not be commited to SVN", ApplicationMode.offlineDevelopment);
+        assertFalse("ApplicationMode.offlineDevelopment = true; should not be committed to GIT", ApplicationMode.offlineDevelopment);
     }
 }

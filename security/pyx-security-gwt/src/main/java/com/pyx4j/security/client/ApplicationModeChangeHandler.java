@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,33 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-01-28
+ * Created on Feb 11, 2016
  * @author vlads
  */
-package com.pyx4j.essentials.client.crud;
+package com.pyx4j.security.client;
 
-import com.pyx4j.commons.IDebugId;
+import com.google.gwt.event.shared.EventHandler;
 
-public enum CrudDebugId implements IDebugId {
+public interface ApplicationModeChangeHandler extends EventHandler {
 
-    Crud_Save,
+    void onApplicationModeChange(ApplicationModeChangeEvent event);
 
-    Crud_Print,
-
-    Crud_Back,
-
-    Crud_New,
-
-    Crud_Delete,
-
-    Crud_Download,
-
-    Criteria_Clear,
-
-    Criteria_Submit;
-
-    @Override
-    public String debugId() {
-        return this.name();
-    }
 }

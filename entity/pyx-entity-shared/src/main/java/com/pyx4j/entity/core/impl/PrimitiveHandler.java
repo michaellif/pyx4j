@@ -139,6 +139,8 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
             converted = (TYPE) java.sql.Date.valueOf(value);
         } else if (valueClass.equals(LogicalDate.class)) {
             converted = (TYPE) LogicalDate.valueOf(value);
+        } else if (valueClass.equals(LogicalTime.class)) {
+            converted = (TYPE) LogicalTime.valueOf(value);
         } else if (valueClass.isEnum()) {
             converted = (TYPE) Enum.valueOf((Class<Enum>) valueClass, value);
         } else if (valueClass.equals(Boolean.class)) {

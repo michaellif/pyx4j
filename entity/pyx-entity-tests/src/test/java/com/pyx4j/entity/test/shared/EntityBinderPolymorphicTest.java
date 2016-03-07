@@ -20,6 +20,7 @@
 package com.pyx4j.entity.test.shared;
 
 import org.junit.Assert;
+import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.utils.BindingContext;
@@ -29,8 +30,10 @@ import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub1;
 import com.pyx4j.entity.test.shared.domain.inherit.binder.B1sub1TO;
 import com.pyx4j.entity.test.shared.domain.inherit.binder.B1superHolder;
 import com.pyx4j.entity.test.shared.domain.inherit.binder.B1superHolderTO;
+import com.pyx4j.junitcategories.Regression;
 import com.pyx4j.unit.shared.UniqueInteger;
 
+@Category({ Regression.class })
 public class EntityBinderPolymorphicTest extends InitializerTestBase {
 
     public static class PolymorphicMemberBinder extends SimpleEntityBinder<B1superHolder, B1superHolderTO> {

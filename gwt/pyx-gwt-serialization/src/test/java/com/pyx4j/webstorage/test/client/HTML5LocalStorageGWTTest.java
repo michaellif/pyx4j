@@ -19,10 +19,15 @@
  */
 package com.pyx4j.webstorage.test.client;
 
-import junit.framework.TestCase;
+import org.junit.experimental.categories.Category;
 
 import com.google.gwt.storage.client.Storage;
 
+import com.pyx4j.junitcategories.GWTTest;
+
+import junit.framework.TestCase;
+
+@Category({ GWTTest.class })
 public class HTML5LocalStorageGWTTest extends TestCase {
 
     private static final String TEST_NAME_PREFIX = HTML5LocalStorageGWTTest.class.getName();

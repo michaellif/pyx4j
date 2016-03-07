@@ -76,4 +76,11 @@ public class LogicalTime extends Time {
         super.setSeconds(seconds);
     }
 
+    /**
+     * Converts a string in JDBC time escape format "hh:mm:ss" to a <code>LogicalTime</code> value.
+     * See {@link java.sql.Time#valueOf(String s)}
+     */
+    public static LogicalTime valueOf(String time) {
+        return new LogicalTime(Time.valueOf(time));
+    }
 }

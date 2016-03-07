@@ -20,6 +20,7 @@
 package com.pyx4j.entity.test.shared;
 
 import org.junit.Assert;
+import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
@@ -33,7 +34,9 @@ import com.pyx4j.entity.test.shared.domain.ownership.RootEnity;
 import com.pyx4j.entity.test.shared.domain.ownership.creation.ForceCreationOneToOneParentDTO;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParentDTO;
+import com.pyx4j.junitcategories.Regression;
 
+@Category({ Regression.class })
 public class BidirectionalRelationshipTest extends InitializerTestBase {
 
     public void testOwnedEntityValue() {
@@ -57,7 +60,7 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
         assertNotNull("Owner Field Entity FieldName", c1.master().getFieldName());
 
         assertEquals("Owner the same value", m.getValue(), c1.getMemberValue(c1.master().getFieldName()));
-        assertTrue("Owner refferes to the same value", c1.getMemberValue(c1.master().getFieldName()) == m.getValue());
+        assertTrue("Owner refers to the same value", c1.getMemberValue(c1.master().getFieldName()) == m.getValue());
 
         m.setPrimaryKey(new Key(76));
         assertEquals("Owner ID Update", m.getPrimaryKey(), c1.master().getPrimaryKey());

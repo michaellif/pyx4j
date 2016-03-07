@@ -28,9 +28,12 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.junit.Assert;
-
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import com.pyx4j.junitcategories.Regression;
+
+@Category({ Regression.class })
 public class MailFilterTest {
 
     @Test

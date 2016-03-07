@@ -22,13 +22,13 @@ package com.pyx4j.essentials.server.preloader;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import com.pyx4j.commons.FIFO;
 import com.pyx4j.commons.LogicalDate;
@@ -317,7 +317,7 @@ public class DataGenerator {
         return list.get(index);
     }
 
-    public static <T> T random(Set<T> set) {
+    public static <T> T random(Collection<T> set) {
         if (set.size() == 0) {
             return null;
         }

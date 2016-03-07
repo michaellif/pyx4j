@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.server;
 import java.util.Iterator;
 
 import org.junit.Assert;
+import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
@@ -31,7 +32,9 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.junitcategories.Regression;
 
+@Category({ Regression.class })
 public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
     public void testPersist() {

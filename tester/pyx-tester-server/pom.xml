@@ -110,7 +110,7 @@
             <classifier>jdk6debug</classifier>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
     <build>
@@ -119,15 +119,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>create-war</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>war</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <archiveClasses>true</archiveClasses>
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
@@ -139,11 +130,43 @@
                 </configuration>
             </plugin>
 
+            <!-- skip install war to local repository -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-install</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
 
     <profiles>
+
+        <profile>
+            <id>dev</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-war-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>default-war</id>
+                                    <phase>none</phase>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
 
         <profile>
             <id>deploy-tomcat</id>

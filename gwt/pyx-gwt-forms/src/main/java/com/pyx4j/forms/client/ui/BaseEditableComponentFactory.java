@@ -141,11 +141,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
         } else if (mm.getValueClass().equals(String.class)) {
             return new CTextField();
         } else if (mm.isEntity()) {
-            if (mm.isOwnedRelationships()) {
-                return new CEntityLabel();
-            } else {
-                return new CEntityComboBox(mm.getObjectClass());
-            }
+            return new CEntityLabel();
         } else if (mm.getValueClass().isEnum()) {
             CComboBox comp = new CComboBox();
             comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));

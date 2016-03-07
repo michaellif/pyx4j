@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2012 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,17 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2012-12-01
+ * Created on Feb 12, 2016
  * @author vlads
  */
-package com.pyx4j.server.mail;
+package com.pyx4j.junitcategories;
 
-import com.pyx4j.config.server.Credentials;
+/**
+ * JUnit Category is excluded from running tests in maven build.
+ * Intended for:
+ * - new functionality that is not completed yet
+ * - testing something very specific : Manual Tests
+ */
+public interface MavenIgnore {
 
-public abstract class SMTPGmailMailServiceConfig extends SMTPMailServiceConfig {
-
-    public SMTPGmailMailServiceConfig(Credentials credentials) {
-        super("smtp.gmail.com", 465, credentials.userName, credentials.password);
-        smtpEncryption = SMTPEncryption.SSL;
-    }
 }

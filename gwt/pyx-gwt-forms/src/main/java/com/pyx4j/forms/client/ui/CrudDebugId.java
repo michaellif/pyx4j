@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2012 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,17 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2012-12-01
+ * Created on 2011-01-28
  * @author vlads
  */
-package com.pyx4j.server.mail;
+package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.config.server.Credentials;
+import com.pyx4j.commons.IDebugId;
 
-public abstract class SMTPGmailMailServiceConfig extends SMTPMailServiceConfig {
+public enum CrudDebugId implements IDebugId {
 
-    public SMTPGmailMailServiceConfig(Credentials credentials) {
-        super("smtp.gmail.com", 465, credentials.userName, credentials.password);
-        smtpEncryption = SMTPEncryption.SSL;
+    Crud_Save,
+
+    Crud_Print,
+
+    Crud_Back,
+
+    Crud_New,
+
+    Crud_Delete,
+
+    Crud_Download,
+
+    Criteria_Clear,
+
+    Criteria_Submit;
+
+    @Override
+    public String debugId() {
+        return this.name();
     }
 }

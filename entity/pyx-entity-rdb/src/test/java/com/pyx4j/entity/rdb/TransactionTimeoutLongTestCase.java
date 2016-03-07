@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.core.EntityFactory;
@@ -35,7 +36,9 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Simple1;
 import com.pyx4j.entity.test.shared.domain.Simple2;
+import com.pyx4j.junitcategories.LongTest;
 
+@Category({ LongTest.class })
 public abstract class TransactionTimeoutLongTestCase extends DatastoreTestBase {
 
     @Override

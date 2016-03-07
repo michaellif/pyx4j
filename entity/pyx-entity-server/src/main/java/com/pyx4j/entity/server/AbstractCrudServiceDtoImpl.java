@@ -133,7 +133,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         if (bo != null) {
             onBeforeBind(bo, retrieveOperation);
         }
-        TO to = binder.createTO(bo, new BindingContext(retrieveOperation == RetrieveOperation.View ? BindingType.View : BindingType.List));
+        TO to = binder.createTO(bo, new BindingContext(retrieveOperation.getBindingType()));
 
         // Allow  for TO to be calculated base on original input
         to.setPrimaryKey(toId);

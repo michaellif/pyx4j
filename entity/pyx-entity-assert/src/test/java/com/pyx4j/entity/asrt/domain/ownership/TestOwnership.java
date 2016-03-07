@@ -19,10 +19,13 @@
  */
 package com.pyx4j.entity.asrt.domain.ownership;
 
-import junit.framework.TestCase;
+import org.junit.Ignore;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import junit.framework.TestCase;
+
+@Ignore
 public class TestOwnership extends TestCase {
 
     public void testMissingOwnedAnnotation() {

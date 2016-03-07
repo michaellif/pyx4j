@@ -38,5 +38,10 @@ class ApplicationMode {
             return ServerSideConfiguration.instance().isDemoBehavior();
         }
 
+        @Override
+        public String toString() {
+            return com.pyx4j.config.shared.ApplicationMode.getModeInfo();
+        }
+
     }
 }

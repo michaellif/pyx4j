@@ -19,13 +19,17 @@
  */
 package com.pyx4j.rpc.test.client;
 
-import junit.framework.TestCase;
+import org.junit.experimental.categories.Category;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.junitcategories.GWTTest;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.unit.client.GUnitTester;
 
+import junit.framework.TestCase;
+
+@Category({ GWTTest.class })
 public class RPCServicesGWTTest extends TestCase {
 
     static final int TIME_OUT = 10 * 1000;
@@ -36,10 +40,12 @@ public class RPCServicesGWTTest extends TestCase {
 
         final AsyncCallback<String> callback = new AsyncCallback<String>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(String result) {
                 assertEquals("Result Value", "Test22", result);
                 GUnitTester.finishTest(RPCServicesGWTTest.this);
@@ -55,12 +61,14 @@ public class RPCServicesGWTTest extends TestCase {
 
         final AsyncCallback<String> callbackFailure = new AsyncCallback<String>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 //assertTrue("Throwable class", t instanceof ServiceCallException);
                 assertEquals("Failure Value", "Test22", t.getMessage());
                 GUnitTester.finishTest(RPCServicesGWTTest.this);
             }
 
+            @Override
             public void onSuccess(String result) {
                 fail("Should throw exception");
             }
@@ -68,11 +76,13 @@ public class RPCServicesGWTTest extends TestCase {
 
         final AsyncCallback<String> callbackSuccess = new AsyncCallback<String>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail("Should not throw exception [" + t.getClass().getName() + "]");
                 GUnitTester.finishTest(RPCServicesGWTTest.this);
             }
 
+            @Override
             public void onSuccess(String result) {
                 RPCManager.execute(TestServices.ThrowException.class, new String("Test22"), callbackFailure);
             }

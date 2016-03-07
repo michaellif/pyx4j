@@ -112,13 +112,15 @@
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
+                    <extractors>
+                        <extractor>java-annotations</extractor>
+                    </extractors>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>descriptor</goal>
-                        </goals>
+                        <id>default-descriptor</id>
+                        <phase>process-classes</phase>
                     </execution>
                 </executions>
             </plugin>

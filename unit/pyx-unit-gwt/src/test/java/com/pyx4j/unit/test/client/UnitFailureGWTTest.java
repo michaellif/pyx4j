@@ -19,17 +19,21 @@
  */
 package com.pyx4j.unit.test.client;
 
-import junit.framework.TestCase;
+import org.junit.experimental.categories.Category;
 
 import com.google.gwt.user.client.Timer;
 
+import com.pyx4j.junitcategories.GWTTest;
 import com.pyx4j.unit.client.GUnitTester;
+
+import junit.framework.TestCase;
 
 /**
  * We only test Failure scenarios here, We have tones of other working cases to test
  * successful results.
- * 
+ *
  */
+@Category({ GWTTest.class })
 public class UnitFailureGWTTest extends TestCase {
 
     static final int TIME_OUT = 10 * 1000;

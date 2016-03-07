@@ -26,10 +26,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.junitcategories.Regression;
 
+import junit.framework.TestCase;
+
+@Category({ Regression.class })
 public class EqualsHelperTest extends TestCase {
 
     public void testEqualsObject() {

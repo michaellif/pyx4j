@@ -70,6 +70,19 @@ public class LogicalDate extends java.sql.Date {
         return super.getDate();
     }
 
+    @SuppressWarnings("deprecation")
+    public Date asDate() {
+        return new Date(getYear(), getMonth(), getDate());
+    }
+
+    /**
+     * Converts a string in JDBC date escape format "yyyy-[m]m-[d]d" to a <code>LogicalDate</code> value.
+     * See {@link java.sql.Date#valueOf(String s)}
+     */
+    public static LogicalDate valueOf(String date) {
+        return new LogicalDate(java.sql.Date.valueOf(date));
+    }
+
     /**
      * this > other
      */

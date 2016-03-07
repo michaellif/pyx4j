@@ -21,10 +21,14 @@ package com.pyx4j.i18n.gettext;
 
 import java.io.IOException;
 
+import org.junit.Assert;
+import org.junit.experimental.categories.Category;
+
+import com.pyx4j.junitcategories.Regression;
+
 import junit.framework.TestCase;
 
-import org.junit.Assert;
-
+@Category({ Regression.class })
 public class POFileReaderTest extends TestCase {
 
     public void testBasicRead() throws IOException {
