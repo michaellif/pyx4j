@@ -27,24 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMethod;
-import javassist.Modifier;
-import javassist.NotFoundException;
-import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.ConstPool;
-import javassist.bytecode.annotation.Annotation;
-import javassist.bytecode.annotation.AnnotationMemberValue;
-import javassist.bytecode.annotation.ArrayMemberValue;
-import javassist.bytecode.annotation.BooleanMemberValue;
-import javassist.bytecode.annotation.ClassMemberValue;
-import javassist.bytecode.annotation.MemberValue;
-import javassist.bytecode.annotation.StringMemberValue;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
@@ -75,6 +57,24 @@ import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.server.pojo.IPojoImpl;
 import com.pyx4j.xml.LogicalDateXmlAdapter;
 import com.pyx4j.xml.TimeXmlAdapter;
+
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtField;
+import javassist.CtMethod;
+import javassist.Modifier;
+import javassist.NotFoundException;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.ConstPool;
+import javassist.bytecode.annotation.Annotation;
+import javassist.bytecode.annotation.AnnotationMemberValue;
+import javassist.bytecode.annotation.ArrayMemberValue;
+import javassist.bytecode.annotation.BooleanMemberValue;
+import javassist.bytecode.annotation.ClassMemberValue;
+import javassist.bytecode.annotation.MemberValue;
+import javassist.bytecode.annotation.StringMemberValue;
 
 public class EntityPojoWrapperGenerator {
 
@@ -185,6 +185,7 @@ public class EntityPojoWrapperGenerator {
             }
 
             List<String> xmlMemberNames = new Vector<String>();
+            xmlMemberNames.add(IEntity.PRIMARY_KEY);
 
             implClass.setSuperclass(pool.get(IPojoImpl.class.getName()));
 
@@ -403,7 +404,7 @@ public class EntityPojoWrapperGenerator {
         implClass.getClassFile().addAttribute(attr);
     }
 
-    private void addXmlTypeAnnotationValue(CtClass implClass, String name, String value, List<String> propOrder) throws NotFoundException {
+    private void addXmlTypeAnnotationValue(CtClass implClass, String name, String value, List<String> namesOfPropertiesOrdered) throws NotFoundException {
         ConstPool constPool = implClass.getClassFile().getConstPool();
         AnnotationsAttribute attr = (AnnotationsAttribute) implClass.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
         if (attr == null) {
@@ -412,13 +413,13 @@ public class EntityPojoWrapperGenerator {
         Annotation annotation = new Annotation(constPool, pool.get(XmlType.class.getName()));
         annotation.addMemberValue(name, new StringMemberValue(value, constPool));
 
-        ArrayMemberValue a = new ArrayMemberValue(constPool);
-        List<MemberValue> m = new Vector<MemberValue>();
-        for (String memberName : propOrder) {
-            m.add(new StringMemberValue(memberName, constPool));
+        ArrayMemberValue namesOfPropertiesArrayValue = new ArrayMemberValue(constPool);
+        List<MemberValue> namesOfPropertiesValues = new Vector<MemberValue>();
+        for (String memberName : namesOfPropertiesOrdered) {
+            namesOfPropertiesValues.add(new StringMemberValue(memberName, constPool));
         }
-        a.setValue(m.toArray(new MemberValue[0]));
-        annotation.addMemberValue("propOrder", a);
+        namesOfPropertiesArrayValue.setValue(namesOfPropertiesValues.toArray(new MemberValue[0]));
+        annotation.addMemberValue("propOrder", namesOfPropertiesArrayValue);
 
         annotation.addMemberValue("namespace", new StringMemberValue("##default", constPool));
         annotation.addMemberValue("factoryClass", new ClassMemberValue(XmlType.class.getName() + "$DEFAULT", constPool));
