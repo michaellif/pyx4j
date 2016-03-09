@@ -37,6 +37,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -545,6 +546,83 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             srv.retrieve(itemA1r);
             assertFalse("version is not null", itemA1r.version().isNull());
             assertEquals("getSpecific", draftV2Name, itemA1r.version().name().getValue());
+        }
+
+    }
+
+    /** Add new version for entity with existing draft */
+    public void testNewVersionWithDraft() {
+        String testId = uniqueString();
+
+        setDBTime("2011-01-01");
+
+        // Initial item
+        ItemA itemA1 = EntityFactory.create(ItemA.class);
+        itemA1.testId().setValue(testId);
+
+        final String currentName = "V0-" + uniqueString();
+        itemA1.version().name().setValue(currentName);
+        itemA1.version().testId().setValue(testId);
+
+        //Save initial value
+        itemA1.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(itemA1);
+
+        ItemA itemA1draft = EntityFactory.create(ItemA.class);
+        itemA1draft.setPrimaryKey(itemA1.getPrimaryKey().asDraftKey());
+
+        srv.retrieve(itemA1draft);
+
+        final String draftName = "V1-" + uniqueString();
+        itemA1draft.version().name().setValue(draftName);
+        itemA1draft.version().testId().setValue(testId);
+
+        //Save Draft
+        itemA1draft.saveAction().setValue(SaveAction.saveAsDraft);
+        srv.persist(itemA1draft);
+
+        // Retrieval of item as draft
+        {
+            ItemA itemA1r = EntityFactory.create(ItemA.class);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey().asDraftKey());
+
+            srv.retrieve(itemA1r);
+            assertTrue("version is null", !itemA1r.version().isNull());
+            assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
+            assertEquals("versionNumber", "Draft", itemA1r.version().versionNumber().getStringView());
+        }
+
+        // create new version
+        ItemA itemA1new = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
+        Persistence.retrieveOwned(itemA1new.version());
+        itemA1new.version().set(EntityGraph.businessDuplicate(itemA1new.version()));
+
+        final String currentV2Name = "V2-" + uniqueString();
+        itemA1new.version().name().setValue(currentV2Name);
+
+        setDBTime("2010-02-01");
+
+        // finalize
+        itemA1new.saveAction().setValue(SaveAction.saveAsFinal);
+        srv.persist(itemA1new);
+
+        // verify Draft still present
+        {
+            ItemA itemA1r = EntityFactory.create(ItemA.class);
+            itemA1r.setPrimaryKey(itemA1.getPrimaryKey().asDraftKey());
+
+            srv.retrieve(itemA1r);
+            assertTrue("version is null", !itemA1r.version().isNull());
+            assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
+            assertEquals("versionNumber", "Draft", itemA1r.version().versionNumber().getStringView());
+        }
+
+        // verify Version updated
+        {
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey());
+            assertFalse("version is not null", itemA1r.version().isNull());
+            assertEquals("versionNumber", "2", itemA1r.version().versionNumber().getStringView());
+            assertEquals("version Name", currentV2Name, itemA1r.version().name().getValue());
         }
 
     }
