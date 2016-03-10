@@ -109,6 +109,10 @@ public class DateUtils extends TimeUtils {
         return c.getTime();
     }
 
+    public static Date hoursAdd(Date date, int hours) {
+        return add(date, Calendar.HOUR_OF_DAY, hours);
+    }
+
     public static Date yearsAdd(Date date, int years) {
         return add(date, Calendar.YEAR, years);
     }
