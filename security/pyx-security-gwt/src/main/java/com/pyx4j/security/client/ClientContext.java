@@ -64,6 +64,7 @@ import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.CoreBehavior;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.security.shared.UserVisitPreferences;
 import com.pyx4j.webstorage.client.HTML5Storage;
@@ -215,9 +216,9 @@ public class ClientContext extends Context {
         if (userVisit == null) {
             return -1;
         } else {
-            return userVisit.hashCode();
-            //TODO fix this
-            /** 0x1F + ClientSecurityController.instance().getAcl().hashCode(); */
+            int hashCode = userVisit.hashCode();
+            hashCode *= 0x1F + SecurityController.instance().getBehaviorsHashCode();
+            return hashCode;
         }
     }
 
