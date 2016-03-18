@@ -19,15 +19,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
-public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
+public class CSelectorListBox<E> extends CAbstractSelectorBox<Collection<E>, E, NSelectorListBox<E>> {
 
     private Command addItemCommand;
 
@@ -42,11 +40,6 @@ public class CSelectorListBox<E extends IEntity> extends CAbstractSelectorBox<Co
 
     public Command getAddItemCommand() {
         return addItemCommand;
-    }
-
-    @Override
-    protected Collection<E> preprocessValue(Collection<E> value, boolean fireEvent, boolean populate) {
-        return super.preprocessValue(new ArrayList<>(value), fireEvent, populate);
     }
 
     @Override
