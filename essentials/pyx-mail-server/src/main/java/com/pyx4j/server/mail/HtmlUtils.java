@@ -24,6 +24,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -104,4 +106,55 @@ public class HtmlUtils {
         Matcher matcher = regExpr.matcher(text);
         return matcher.find();
     }
+
+    /**
+     * Removes <style> tag and <xml> microsoft word style definition from
+     * html code snippet. Also remove font-family attribute from all tags and face
+     * attribute from <font> tag.
+     *
+     * @param html_css_styles
+     *            html code snippet
+     * @return inner html of body (will not return complete html document)
+     */
+    public static String removeExtraStylesAndFontFamilyFromHtmlPart(String htmlPart) {
+        Document document = Jsoup.parse(htmlPart);
+        Elements elements = document.getAllElements();
+
+        // Although style tag should be placed in <head> by Jsoup, we'll ensure
+        // not to have any tag inside html body
+        for (Element e : elements) {
+            switch (e.tagName()) {
+            case "style":
+                e.remove();
+                break;
+            case "font": {
+                Attributes attributes = e.attributes();
+                for (Attribute attr : attributes) {
+                    if (attr.getKey().equals("face")) {
+                        e.removeAttr(attr.getKey());
+                    }
+                }
+            }
+                break;
+            default:
+                Attributes attributes = e.attributes();
+                for (Attribute attr : attributes) {
+                    if (attr.getKey().equals("style")) {
+                        String[] styleItems = attr.getValue().trim().split(";");
+                        String newStyle = "";
+                        for (String item : styleItems) {
+                            if (!item.contains("font-family")) {
+                                newStyle = newStyle.concat(item).concat(";");
+                            }
+                        }
+                        attr.setValue(newStyle);
+                    }
+                }
+
+            }
+        }
+
+        return document.select("body").html();
+    }
+
 }

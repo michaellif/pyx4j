@@ -19,13 +19,21 @@
  */
 package com.pyx4j.server.mail;
 
+import java.io.IOException;
+
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.pyx4j.gwt.server.IOUtils;
+
 public class HtmlUtilsTest {
+
+    // TODO @ernestog Move this Strings to resource files!!!
 
     // HTML with inner link
     private static final String HTML_INNER_LINK = "<!DOCTYPE html><html><body><a href=\"http://www.w3schools.com\">This is a link</a></body></html>";
@@ -70,6 +78,81 @@ public class HtmlUtilsTest {
         testNoHTMLTagsAndExpectedOutput(HTML_WITH_IMAGE, TEXT_WITH_IMAGE);
 
         testNoHtmlTagsAndLines(HTML_WITH_PARAGRAPHS, 6);
+
+        testRemoveExtraStylesAndFontFamily();
+
+    }
+
+    void testRemoveExtraStylesAndFontFamily() {
+        String htmlText = null;
+
+        try {
+            htmlText = IOUtils.getTextResource("leaseTerm.html", HtmlUtilsTest.class);
+        } catch (IOException e) {
+            throw new Error("Unable to load html resource for test", e);
+        }
+
+        if (htmlText == null) {
+            Assert.fail("Unable to load html resource for test");
+        }
+
+        String plaintext = HtmlUtils.removeExtraStylesAndFontFamilyFromHtmlPart(htmlText);
+
+        // Test no unsupported tags in html
+        String[] tags = { "style", "xml" };
+        for (String tagName : tags) {
+            Assert.assertTrue("Found <" + tagName + "> tag yet but it shouldn't be present", !hasTag(plaintext, tagName));
+        }
+
+        // Test no font-family nor font face attributes
+        Assert.assertTrue("Found font-family style attribute yet but it shouldn't be present", !hasFontFamilyStyleAttr(plaintext));
+
+        // Test no face in font tag
+        Assert.assertTrue("Found face attribute in <font> tag yet but it shouldn't be present", !hasFaceAttribute(plaintext));
+
+    }
+
+    private boolean hasTag(String html, String tagName) {
+        Elements htmlElements = Jsoup.parse(html).getAllElements();
+        for (Element e : htmlElements) {
+            if (e.tagName().equalsIgnoreCase(tagName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasFontFamilyStyleAttr(String html) {
+        Elements htmlElements = Jsoup.parse(html).getAllElements();
+        for (Element e : htmlElements) {
+            Attributes attributes = e.attributes();
+            for (Attribute attr : attributes) {
+                if (attr.getKey().equals("style")) {
+                    String[] styleItems = attr.getValue().trim().split(";");
+                    for (String item : styleItems) {
+                        if (item.contains("font-family")) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasFaceAttribute(String html) {
+        Elements htmlElements = Jsoup.parse(html).getAllElements();
+        for (Element e : htmlElements) {
+            if (e.tagName().equals("font")) {
+                Attributes attributes = e.attributes();
+                for (Attribute attr : attributes) {
+                    if (attr.getKey().equals("face")) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     void testNoHtmlTagsAndLines(String htmlText, int minimumLines) {
@@ -102,6 +185,7 @@ public class HtmlUtilsTest {
     private boolean hasHtmlTags(String text) {
         boolean hasHtmlTags = false;
         Elements htmlElements = Jsoup.parse(text).select("body");
+
         for (Element e : htmlElements) {
             if (e.tagName() != "body") {
                 hasHtmlTags = true;
