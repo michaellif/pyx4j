@@ -66,7 +66,7 @@ public abstract class ReportsTestBase {
 
     protected ArrayList<String> textItems = new ArrayList<String>();
 
-    protected static String debugFileName(String designName, String ext) {
+    protected static File debugFileName(String designName, String ext) {
         File dir = new File("target", "reports-dump");
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
@@ -80,7 +80,7 @@ public abstract class ReportsTestBase {
                 throw new Error("Can't delete file " + file.getAbsolutePath());
             }
         }
-        return file.getAbsolutePath();
+        return file;
     }
 
     @Deprecated
@@ -89,7 +89,7 @@ public abstract class ReportsTestBase {
         try {
             JasperReport jasperReport = JasperReportFactory.create(designName);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-            JasperExportManager.exportReportToPdfFile(jasperPrint, debugFileName(designName, ".pdf"));
+            JasperExportManager.exportReportToPdfFile(jasperPrint, debugFileName(designName, ".pdf").getAbsolutePath());
 
             bos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToXmlStream(jasperPrint, bos);
@@ -119,7 +119,7 @@ public abstract class ReportsTestBase {
         String pdfName = null;
         try {
 
-            pdf = new FileOutputStream(pdfName = debugFileName(model.getDesignName(), ".pdf"));
+            pdf = new FileOutputStream(pdfName = debugFileName(model.getDesignName(), ".pdf").getAbsolutePath());
             JasperReportProcessor.createReport(model, JasperFileFormat.PDF, pdf);
             pdf.flush();
 

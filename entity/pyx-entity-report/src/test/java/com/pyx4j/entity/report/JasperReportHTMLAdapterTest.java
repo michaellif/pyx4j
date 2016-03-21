@@ -19,8 +19,10 @@
  */
 package com.pyx4j.entity.report;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
@@ -45,6 +47,8 @@ public class JasperReportHTMLAdapterTest {
         }
 
         String plaintext = JasperReportHTMLAdapter.makeJasperCompatibleHTML(htmlText);
+
+        FileUtils.writeStringToFile(new File("target", "mixedHtml-compatible.html"), plaintext);
 
         // Test no unsupported tags in html
         String[] tags = { "style", "xml" };
