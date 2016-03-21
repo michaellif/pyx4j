@@ -344,6 +344,13 @@ public class ServerSideConfiguration {
         return isUnitTest;
     }
 
+    /**
+     * Running in Continuous Integration on Build server
+     */
+    public static boolean isRunningInCI() {
+        return (System.getProperty("bamboo.buildNumber") == null);
+    }
+
     public static boolean isStartedUnderJvmDebugMode() {
         if (jvmDebugMode == null) {
             try {
