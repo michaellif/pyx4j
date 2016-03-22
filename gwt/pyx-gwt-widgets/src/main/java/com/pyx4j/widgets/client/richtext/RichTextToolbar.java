@@ -90,19 +90,19 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
     private RichTextTemplateAction templateAction;
 
-    private Button fontButton;
+    protected Button fontButton;
 
-    private Button formatButton;
+    protected Button formatButton;
 
     protected Button insertButton;
 
     private CheckBox editModeSwitch;
 
-    private Button boldButton;
+    protected Button boldButton;
 
-    private Button italicButton;
+    protected Button italicButton;
 
-    private Button underlineButton;
+    protected Button underlineButton;
 
     protected final GroupFocusHandler groupFocusHandler;
 
@@ -328,7 +328,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
     }
 
-    private void initFormatToolbar() {
+    protected void initFormatToolbar() {
         formatToolbar = new FlowPanel();
         formatToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
         formatToolbar.setVisible(false);
@@ -407,27 +407,21 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
         formatToolbar.add(formatPanel);
 
-        formatToolbar.add(createIndentPanel());
-        add(formatToolbar);
-
-    }
-
-    protected Toolbar createIndentPanel() {
         Toolbar indentPanel = new Toolbar();
-        indentPanel.addItem(createButton(images.indent(), i18n.tr("Indent More"), new Command() {
-
-            @Override
-            public void execute() {
-                richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                formatter.rightIndent();
-            }
-        }, false));
         indentPanel.addItem(createButton(images.outdent(), i18n.tr("Indent Less"), new Command() {
 
             @Override
             public void execute() {
                 richTextEditor.getRichTextArea().restoreSelectionAndRange();
                 formatter.leftIndent();
+            }
+        }, false));
+        indentPanel.addItem(createButton(images.indent(), i18n.tr("Indent More"), new Command() {
+
+            @Override
+            public void execute() {
+                richTextEditor.getRichTextArea().restoreSelectionAndRange();
+                formatter.rightIndent();
             }
         }, false));
         indentPanel.addItem(new HTML("&emsp;"));
@@ -465,8 +459,9 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
                 formatter.removeFormat();
             }
         }, false));
+        formatToolbar.add(indentPanel);
+        add(formatToolbar);
 
-        return indentPanel;
     }
 
     private ListBox createColorList(String caption, ChangeHandler handler) {
