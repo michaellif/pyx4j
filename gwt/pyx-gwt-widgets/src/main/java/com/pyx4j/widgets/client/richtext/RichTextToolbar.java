@@ -60,27 +60,27 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
             RichTextArea.FontSize.X_SMALL, RichTextArea.FontSize.SMALL, RichTextArea.FontSize.MEDIUM, RichTextArea.FontSize.LARGE,
             RichTextArea.FontSize.X_LARGE, RichTextArea.FontSize.XX_LARGE };
 
-    private final WidgetsImageBundle images = ImageFactory.getImages();
+    protected final WidgetsImageBundle images = ImageFactory.getImages();
 
-    private final RichTextEditor richTextEditor;
+    protected final RichTextEditor richTextEditor;
 
-    private final RichTextArea.Formatter formatter;
+    protected final RichTextArea.Formatter formatter;
 
     private FlowPanel topToolbar;
 
-    private Toolbar topButtonBar;
+    protected Toolbar topButtonBar;
 
     private FlowPanel fontToolbar;
 
     private FlowPanel insertToolbar;
 
-    private FlowPanel formatToolbar;
+    protected FlowPanel formatToolbar;
 
     private ListBox backColors;
 
     private ListBox foreColors;
 
-    private ListBox fonts;
+    protected ListBox fonts;
 
     private ListBox fontSizes;
 
@@ -94,7 +94,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
     private Button formatButton;
 
-    private Button insertButton;
+    protected Button insertButton;
 
     private CheckBox editModeSwitch;
 
@@ -104,11 +104,11 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
     private Button underlineButton;
 
-    private final GroupFocusHandler groupFocusHandler;
+    protected final GroupFocusHandler groupFocusHandler;
 
     /**
      * Creates a new toolbar that drives the given rich text area.
-     * 
+     *
      * @param richText
      *            the rich text area to be controlled
      */
@@ -407,6 +407,12 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
         formatToolbar.add(formatPanel);
 
+        formatToolbar.add(createIndentPanel());
+        add(formatToolbar);
+
+    }
+
+    protected Toolbar createIndentPanel() {
         Toolbar indentPanel = new Toolbar();
         indentPanel.addItem(createButton(images.indent(), i18n.tr("Indent More"), new Command() {
 
@@ -459,9 +465,8 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
                 formatter.removeFormat();
             }
         }, false));
-        formatToolbar.add(indentPanel);
-        add(formatToolbar);
 
+        return indentPanel;
     }
 
     private ListBox createColorList(String caption, ChangeHandler handler) {
@@ -484,7 +489,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         return lb;
     }
 
-    private ListBox createFontList() {
+    protected ListBox createFontList() {
         ListBox lb = new ListBox();
         lb.addChangeHandler(new ChangeHandler() {
 
@@ -542,11 +547,11 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         return lb;
     }
 
-    private Button createButton(String text, String tip, Command command, boolean toggleable) {
+    protected Button createButton(String text, String tip, Command command, boolean toggleable) {
         return createButton(text, null, tip, command, toggleable);
     }
 
-    private Button createButton(ImageResource img, String tip, Command command, boolean toggleable) {
+    protected Button createButton(ImageResource img, String tip, Command command, boolean toggleable) {
         return createButton(null, img, tip, command, toggleable);
     }
 

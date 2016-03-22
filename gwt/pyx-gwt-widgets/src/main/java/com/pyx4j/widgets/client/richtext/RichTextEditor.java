@@ -67,7 +67,7 @@ public class RichTextEditor extends FlowPanel implements IFocusGroup, IValueBoxW
         richTextArea.setWidth("100%");
         richTextArea.setHeight("15em");
 
-        toolbar = new RichTextToolbar(this);
+        toolbar = setRichTextToolbar(this);
 
         add(toolbar);
         add(richTextArea);
@@ -300,6 +300,10 @@ public class RichTextEditor extends FlowPanel implements IFocusGroup, IValueBoxW
             html = b.toString();
             return html.replaceAll("<br>", "<br />");
         }
+    }
+
+    protected RichTextToolbar setRichTextToolbar(RichTextEditor editor) {
+        return new RichTextToolbar(editor);
     }
 
 }
