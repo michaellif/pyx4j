@@ -22,8 +22,10 @@ package com.pyx4j.entity.report;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
@@ -47,6 +49,11 @@ import com.steadystate.css.parser.SACParserCSS3;
 import com.pyx4j.config.shared.ApplicationMode;
 
 public class JasperReportHTMLAdapter {
+
+    // The css properties supported by jasper withut modification
+    private static List<String> supportedStyleProperties = Arrays.asList(//
+            "font-weight", "font-style", "text-decoration", //
+            "color", "background-color");
 
     /**
      * Removes <style> tag and <xml> microsoft word style definition from
@@ -86,9 +93,11 @@ public class JasperReportHTMLAdapter {
                 elementStylePropertiesNew.put("font-size", normalizeFontSize(fontSize));
             }
 
-            String fontWeight = elementStylePropertiesCombined.get("font-weight");
-            if (fontWeight != null) {
-                elementStylePropertiesNew.put("font-weight", fontWeight);
+            for (String property : supportedStyleProperties) {
+                String propertyValue = elementStylePropertiesCombined.get(property);
+                if (propertyValue != null) {
+                    elementStylePropertiesNew.put(property, propertyValue);
+                }
             }
 
             String newStyle = Joiner.on("; ").withKeyValueSeparator(":").join(elementStylePropertiesNew);
@@ -116,7 +125,7 @@ public class JasperReportHTMLAdapter {
         // TODO This may affect presentation in browser; so may be moved to new function or aproach can be changed...
         Whitelist whitelist = Whitelist.none()//
                 .addTags("b", "i", "u", "font", "br", "p")//
-                .addAttributes("font", "size")//
+                .addAttributes("font", "size", "color")//
                 .addAttributes("span", "style");
 
         Cleaner cleaner = new Cleaner(whitelist);

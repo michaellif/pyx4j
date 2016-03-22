@@ -64,10 +64,10 @@ public class HTMLMarkupReportTest extends ReportsTestBase {
     @Test
     public void testHtmlText() throws Exception {
         List<IEntity> data = new ArrayList<>();
-//        data.addAll(createFragments("Bold Font", "htmlMarkup-bold.html"));
+        data.addAll(createFragments("Bold Font", "htmlMarkup-texts.html"));
 //        data.addAll(createFragments("No Font Family", "htmlMarkup-no-family.html"));
 
-        data.addAll(createFragments("Font proportions", "htmlMarkup-proportions.html"));
+//        data.addAll(createFragments("Font proportions", "htmlMarkup-proportions.html"));
 //        data.addAll(createFragments("Indent More", "htmlMarkup-indent-more.html"));
 
         //data.addAll(createFragments("Lines test", "htmlMarkup-lines.html"));
