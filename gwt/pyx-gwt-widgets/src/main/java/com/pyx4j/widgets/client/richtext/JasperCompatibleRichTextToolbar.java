@@ -23,16 +23,17 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.Toolbar;
 
-public class SimpleRichTextToolbar extends RichTextToolbar {
+public class JasperCompatibleRichTextToolbar extends RichTextToolbar {
     private static final I18n i18n = I18n.get(RichTextToolbar.class);
 
-    public SimpleRichTextToolbar(RichTextEditor richTextEditor) {
+    public JasperCompatibleRichTextToolbar(RichTextEditor richTextEditor) {
         super(richTextEditor);
         hideInsertToolbar();
     }
@@ -64,44 +65,58 @@ public class SimpleRichTextToolbar extends RichTextToolbar {
     }
 
     @Override
-    protected Toolbar createIndentPanel() {
-        Toolbar indentPanel = new Toolbar();
-        indentPanel.addItem(createButton(images.indent(), i18n.tr("Indent More"), new Command() {
+    protected void initFormatToolbar() {
+        formatToolbar = new FlowPanel();
+        formatToolbar.setStyleName(RichTextTheme.StyleName.RteToolbarBottom.name());
+        formatToolbar.setVisible(false);
+
+        topButtonBar.addItem(formatButton = createButton(i18n.tr("Format"), i18n.tr("Format"), new Command() {
 
             @Override
             public void execute() {
                 richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                formatter.rightIndent();
+                if (formatButton.isActive()) {
+                    if (fontButton.isActive()) {
+                        fontButton.toggleActive();
+                    }
+                    if (insertButton.isActive()) {
+                        insertButton.toggleActive();
+                    }
+                }
+                formatToolbar.setVisible(formatButton.isActive());
             }
-        }, false));
-        indentPanel.addItem(createButton(images.outdent(), i18n.tr("Indent Less"), new Command() {
+        }, true));
+        formatButton.addStyleName(RichTextTheme.StyleName.RteToolbarButton.name());
+        groupFocusHandler.addFocusable(formatButton);
+
+        Toolbar formatPanel = new Toolbar();
+
+        formatPanel.addItem(boldButton = createButton(images.bold(), i18n.tr("Bold"), new Command() {
 
             @Override
             public void execute() {
                 richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                formatter.leftIndent();
+                formatter.toggleBold();
             }
-        }, false));
-
-        indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(createButton(images.ol(), i18n.tr("Numbered List"), new Command() {
+        }, true));
+        formatPanel.addItem(italicButton = createButton(images.italic(), i18n.tr("Italic"), new Command() {
 
             @Override
             public void execute() {
                 richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                formatter.insertOrderedList();
+                formatter.toggleItalic();
             }
-        }, false));
-        indentPanel.addItem(createButton(images.ul(), i18n.tr("Bulleted List"), new Command() {
+        }, true));
+        formatPanel.addItem(underlineButton = createButton(images.underline(), i18n.tr("Underline"), new Command() {
 
             @Override
             public void execute() {
                 richTextEditor.getRichTextArea().restoreSelectionAndRange();
-                formatter.insertUnorderedList();
+                formatter.toggleUnderline();
             }
-        }, false));
-        indentPanel.addItem(new HTML("&emsp;"));
-        indentPanel.addItem(createButton(images.removeFormat(), i18n.tr("Remove Format"), new Command() {
+        }, true));
+        formatPanel.addItem(new HTML("&emsp;"));
+        formatPanel.addItem(createButton(images.removeFormat(), i18n.tr("Remove Format"), new Command() {
 
             @Override
             public void execute() {
@@ -110,7 +125,8 @@ public class SimpleRichTextToolbar extends RichTextToolbar {
             }
         }, false));
 
-        return indentPanel;
-    }
+        formatToolbar.add(formatPanel);
 
+        add(formatToolbar);
+    }
 }
