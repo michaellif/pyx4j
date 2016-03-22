@@ -21,6 +21,7 @@ package com.pyx4j.entity.report;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,6 +29,7 @@ import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Entities;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
@@ -41,6 +43,8 @@ import org.w3c.dom.css.CSSStyleSheet;
 import com.google.common.base.Joiner;
 import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.parser.SACParserCSS3;
+
+import com.pyx4j.config.shared.ApplicationMode;
 
 public class JasperReportHTMLAdapter {
 
@@ -111,12 +115,17 @@ public class JasperReportHTMLAdapter {
         // Base On http://jasperreports.sourceforge.net/sample.reference/styledtext/
         // TODO This may affect presentation in browser; so may be moved to new function or aproach can be changed...
         Whitelist whitelist = Whitelist.none()//
-                .addTags("b", "i", "u", "font", "br")//
+                .addTags("b", "i", "u", "font", "br", "p")//
                 .addAttributes("font", "size")//
                 .addAttributes("span", "style");
 
         Cleaner cleaner = new Cleaner(whitelist);
         Document document = cleaner.clean(dirtyDocument);
+
+        Document.OutputSettings settings = document.outputSettings();
+        settings.prettyPrint(ApplicationMode.isDevelopment());
+        settings.escapeMode(Entities.EscapeMode.extended);
+        settings.charset(StandardCharsets.UTF_8);
 
         return document.select("body").html();
     }
