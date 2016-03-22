@@ -21,16 +21,23 @@ package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.BodyElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.IFrameElement;
+import com.google.gwt.dom.client.StyleElement;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.logical.shared.InitializeEvent;
+import com.google.gwt.event.logical.shared.InitializeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.Theme;
 import com.pyx4j.widgets.client.NotImplementedException;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
@@ -74,6 +81,25 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
             }
         });
 
+        this.addInitializeHandler(new InitializeHandler() {
+            @Override
+            public void onInitialize(InitializeEvent ie) {
+                Document document = IFrameElement.as(getElement()).getContentDocument();
+
+                Theme theme = StyleManager.getTheme().getTheme(RichTextThemeDisplay.themeId());
+                if (theme != null) {
+                    StyleElement styleElement = document.createStyleElement();
+                    styleElement.setType("text/css");
+                    styleElement.setInnerHTML(theme.getCss(null));
+
+                    BodyElement body = document.getBody();
+                    body.getParentNode().getChild(0).appendChild(styleElement);
+
+                    body.setClassName(RichTextTheme.StyleName.ReachTextDisplay.name());
+                }
+            }
+        });
+
     }
 
     private void addIEMouseHandlers() {
@@ -94,43 +120,43 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
 
     /**
      * Save current selection and range; useful for fixing IE9 selection/range issues
-     * 
+     *
      * @param win
      */
     private native void saveSelectionAndRange(JavaScriptObject win) /*-{
-                                                                    
-                                                                    var selection = win.getSelection();
-                                                                    this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedSelection = selection;
-                                                                    
-                                                                    var range = null;
-                                                                    if (selection != null) {
-                                                                    try {
-                                                                    range = selection.getRangeAt(0);
-                                                                    this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange = range;
-                                                                    } catch (e) {
-                                                                    alert("saveSelectionAndRange: " + e);
-                                                                    }
-                                                                    }
-                                                                    
-                                                                    }-*/;
+
+		var selection = win.getSelection();
+		this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedSelection = selection;
+
+		var range = null;
+		if (selection != null) {
+			try {
+				range = selection.getRangeAt(0);
+				this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange = range;
+			} catch (e) {
+				alert("saveSelectionAndRange: " + e);
+			}
+		}
+
+    }-*/;
 
     /**
      * Restore previous selection and range; useful for fixing IE9 selection/range issues
-     * 
+     *
      * @param win
      */
     private native void restoreSelectionAndRange(JavaScriptObject win) /*-{
-                                                                       
-                                                                       try {
-                                                                       var selection = win.getSelection();
-                                                                       selection.removeAllRanges();
-                                                                       selection
-                                                                       .addRange(this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange);
-                                                                       } catch (e) {
-                                                                       alert("restoreSelectionAndRange: " + e);
-                                                                       }
-                                                                       
-                                                                       }-*/;
+
+		try {
+			var selection = win.getSelection();
+			selection.removeAllRanges();
+			selection
+					.addRange(this.@com.pyx4j.widgets.client.richtext.RichTextArea::storedRange);
+		} catch (e) {
+			alert("restoreSelectionAndRange: " + e);
+		}
+
+    }-*/;
 
     public void restoreSelectionAndRange() {
 
@@ -169,18 +195,18 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
     }
 
     private static native JavaScriptObject getWindow(IFrameElement iFrame) /*-{
-                                                                           try {
-                                                                           
-                                                                           var iFrameWin = iFrame.contentWindow || iFrame.contentDocument;
-                                                                           
-                                                                           if (!iFrameWin.document) {
-                                                                           iFrameWin = iFrameWin.getParentNode();
-                                                                           }
-                                                                           return iFrameWin;
-                                                                           } catch (e) {
-                                                                           return null;
-                                                                           }
-                                                                           }-*/;
+		try {
+
+			var iFrameWin = iFrame.contentWindow || iFrame.contentDocument;
+
+			if (!iFrameWin.document) {
+				iFrameWin = iFrameWin.getParentNode();
+			}
+			return iFrameWin;
+		} catch (e) {
+			return null;
+		}
+    }-*/;
 
     private static boolean isInternetExplorerUser() {
         String ua = Window.Navigator.getUserAgent();
