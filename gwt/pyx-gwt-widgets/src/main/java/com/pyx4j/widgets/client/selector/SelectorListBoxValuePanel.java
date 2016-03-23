@@ -128,6 +128,10 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
         });
     }
 
+    public void enableQuery(boolean enable) {
+        queryBox.setVisible(enable);
+    }
+
     public void showValue(Collection<E> value) {
 
         for (int i = itemsPanel.getWidgetCount() - 2; i >= 0; i--) {

@@ -19,6 +19,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -34,7 +35,7 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.selector.IOptionsGrabber;
 
-public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET>
+public abstract class CAbstractSelectorBox<DATA, TYPE, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET>
         implements IAcceptsWatermark, HasOptionsChangeHandlers<List<TYPE>> {
 
     private IFormatter<TYPE, String> valueformatter;
@@ -54,7 +55,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
 
             @Override
             public String format(TYPE value) {
-                return value == null ? "" : value.getStringView();
+                return value == null ? "" : getStringView(value);
             }
         });
 
@@ -62,7 +63,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
             @Override
             public SafeHtml format(TYPE value) {
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                return builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:5px;\"><div>{0}</div></div>", value.getStringView()))
+                return builder.appendHtmlConstant(SimpleMessageFormat.format("<div style=\"padding:5px;\"><div>{0}</div></div>", getStringView(value)))
                         .toSafeHtml();
             }
         });
@@ -70,7 +71,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
         setTooltipFormatter(new IFormatter<TYPE, String>() {
             @Override
             public String format(TYPE value) {
-                return value == null ? "" : value.getStringView();
+                return value == null ? "" : getStringView(value);
             }
         });
     }
@@ -91,7 +92,7 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
                     if (value == null) {
                         return null;
                     } else {
-                        return value.getStringView();
+                        return getStringView(value);
                     }
                 }
             });
@@ -140,4 +141,12 @@ public abstract class CAbstractSelectorBox<DATA, TYPE extends IEntity, WIDGET ex
         return info.toString();
     }
 
+    /** override to convert native collection to required collection type */
+    protected Collection<TYPE> convertCollectionType(Collection<TYPE> nativeValue) {
+        return nativeValue;
+    }
+
+    protected String getStringView(TYPE value) {
+        return value instanceof IEntity ? ((IEntity) value).getStringView() : value.toString();
+    }
 }

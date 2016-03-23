@@ -120,6 +120,20 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
         });
     }
 
+    public void enableQuery(boolean enable) {
+        listBox.enableQuery(enable);
+    }
+
+    public void enableDropDownMode(boolean enable) {
+        listBox.setAction(enable ? new Command() {
+
+            @Override
+            public void execute() {
+                showSuggestPicker();
+            }
+        } : null);
+    }
+
     public IOptionsGrabber<E> getOptionsGrabber() {
         return optionsGrabber;
     }
@@ -200,6 +214,7 @@ public class SelectorListBox<E> extends AbstractSelectorWidget<E> implements Has
             ArrayList<E> newValue = new ArrayList<>(value);
             newValue.remove(item);
             setValue(newValue);
+            hidePickerPopup();
             fireValueChangeEvent();
         }
     }

@@ -34,13 +34,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.selector.SelectorListBox;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, FlowPanel> {
+public class NSelectorListBox<E> extends NFocusField<Collection<E>, SelectorListBox<E>, CSelectorListBox<E>, FlowPanel> {
 
     private NavigationCommand<E> navigationCommand;
 
@@ -123,7 +122,7 @@ public class NSelectorListBox<E extends IEntity> extends NFocusField<Collection<
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
         } else {
-            return getEditor().getValue();
+            return getCComponent().convertCollectionType(getEditor().getValue());
         }
     }
 
