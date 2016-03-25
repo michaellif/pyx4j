@@ -21,15 +21,17 @@ package com.pyx4j.tester.widgets.menu;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeComposition;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.style.theme.MenuBarTheme;
@@ -45,19 +47,33 @@ public class MenuTestEntyPoint implements EntryPoint {
                         new WidgetsTheme(), new DialogTheme(), new MenuBarTheme()), //
                 new WindowsPalette());
 
-        VerticalPanel content = new VerticalPanel();
+        SplitLayoutPanel content = new SplitLayoutPanel();
+        content.getElement().getStyle().setProperty("border", "3px solid #e7e7e7");
+        content.setHeight("500px");
+        content.setWidth("500px");
 
-        {
-            Button button = new Button("Simple Button");
-            content.add(button);
-        }
         {
             Button button = new Button("Menu Button");
             ButtonMenuBar menu = new ButtonMenuBar();
             menu.addItem(new MenuItem("Action One", createCommand("Action One")));
             menu.addItem(new MenuItem("Action Two", createCommand("Action Two")));
             button.setMenu(menu);
-            content.add(button);
+
+            HorizontalPanel hPanel = new HorizontalPanel();
+            hPanel.add(button);
+            content.addWest(hPanel, 200);
+        }
+
+        {
+            Button button = new Button("Menu Button");
+            ButtonMenuBar menu = new ButtonMenuBar();
+            menu.addItem(new MenuItem("Action One", createCommand("Action One")));
+            menu.addItem(new MenuItem("Action Two", createCommand("Action Two")));
+            button.setMenu(menu);
+
+            HorizontalPanel hPanel = new HorizontalPanel();
+            hPanel.add(button);
+            content.addEast(hPanel, 200);
         }
 
         {
@@ -72,11 +88,58 @@ public class MenuTestEntyPoint implements EntryPoint {
 
             menu.addItem(new MenuItem("Action Two", createCommand("Action Two")));
             button.setMenu(menu);
-            content.add(button);
+
+            HorizontalPanel hPanel = new HorizontalPanel();
+            hPanel.add(button);
+            content.add(hPanel);
         }
 
         RootPanel.get().add(content);
 
+        {
+            HorizontalPanel hPanel = new HorizontalPanel();
+            {
+                Button button = new Button("Button");
+                ButtonMenuBar menu = new ButtonMenuBar();
+                menu.addItem(new MenuItem("Action One", createCommand("Action One")));
+                menu.addItem(new MenuItem("Action Two", createCommand("Action Two")));
+                button.setMenu(menu);
+                hPanel.add(button);
+            }
+            {
+                Button button = new Button("Button");
+                ButtonMenuBar menu = new ButtonMenuBar();
+                menu.addItem(new MenuItem("Action One", createCommand("Action One")));
+                menu.addItem(new MenuItem("Action Two", createCommand("Action Two")));
+                button.setMenu(menu);
+                hPanel.add(button);
+            }
+
+            RootPanel.get().add(hPanel);
+        }
+
+        {
+            HorizontalPanel hPanel = new HorizontalPanel();
+            {
+                Button button = new Button(ImageFactory.getImages().action());
+                hPanel.add(button);
+            }
+            {
+                Button button = new Button(ImageFactory.getImages().action(), "Text");
+                hPanel.add(button);
+            }
+
+            {
+                Button button = new Button(ImageFactory.getImages().action(), "Actions");
+                ButtonMenuBar menu = new ButtonMenuBar();
+                menu.addItem(new MenuItem("Action One", createCommand("Action One")));
+                menu.addItem(new MenuItem("Action Two", createCommand("Action Two")));
+                button.setMenu(menu);
+                hPanel.add(button);
+            }
+
+            RootPanel.get().add(hPanel);
+        }
     }
 
     private static Command createCommand(final String message) {

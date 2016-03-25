@@ -37,6 +37,8 @@ import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Button extends ButtonBase {
 
+    private ContextMenuHolder menuHolder;
+
     private ButtonMenuBar menu;
 
     private final Label buttonMenuIndicator;
@@ -94,17 +96,13 @@ public class Button extends ButtonBase {
         buttonMenuIndicator.addStyleName(WidgetsTheme.StyleName.ButtonMenuIndicator.name());
         buttonMenuIndicator.setVisible(false);
         getImageHolder().add(buttonMenuIndicator);
+
     }
 
     @Override
     protected final void execute(HumanInputInfo humanInputInfo) {
         if (menu != null) {
-            if (menu.getMenuPopup().isShowing()) {
-                menu.getMenuPopup().hide();
-            } else if (isEnabled()) {
-                menu.getMenuPopup().showRelativeTo(Button.this);
-                menu.getElement().getStyle().setProperty("minWidth", getOffsetWidth() + "px");
-            }
+            menuHolder.togleMenu();
         } else {
             super.execute(humanInputInfo);
         }
@@ -127,6 +125,12 @@ public class Button extends ButtonBase {
     }
 
     public void setMenu(ButtonMenuBar menu) {
+        if (menuHolder == null) {
+            menuHolder = new ContextMenuHolder();
+            getImageHolder().add(menuHolder);
+        }
+        menuHolder.setMenu(menu);
+
         this.menu = menu;
         buttonMenuIndicator.setVisible(true);
     }
@@ -151,8 +155,6 @@ public class Button extends ButtonBase {
 
     public static class ButtonMenuBar extends MenuBar implements HasSecureConcern {
 
-        private final DropDownPanel popup;
-
         private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
         private HumanInputInfo humanInputInfo = HumanInputInfo.robot;
@@ -161,8 +163,6 @@ public class Button extends ButtonBase {
             super(true);
             setAutoOpen(true);
             setAnimationEnabled(true);
-            popup = new DropDownPanel();
-            popup.setWidget(this);
         }
 
         @Override
@@ -173,7 +173,6 @@ public class Button extends ButtonBase {
 
                     @Override
                     public void execute() {
-                        popup.hide();
                         if (origCommand instanceof HumanInputCommand) {
                             ((HumanInputCommand) origCommand).execute(humanInputInfo);
                         } else {
@@ -231,10 +230,6 @@ public class Button extends ButtonBase {
         @Override
         public List<MenuItem> getItems() {
             return super.getItems();
-        }
-
-        public DropDownPanel getMenuPopup() {
-            return popup;
         }
 
         @Override
