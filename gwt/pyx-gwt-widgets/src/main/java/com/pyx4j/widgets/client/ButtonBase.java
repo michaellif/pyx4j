@@ -33,9 +33,9 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.security.shared.AccessControlContext;
@@ -46,7 +46,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     private final HTML textLabel;
 
-    private final SimplePanel imageHolder;
+    private final FlowPanel imageHolder;
 
     private final ButtonFacesHandler facesHandler;
 
@@ -67,10 +67,10 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         textLabel = new HTML();
         setTextLabel(text);
 
-        imageHolder = new SimplePanel();
+        imageHolder = new FlowPanel();
         imageHolder.getElement().getStyle().setProperty("height", "100%");
 
-        imageHolder.setWidget(textLabel);
+        imageHolder.add(textLabel);
 
         setWidget(imageHolder);
 
@@ -155,7 +155,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         setTitle(text);
     }
 
-    protected SimplePanel getImageHolder() {
+    protected FlowPanel getImageHolder() {
         return imageHolder;
     }
 

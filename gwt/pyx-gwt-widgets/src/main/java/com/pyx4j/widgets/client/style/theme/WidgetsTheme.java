@@ -39,7 +39,7 @@ public class WidgetsTheme extends Theme {
 
         StatusBar,
 
-        Button, ButtonText,
+        Button, ButtonText, ButtonMenuIndicator,
 
         ImageButton, ImageButtonText,
 
@@ -74,8 +74,6 @@ public class WidgetsTheme extends Theme {
         SelectedItemEditor, SelectedItemEditorContent,
 
         SelectedItemEditorBodyHolder,
-
-        DownArrow,
 
         SelectorCheckGroup;
     }
@@ -278,10 +276,10 @@ public class WidgetsTheme extends Theme {
         style.addProperty("opacity", "0.4");
         addStyle(style);
 
-        style = new Style(".", StyleName.DownArrow);
+        style = new Style(".", StyleName.ButtonMenuIndicator);
         style.addProperty("display", "inline-block");
         style.addProperty("font-size", "0.5em");
-        style.addProperty("margin-left", "4px");
+        style.addProperty("margin-left", "0px");
         style.addProperty("vertical-align", "top");
         addStyle(style);
 

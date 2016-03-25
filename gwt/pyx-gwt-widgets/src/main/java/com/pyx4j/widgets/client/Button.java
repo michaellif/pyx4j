@@ -39,6 +39,8 @@ public class Button extends ButtonBase {
 
     private ButtonMenuBar menu;
 
+    private final Label buttonMenuIndicator;
+
     private ImageResource imageResource;
 
     public Button(ImageResource imageResource) {
@@ -86,6 +88,12 @@ public class Button extends ButtonBase {
         super(null, text, command, permission);
         setStylePrimaryName(getElement(), WidgetsTheme.StyleName.Button.name());
         getTextLabel().setStyleName(WidgetsTheme.StyleName.ButtonText.name());
+
+        buttonMenuIndicator = new Label("\u25bc");
+        buttonMenuIndicator.setStyleName(WidgetsTheme.StyleName.ButtonText.name());
+        buttonMenuIndicator.addStyleName(WidgetsTheme.StyleName.ButtonMenuIndicator.name());
+        buttonMenuIndicator.setVisible(false);
+        getImageHolder().add(buttonMenuIndicator);
     }
 
     @Override
@@ -120,9 +128,7 @@ public class Button extends ButtonBase {
 
     public void setMenu(ButtonMenuBar menu) {
         this.menu = menu;
-        String label = getTextLabel().getText();
-        //this will call local setTextLabel and reset the label text if the menu is not null
-        setTextLabel(label);
+        buttonMenuIndicator.setVisible(true);
     }
 
     public ButtonMenuBar getMenu() {
@@ -281,14 +287,4 @@ public class Button extends ButtonBase {
 
     }
 
-    @Override
-    public void setTextLabel(String label) {
-        if (menu != null) {
-            Label downArrow = new Label("\u25bc");
-            downArrow.setStyleName(WidgetsTheme.StyleName.DownArrow.name());
-            super.setTextLabel(label + downArrow);
-        } else {
-            super.setTextLabel(label);
-        }
-    }
 }
