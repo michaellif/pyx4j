@@ -27,18 +27,24 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeComposition;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.dialog.DialogTheme;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.style.theme.MenuBarTheme;
+import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 import com.pyx4j.widgets.client.style.theme.WindowsPalette;
-import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class MenuTestEntyPoint implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        StyleManager.installTheme(new WindowsTheme(), new WindowsPalette());
-        
+        StyleManager.installTheme(
+                new ThemeComposition(//
+                        new WidgetsTheme(), new DialogTheme(), new MenuBarTheme()), //
+                new WindowsPalette());
+
         VerticalPanel content = new VerticalPanel();
 
         {
