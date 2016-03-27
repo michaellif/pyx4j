@@ -25,6 +25,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.ServerEntityFactory;
 
@@ -49,7 +50,13 @@ public class EmailBuilder {
         resolver.setSuffix(".th.html");
         resolver.setTemplateMode("HTML");
         resolver.setCharacterEncoding("UTF8");
-        resolver.setCacheTTLMs(60 * Consts.MIN2MSEC);
+        if (ServerSideConfiguration.isStartedUnderEclipse()) {
+            resolver.setCacheable(false);
+            resolver.setCacheTTLMs(1L);
+        } else {
+            resolver.setCacheTTLMs(60 * Consts.MIN2MSEC);
+            resolver.setCacheable(true);
+        }
         templateEngine.setTemplateResolver(resolver);
 
         cssInliner = new JsoupCssInliner();
