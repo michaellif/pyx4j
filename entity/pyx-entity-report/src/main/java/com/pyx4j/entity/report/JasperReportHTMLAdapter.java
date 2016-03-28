@@ -27,6 +27,8 @@ import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -140,7 +142,22 @@ public class JasperReportHTMLAdapter {
     }
 
     private static String normalizeFontSize(String fontSize) {
-        // TODO Auto-generated method stub
+        Matcher matcher = Pattern.compile("(\\d+\\.?\\d*)(.*)").matcher(fontSize);
+        if (matcher.find()) {
+            switch (matcher.group(2)) {
+            case "px":
+                fontSize = 0.75 * Float.valueOf(matcher.group(1)) + "pt";
+                break;
+            case "%":
+                fontSize = 0.12 * Float.valueOf(matcher.group(1)) + "pt";
+                break;
+            case "em":
+                fontSize = 12 * Float.valueOf(matcher.group(1)) + "pt";
+                break;
+            default:
+                break;
+            }
+        }
         return fontSize;
     }
 
