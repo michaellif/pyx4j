@@ -72,6 +72,8 @@ public class HTMLMarkupReportTest extends ReportsTestBase {
 
         //data.addAll(createFragments("Lines test", "htmlMarkup-lines.html"));
 
+//        data.addAll(createFragments("Font style inheritance", "htmlMarkup-style-inheritance.html"));
+
         createReport(new JasperReportModel("reports.HTMLMarkup", data, null));
 
         if (ServerSideConfiguration.isStartedUnderEclipse()) {

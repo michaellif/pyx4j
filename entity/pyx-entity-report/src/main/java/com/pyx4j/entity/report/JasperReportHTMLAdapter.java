@@ -31,6 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Entities;
@@ -115,23 +117,44 @@ public class JasperReportHTMLAdapter {
         }
 
         // Go over unsupported tags
-        for (Element element : dirtyDocument.getAllElements()) {
+        Elements elements = dirtyDocument.getAllElements();
+        for (int i = 0; i < elements.size(); i++) {
+            Element element = elements.get(i);
             switch (element.tagName()) {
-            case "div":
+            case "p":
                 element.tagName("span").after("<br/>");
+                break;
+            case "div":
+                element.tagName("span");
+                if (i < (elements.size() - 1)) {
+                    element.after("<br/>");
+                }
                 break;
             }
         }
 
         // Base On http://jasperreports.sourceforge.net/sample.reference/styledtext/
-        // TODO This may affect presentation in browser; so may be moved to new function or aproach can be changed...
+        // TODO This may affect presentation in browser; so may be moved to new function or approach can be changed...
         Whitelist whitelist = Whitelist.none()//
-                .addTags("b", "i", "u", "font", "br", "p")//
-                .addAttributes("font", "size", "color")//
+                .addTags("b", "i", "u", "font", "sup", "sub", "li", "br") //
+                .addAttributes("font", "size", "color") //
                 .addAttributes("span", "style");
 
         Cleaner cleaner = new Cleaner(whitelist);
         Document document = cleaner.clean(dirtyDocument);
+
+        // Apply font style inheritance to children elements
+        Elements candidateElements = document.select("body").get(0).getAllElements();
+        for (int i = 1; i < candidateElements.size(); i++) {
+            Element element = candidateElements.get(i);
+            if (!element.tagName().equalsIgnoreCase("br") //
+                    && element.parent() != null //
+                    && !element.parent().tagName().equalsIgnoreCase("body") //
+                    && !hasImplicitStyle(element) //
+                    && hasImplicitStyle(element.parent())) {
+                element.attr("style", element.parent().attr("style"));
+            }
+        }
 
         Document.OutputSettings settings = document.outputSettings();
         settings.prettyPrint(ApplicationMode.isDevelopment());
@@ -139,6 +162,16 @@ public class JasperReportHTMLAdapter {
         settings.charset(StandardCharsets.UTF_8);
 
         return document.select("body").html();
+    }
+
+    private static boolean hasImplicitStyle(Element e) {
+        Attributes attributes = e.attributes();
+        for (Attribute attr : attributes) {
+            if (attr.getKey().equals("style")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String normalizeFontSize(String fontSize) {
