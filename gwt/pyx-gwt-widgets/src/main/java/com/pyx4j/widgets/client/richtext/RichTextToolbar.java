@@ -527,7 +527,6 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         lb.setVisibleItemCount(1);
 
         lb.addItem(i18n.tr("Font Size"));
-        lb.addItem(i18n.tr("XX-Small"));
         lb.addItem(i18n.tr("X-Small"));
         lb.addItem(i18n.tr("Small"));
         lb.addItem(i18n.tr("Medium"));
