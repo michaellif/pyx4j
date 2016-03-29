@@ -24,8 +24,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
@@ -77,14 +75,11 @@ public class JasperReportHTMLAdapterTest {
     private boolean hasFontFamilyStyleAttr(String html) {
         Elements htmlElements = Jsoup.parse(html).getAllElements();
         for (Element e : htmlElements) {
-            Attributes attributes = e.attributes();
-            for (Attribute attr : attributes) {
-                if (attr.getKey().equals("style")) {
-                    String[] styleItems = attr.getValue().trim().split(";");
-                    for (String item : styleItems) {
-                        if (item.contains("font-family")) {
-                            return true;
-                        }
+            if (e.hasAttr("style")) {
+                String[] styleItems = e.attr("style").trim().split(";");
+                for (String item : styleItems) {
+                    if (item.contains("font-family")) {
+                        return true;
                     }
                 }
             }
@@ -96,12 +91,7 @@ public class JasperReportHTMLAdapterTest {
         Elements htmlElements = Jsoup.parse(html).getAllElements();
         for (Element e : htmlElements) {
             if (e.tagName().equals("font")) {
-                Attributes attributes = e.attributes();
-                for (Attribute attr : attributes) {
-                    if (attr.getKey().equals("face")) {
-                        return true;
-                    }
-                }
+                return e.hasAttr("face");
             }
         }
         return false;
