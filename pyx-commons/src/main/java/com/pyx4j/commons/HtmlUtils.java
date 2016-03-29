@@ -90,6 +90,23 @@ public class HtmlUtils {
         return sb.toString();
     }
 
+    /**
+     * Will return true if string contains HTML tags.
+     *
+     * Warn: Not very sophisticated.
+     *
+     * @param s
+     *            String to test
+     * @return true if string contains HTML
+     */
+    public static boolean isHtml(String text) {
+        if (CommonsStringUtils.isEmpty(text)) {
+            return false;
+        } else {
+            return text.matches("\\<[^\\>]*\\>");
+        }
+    }
+
     public static boolean isEmpty(String html) {
         if (CommonsStringUtils.isEmpty(html)) {
             return true;

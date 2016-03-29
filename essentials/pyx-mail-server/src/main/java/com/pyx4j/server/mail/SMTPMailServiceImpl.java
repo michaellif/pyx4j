@@ -119,6 +119,11 @@ class SMTPMailServiceImpl implements IMailService {
             mailProperties.put(me.getKey(), me.getValue());
         }
 
+        if (config.getHost() == null) {
+            log.error("E-mail delivery SMTP not configured for {}", mailMessage);
+            return MailDeliveryStatus.ConfigurationError;
+        }
+
         mailProperties.put("mail.smtp.host", config.getHost());
         mailProperties.put("mail.smtp.port", String.valueOf(config.getPort()));
 
