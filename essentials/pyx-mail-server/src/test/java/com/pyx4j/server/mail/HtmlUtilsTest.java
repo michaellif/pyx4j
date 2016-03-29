@@ -27,6 +27,8 @@ import org.junit.Test;
 
 public class HtmlUtilsTest {
 
+    // TODO @ernestog Move this Strings to resource files!!!
+
     // HTML with inner link
     private static final String HTML_INNER_LINK = "<!DOCTYPE html><html><body><a href=\"http://www.w3schools.com\">This is a link</a></body></html>";
 
@@ -70,6 +72,7 @@ public class HtmlUtilsTest {
         testNoHTMLTagsAndExpectedOutput(HTML_WITH_IMAGE, TEXT_WITH_IMAGE);
 
         testNoHtmlTagsAndLines(HTML_WITH_PARAGRAPHS, 6);
+
     }
 
     void testNoHtmlTagsAndLines(String htmlText, int minimumLines) {
@@ -102,6 +105,7 @@ public class HtmlUtilsTest {
     private boolean hasHtmlTags(String text) {
         boolean hasHtmlTags = false;
         Elements htmlElements = Jsoup.parse(text).select("body");
+
         for (Element e : htmlElements) {
             if (e.tagName() != "body") {
                 hasHtmlTags = true;

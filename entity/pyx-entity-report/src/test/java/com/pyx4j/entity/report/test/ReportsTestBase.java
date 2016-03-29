@@ -37,23 +37,24 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportFactory;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.gwt.server.IOUtils;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 public abstract class ReportsTestBase {
 
@@ -65,21 +66,21 @@ public abstract class ReportsTestBase {
 
     protected ArrayList<String> textItems = new ArrayList<String>();
 
-    protected static String debugFileName(String designName, String ext) {
+    protected static File debugFileName(String designName, String ext) {
         File dir = new File("target", "reports-dump");
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 throw new Error("Can't create directory " + dir.getAbsolutePath());
             }
         }
-        String uniqueId = new SimpleDateFormat("_MM-dd_HH-mm").format(new Date());
+        String uniqueId = new SimpleDateFormat("_MM-dd_HH-mm-ss").format(new Date());
         File file = new File(dir, designName + uniqueId + ext);
         if (file.exists()) {
             if (!file.delete()) {
                 throw new Error("Can't delete file " + file.getAbsolutePath());
             }
         }
-        return file.getAbsolutePath();
+        return file;
     }
 
     @Deprecated
@@ -88,7 +89,7 @@ public abstract class ReportsTestBase {
         try {
             JasperReport jasperReport = JasperReportFactory.create(designName);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-            JasperExportManager.exportReportToPdfFile(jasperPrint, debugFileName(designName, ".pdf"));
+            JasperExportManager.exportReportToPdfFile(jasperPrint, debugFileName(designName, ".pdf").getAbsolutePath());
 
             bos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToXmlStream(jasperPrint, bos);
@@ -115,9 +116,10 @@ public abstract class ReportsTestBase {
     protected void createReport(JasperReportModel model) throws Exception {
         ByteArrayOutputStream bos = null;
         FileOutputStream pdf = null;
+        String pdfName = null;
         try {
 
-            pdf = new FileOutputStream(debugFileName(model.getDesignName(), ".pdf"));
+            pdf = new FileOutputStream(pdfName = debugFileName(model.getDesignName(), ".pdf").getAbsolutePath());
             JasperReportProcessor.createReport(model, JasperFileFormat.PDF, pdf);
             pdf.flush();
 
@@ -139,6 +141,11 @@ public abstract class ReportsTestBase {
         } finally {
             IOUtils.closeQuietly(bos);
             IOUtils.closeQuietly(pdf);
+        }
+
+        if (ServerSideConfiguration.isStartedUnderEclipse()) {
+            String[] command = { "cmd.exe", "/c", "start", pdfName };
+            Runtime.getRuntime().exec(command);
         }
     }
 

@@ -80,6 +80,10 @@ public abstract class Theme {
         mixinThemes.put(theme.getId(), theme);
     }
 
+    public Theme getTheme(ThemeId id) {
+        return mixinThemes.get(id);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Theme) {
@@ -94,7 +98,7 @@ public abstract class Theme {
         // Add do-not-print css:
         stylesString.append("@media print {");
         stylesString.append("." + StyleManager.DO_NOT_PRINT_CLASS_NAME + ", ." + StyleManager.DO_NOT_PRINT_CLASS_NAME + " * {display: none !important;}");
-        stylesString.append("}");
+        stylesString.append("}\n");
 
         for (String atRule : getAllAtRules()) {
             stylesString.append(atRule);
