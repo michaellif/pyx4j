@@ -31,8 +31,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Entities;
@@ -54,13 +52,13 @@ import com.pyx4j.config.shared.ApplicationMode;
 
 public class JasperReportHTMLAdapter {
 
-    // The css properties supported by jasper withut modification
+    // The css properties supported by jasper without modification
     private static List<String> supportedStyleProperties = Arrays.asList(//
             "font-weight", "font-style", "text-decoration", //
             "color", "background-color");
 
     /**
-     * Removes <style> tag and <xml> microsoft word style definition from
+     * Removes <style> tag and <xml> Microsoft word style definition from
      * html code snippet. Also remove font-family attribute from all tags and face
      * attribute from <font> tag.
      *
@@ -116,18 +114,16 @@ public class JasperReportHTMLAdapter {
             element.removeAttr("class");
         }
 
-        // Go over unsupported tags
+        // Go over unsupported tags and convert them.
         Elements elements = dirtyDocument.getAllElements();
         for (int i = 0; i < elements.size(); i++) {
             Element element = elements.get(i);
             switch (element.tagName()) {
             case "p":
-                element.tagName("span").after("<br/>");
-                break;
             case "div":
                 element.tagName("span");
                 if (i < (elements.size() - 1)) {
-                    element.after("<br/>");
+                    element.after("<br/>"); // avoid extra space at the end.
                 }
                 break;
             }
@@ -165,13 +161,7 @@ public class JasperReportHTMLAdapter {
     }
 
     private static boolean hasImplicitStyle(Element e) {
-        Attributes attributes = e.attributes();
-        for (Attribute attr : attributes) {
-            if (attr.getKey().equals("style")) {
-                return true;
-            }
-        }
-        return false;
+        return e.hasAttr("style");
     }
 
     private static String normalizeFontSize(String fontSize) {
