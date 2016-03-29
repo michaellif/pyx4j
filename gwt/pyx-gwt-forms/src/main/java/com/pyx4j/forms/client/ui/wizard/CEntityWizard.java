@@ -185,12 +185,18 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
     protected void onFinish() {
     }
 
+    public final void save() {
+        onSave();
+    }
+
+    protected void onSave() {
+    }
+
     public final void cancel() {
         onCancel();
     }
 
     protected void onCancel() {
-
     }
 
     public boolean isFirst() {
