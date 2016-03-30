@@ -34,7 +34,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
 
     public static enum WizardDebugIds implements IDebugId {
 
-        WizardPrevious, WizardNext, WizardCancel;
+        WizardPrevious, WizardNext, WizardSave, WizardCancel;
 
         @Override
         public String debugId() {
@@ -45,6 +45,8 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
     private final Button btnPrevious;
 
     private final Button btnNext;
+
+    private final Button btnSave;
 
     private final Button btnCancel;
 
@@ -70,6 +72,17 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         });
         btnCancel.setDebugId(WizardDebugIds.WizardCancel);
         addFooterToolbarWidget(btnCancel);
+
+        btnSave = new Button(i18n.tr("Save"), new Command() {
+            @Override
+            public void execute() {
+                getComponent().save();
+                calculateButtonsState();
+            }
+        });
+        btnSave.setDebugId(WizardDebugIds.WizardSave);
+        addFooterToolbarWidget(btnSave);
+        btnSave.setVisible(false); // invisible by default!..
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
@@ -106,6 +119,10 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         return btnNext;
     }
 
+    public Button getBtnSave() {
+        return btnSave;
+    }
+
     public Button getBtnCancel() {
         return btnCancel;
     }
@@ -117,7 +134,6 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
     }
 
     public void calculateButtonsState() {
-
         //Return if Wizard is not yet initiated.
         if (getComponent() == null) {
             return;
