@@ -217,7 +217,6 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
             ValidationResults validationResults = previousStep.getValidationResults();
             previousStep.setStepComplete(validationResults.isValid());
             previousStep.setStepWarning(validationResults.getValidationShortMessage());
-
         }
     }
 
