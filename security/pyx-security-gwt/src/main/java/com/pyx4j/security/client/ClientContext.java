@@ -64,11 +64,11 @@ import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.Context;
 import com.pyx4j.security.shared.CoreBehavior;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.security.shared.UserVisitPreferences;
 import com.pyx4j.webstorage.client.HTML5Storage;
 
+// The same idea as in Server Visit. TODO Restructure
 public class ClientContext extends Context {
 
     public static String USER_VISIT_ATTRIBUTE = "UserVisit";
@@ -118,7 +118,10 @@ public class ClientContext extends Context {
 
     private static String clientAclTimeStamp;
 
-    private static final Map<String, Object> attributes = new HashMap<String, Object>();
+    private static final Map<String, Object> attributes = new HashMap<>();
+
+    // The same idea as in Server Visit.
+    private static final Map<String, Object> transientAttributes = new HashMap<>();
 
     private static ClientSystemInfo clientSystemInfo;
 
@@ -216,9 +219,9 @@ public class ClientContext extends Context {
         if (userVisit == null) {
             return -1;
         } else {
-            int hashCode = userVisit.hashCode();
-            hashCode *= 0x1F + SecurityController.instance().getBehaviorsHashCode();
-            return hashCode;
+            return userVisit.hashCode();
+            //TODO fix this
+            /** 0x1F + ClientSecurityController.instance().getAcl().hashCode(); */
         }
     }
 
@@ -236,6 +239,10 @@ public class ClientContext extends Context {
 
     public static String getSessionToken() {
         return sessionToken;
+    }
+
+    public Map<String, Object> getVisitTransientAttributes() {
+        return transientAttributes;
     }
 
     public static Object getAttribute(String name) {
@@ -321,6 +328,7 @@ public class ClientContext extends Context {
             }
             log.info("Authenticated {}", userVisit);
             attributes.clear();
+            transientAttributes.clear();
             ClientSecurityController.instance().authorize(authenticationResponse.getBehaviors(), authenticationResponse.getPermissions());
             ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
             if (ClientSecurityController.check(CoreBehavior.DEVELOPER)) {
@@ -342,6 +350,7 @@ public class ClientContext extends Context {
         log.error("terminateSession");
         userVisit = null;
         attributes.clear();
+        transientAttributes.clear();
         RPCManager.setSessionToken(null, null);
         RPCManager.setUserVisitHashCode(null);
         if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
