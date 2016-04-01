@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceAdapter;
@@ -52,11 +53,42 @@ public abstract class IServiceBase implements IService {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected final void execute(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature, AsyncCallback<? extends Serializable> callback,
-            Serializable... args) {
+    protected final void executeWithExecutionInfo(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature,
+            AsyncCallback<? extends Serializable> callback, Serializable... args) {
         log.trace("RPC CALL {} #{}", getServiceClassId() + "." + serviceMethodId, ++rpcCallCount);
         RPCManager.execute(info, (Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class,
                 new IServiceRequest(getServiceClassId(), serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
+    }
+
+    protected final void executeCacheable(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature,
+            AsyncCallback<? extends Serializable> callback, Serializable... args) {
+
+        @SuppressWarnings("unchecked")
+        final AsyncCallback<Serializable> callbackUntyped = (AsyncCallback<Serializable>) callback;
+
+        // TODO use MultiKey and use args
+        Object key = this.getClass();
+        Pair<Serializable, ?> valueHoder = ClientCache.get(key);
+        if (valueHoder != null) {
+            Serializable value = valueHoder.getA();
+            callbackUntyped.onSuccess(value);
+        } else {
+            AsyncCallback<Serializable> cacher = new AsyncCallback<Serializable>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    callback.onFailure(caught);
+                }
+
+                @Override
+                public void onSuccess(Serializable result) {
+                    Pair<Serializable, ?> valueHoder = new Pair<Serializable, Serializable>(result, null);
+                    ClientCache.put(key, valueHoder);
+                    callbackUntyped.onSuccess(result);
+                }
+            };
+            executeWithExecutionInfo(info, serviceMethodId, serviceMethodSignature, cacher, args);
+        }
     }
 
     public abstract String getServiceClassId();

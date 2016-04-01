@@ -74,8 +74,13 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
         ServiceExecution serviceExecution = targetMethod.getAnnotation(ServiceExecution.class);
 
-        print("execute(");
         if (serviceExecution != null) {
+            if (serviceExecution.cacheable()) {
+                print("executeCacheable(");
+            } else {
+                print("executeWithExecutionInfo(");
+            }
+
             print("new ");
             print(ServiceExecutionInfo.class.getSimpleName());
             print("(");
@@ -97,6 +102,8 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
             }
 
             print("), ");
+        } else {
+            print("execute(");
         }
         print("\"");
         print(targetMethod.getName());
