@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceAdapter;
@@ -81,8 +80,7 @@ public abstract class IServiceBase implements IService {
 
                 @Override
                 public void onSuccess(Serializable result) {
-                    Pair<Serializable, ?> valueHoder = new Pair<Serializable, Serializable>(result, null);
-                    ClientCache.put(key, valueHoder, timeoutMin);
+                    ClientCache.put(key, result, timeoutMin);
                     callbackUntyped.onSuccess(result);
                 }
             };

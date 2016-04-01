@@ -91,4 +91,13 @@ public class ClientCache {
             return null;
         }
     }
+
+    public static void remove(Object key) {
+        getCache().remove(key);
+    }
+
+    public static void clear() {
+        getCache().clear();
+    }
+
 }
