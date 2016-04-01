@@ -22,12 +22,42 @@ package com.pyx4j.rpc.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.security.shared.Context;
 
 /**
  * Client cache gets cleaned upon login/logout
  */
 public class ClientCache {
+
+    private static class CacheValueHolder<E> {
+
+        private E value;
+
+        private long expirationTimestamp;
+
+        public CacheValueHolder(E value, int timeoutMinutes) {
+            this.value = value;
+            if (timeoutMinutes < 0) {
+                expirationTimestamp = 0;
+            } else {
+                expirationTimestamp = System.currentTimeMillis() + timeoutMinutes * Consts.MIN2MSEC;
+            }
+        }
+
+        public boolean expired() {
+            if (expirationTimestamp == 0) {
+                return false;
+            } else {
+                return System.currentTimeMillis() > expirationTimestamp;
+            }
+        }
+
+        public E getValue() {
+            return value;
+        }
+
+    }
 
     private static <V> Map<Object, V> getCache() {
         @SuppressWarnings("unchecked")
@@ -39,12 +69,26 @@ public class ClientCache {
         return map;
     }
 
-    public static <V> void put(Object key, V value) {
-        getCache().put(key, value);
+    public static <V> void put(Object key, V value, int timeoutMinutes) {
+        getCache().put(key, new CacheValueHolder<V>(value, timeoutMinutes));
     }
 
     @SuppressWarnings("unchecked")
+    private static <V> CacheValueHolder<V> getValueHolder(Object key) {
+        return (CacheValueHolder<V>) getCache().get(key);
+    }
+
+    public static boolean containsKey(Object key) {
+        CacheValueHolder<Object> valueHolder = getValueHolder(key);
+        return valueHolder != null && !valueHolder.expired();
+    }
+
     public static <V> V get(Object key) {
-        return (V) getCache().get(key);
+        CacheValueHolder<V> valueHolder = getValueHolder(key);
+        if (valueHolder != null && !valueHolder.expired()) {
+            return valueHolder.getValue();
+        } else {
+            return null;
+        }
     }
 }

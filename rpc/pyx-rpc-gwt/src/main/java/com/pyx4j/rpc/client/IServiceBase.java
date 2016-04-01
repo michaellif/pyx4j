@@ -60,17 +60,16 @@ public abstract class IServiceBase implements IService {
                 new IServiceRequest(getServiceClassId(), serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
     }
 
-    protected final void executeCacheable(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature,
+    protected final void executeCacheable(int timeoutMin, ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature,
             AsyncCallback<? extends Serializable> callback, Serializable... args) {
 
         @SuppressWarnings("unchecked")
         final AsyncCallback<Serializable> callbackUntyped = (AsyncCallback<Serializable>) callback;
 
-        // TODO use MultiKey and use args
+        // TODO use MultiKey and use args defined in ServiceCacheKey
         Object key = this.getClass();
-        Pair<Serializable, ?> valueHoder = ClientCache.get(key);
-        if (valueHoder != null) {
-            Serializable value = valueHoder.getA();
+        if (ClientCache.containsKey(key)) {
+            Serializable value = ClientCache.get(key);
             callbackUntyped.onSuccess(value);
         } else {
             AsyncCallback<Serializable> cacher = new AsyncCallback<Serializable>() {
@@ -83,7 +82,7 @@ public abstract class IServiceBase implements IService {
                 @Override
                 public void onSuccess(Serializable result) {
                     Pair<Serializable, ?> valueHoder = new Pair<Serializable, Serializable>(result, null);
-                    ClientCache.put(key, valueHoder);
+                    ClientCache.put(key, valueHoder, timeoutMin);
                     callbackUntyped.onSuccess(result);
                 }
             };

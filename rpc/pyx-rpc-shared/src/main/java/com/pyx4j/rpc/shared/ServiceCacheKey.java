@@ -19,21 +19,17 @@
  */
 package com.pyx4j.rpc.shared;
 
-/**
- * Allow to Cache the service call results in client.
- *
- * Values are stored in @see ClientCache with the service type as key
- *
- * @see also ServiceCacheKey to anotate the argumens
- */
-public @interface ServiceCacheable {
+import static java.lang.annotation.ElementType.PARAMETER;
 
-    /**
-     * Cache expiry time in minutes.
-     *
-     * 0 indefinite.
-     *
-     */
-    int timeoutMin() default 0;
+import java.lang.annotation.Target;
+
+/**
+ * This is just an idea. Than can be implemented when needed.
+ * 
+ * @author vlads
+ *
+ */
+@Target(PARAMETER)
+public @interface ServiceCacheKey {
 
 }

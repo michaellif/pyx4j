@@ -51,11 +51,4 @@ public @interface ServiceExecution {
      */
     Class<? extends ServiceQueueId> queue() default ServiceQueueId.class;
 
-    /**
-     * Allow to Cache the service call results in client, forever
-     * 
-     * @return
-     */
-    boolean cacheable() default false;
-
 }
