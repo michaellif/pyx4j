@@ -125,14 +125,15 @@ public class Button extends ButtonBase {
     }
 
     public void setMenu(ButtonMenuBar menu) {
-        if (menuHolder == null) {
+        if (menuHolder == null && menu != null) {
             menuHolder = new ContextMenuHolder();
             getImageHolder().add(menuHolder);
         }
-        menuHolder.setMenu(menu);
-
+        if (menuHolder != null) {
+            menuHolder.setMenu(menu);
+        }
         this.menu = menu;
-        buttonMenuIndicator.setVisible(true);
+        buttonMenuIndicator.setVisible(menu != null && !menu.isMenuEmpty());
     }
 
     public ButtonMenuBar getMenu() {
@@ -144,6 +145,7 @@ public class Button extends ButtonBase {
         super.setSecurityContext(context);
         if (menu != null) {
             menu.setSecurityContext(context);
+            buttonMenuIndicator.setVisible(!menu.isMenuEmpty());
         }
     }
 
