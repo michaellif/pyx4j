@@ -43,7 +43,7 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
     private static final I18n i18n = I18n.get(CEntityWizard.class);
 
-    private static final Logger log = LoggerFactory.getLogger(PropertyChangeEvent.class);
+    private static final Logger log = LoggerFactory.getLogger(CEntityWizard.class);
 
     private final WizardPanel wizardPanel;
 
@@ -174,12 +174,16 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
     protected final void finish() {
         setVisitedRecursive();
-        if (!isValid()) {
-            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(false));
-            log.error("Wizard steps contain errors or omissions: {}", getValidationResults().getValidationMessage(false));
-        } else {
+        if (isValid()) {
             onFinish();
+        } else {
+            onInvalid();
         }
+    }
+
+    protected void onInvalid() {
+        MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(false));
+        log.error("Wizard steps contain errors or omissions: {}", getValidationResults().getValidationMessage(false));
     }
 
     protected void onFinish() {
@@ -213,7 +217,6 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
             ValidationResults validationResults = previousStep.getValidationResults();
             previousStep.setStepComplete(validationResults.isValid());
             previousStep.setStepWarning(validationResults.getValidationShortMessage());
-
         }
     }
 
