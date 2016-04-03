@@ -50,19 +50,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
 
     private final Button btnCancel;
 
-    private String endButtonCaption;
-
     public WizardDecorator() {
-        this(i18n.tr("Finish"));
-    }
-
-    @Override
-    public CEntityWizard<E> getComponent() {
-        return (CEntityWizard<E>) super.getComponent();
-    }
-
-    public WizardDecorator(String endButtonCaption) {
-        this.endButtonCaption = endButtonCaption;
 
         btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
@@ -94,6 +82,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         btnPrevious.setDebugId(WizardDebugIds.WizardPrevious);
         addFooterToolbarWidget(btnPrevious);
 
+        // This name will change in each step.
         btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
             public void execute() {
@@ -111,10 +100,17 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         setWidth("100%");
     }
 
+    @Override
+    public CEntityWizard<E> getComponent() {
+        return (CEntityWizard<E>) super.getComponent();
+    }
+
     public Button getBtnPrevious() {
         return btnPrevious;
     }
 
+    // Can't change the name, use WizardStep constructor.
+    // TODO The same button used in final submit. maybe need to changed
     public Button getBtnNext() {
         return btnNext;
     }
@@ -134,18 +130,11 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
     }
 
     public void calculateButtonsState() {
-        //Return if Wizard is not yet initiated.
-        if (getComponent() == null) {
-            return;
+        //If Wizard already initiated.
+        if (getComponent() != null && getComponent().getSelectedStep() != null) {
+            btnNext.setCaption(getComponent().getSelectedStep().getNextButtonCaption());
+            btnPrevious.setEnabled(!getComponent().isFirst());
         }
-
-        if (getComponent().isLast()) {
-            btnNext.setCaption(endButtonCaption);
-        } else {
-            btnNext.setCaption(i18n.tr("Next"));
-        }
-
-        btnPrevious.setEnabled(!getComponent().isFirst());
     }
 
 }

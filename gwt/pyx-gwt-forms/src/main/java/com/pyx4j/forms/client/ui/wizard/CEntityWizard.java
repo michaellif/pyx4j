@@ -109,6 +109,16 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
         return step;
     }
 
+    public WizardStep addStep(IsWidget content, String tabTitle, String nextButtonCaption) {
+        WizardStep step = new WizardStep(content, tabTitle, nextButtonCaption);
+        addStep(step);
+        return step;
+    }
+
+    public void setLastStepButtonCaption(String buttonCaption) {
+        getAllSteps().get(getAllSteps().size() - 1).setNextButtonCaption(buttonCaption);
+    }
+
     public void addStep(WizardStep step) {
         wizardPanel.addStep(step);
     }
