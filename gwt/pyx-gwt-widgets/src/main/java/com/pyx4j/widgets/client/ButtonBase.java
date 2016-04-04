@@ -76,7 +76,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
         setPermission(permission);
 
-        super.addClickHandler(new ClickHandler() {
+        addClickHandlerPrivate(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 execute(new HumanInputInfo(event));
@@ -109,27 +109,24 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     public void setCommand(Command command) {
         this.command = command;
+        setVisibleImpl();
     }
 
     public Command getCommand() {
         return this.command;
     }
 
+    private HandlerRegistration addClickHandlerPrivate(ClickHandler handler) {
+        return super.addClickHandler(handler);
+    }
+
     /**
-     * @deprecated Use setCommand(new Command(){}) , conve
+     * @deprecated Use setCommand(new Command(){})
      */
     @Override
     @Deprecated
     public HandlerRegistration addClickHandler(final ClickHandler handler) {
-        ClickHandler wrapper = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (isEnabled()) {
-                    handler.onClick(event);
-                }
-            }
-        };
-        return super.addClickHandler(wrapper);
+        throw new UnsupportedOperationException();
     }
 
     public void setTextLabel(String label) {
@@ -257,7 +254,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
             button.addMouseOutHandler(this);
             button.addMouseDownHandler(this);
             button.addMouseUpHandler(this);
-            button.addClickHandler(this);
+            button.addClickHandlerPrivate(this);
 
         }
 

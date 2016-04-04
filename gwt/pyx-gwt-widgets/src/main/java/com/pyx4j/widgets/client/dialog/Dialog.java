@@ -30,10 +30,9 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -45,7 +44,7 @@ import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -238,43 +237,111 @@ public class Dialog implements ProvidesResize, IsWidget {
         customButtonsToolbar.setStylePrimaryName(DialogTheme.StyleName.DialogCustomButtonsToolbar.name());
         buttonsPanel.add(customButtonsToolbar);
 
-        ClickHandler buttonsHandler = new ButtonClickHandler();
-
         if (options instanceof Custom1Option) {
-            custom1Button = createButton(((Custom1Option) options).custom1Text(), ((Custom1Option) options).getCustom1DebugID(), buttonsHandler, true);
+            custom1Button = createButton(((Custom1Option) options).custom1Text(), ((Custom1Option) options).getCustom1DebugID(), true, new Command() {
+                @Override
+                public void execute() {
+                    if (((Custom1Option) options).onClickCustom1()) {
+                        hide(false);
+                    }
+                }
+            });
             customButtonsToolbar.addItem(custom1Button);
         }
+
         if (options instanceof Custom2Option) {
-            custom2Button = createButton(((Custom2Option) options).custom2Text(), ((Custom2Option) options).getCustom2DebugID(), buttonsHandler, true);
+            custom2Button = createButton(((Custom2Option) options).custom2Text(), ((Custom2Option) options).getCustom2DebugID(), true, new Command() {
+                @Override
+                public void execute() {
+                    if (((Custom2Option) options).onClickCustom2()) {
+                        hide(false);
+                    }
+                }
+            });
             customButtonsToolbar.addItem(custom2Button);
         }
+
         if (options instanceof Custom3Option) {
-            custom3Button = createButton(((Custom3Option) options).custom3Text(), ((Custom3Option) options).getCustom3DebugID(), buttonsHandler, true);
+            custom3Button = createButton(((Custom3Option) options).custom3Text(), ((Custom3Option) options).getCustom3DebugID(), true, new Command() {
+                @Override
+                public void execute() {
+                    if (((Custom3Option) options).onClickCustom3()) {
+                        hide(false);
+                    }
+                }
+            });
             customButtonsToolbar.addItem(custom3Button);
         }
+
         if (options instanceof Custom4Option) {
-            custom4Button = createButton(((Custom4Option) options).custom4Text(), ((Custom4Option) options).getCustom4DebugID(), buttonsHandler, true);
+            custom4Button = createButton(((Custom4Option) options).custom4Text(), ((Custom4Option) options).getCustom4DebugID(), true, new Command() {
+                @Override
+                public void execute() {
+                    if (((Custom4Option) options).onClickCustom4()) {
+                        hide(false);
+                    }
+                }
+            });
             customButtonsToolbar.addItem(custom4Button);
         }
 
         if (options instanceof YesOption) {
-            yesButton = createButton(defaultYesText(), DialogDebugId.Dialog_Yes, buttonsHandler, true);
+            yesButton = createButton(defaultYesText(), DialogDebugId.Dialog_Yes, true, new Command() {
+                @Override
+                public void execute() {
+                    if (((YesOption) options).onClickYes()) {
+                        hide(false);
+                    }
+                }
+            });
             defaultButtonsToolbar.addItem(yesButton);
         }
+
         if (options instanceof NoOption) {
-            noButton = createButton(defaultNoText(), DialogDebugId.Dialog_No, buttonsHandler, true);
+            noButton = createButton(defaultNoText(), DialogDebugId.Dialog_No, true, new Command() {
+                @Override
+                public void execute() {
+                    if (((NoOption) options).onClickNo()) {
+                        hide(false);
+                    }
+                }
+            });
             defaultButtonsToolbar.addItem(noButton);
         }
+
         if (options instanceof OkOption) {
-            okButton = createButton(optionTextOk(), DialogDebugId.Dialog_Ok, buttonsHandler, true);
+            okButton = createButton(optionTextOk(), DialogDebugId.Dialog_Ok, true, new Command() {
+                @Override
+                public void execute() {
+                    if (((OkOption) options).onClickOk()) {
+                        hide(false);
+                    }
+                }
+            });
             defaultButtonsToolbar.addItem(okButton);
         }
+
         if (options instanceof CancelOption) {
-            cancelButton = createButton(optionTextCancel(), DialogDebugId.Dialog_Cancel, buttonsHandler, true);
+            cancelButton = createButton(optionTextCancel(), DialogDebugId.Dialog_Cancel, true, new Command() {
+                @Override
+                public void execute() {
+                    if (((CancelOption) options).onClickCancel()) {
+                        hide(false);
+                    }
+                }
+            });
             defaultButtonsToolbar.addItem(cancelButton);
         }
+
         if (options instanceof CloseOption) {
-            closeButton = createButton(optionTextClose(), DialogDebugId.Dialog_Close, buttonsHandler, true);
+            closeButton = createButton(optionTextClose(), DialogDebugId.Dialog_Close, true, new Command() {
+                @Override
+                public void execute() {
+                    if (((CloseOption) options).onClickClose()) {
+                        hide(false);
+                    }
+                }
+            });
             defaultButtonsToolbar.addItem(closeButton);
         }
 
@@ -330,56 +397,19 @@ public class Dialog implements ProvidesResize, IsWidget {
         return i18n.tr("Close");
     }
 
-    private Button createButton(String text, IDebugId debugID, ClickHandler buttonListener, boolean canHaveFocus) {
-        Button button = new Button(text);
+    private Button createButton(String text, IDebugId debugID, boolean canHaveFocus, Command buttonCommand) {
+        Button button = new Button(text, buttonCommand);
         if (debugID == null) {
             button.ensureDebugId("Dialog." + text);
         } else {
             button.ensureDebugId(debugID.debugId());
         }
-        button.addClickHandler(buttonListener);
-        DOM.setStyleAttribute(button.getElement(), "margin", "3px");
-        DOM.setStyleAttribute(button.getElement(), "whiteSpace", "nowrap");
+        button.getElement().getStyle().setMargin(3, Unit.PX);
+        button.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
         if (canHaveFocus && defaultButton == null) {
             defaultButton = button;
         }
         return button;
-    }
-
-    private class ButtonClickHandler implements ClickHandler {
-
-        @Override
-        public void onClick(ClickEvent event) {
-            Object sender = event.getSource();
-            if (triggerOption(sender)) {
-                hide(false);
-            }
-        }
-
-    }
-
-    private boolean triggerOption(Object sender) {
-        if (sender == yesButton) {
-            return ((YesOption) options).onClickYes();
-        } else if (sender == noButton) {
-            return ((NoOption) options).onClickNo();
-        } else if (sender == okButton) {
-            return ((OkOption) options).onClickOk();
-        } else if (sender == cancelButton) {
-            return ((CancelOption) options).onClickCancel();
-        } else if (sender == closeButton) {
-            return ((CloseOption) options).onClickClose();
-        } else if (sender == custom1Button) {
-            return ((Custom1Option) options).onClickCustom1();
-        } else if (sender == custom2Button) {
-            return ((Custom2Option) options).onClickCustom2();
-        } else if (sender == custom3Button) {
-            return ((Custom3Option) options).onClickCustom3();
-        } else if (sender == custom4Button) {
-            return ((Custom4Option) options).onClickCustom4();
-        } else {
-            return true;
-        }
     }
 
     @Override
@@ -498,8 +528,8 @@ public class Dialog implements ProvidesResize, IsWidget {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-                                                           return $doc.activeElement;
-                                                           }-*/;
+		return $doc.activeElement;
+    }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {
