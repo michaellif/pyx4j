@@ -53,9 +53,11 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         List<Node> childNodes = htmlDocument.select("body").get(0).childNodes();
 
         String converted = convertToStyled(childNodes, null);
+        styledResult.setLength(0); // TODO Enhance this
 
-        System.out.println("\n\n************** STYLED CONVERTED ***************");
-        System.out.println(converted);
+        System.out.println("\n\n************** STYLED CONVERSION ***************");
+        System.out.println("Received -> " + cleanedHtmlPart);
+        System.out.println("\nConverted-> " + converted);
         System.out.println("*******************************************\n\n");
         return converted;
     }
