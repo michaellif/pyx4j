@@ -114,21 +114,6 @@ public class JasperReportHTMLAdapter {
             element.removeAttr("class");
         }
 
-        // Go over unsupported tags and convert them.
-        Elements elements = dirtyDocument.getAllElements();
-        for (int i = 0; i < elements.size(); i++) {
-            Element element = elements.get(i);
-            switch (element.tagName()) {
-            case "p":
-            case "div":
-                element.tagName("span");
-                if (i < (elements.size() - 1)) {
-                    element.after("<br/>"); // avoid extra space at the end.
-                }
-                break;
-            }
-        }
-
         // Base On http://jasperreports.sourceforge.net/sample.reference/styledtext/
         // TODO This may affect presentation in browser; so may be moved to new function or approach can be changed...
         Whitelist whitelist = Whitelist.none()//
@@ -139,29 +124,12 @@ public class JasperReportHTMLAdapter {
         Cleaner cleaner = new Cleaner(whitelist);
         Document document = cleaner.clean(dirtyDocument);
 
-        // Apply font style inheritance to children elements
-        Elements candidateElements = document.select("body").get(0).getAllElements();
-        for (int i = 1; i < candidateElements.size(); i++) {
-            Element element = candidateElements.get(i);
-            if (!element.tagName().equalsIgnoreCase("br") //
-                    && element.parent() != null //
-                    && !element.parent().tagName().equalsIgnoreCase("body") //
-                    && !hasImplicitStyle(element) //
-                    && hasImplicitStyle(element.parent())) {
-                element.attr("style", element.parent().attr("style"));
-            }
-        }
-
         Document.OutputSettings settings = document.outputSettings();
         settings.prettyPrint(ApplicationMode.isDevelopment());
         settings.escapeMode(Entities.EscapeMode.extended);
         settings.charset(StandardCharsets.UTF_8);
 
         return document.select("body").html();
-    }
-
-    private static boolean hasImplicitStyle(Element e) {
-        return e.hasAttr("style");
     }
 
     private static String normalizeFontSize(String fontSize) {
