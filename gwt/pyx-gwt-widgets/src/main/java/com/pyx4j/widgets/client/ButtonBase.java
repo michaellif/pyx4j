@@ -54,7 +54,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     private boolean active = false;
 
-    private final SecureConcern visible = new SecureConcern();
+    protected final SecureConcern visible = new SecureConcern();
 
     private String captionText;
 
@@ -170,7 +170,11 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
     }
 
     protected void setVisibleImpl() {
-        super.setVisible(this.visible.getDecision());
+        setVisibleUIObject(this.visible.getDecision());
+    }
+
+    protected void setVisibleUIObject(boolean visible) {
+        super.setVisible(visible);
     }
 
     @Override

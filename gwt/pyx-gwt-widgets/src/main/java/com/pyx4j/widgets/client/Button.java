@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client;
 import java.util.List;
 
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -33,6 +34,7 @@ import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
+import com.pyx4j.widgets.client.event.shared.SecureConcernStateChangeEvent;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Button extends ButtonBase {
@@ -133,7 +135,16 @@ public class Button extends ButtonBase {
             menuHolder.setMenu(menu);
         }
         this.menu = menu;
-        buttonMenuIndicator.setVisible(menu != null && !menu.isMenuEmpty());
+
+        if (menu != null) {
+            setVisibleImpl();
+            menu.addSecureConcernStateChangeHandler(new SecureConcernStateChangeEvent.Handler() {
+                @Override
+                public void onSecureConcernStateChanged(SecureConcernStateChangeEvent event) {
+                    setVisibleImpl();
+                }
+            });
+        }
     }
 
     public ButtonMenuBar getMenu() {
@@ -145,8 +156,15 @@ public class Button extends ButtonBase {
         super.setSecurityContext(context);
         if (menu != null) {
             menu.setSecurityContext(context);
-            buttonMenuIndicator.setVisible(!menu.isMenuEmpty());
         }
+    }
+
+    @Override
+    protected void setVisibleImpl() {
+        if (buttonMenuIndicator != null) {
+            buttonMenuIndicator.setVisible(this.menu != null && !this.menu.isMenuEmpty());
+        }
+        setVisibleUIObject(this.visible.getDecision() && (getCommand() != null || (menu != null && !this.menu.isMenuEmpty())));
     }
 
     @Deprecated
@@ -165,6 +183,10 @@ public class Button extends ButtonBase {
             super(true);
             setAutoOpen(true);
             setAnimationEnabled(true);
+        }
+
+        public HandlerRegistration addSecureConcernStateChangeHandler(SecureConcernStateChangeEvent.Handler handler) {
+            return addHandler(handler, SecureConcernStateChangeEvent.getType());
         }
 
         @Override
@@ -187,7 +209,11 @@ public class Button extends ButtonBase {
             if (item instanceof HasSecureConcern) {
                 secureConcerns.addSecureConcern((HasSecureConcern) item);
             }
-            return super.insertItem(item, beforeIndex);
+            try {
+                return super.insertItem(item, beforeIndex);
+            } finally {
+                fireEvent(new SecureConcernStateChangeEvent());
+            }
         }
 
         public SecureMenuItem addItem(String text, ScheduledCommand cmd, Permission... permissions) {
@@ -238,11 +264,15 @@ public class Button extends ButtonBase {
         public void clearItems() {
             super.clearItems();
             secureConcerns.clear();
+            fireEvent(new SecureConcernStateChangeEvent());
         }
 
         @Override
         public void setSecurityContext(AccessControlContext context) {
             secureConcerns.setSecurityContext(context);
+
+            // TODO Fire when state actually changes.
+            fireEvent(new SecureConcernStateChangeEvent());
         }
     }
 
