@@ -25,14 +25,19 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidatableWidget;
 import com.pyx4j.forms.client.validators.ValidationResults;
+import com.pyx4j.i18n.shared.I18n;
 
 public class WizardStep extends SimplePanel implements IValidatable {
+
+    private static final I18n i18n = I18n.get(WizardStep.class);
 
     private WizardPanel parent;
 
     private IsWidget content;
 
     private String title;
+
+    private String nextButtonCaption;
 
     private boolean complete = false;
 
@@ -45,9 +50,14 @@ public class WizardStep extends SimplePanel implements IValidatable {
     }
 
     public WizardStep(IsWidget content, String title) {
+        this(content, title, i18n.tr("Next"));
+    }
+
+    public WizardStep(IsWidget content, String title, String nextButtonCaption) {
         setStepTitle(title);
         setStepContent(content);
         addStyleName(WizardDecoratorTheme.StyleName.WizardStep.name());
+        this.nextButtonCaption = nextButtonCaption;
     }
 
     public void setParent(WizardPanel parent) {
@@ -64,6 +74,14 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     public void setStepTitle(String title) {
         this.title = title;
+    }
+
+    public String getNextButtonCaption() {
+        return nextButtonCaption;
+    }
+
+    public void setNextButtonCaption(String nextButtonCaption) {
+        this.nextButtonCaption = nextButtonCaption;
     }
 
     public boolean isStepVisible() {
