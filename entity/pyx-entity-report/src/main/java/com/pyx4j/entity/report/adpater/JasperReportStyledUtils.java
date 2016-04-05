@@ -164,6 +164,11 @@ public class JasperReportStyledUtils {
                     resultMap.put("isBold", String.valueOf(Boolean.TRUE));
                 }
 
+                // ******************  Strikethrough ***********************
+                if (keyAttribute != null && keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.TEXT_DECORATION)) {
+                    resultMap.put("isStrikeThrough", String.valueOf(valueAttribute.equalsIgnoreCase("line-through")));
+                }
+
                 // ******************  Italic ***********************
                 if (keyAttribute != null && keyAttribute.equalsIgnoreCase("isitalic")) {
                     resultMap.put("isItalic", String.valueOf(Boolean.TRUE));
