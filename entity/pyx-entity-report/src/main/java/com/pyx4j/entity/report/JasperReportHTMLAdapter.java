@@ -55,7 +55,7 @@ public class JasperReportHTMLAdapter {
     // The css properties supported by jasper without modification
     private static List<String> supportedStyleProperties = Arrays.asList(//
             "font-weight", "font-style", "text-decoration", //
-            "color", "background-color");
+            "color", "background-color", "background");
 
     /**
      * Removes <style> tag and <xml> Microsoft word style definition from
@@ -83,7 +83,7 @@ public class JasperReportHTMLAdapter {
             for (String nameValue : element.attr("style").split(";")) {
                 String[] nameValuParts = nameValue.split(":");
                 if (nameValuParts.length > 1) {
-                    elementStylePropertiesCombined.put(nameValuParts[0], nameValuParts[1]);
+                    elementStylePropertiesCombined.put(nameValuParts[0].trim(), nameValuParts[1].trim());
                 }
             }
 
@@ -100,6 +100,7 @@ public class JasperReportHTMLAdapter {
                 if (propertyValue != null) {
                     elementStylePropertiesNew.put(property, propertyValue);
                 }
+
             }
 
             String newStyle = Joiner.on("; ").withKeyValueSeparator(":").join(elementStylePropertiesNew);
@@ -119,7 +120,9 @@ public class JasperReportHTMLAdapter {
         Whitelist whitelist = Whitelist.none()//
                 .addTags("b", "i", "u", "font", "sup", "sub", "li", "br") //
                 .addAttributes("font", "size", "color") //
-                .addAttributes("span", "style");
+                .addAttributes("span", "style") //
+                .addAttributes("p", "style") //
+                .addAttributes("div", "style");
 
         Cleaner cleaner = new Cleaner(whitelist);
         Document document = cleaner.clean(dirtyDocument);

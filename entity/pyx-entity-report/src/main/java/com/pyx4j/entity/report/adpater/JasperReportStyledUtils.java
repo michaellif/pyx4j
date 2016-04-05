@@ -48,6 +48,8 @@ public class JasperReportStyledUtils {
 
     public static final String BACKGROUND_COLOR = "background-color";
 
+    public static final String BACKGROUND = "background";
+
     public static final String FONT_SIZE = "font-size";
 
     public enum ReservedStyledWords {
@@ -152,34 +154,34 @@ public class JasperReportStyledUtils {
 //                  sbuffer.append(QUOTE);
 //              }
 
-                String keyAttribute = values[0];
-                String valueAttribute = values[1];
+                String keyAttribute = values[0].trim();
+                String valueAttribute = values[1].trim();
 
                 // ******************  Bold ***********************
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_WEIGHT)) {
+                if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_WEIGHT)) {
                     resultMap.put("isBold", String.valueOf(valueAttribute.equalsIgnoreCase("bold")));
                 }
 
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase("isbold")) {
+                if (keyAttribute.equalsIgnoreCase("isbold")) {
                     resultMap.put("isBold", String.valueOf(Boolean.TRUE));
                 }
 
                 // ******************  Strikethrough ***********************
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.TEXT_DECORATION)) {
+                if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.TEXT_DECORATION)) {
                     resultMap.put("isStrikeThrough", String.valueOf(valueAttribute.equalsIgnoreCase("line-through")));
                 }
 
                 // ******************  Italic ***********************
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase("isitalic")) {
+                if (keyAttribute.equalsIgnoreCase("isitalic")) {
                     resultMap.put("isItalic", String.valueOf(Boolean.TRUE));
                 }
 
                 // ******************  Underline ***********************
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase("isunderline")) {
+                if (keyAttribute.equalsIgnoreCase("isunderline")) {
                     resultMap.put("isUnderline", String.valueOf(Boolean.TRUE));
                 }
 
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_SIZE)) {
+                if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_SIZE)) {
                     Matcher matcher = Pattern.compile("(\\d+\\.?\\d*)(.*)").matcher(valueAttribute);
                     if (matcher.find()) {
                         resultMap.put("size", String.valueOf(matcher.group(1)));
@@ -199,12 +201,13 @@ public class JasperReportStyledUtils {
 //                  sbuffer.append(QUOTE);
 //              }
 
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.COLOR)) {
+                if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.COLOR)) {
                     Color color = JRColorUtil.getColor(valueAttribute, Color.black);
                     resultMap.put("forecolor", JRColorUtil.getCssColor(color));
                 }
 
-                if (keyAttribute != null && keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND_COLOR)) {
+                if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND_COLOR) //
+                        || keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND)) {
                     Color color = JRColorUtil.getColor(valueAttribute, Color.black);
                     resultMap.put("backcolor", JRColorUtil.getCssColor(color));
                 }
@@ -302,7 +305,9 @@ public class JasperReportStyledUtils {
         if (attributes != null) {
             for (Attribute attr : attributes) {
                 if (attr.getKey() != "text") { // avoid text attribute
-                    attrMap.put(attr.getKey(), attr.getValue());
+                    String key = attr.getKey() != null ? attr.getKey().trim() : null;
+                    String value = attr.getValue() != null ? attr.getValue().trim() : null;
+                    attrMap.put(key, value);
                 }
             }
         }
