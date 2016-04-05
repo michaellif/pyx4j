@@ -185,7 +185,8 @@ public class JasperReportStyledUtils {
                     Matcher matcher = Pattern.compile("(\\d+\\.?\\d*)(.*)").matcher(valueAttribute);
                     if (matcher.find()) {
                         resultMap.put("size", String.valueOf(matcher.group(1)));
-//                        resultMap.put("size", getFontSize(matcher.group(1)));
+                    } else {
+                        resultMap.put("size", getFontSize(valueAttribute));
                     }
 
                 }
