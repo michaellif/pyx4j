@@ -19,6 +19,8 @@
  */
 package com.pyx4j.security.shared;
 
+import java.util.Map;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -64,4 +66,6 @@ public abstract class Context {
     protected abstract <E extends UserVisit> E getUserVisit(Class<E> userVisitClass);
 
     protected abstract <E extends UserVisitPreferences> E defaultUserPreferences(Class<E> userPreferencesClass);
+    
+    public abstract Map<String, Object> getVisitTransientAttributes(); 
 }

@@ -39,6 +39,7 @@ import com.google.gwt.user.rebind.AbstractMethodCreator;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.rpc.client.ServiceExecutionInfo;
+import com.pyx4j.rpc.shared.ServiceCacheable;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.ServiceExecution.OperationType;
 import com.pyx4j.rpc.shared.ServiceQueueId;
@@ -74,8 +75,16 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
         ServiceExecution serviceExecution = targetMethod.getAnnotation(ServiceExecution.class);
 
-        print("execute(");
         if (serviceExecution != null) {
+            ServiceCacheable serviceCacheable = targetMethod.getAnnotation(ServiceCacheable.class);
+            if (serviceCacheable != null) {
+                print("executeCacheable(");
+                print(String.valueOf(serviceCacheable.timeoutMin()));
+                print(",");
+            } else {
+                print("executeWithExecutionInfo(");
+            }
+
             print("new ");
             print(ServiceExecutionInfo.class.getSimpleName());
             print("(");
@@ -97,6 +106,8 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
             }
 
             print("), ");
+        } else {
+            print("execute(");
         }
         print("\"");
         print(targetMethod.getName());

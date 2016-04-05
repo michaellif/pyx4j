@@ -119,6 +119,11 @@ class SMTPMailServiceImpl implements IMailService {
             mailProperties.put(me.getKey(), me.getValue());
         }
 
+        if (config.getHost() == null) {
+            log.error("E-mail delivery SMTP not configured for {}", mailMessage);
+            return MailDeliveryStatus.ConfigurationError;
+        }
+
         mailProperties.put("mail.smtp.host", config.getHost());
         mailProperties.put("mail.smtp.port", String.valueOf(config.getPort()));
 
@@ -236,21 +241,21 @@ class SMTPMailServiceImpl implements IMailService {
                 // Set text/plain part
                 MimeBodyPart textPart = new MimeBodyPart();
                 if (!CommonsStringUtils.isEmpty(mailMessage.getTextBody())) {
-                    textPart.setText(mailMessage.getTextBody());
+                    textPart.setContent(mailMessage.getTextBody(), "text/plain; charset=UTF-8");
                 } else {
-                    textPart.setText(HtmlUtils.getPlainTextFromHtml(mailMessage.getHtmlBody()), "utf-8");
+                    textPart.setContent(HtmlUtils.getPlainTextFromHtml(mailMessage.getHtmlBody()), "text/plain; charset=UTF-8");
                 }
 
                 textPart.setHeader("MIME-Version", "1.0");
-                textPart.setHeader("Content-Type", "text/plain; charset=\"utf-8\"");
+                textPart.setHeader("Content-Type", "text/plain; charset=UTF-8");
                 textPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
                 messageTextMultipart.addBodyPart(textPart);
 
                 // Set text/html part
                 MimeBodyPart htmlPart = new MimeBodyPart();
-                htmlPart.setContent(mailMessage.getHtmlBody(), "text/html");
+                htmlPart.setContent(mailMessage.getHtmlBody(), "text/html; charset=UTF-8");
                 htmlPart.setHeader("MIME-Version", "1.0");
-                htmlPart.setHeader("Content-Type", "text/html; charset=\"utf-8\"");
+                htmlPart.setHeader("Content-Type", "text/html; charset=UTF-8");
                 messageTextMultipart.addBodyPart(htmlPart);
 
                 MimeBodyPart htmlAndTextBodyPart = new MimeBodyPart();

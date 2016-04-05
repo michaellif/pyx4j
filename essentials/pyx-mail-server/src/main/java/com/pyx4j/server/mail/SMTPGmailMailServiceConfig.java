@@ -19,12 +19,29 @@
  */
 package com.pyx4j.server.mail;
 
+import java.io.File;
+import java.util.Map;
+
 import com.pyx4j.config.server.Credentials;
+import com.pyx4j.config.server.PropertiesConfiguration;
 
 public abstract class SMTPGmailMailServiceConfig extends SMTPMailServiceConfig {
 
     public SMTPGmailMailServiceConfig(Credentials credentials) {
-        super("smtp.gmail.com", 465, credentials.userName, credentials.password);
+        this(credentials, null);
+    }
+
+    public SMTPGmailMailServiceConfig(Credentials credentials, File propertiesFile) {
+        host = "smtp.gmail.com";
+        port = 465;
         smtpEncryption = SMTPEncryption.SSL;
+
+        user = credentials.userName;
+        password = credentials.password;
+
+        if (propertiesFile != null && propertiesFile.canRead()) {
+            Map<String, String> configProperties = PropertiesConfiguration.loadProperties(propertiesFile);
+            readProperties("mail", configProperties);
+        }
     }
 }

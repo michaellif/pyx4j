@@ -39,17 +39,34 @@ public class PropertiesConfiguration implements CanReloadProperties {
     private final Map<String, String> properties;
 
     public PropertiesConfiguration(Map<String, String> properties) {
-        this(null, properties);
+        this(null, properties, (Map<String, String>) null);
     }
 
-    public PropertiesConfiguration(String prefix, Map<String, String> properties) {
-        this.prefix = prefix;
-        this.properties = properties;
+    public PropertiesConfiguration(Properties properties) {
+        this(toStringProperties(properties));
     }
 
     public PropertiesConfiguration(String prefix, PropertiesConfiguration properties) {
+        this(prefix, properties.getProperties(), (Map<String, String>) null);
+    }
+
+    public PropertiesConfiguration(String prefix, Map<String, String> properties) {
+        this(prefix, properties, (Map<String, String>) null);
+    }
+
+    public PropertiesConfiguration(String prefix, Map<String, String> properties, Properties fallBackProperties) {
+        this(null, properties, toStringProperties(fallBackProperties));
+    }
+
+    public PropertiesConfiguration(String prefix, Map<String, String> properties, Map<String, String> fallBackProperties) {
         this.prefix = prefix;
-        this.properties = properties.getProperties();
+        if (fallBackProperties == null) {
+            this.properties = properties;
+        } else {
+            this.properties = new HashMap<>();
+            this.properties.putAll(fallBackProperties);
+            this.properties.putAll(properties);
+        }
     }
 
     @Override
@@ -156,7 +173,7 @@ public class PropertiesConfiguration implements CanReloadProperties {
     /**
      * First value is default
      */
-    public <T extends Enum<T>> T getEnumValue(String key, T... values) {
+    public <T extends Enum<T>> T getEnumValue(String key, @SuppressWarnings("unchecked") T... values) {
         String value = getValue(key);
         if (value == null) {
             return values[0];
@@ -179,6 +196,17 @@ public class PropertiesConfiguration implements CanReloadProperties {
         }
     }
 
+    private static Map<String, String> toStringProperties(Properties p) {
+        if (p == null) {
+            return null;
+        }
+        Map<String, String> m = new HashMap<>();
+        for (String key : p.stringPropertyNames()) {
+            m.put(key, p.getProperty(key));
+        }
+        return m;
+    }
+
     public static Map<String, String> loadProperties(File file) {
         Properties p = new Properties();
         FileReader reader = null;
@@ -194,7 +222,7 @@ public class PropertiesConfiguration implements CanReloadProperties {
             } catch (Throwable e) {
             }
         }
-        Map<String, String> m = new HashMap<String, String>();
+        Map<String, String> m = new HashMap<>();
         for (String key : p.stringPropertyNames()) {
             if (key.startsWith("include.")) {
                 m.putAll(loadProperties(new File(file.getParentFile(), p.getProperty(key))));

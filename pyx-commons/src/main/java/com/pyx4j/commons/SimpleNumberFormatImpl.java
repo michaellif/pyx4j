@@ -35,7 +35,12 @@ class SimpleNumberFormatImpl {
     }
 
     public static Number parse(String text, String pattern) throws NumberFormatException {
-        DecimalFormat fmt = new DecimalFormat(pattern);
+        DecimalFormat fmt;
+        if (pattern == null) {
+            fmt = new DecimalFormat();
+        } else {
+            fmt = new DecimalFormat(pattern);
+        }
         try {
             return fmt.parse(text);
         } catch (ParseException e) {

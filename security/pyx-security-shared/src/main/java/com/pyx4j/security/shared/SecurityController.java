@@ -19,7 +19,10 @@
  */
 package com.pyx4j.security.shared;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -140,6 +143,32 @@ public abstract class SecurityController {
 
     public static <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleClass, Object subject) {
         return controller.getAcl().getAccessRules(accessRuleClass, subject);
+    }
+
+    public int getBehaviorsHashCode() {
+        List<Behavior> behaviors = new ArrayList<>(getBehaviors());
+        Collections.sort(behaviors, new Comparator<Behavior>() {
+
+            @Override
+            public int compare(Behavior o1, Behavior o2) {
+                if (o1 instanceof Enum) {
+                    if (o2 instanceof Enum) {
+                        return ((Enum<?>) o1).name().compareTo(((Enum<?>) o2).name());
+                    } else {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+
+        int hashCode = 1;
+        for (Behavior b : behaviors) {
+            if (b instanceof Enum) {
+                hashCode = 31 * hashCode + ((Enum<?>) b).name().hashCode();
+            }
+        }
+        return hashCode;
     }
 
 }

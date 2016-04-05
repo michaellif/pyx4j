@@ -34,7 +34,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
 
     public static enum WizardDebugIds implements IDebugId {
 
-        WizardPrevious, WizardNext, WizardCancel;
+        WizardPrevious, WizardNext, WizardSave, WizardCancel;
 
         @Override
         public String debugId() {
@@ -46,21 +46,11 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
 
     private final Button btnNext;
 
+    private final Button btnSave;
+
     private final Button btnCancel;
 
-    private String endButtonCaption;
-
     public WizardDecorator() {
-        this(i18n.tr("Finish"));
-    }
-
-    @Override
-    public CEntityWizard<E> getComponent() {
-        return (CEntityWizard<E>) super.getComponent();
-    }
-
-    public WizardDecorator(String endButtonCaption) {
-        this.endButtonCaption = endButtonCaption;
 
         btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
@@ -70,6 +60,17 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         });
         btnCancel.setDebugId(WizardDebugIds.WizardCancel);
         addFooterToolbarWidget(btnCancel);
+
+        btnSave = new Button(i18n.tr("Save"), new Command() {
+            @Override
+            public void execute() {
+                getComponent().save();
+                calculateButtonsState();
+            }
+        });
+        btnSave.setDebugId(WizardDebugIds.WizardSave);
+        addFooterToolbarWidget(btnSave);
+        btnSave.setVisible(false); // invisible by default!..
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
@@ -81,6 +82,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         btnPrevious.setDebugId(WizardDebugIds.WizardPrevious);
         addFooterToolbarWidget(btnPrevious);
 
+        // This name will change in each step.
         btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
             public void execute() {
@@ -98,12 +100,23 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         setWidth("100%");
     }
 
+    @Override
+    public CEntityWizard<E> getComponent() {
+        return (CEntityWizard<E>) super.getComponent();
+    }
+
     public Button getBtnPrevious() {
         return btnPrevious;
     }
 
+    // Can't change the name, use WizardStep constructor.
+    // TODO The same button used in final submit. maybe need to changed
     public Button getBtnNext() {
         return btnNext;
+    }
+
+    public Button getBtnSave() {
+        return btnSave;
     }
 
     public Button getBtnCancel() {
@@ -117,19 +130,11 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
     }
 
     public void calculateButtonsState() {
-
-        //Return if Wizard is not yet initiated.
-        if (getComponent() == null) {
-            return;
+        //If Wizard already initiated.
+        if (getComponent() != null && getComponent().getSelectedStep() != null) {
+            btnNext.setCaption(getComponent().getSelectedStep().getNextButtonCaption());
+            btnPrevious.setEnabled(!getComponent().isFirst());
         }
-
-        if (getComponent().isLast()) {
-            btnNext.setCaption(endButtonCaption);
-        } else {
-            btnNext.setCaption(i18n.tr("Next"));
-        }
-
-        btnPrevious.setEnabled(!getComponent().isFirst());
     }
 
 }

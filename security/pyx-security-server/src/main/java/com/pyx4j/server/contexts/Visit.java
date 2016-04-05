@@ -22,6 +22,7 @@ package com.pyx4j.server.contexts;
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -179,6 +180,10 @@ public class Visit implements Serializable {
     public void setAttribute(String name, Serializable value) {
         this.attributes.put(name, value);
         this.changed = true;
+    }
+
+    public Map<String, Object> getTransientAttributes() {
+        return this.transientAttributes;
     }
 
     public Enumeration<String> getTransientAttributeNames() {

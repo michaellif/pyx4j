@@ -19,8 +19,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -159,10 +158,10 @@ public class NColorPicker extends NFocusField<Integer, ColorButton, CColorPicker
             getTextLabelComponent().getElement().getStyle().setProperty("border", "1px inset #C2C2C2");
             getElement().getStyle().setProperty("opacity", "1");
 
-            addClickHandler(new ClickHandler() {
+            setCommand(new Command() {
 
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
                     String header = getCComponent().isHueOnly() ? "Hue Picker" : "Color Picker";
                     new ColorPickerDialog(header) {
                         @Override
@@ -173,6 +172,7 @@ public class NColorPicker extends NFocusField<Integer, ColorButton, CColorPicker
                     }.show();
                 }
             });
+
         }
 
         public void onColorChange() {

@@ -33,9 +33,9 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.security.shared.AccessControlContext;
@@ -46,7 +46,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     private final HTML textLabel;
 
-    private final SimplePanel imageHolder;
+    private final FlowPanel imageHolder;
 
     private final ButtonFacesHandler facesHandler;
 
@@ -54,7 +54,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     private boolean active = false;
 
-    private final SecureConcern visible = new SecureConcern();
+    protected final SecureConcern visible = new SecureConcern();
 
     private String captionText;
 
@@ -67,16 +67,16 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         textLabel = new HTML();
         setTextLabel(text);
 
-        imageHolder = new SimplePanel();
+        imageHolder = new FlowPanel();
         imageHolder.getElement().getStyle().setProperty("height", "100%");
 
-        imageHolder.setWidget(textLabel);
+        imageHolder.add(textLabel);
 
         setWidget(imageHolder);
 
         setPermission(permission);
 
-        super.addClickHandler(new ClickHandler() {
+        addClickHandlerPrivate(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 execute(new HumanInputInfo(event));
@@ -109,27 +109,24 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     public void setCommand(Command command) {
         this.command = command;
+        setVisibleImpl();
     }
 
     public Command getCommand() {
         return this.command;
     }
 
+    private HandlerRegistration addClickHandlerPrivate(ClickHandler handler) {
+        return super.addClickHandler(handler);
+    }
+
     /**
-     * @deprecated Use setCommand(new Command(){}) , conve
+     * @deprecated Use setCommand(new Command(){})
      */
     @Override
     @Deprecated
     public HandlerRegistration addClickHandler(final ClickHandler handler) {
-        ClickHandler wrapper = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (isEnabled()) {
-                    handler.onClick(event);
-                }
-            }
-        };
-        return super.addClickHandler(wrapper);
+        throw new UnsupportedOperationException();
     }
 
     public void setTextLabel(String label) {
@@ -155,7 +152,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         setTitle(text);
     }
 
-    protected SimplePanel getImageHolder() {
+    protected FlowPanel getImageHolder() {
         return imageHolder;
     }
 
@@ -170,7 +167,11 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
     }
 
     protected void setVisibleImpl() {
-        super.setVisible(this.visible.getDecision());
+        setVisibleUIObject(this.visible.getDecision());
+    }
+
+    protected void setVisibleUIObject(boolean visible) {
+        super.setVisible(visible);
     }
 
     @Override
@@ -253,7 +254,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
             button.addMouseOutHandler(this);
             button.addMouseDownHandler(this);
             button.addMouseUpHandler(this);
-            button.addClickHandler(this);
+            button.addClickHandlerPrivate(this);
 
         }
 

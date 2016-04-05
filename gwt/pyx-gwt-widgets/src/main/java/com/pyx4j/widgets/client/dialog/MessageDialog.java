@@ -69,15 +69,6 @@ public class MessageDialog extends Dialog {
         show(title, text, Type.Info);
     }
 
-    public static void show(String title, String text, Type type) {
-        show(title, text, type, new OkOption() {
-            @Override
-            public boolean onClickOk() {
-                return true;
-            }
-        });
-    }
-
     public static void confirm(String title, String text, final Command onConfirmed) {
         confirm(title, text, onConfirmed, null);
     }
@@ -144,6 +135,15 @@ public class MessageDialog extends Dialog {
             @Override
             public boolean onClickNo() {
                 confirmDecline.onDeclined();
+                return true;
+            }
+        });
+    }
+
+    public static void show(String title, String text, Type type) {
+        show(title, text, type, new OkOption() {
+            @Override
+            public boolean onClickOk() {
                 return true;
             }
         });

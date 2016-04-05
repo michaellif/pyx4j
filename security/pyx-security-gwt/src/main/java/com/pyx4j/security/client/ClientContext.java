@@ -68,6 +68,7 @@ import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.security.shared.UserVisitPreferences;
 import com.pyx4j.webstorage.client.HTML5Storage;
 
+// The same idea as in Server Visit. TODO Restructure
 public class ClientContext extends Context {
 
     public static String USER_VISIT_ATTRIBUTE = "UserVisit";
@@ -117,7 +118,10 @@ public class ClientContext extends Context {
 
     private static String clientAclTimeStamp;
 
-    private static final Map<String, Object> attributes = new HashMap<String, Object>();
+    private static final Map<String, Object> attributes = new HashMap<>();
+
+    // The same idea as in Server Visit.
+    private static final Map<String, Object> transientAttributes = new HashMap<>();
 
     private static ClientSystemInfo clientSystemInfo;
 
@@ -237,6 +241,10 @@ public class ClientContext extends Context {
         return sessionToken;
     }
 
+    public Map<String, Object> getVisitTransientAttributes() {
+        return transientAttributes;
+    }
+
     public static Object getAttribute(String name) {
         return attributes.get(name);
     }
@@ -320,6 +328,7 @@ public class ClientContext extends Context {
             }
             log.info("Authenticated {}", userVisit);
             attributes.clear();
+            transientAttributes.clear();
             ClientSecurityController.instance().authorize(authenticationResponse.getBehaviors(), authenticationResponse.getPermissions());
             ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
             if (ClientSecurityController.check(CoreBehavior.DEVELOPER)) {
@@ -341,6 +350,7 @@ public class ClientContext extends Context {
         log.error("terminateSession");
         userVisit = null;
         attributes.clear();
+        transientAttributes.clear();
         RPCManager.setSessionToken(null, null);
         RPCManager.setUserVisitHashCode(null);
         if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {

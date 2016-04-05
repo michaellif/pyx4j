@@ -20,6 +20,7 @@
 package com.pyx4j.server.contexts;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,6 +155,12 @@ public class ServerContext extends Context {
         } else {
             return s.getId();
         }
+    }
+
+    @Override
+    public Map<String, Object> getVisitTransientAttributes() {
+        // TODO Auto-generated method stub
+        return getVisit().getTransientAttributes();
     }
 
     public static Object getSessionAttribute(String name) {

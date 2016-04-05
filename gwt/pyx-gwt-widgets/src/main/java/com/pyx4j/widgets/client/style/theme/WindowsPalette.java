@@ -20,9 +20,13 @@
 package com.pyx4j.widgets.client.style.theme;
 
 import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class WindowsPalette extends Palette {
 
     public WindowsPalette() {
+        putThemeColor(ThemeColor.object1, "#318FB2");
+        putThemeColor(ThemeColor.object2, "B26C1F");
+        putThemeColor(ThemeColor.foreground, "#666666");
     }
 }

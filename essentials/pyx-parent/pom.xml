@@ -147,12 +147,12 @@
         <gaeVersion.kindleit.deploy>1.8.8</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
 
-        <cxf.version>3.1.4</cxf.version>
-        <jackson.version>2.5.4</jackson.version>
+        <cxf.version>3.1.6</cxf.version>
+        <jackson.version>2.7.3</jackson.version>
 
         <jettyVersion>9.3.7.v20160115</jettyVersion>
 
-        <slf4jVersion>1.7.16</slf4jVersion>
+        <slf4jVersion>1.7.20</slf4jVersion>
 
         <jasperreportsVersion>6.1.1</jasperreportsVersion>
         <dynamicreportsVersion>4.0.1</dynamicreportsVersion>
@@ -315,7 +315,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.1.5</version>
+                <version>1.1.7</version>
             </dependency>
 
             <!-- MemoryLeakPrevention remove META-INF/services on build server -->
@@ -328,7 +328,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>9.4-1201-jdbc41-dls</version>
+                <version>9.4.1208</version>
             </dependency>
 
             <dependency>
@@ -646,6 +646,9 @@
                 <groupId>org.thymeleaf</groupId>
                 <artifactId>thymeleaf</artifactId>
                 <version>3.0.0.BETA02</version>
+                <exclusions>
+                    <exclusion><groupId>javassist</groupId><artifactId>javassist</artifactId></exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>

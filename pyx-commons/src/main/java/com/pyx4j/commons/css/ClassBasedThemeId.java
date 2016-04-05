@@ -19,6 +19,8 @@
  */
 package com.pyx4j.commons.css;
 
+import com.pyx4j.commons.EqualsHelper;
+
 public class ClassBasedThemeId implements ThemeId {
 
     private final Class<? extends Theme> clazz;
@@ -30,6 +32,25 @@ public class ClassBasedThemeId implements ThemeId {
     @Override
     public String getKey() {
         return clazz.getName();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getKey() == null) ? 0 : getKey().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ClassBasedThemeId)) {
+            return false;
+        } else {
+            ClassBasedThemeId other = (ClassBasedThemeId) obj;
+            return EqualsHelper.equals(this.getKey(), other.getKey());
+        }
+
     }
 
 }

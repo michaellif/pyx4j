@@ -52,11 +52,40 @@ public abstract class IServiceBase implements IService {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected final void execute(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature, AsyncCallback<? extends Serializable> callback,
-            Serializable... args) {
+    protected final void executeWithExecutionInfo(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature,
+            AsyncCallback<? extends Serializable> callback, Serializable... args) {
         log.trace("RPC CALL {} #{}", getServiceClassId() + "." + serviceMethodId, ++rpcCallCount);
         RPCManager.execute(info, (Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class,
                 new IServiceRequest(getServiceClassId(), serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
+    }
+
+    protected final void executeCacheable(int timeoutMin, ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature,
+            AsyncCallback<? extends Serializable> callback, Serializable... args) {
+
+        @SuppressWarnings("unchecked")
+        final AsyncCallback<Serializable> callbackUntyped = (AsyncCallback<Serializable>) callback;
+
+        // TODO use MultiKey and use args defined in ServiceCacheKey
+        Object key = this.getClass();
+        if (ClientCache.containsKey(key)) {
+            Serializable value = ClientCache.get(key);
+            callbackUntyped.onSuccess(value);
+        } else {
+            AsyncCallback<Serializable> cacher = new AsyncCallback<Serializable>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    callback.onFailure(caught);
+                }
+
+                @Override
+                public void onSuccess(Serializable result) {
+                    ClientCache.put(key, result, timeoutMin);
+                    callbackUntyped.onSuccess(result);
+                }
+            };
+            executeWithExecutionInfo(info, serviceMethodId, serviceMethodSignature, cacher, args);
+        }
     }
 
     public abstract String getServiceClassId();

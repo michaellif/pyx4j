@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client;
 import java.util.List;
 
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -33,11 +34,16 @@ import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
+import com.pyx4j.widgets.client.event.shared.SecureConcernStateChangeEvent;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Button extends ButtonBase {
 
+    private ContextMenuHolder menuHolder;
+
     private ButtonMenuBar menu;
+
+    private final Label buttonMenuIndicator;
 
     private ImageResource imageResource;
 
@@ -86,17 +92,19 @@ public class Button extends ButtonBase {
         super(null, text, command, permission);
         setStylePrimaryName(getElement(), WidgetsTheme.StyleName.Button.name());
         getTextLabel().setStyleName(WidgetsTheme.StyleName.ButtonText.name());
+
+        buttonMenuIndicator = new Label("\u25bc");
+        buttonMenuIndicator.setStyleName(WidgetsTheme.StyleName.ButtonText.name());
+        buttonMenuIndicator.addStyleName(WidgetsTheme.StyleName.ButtonMenuIndicator.name());
+        buttonMenuIndicator.setVisible(false);
+        getImageHolder().add(buttonMenuIndicator);
+
     }
 
     @Override
     protected final void execute(HumanInputInfo humanInputInfo) {
         if (menu != null) {
-            if (menu.getMenuPopup().isShowing()) {
-                menu.getMenuPopup().hide();
-            } else if (isEnabled()) {
-                menu.getMenuPopup().showRelativeTo(Button.this);
-                menu.getElement().getStyle().setProperty("minWidth", getOffsetWidth() + "px");
-            }
+            menuHolder.togleMenu();
         } else {
             super.execute(humanInputInfo);
         }
@@ -119,10 +127,24 @@ public class Button extends ButtonBase {
     }
 
     public void setMenu(ButtonMenuBar menu) {
+        if (menuHolder == null && menu != null) {
+            menuHolder = new ContextMenuHolder();
+            getImageHolder().add(menuHolder);
+        }
+        if (menuHolder != null) {
+            menuHolder.setMenu(menu);
+        }
         this.menu = menu;
-        String label = getTextLabel().getText();
-        //this will call local setTextLabel and reset the label text if the menu is not null
-        setTextLabel(label);
+
+        if (menu != null) {
+            setVisibleImpl();
+            menu.addSecureConcernStateChangeHandler(new SecureConcernStateChangeEvent.Handler() {
+                @Override
+                public void onSecureConcernStateChanged(SecureConcernStateChangeEvent event) {
+                    setVisibleImpl();
+                }
+            });
+        }
     }
 
     public ButtonMenuBar getMenu() {
@@ -137,6 +159,14 @@ public class Button extends ButtonBase {
         }
     }
 
+    @Override
+    protected void setVisibleImpl() {
+        if (buttonMenuIndicator != null) {
+            buttonMenuIndicator.setVisible(this.menu != null && !this.menu.isMenuEmpty());
+        }
+        setVisibleUIObject(this.visible.getDecision() && (getCommand() != null || (menu != null && !this.menu.isMenuEmpty())));
+    }
+
     @Deprecated
     public ButtonMenuBar createMenu() {
         ButtonMenuBar menu = new ButtonMenuBar();
@@ -144,8 +174,6 @@ public class Button extends ButtonBase {
     }
 
     public static class ButtonMenuBar extends MenuBar implements HasSecureConcern {
-
-        private final DropDownPanel popup;
 
         private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
@@ -155,8 +183,10 @@ public class Button extends ButtonBase {
             super(true);
             setAutoOpen(true);
             setAnimationEnabled(true);
-            popup = new DropDownPanel();
-            popup.setWidget(this);
+        }
+
+        public HandlerRegistration addSecureConcernStateChangeHandler(SecureConcernStateChangeEvent.Handler handler) {
+            return addHandler(handler, SecureConcernStateChangeEvent.getType());
         }
 
         @Override
@@ -167,7 +197,6 @@ public class Button extends ButtonBase {
 
                     @Override
                     public void execute() {
-                        popup.hide();
                         if (origCommand instanceof HumanInputCommand) {
                             ((HumanInputCommand) origCommand).execute(humanInputInfo);
                         } else {
@@ -180,7 +209,11 @@ public class Button extends ButtonBase {
             if (item instanceof HasSecureConcern) {
                 secureConcerns.addSecureConcern((HasSecureConcern) item);
             }
-            return super.insertItem(item, beforeIndex);
+            try {
+                return super.insertItem(item, beforeIndex);
+            } finally {
+                fireEvent(new SecureConcernStateChangeEvent());
+            }
         }
 
         public SecureMenuItem addItem(String text, ScheduledCommand cmd, Permission... permissions) {
@@ -227,19 +260,19 @@ public class Button extends ButtonBase {
             return super.getItems();
         }
 
-        public DropDownPanel getMenuPopup() {
-            return popup;
-        }
-
         @Override
         public void clearItems() {
             super.clearItems();
             secureConcerns.clear();
+            fireEvent(new SecureConcernStateChangeEvent());
         }
 
         @Override
         public void setSecurityContext(AccessControlContext context) {
             secureConcerns.setSecurityContext(context);
+
+            // TODO Fire when state actually changes.
+            fireEvent(new SecureConcernStateChangeEvent());
         }
     }
 
@@ -281,14 +314,4 @@ public class Button extends ButtonBase {
 
     }
 
-    @Override
-    public void setTextLabel(String label) {
-        if (menu != null) {
-            Label downArrow = new Label("\u25bc");
-            downArrow.setStyleName(WidgetsTheme.StyleName.DownArrow.name());
-            super.setTextLabel(label + downArrow);
-        } else {
-            super.setTextLabel(label);
-        }
-    }
 }

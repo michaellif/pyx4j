@@ -129,7 +129,7 @@ public class PersistenceContext {
         this.transactionType = transactionType;
         if (PersistenceTrace.traceOpenSession) {
             this.contextOpenFrom = Trace.getStackTrace(new Throwable());
-        } else if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+        } else if (ServerSideConfiguration.isStartedUnderJvmDebugMode() || ServerSideConfiguration.isStartedUnderUnitTest()) {
             this.contextOpenFrom = PersistenceTrace.getCallOrigin();
         } else {
             this.contextOpenFrom = "n/a";
@@ -475,7 +475,7 @@ public class PersistenceContext {
             if (PersistenceTrace.traceTransaction) {
                 log.info("{} terminate", txId());
             }
-            throw new Error("Transaction was not ended");
+            throw new Error("Transaction open from " + getContextOpenFrom() + " was not ended");
         }
         timeNow = null;
     }

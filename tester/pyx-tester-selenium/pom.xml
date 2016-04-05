@@ -113,7 +113,7 @@
         </profile>
 
         <profile>
-            <id>selenium</id>
+            <id>selenium-pyx</id>
             <build>
                 <plugins>
                     <plugin>

@@ -1,13 +1,13 @@
 package com.pyx4j.widgets.client.richtext;
 
 import com.pyx4j.commons.css.AtRule;
+import com.pyx4j.commons.css.AtRule.AtKeyword;
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.commons.css.AtRule.AtKeyword;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class RichTextTheme extends Theme {
@@ -15,7 +15,11 @@ public class RichTextTheme extends Theme {
     public static enum StyleName implements IStyleName {
         ReachTextEditor, ReachTextArea, RteToolbar, RteToolbarTop, RteToolbarBottom, RteToolbarButton, RteToolbarButtonNoToggle, RteCheckBox,
 
-        ReachTextViewer
+        // This defined in RichTextThemeDisplay
+        ReachTextDisplay,
+
+        ReachTextViewer;
+
     }
 
     public RichTextTheme() {
@@ -85,7 +89,6 @@ public class RichTextTheme extends Theme {
         style.addProperty("overflow", "auto");
         style.addProperty("height", "100%");
         style.addProperty("max-height", "15em");
-        style.addProperty("line-height", "2.6em");
         style.addProperty("background", ThemeColor.foreground, 0.02);
         style.addProperty("padding", "2px");
         addStyle(style);
