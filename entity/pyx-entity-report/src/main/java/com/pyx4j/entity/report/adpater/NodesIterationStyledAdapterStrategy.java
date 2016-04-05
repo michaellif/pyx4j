@@ -26,6 +26,7 @@ import java.util.Stack;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -75,7 +76,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         StringBuffer converted = new StringBuffer();
 
-        if (node instanceof TextNode) { // || (node instanceof Element && node.childNodes().size() == 0)) {
+        if (node instanceof TextNode) {
             converted.append(
                     JasperReportStyledUtils.createStyledElement(node, JasperReportStyledUtils.toStyledMap(JasperReportStyledUtils.toMap(parentAttribs))));
 
@@ -106,6 +107,8 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             if (node.previousSibling() != null //
                     && (node.previousSibling() instanceof Element) //
                     && ((Element) node.previousSibling()).tagName().equalsIgnoreCase("ul")) {
+                // TODO pop all ul childs recursively
+//                removeFromStackRecursively(node.previousSibling());
                 ulStackIndex.pop();
             }
             // Special treatment for closing <ol> and <li> depth level
@@ -179,9 +182,10 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                 }
                 childNodes.addAll(node.childNodes());
                 break;
+            case "font":
+                nodeAttribs = convertFontAttributeToStyleAttribute(node, nodeAttribs);
             default:
                 childNodes.addAll(node.childNodes());
-
             }
 
             Attributes inheritedAttributes = JasperReportStyledUtils.inheriteAttributes(parentAttribs, nodeAttribs);
@@ -197,6 +201,40 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         return converted.toString();
 
     }
+
+    private Attributes convertFontAttributeToStyleAttribute(Node node, Attributes nodeAttribs) {
+        Attributes styleAttribute = new Attributes();
+        StringBuffer newAttributes = new StringBuffer();
+        for (Attribute attribute : nodeAttribs) {
+            if (attribute.getKey().equalsIgnoreCase("size")) {
+                newAttributes.append(JasperReportStyledUtils.FONT_SIZE);
+                newAttributes.append(":");
+                newAttributes.append(JasperReportStyledUtils.getFontSize(attribute.getValue()));
+                newAttributes.append(";");
+            } else if (attribute.getKey().equalsIgnoreCase("color")) {
+                newAttributes.append(JasperReportStyledUtils.COLOR);
+                newAttributes.append(":");
+                newAttributes.append(attribute.getValue());
+                newAttributes.append(";");
+            }
+        }
+
+        styleAttribute.put("style", newAttributes.toString());
+
+        return styleAttribute;
+    }
+
+//    private void removeFromStackRecursively(Node previousSibling) {
+//        List<Node> children = previousSibling.childNodes();
+//        for (Node child : children) {
+//            if (child instanceof Element && ((Element) child).tagName().equalsIgnoreCase("ul")) {
+//                ulStackIndex.pop();
+//            }
+//            if (child.childNodes().size() > 0) {
+//                removeFromStackRecursively(child);
+//            }
+//        }
+//    }
 
     private String getTabSpaces() {
         String spacesStr = "";

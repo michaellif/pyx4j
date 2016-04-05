@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Node;
@@ -177,6 +178,7 @@ public class JasperReportStyledUtils {
                     Matcher matcher = Pattern.compile("(\\d+\\.?\\d*)(.*)").matcher(valueAttribute);
                     if (matcher.find()) {
                         resultMap.put("size", String.valueOf(matcher.group(1)));
+//                        resultMap.put("size", getFontSize(matcher.group(1)));
                     }
 
                 }
@@ -205,6 +207,19 @@ public class JasperReportStyledUtils {
             }
         }
 
+    }
+
+    public static String getFontSize(String fontSize) {
+        double pt;
+        if (NumberUtils.isNumber(fontSize)) {
+            Double value = new Double(fontSize);
+            int index = (int) Math.round(value);
+            pt = FontSizeKeyword.getValueByNumber(index);
+        } else {
+            pt = FontSizeKeyword.getValueByName(fontSize);
+        }
+
+        return String.valueOf(pt);
     }
 
     public static Attributes getTagImplicitAttributes(Tag tag) {
