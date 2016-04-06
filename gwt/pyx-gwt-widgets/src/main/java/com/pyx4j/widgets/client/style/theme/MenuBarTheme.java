@@ -53,6 +53,12 @@ public class MenuBarTheme extends Theme {
         style.addProperty("background", "transparent");
         addStyle(style);
 
+        style = new Style(".gwt-MenuItem-disabled");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("background", "transparent");
+        addStyle(style);
+
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
