@@ -63,7 +63,7 @@ public class JasperReportStyledUtils {
     public static String createStyledElement(Node node, Map<String, String> currentAttribs) {
         StringBuffer buffer = new StringBuffer();
         buffer.append(createOpenStyleTag(node, currentAttribs));
-        buffer.append(((TextNode) node).getWholeText());
+        buffer.append(((TextNode) node).getWholeText()); // TODO Test with only getting text to not get breaklines
         buffer.append(createCloseStyleTag());
         return buffer.toString();
     }

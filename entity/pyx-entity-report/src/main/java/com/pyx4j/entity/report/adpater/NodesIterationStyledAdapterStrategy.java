@@ -42,6 +42,10 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     Stack<Integer> ulStackIndex;
 
+    boolean isSup = false;
+
+    boolean isSub = false;
+
     private StringBuffer styledResult = new StringBuffer();
 
     @Override
@@ -76,9 +80,50 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         StringBuffer converted = new StringBuffer();
 
+        // ********************************************************
+        // Special treatment for closing <ol> and <li> depth level
+        if (node.previousSibling() != null //
+                && (node.previousSibling() instanceof Element) //
+                && ((Element) node.previousSibling()).tagName().equalsIgnoreCase("ol")) {
+            olStackIndex.pop();
+        }
+
+        if (node.previousSibling() != null //
+                && (node.previousSibling() instanceof Element) //
+                && ((Element) node.previousSibling()).tagName().equalsIgnoreCase("ul")) {
+            // TODO pop all ul childs recursively
+//            removeFromStackRecursively(node.previousSibling());
+            ulStackIndex.pop();
+        }
+
+        // Special treatment for closing <ol> and <li> depth level
+        // *********************************************************
+
+        // ********************************************************
+        // Special treatment for closing <sup> and <sub>
+        if (node.previousSibling() != null && (node.previousSibling() instanceof Element)) {
+            if (((Element) node.previousSibling()).tagName().equalsIgnoreCase("sup")) {
+                isSup = false;
+            } else if (((Element) node.previousSibling()).tagName().equalsIgnoreCase("sub")) {
+                isSub = false;
+            }
+        }
+        // ********************************************************
+        // Special treatment for closing <sup>
+
         if (node instanceof TextNode) {
+            TextNode textNode = (TextNode) node;
+            if (isSup) {
+                Element el = new Element(Tag.valueOf("sup"), "");
+                el.text(textNode.text());
+                textNode.text(el.outerHtml());
+            } else if (isSub) {
+                Element el = new Element(Tag.valueOf("sub"), "");
+                el.text(textNode.text());
+                textNode.text(el.outerHtml());
+            }
             converted.append(
-                    JasperReportStyledUtils.createStyledElement(node, JasperReportStyledUtils.toStyledMap(JasperReportStyledUtils.toMap(parentAttribs))));
+                    JasperReportStyledUtils.createStyledElement(textNode, JasperReportStyledUtils.toStyledMap(JasperReportStyledUtils.toMap(parentAttribs))));
 
         } else if ((node instanceof Element && node.childNodes().size() == 0)) {
             Tag htmlTag = ((Element) node).tag();
@@ -95,24 +140,6 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         } else if (node instanceof Element) {
             Node parent = node.parent();
             Tag htmlTag = ((Element) node).tag();
-
-            // ********************************************************
-            // Special treatment for closing <ol> and <li> depth level
-            if (node.previousSibling() != null //
-                    && (node.previousSibling() instanceof Element) //
-                    && ((Element) node.previousSibling()).tagName().equalsIgnoreCase("ol")) {
-                olStackIndex.pop();
-            }
-
-            if (node.previousSibling() != null //
-                    && (node.previousSibling() instanceof Element) //
-                    && ((Element) node.previousSibling()).tagName().equalsIgnoreCase("ul")) {
-                // TODO pop all ul childs recursively
-//                removeFromStackRecursively(node.previousSibling());
-                ulStackIndex.pop();
-            }
-            // Special treatment for closing <ol> and <li> depth level
-            // *********************************************************
 
             List<Node> childNodes = new ArrayList<Node>();
 
@@ -184,6 +211,16 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                 break;
             case "font":
                 nodeAttribs = convertFontAttributeToStyleAttribute(node, nodeAttribs);
+                childNodes.addAll(node.childNodes());
+                break;
+            case "sup":
+                isSup = true;
+                childNodes.addAll(node.childNodes());
+                break;
+            case "sub":
+                isSub = true;
+                childNodes.addAll(node.childNodes());
+                break;
             default:
                 childNodes.addAll(node.childNodes());
             }
