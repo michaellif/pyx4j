@@ -3,5 +3,5 @@
 <module>
     <inherits name='com.pyx4j.SVG'/>
     <inherits name='com.pyx4j.forms.Forms'/>
-	<source path="client.ui.svg" />
+	<source path="client/ui/svg" />
 </module>
