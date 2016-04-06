@@ -103,6 +103,10 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
     }
 
+    public void addStep(WizardStep step) {
+        wizardPanel.addStep(step);
+    }
+
     public WizardStep addStep(IsWidget content, String tabTitle) {
         WizardStep step = new WizardStep(content, tabTitle);
         addStep(step);
@@ -117,10 +121,6 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
     public void setLastStepButtonCaption(String buttonCaption) {
         getAllSteps().get(getAllSteps().size() - 1).setNextButtonCaption(buttonCaption);
-    }
-
-    public void addStep(WizardStep step) {
-        wizardPanel.addStep(step);
     }
 
     public WizardStep getSelectedStep() {
