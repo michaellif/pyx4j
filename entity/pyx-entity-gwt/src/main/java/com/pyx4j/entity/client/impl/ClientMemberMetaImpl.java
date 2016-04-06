@@ -58,6 +58,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private EditorType editorType;
 
+    private String editorDescriptor;
+
     private Set<Class<?>> annotations;
 
     /**
@@ -286,6 +288,15 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     public void setEditorType(EditorType editorType) {
         this.editorType = editorType;
+    }
+
+    @Override
+    public String getEditorDescriptor() {
+        return editorDescriptor;
+    }
+
+    public void setEditorDescriptor(String editorDescriptor) {
+        this.editorDescriptor = editorDescriptor;
     }
 
 }

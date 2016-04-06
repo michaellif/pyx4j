@@ -17,14 +17,16 @@
  * Created on Aug 23, 2012
  * @author michaellif
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.forms.client.ui.svg;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ColorUtil;
-import com.pyx4j.forms.client.ui.NColorPicker.ColorButton;
+import com.pyx4j.forms.client.ui.INativeFocusField;
+import com.pyx4j.forms.client.ui.NFocusField;
+import com.pyx4j.forms.client.ui.svg.NColorPicker.ColorButton;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;

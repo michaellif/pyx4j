@@ -173,6 +173,8 @@ public interface MemberMeta {
 
     public EditorType getEditorType();
 
+    public String getEditorDescriptor();
+
     public List<Validator> getValidators();
 
 }

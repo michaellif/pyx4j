@@ -467,6 +467,16 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public String getEditorDescriptor() {
+        Editor editorAnnotation = method.getAnnotation(Editor.class);
+        if (editorAnnotation == null) {
+            return null;
+        } else {
+            return editorAnnotation.descriptor();
+        }
+    }
+
+    @Override
     public List<Validator> getValidators() {
         // TODO Auto-generated method stub
         return null;

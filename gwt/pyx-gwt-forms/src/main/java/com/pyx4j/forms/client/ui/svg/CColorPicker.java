@@ -17,7 +17,9 @@
  * Created on Jun 11, 2010
  * @author Misha
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.forms.client.ui.svg;
+
+import com.pyx4j.forms.client.ui.CFocusComponent;
 
 public class CColorPicker extends CFocusComponent<Integer, NColorPicker> {
 

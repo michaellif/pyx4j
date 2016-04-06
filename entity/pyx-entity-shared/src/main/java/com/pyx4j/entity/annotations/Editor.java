@@ -46,16 +46,22 @@ public @interface Editor {
 
         radiogroup, entityselector,
 
-        @Deprecated
-        color,
+        @Deprecated color,
 
-        @Deprecated
-        hue,
+        @Deprecated hue,
+
+        // Form should provide the  Editor for this component, there are no default factory.
+        custom
     }
 
     /**
      * UI Editor type of the member.
      */
     EditorType type();
+
+    /**
+     * Define additional editor descriptor used by component factory to create editor.
+     */
+    String descriptor() default "";
 
 }
