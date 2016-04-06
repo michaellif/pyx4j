@@ -30,6 +30,7 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
+import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.parser.Tag;
@@ -119,40 +120,6 @@ public class JasperReportStyledUtils {
             String[] properties = value.split(";");
             for (String property : properties) {
                 String[] values = property.split(":");
-//              System.out.println("Item : " + entry.getKey() + " Count : " + entry.getValue());
-
-//              Object value = attrs.get(TextAttribute.FAMILY);
-//              Object oldValue = parentAttrs.get(TextAttribute.FAMILY);
-                //
-//              if (value != null && !value.equals(oldValue)) {
-//                  sbuffer.append(SPACE);
-//                  sbuffer.append(ATTRIBUTE_fontName);
-//                  sbuffer.append(EQUAL_QUOTE);
-//                  sbuffer.append(value);
-//                  sbuffer.append(QUOTE);
-//              }
-
-//              Object value = attr.getKey().equalsIgnoreCase(FONT_WEIGHT);
-//              Object oldValue = parentAttrs.get(TextAttribute.WEIGHT);
-
-//              if (value != null && !value.equals(oldValue)) {
-//                  sbuffer.append(SPACE);
-//                  sbuffer.append(ATTRIBUTE_isBold);
-//                  sbuffer.append(EQUAL_QUOTE);
-//                  sbuffer.append(value.equals(TextAttribute.WEIGHT_BOLD));
-//                  sbuffer.append(QUOTE);
-//              }
-                //
-//              value = attrs.get(TextAttribute.POSTURE);
-//              oldValue = parentAttrs.get(TextAttribute.POSTURE);
-                //
-//              if (value != null && !value.equals(oldValue)) {
-//                  sbuffer.append(SPACE);
-//                  sbuffer.append(ATTRIBUTE_isItalic);
-//                  sbuffer.append(EQUAL_QUOTE);
-//                  sbuffer.append(value.equals(TextAttribute.POSTURE_OBLIQUE));
-//                  sbuffer.append(QUOTE);
-//              }
 
                 String keyAttribute = values[0].trim();
                 String valueAttribute = values[1].trim();
@@ -188,19 +155,7 @@ public class JasperReportStyledUtils {
                     } else {
                         resultMap.put("size", getFontSize(valueAttribute));
                     }
-
                 }
-
-//              value = attrs.get(TextAttribute.STRIKETHROUGH);
-//              oldValue = parentAttrs.get(TextAttribute.STRIKETHROUGH);
-                //
-//              if ((value == null && oldValue != null) || (value != null && !value.equals(oldValue))) {
-//                  sbuffer.append(SPACE);
-//                  sbuffer.append(ATTRIBUTE_isStrikeThrough);
-//                  sbuffer.append(EQUAL_QUOTE);
-//                  sbuffer.append(value != null);
-//                  sbuffer.append(QUOTE);
-//              }
 
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.COLOR)) {
                     Color color = JRColorUtil.getColor(valueAttribute, Color.black);
@@ -216,6 +171,24 @@ public class JasperReportStyledUtils {
             }
         }
 
+    }
+
+    public static boolean isBreakLiner(Node node) {
+        if (node instanceof TextNode) {
+            return false;
+        }
+
+        Element element = (Element) node;
+
+        if (element == null) {
+            return false;
+        }
+
+        if (EnumUtils.isValidEnum(BreakLiners.class, element.tagName()) && element.text().length() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static String getFontSize(String fontSize) {

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
@@ -34,13 +33,11 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.parser.Tag;
 
-import com.pyx4j.entity.report.adpater.JasperReportStyledUtils.BreakLiners;
-
 public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAdapterStrategy {
 
-    Stack<Integer> olStackIndex;
+    private Stack<Integer> olStackIndex;
 
-    Stack<Integer> ulStackIndex;
+    private int ulCounter = 0;
 
     boolean isSup = false;
 
@@ -82,26 +79,17 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         // ********************************************************
         // Special treatment for closing <ol> and <li> depth level
-        if (node.previousSibling() != null //
-                && (node.previousSibling() instanceof Element) //
-                && ((Element) node.previousSibling()).tagName().equalsIgnoreCase("ol")) {
-            olStackIndex.pop();
-        }
 
-        if (node.previousSibling() != null //
-                && (node.previousSibling() instanceof Element) //
-                && ((Element) node.previousSibling()).tagName().equalsIgnoreCase("ul")) {
-            // TODO pop all ul childs recursively
-//            removeFromStackRecursively(node.previousSibling());
-            ulStackIndex.pop();
-        }
+        removeFromStackRecursively(node.previousSibling());
 
         // Special treatment for closing <ol> and <li> depth level
         // *********************************************************
 
         // ********************************************************
         // Special treatment for closing <sup> and <sub>
-        if (node.previousSibling() != null && (node.previousSibling() instanceof Element)) {
+        if (node.previousSibling() != null && (node.previousSibling() instanceof Element))
+
+        {
             if (((Element) node.previousSibling()).tagName().equalsIgnoreCase("sup")) {
                 isSup = false;
             } else if (((Element) node.previousSibling()).tagName().equalsIgnoreCase("sub")) {
@@ -109,9 +97,11 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             }
         }
         // ********************************************************
-        // Special treatment for closing <sup>
+        // Special treatment for closing <sup> and <sub>
 
-        if (node instanceof TextNode) {
+        if (node instanceof TextNode)
+
+        {
             TextNode textNode = (TextNode) node;
             if (isSup) {
                 Element el = new Element(Tag.valueOf("sup"), "");
@@ -125,19 +115,21 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             converted.append(
                     JasperReportStyledUtils.createStyledElement(textNode, JasperReportStyledUtils.toStyledMap(JasperReportStyledUtils.toMap(parentAttribs))));
 
-        } else if ((node instanceof Element && node.childNodes().size() == 0)) {
+        } else if ((node instanceof Element && node.childNodes().size() == 0))
+
+        {
             Tag htmlTag = ((Element) node).tag();
 
             // Deal with br
             switch (htmlTag.getName()) {
-//            case "p":
-//            case "div":
             case "br":
                 converted.append(JasperReportStyledUtils.createStyledElement(new TextNode("\n", ""), null));
                 break;
             }
 
-        } else if (node instanceof Element) {
+        } else if (node instanceof Element)
+
+        {
             Node parent = node.parent();
             Tag htmlTag = ((Element) node).tag();
 
@@ -147,12 +139,16 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             switch (htmlTag.getName()) {
             case "p":
             case "div":
-                if (!hasPreviousBreakLiner(node)) {
+                if (((Element) node).text().length() == 0) {
                     childNodes.add(new TextNode("\n", ""));
-                }
-                childNodes.addAll(node.childNodes());
-                if (!hasPosteriorBreakLiner(node)) {
-                    childNodes.add(new TextNode("\n", ""));
+                } else {
+                    if (!hasPreviousBreakLiner(node)) {
+                        childNodes.add(new TextNode("\n", ""));
+                    }
+                    childNodes.addAll(node.childNodes());
+                    if (!hasPosteriorBreakLiner(node)) {
+                        childNodes.add(new TextNode("\n", ""));
+                    }
                 }
                 break;
             case "ol":
@@ -175,16 +171,12 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                 childNodes.addAll(node.childNodes());
                 break;
             case "ul":
-                if (ulStackIndex == null) {
-                    ulStackIndex = new Stack<Integer>();
-                }
-
                 if (parent != null //
                         && (((Element) parent).tagName().equalsIgnoreCase("body") && node.siblingIndex() > 0)) {
-                    ulStackIndex.removeAllElements();
+                    ulCounter = 0;
                 }
 
-                ulStackIndex.push(new Integer(1));
+                ulCounter++;
 
                 if (parent != null //
                         && (!((Element) parent).tagName().equalsIgnoreCase("body") || node.siblingIndex() > 0) //
@@ -239,6 +231,31 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     }
 
+    private void removeFromStackRecursively(Node node) {
+        if (!(node instanceof Element)) {
+            return;
+        }
+
+        if (((Element) node).tagName().equalsIgnoreCase("ul")) {
+            if (ulCounter > 0) {
+                ulCounter--;
+            }
+        }
+
+        if (((Element) node).tagName().equalsIgnoreCase("ol")) {
+            if (!olStackIndex.isEmpty()) {
+                olStackIndex.pop();
+            }
+        }
+
+        if (node.childNodes().size() > 0) {
+            for (Node child : node.childNodes()) {
+                removeFromStackRecursively(child);
+            }
+        }
+
+    }
+
     private Attributes convertFontAttributeToStyleAttribute(Node node, Attributes nodeAttribs) {
         Attributes styleAttribute = new Attributes();
         StringBuffer newAttributes = new StringBuffer();
@@ -261,21 +278,9 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         return styleAttribute;
     }
 
-//    private void removeFromStackRecursively(Node previousSibling) {
-//        List<Node> children = previousSibling.childNodes();
-//        for (Node child : children) {
-//            if (child instanceof Element && ((Element) child).tagName().equalsIgnoreCase("ul")) {
-//                ulStackIndex.pop();
-//            }
-//            if (child.childNodes().size() > 0) {
-//                removeFromStackRecursively(child);
-//            }
-//        }
-//    }
-
     private String getTabSpaces() {
         String spacesStr = "";
-        int nSpaces = (ulStackIndex != null ? ulStackIndex.size() : 0) + (olStackIndex != null ? olStackIndex.size() : 0);
+        int nSpaces = ulCounter + (olStackIndex != null ? olStackIndex.size() : 0);
         for (int i = 1; i <= nSpaces; i++) {
             spacesStr += "    "; // Default tab space 4 chars
         }
@@ -291,14 +296,13 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         }
 
         // Previous node is tag no break-liner
-        if (previous != null && ((previous instanceof Element) && !EnumUtils.isValidEnum(BreakLiners.class, ((Element) previous).tagName()))) {
+        if (previous != null && ((previous instanceof Element) && !JasperReportStyledUtils.isBreakLiner(previous))) {
             return false;
         }
 
         // No siblings, and parent is no break-liner
         Node parent = node.parent();
-        if (parent != null && !((Element) parent).tagName().equalsIgnoreCase("body")
-                && !EnumUtils.isValidEnum(BreakLiners.class, ((Element) parent).tagName())) {
+        if (parent != null && !((Element) parent).tagName().equalsIgnoreCase("body") && !JasperReportStyledUtils.isBreakLiner(parent)) {
             return false;
         }
 
@@ -315,7 +319,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         }
 
         // Node after is tag no break-liner
-        if (after != null && ((after instanceof Element) && !EnumUtils.isValidEnum(BreakLiners.class, ((Element) after).tagName()))) {
+        if (after != null && ((after instanceof Element) && !JasperReportStyledUtils.isBreakLiner(after))) {
             return false;
         }
 
@@ -330,13 +334,14 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             }
 
             // First child node is tag no break-liner
-            if (firstChild != null && ((firstChild instanceof Element) && !EnumUtils.isValidEnum(BreakLiners.class, ((Element) firstChild).tagName()))) {
+            if (firstChild != null && ((firstChild instanceof Element) && !JasperReportStyledUtils.isBreakLiner(firstChild))) {
                 return false;
             }
 
         }
 
         return true;
+
     }
 
 }

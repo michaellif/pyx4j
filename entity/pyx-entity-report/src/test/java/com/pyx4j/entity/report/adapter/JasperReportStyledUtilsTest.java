@@ -50,10 +50,6 @@ public class JasperReportStyledUtilsTest {
 
         Document htmlDocument = Jsoup.parse(htmlText);
         List<Node> childNodes = htmlDocument.select("body").get(0).childNodes();
-        int i = 0;
-        for (Node node : childNodes) {
-            System.out.println("Node " + i++ + node);
-        }
 
         // First scenario: One inherited attribute present in child
         Attributes inhiretedAttributes = childNodes.get(2).attributes();

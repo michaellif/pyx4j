@@ -118,7 +118,7 @@ public class JasperReportHTMLAdapter {
         // Base On http://jasperreports.sourceforge.net/sample.reference/styledtext/
         // TODO This may affect presentation in browser; so may be moved to new function or approach can be changed...
         Whitelist whitelist = Whitelist.none()//
-                .addTags("b", "i", "u", "font", "sup", "sub", "li", "br") //
+                .addTags("b", "i", "u", "font", "sup", "sub", "li", "br", "ol", "ul") //
                 .addAttributes("font", "size", "color") //
                 .addAttributes("span", "style") //
                 .addAttributes("p", "style") //
