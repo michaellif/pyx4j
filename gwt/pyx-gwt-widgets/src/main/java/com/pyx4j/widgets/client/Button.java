@@ -235,6 +235,7 @@ public class Button extends ButtonBase {
                 for (MenuItem item : getItems()) {
                     if (item.isVisible()) {
                         empty = false;
+                        break;
                     }
                 }
             }
