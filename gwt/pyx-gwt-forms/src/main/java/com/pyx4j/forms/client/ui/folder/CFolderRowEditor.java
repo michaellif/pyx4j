@@ -25,6 +25,7 @@ import static com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme.StyleNam
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -45,6 +46,8 @@ public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
 
     protected final List<FolderColumnDescriptor> columns;
 
+    private VerticalAlignmentConstant columnsVerticalAlignment = HorizontalPanel.ALIGN_TOP;
+
     public CFolderRowEditor(Class<E> clazz, List<FolderColumnDescriptor> columns) {
         this(clazz, columns, null);
     }
@@ -54,9 +57,15 @@ public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
         this.columns = columns;
     }
 
+    // Can't be called after Content is created e.g. init() was called
+    public void setColumnsVerticalAlignment(VerticalAlignmentConstant align) {
+        this.columnsVerticalAlignment = align;
+    }
+
     @Override
     protected IsWidget createContent() {
         HorizontalPanel main = new HorizontalPanel();
+        main.setVerticalAlignment(columnsVerticalAlignment);
         for (FolderColumnDescriptor column : columns) {
             CField<?, ?> component = createCell(column);
             if (column.isReadOnly()) {
