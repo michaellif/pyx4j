@@ -289,6 +289,11 @@ public class Button extends ButtonBase {
             this(text, cmd, new ActionPermission(actionId));
         }
 
+        public SecureMenuItem(String text, ButtonMenuBar subMenu, Permission... permissions) {
+            super(text, subMenu);
+            setPermission(permissions);
+        }
+
         public void setPermission(Permission... permission) {
             visible.setPermission(permission);
             setVisibleImpl();
