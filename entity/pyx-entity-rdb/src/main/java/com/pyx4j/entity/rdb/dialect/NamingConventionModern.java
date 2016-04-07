@@ -150,11 +150,15 @@ public class NamingConventionModern implements NamingConvention {
     }
 
     @Override
-    public String sqlConstraintName(String tableName, String colName) {
+    public String sqlConstraintName(String tableName, String colName, String... suffix) {
         StringBuilder sql = new StringBuilder();
         sql.append(tableName);
         sql.append('_');
         sql.append(colName);
+        for (String s : suffix) {
+            sql.append('_');
+            sql.append(s);
+        }
         sql.append("_ck");
         return sql.toString();
     }

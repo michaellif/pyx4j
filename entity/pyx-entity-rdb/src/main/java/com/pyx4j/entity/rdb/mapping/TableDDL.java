@@ -281,7 +281,7 @@ class TableDDL {
         StringBuilder sql = new StringBuilder();
         sql.append("ALTER TABLE ").append(tableModel.getFullTableName());
         sql.append(" ADD CONSTRAINT ");
-        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, sqlName + "_d"));
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, sqlName, "d"));
         sql.append(" CHECK ");
         sql.append(" (").append(sqlName).append(" IN (");
         boolean first = true;
@@ -304,7 +304,7 @@ class TableDDL {
         StringBuilder sql = new StringBuilder();
         sql.append("ALTER TABLE ").append(tableModel.getFullTableName());
         sql.append(" ADD CONSTRAINT ");
-        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, member.sqlName() + "_e"));
+        sql.append(dialect.getNamingConvention().sqlConstraintName(tableModel.tableName, member.sqlName(), "e"));
         sql.append(" CHECK ");
         sql.append(" (").append(member.sqlName()).append(" IN (");
         boolean first = true;
