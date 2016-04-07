@@ -40,7 +40,7 @@ public class MenuBarTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-MenuItem-selected");
-        style.addGradient(ThemeColor.foreground, 0.15, ThemeColor.foreground, 0.35);
+        style.addGradient(ThemeColor.foreground, 0.17, ThemeColor.foreground, 0.32);
         style.addProperty("color", "#333333");
         style.addProperty("cursor", "pointer");
         addStyle(style);
