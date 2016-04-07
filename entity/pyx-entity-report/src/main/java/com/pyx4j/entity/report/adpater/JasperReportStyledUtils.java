@@ -135,15 +135,23 @@ public class JasperReportStyledUtils {
 
                 // ******************  Strikethrough ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.TEXT_DECORATION)) {
-                    resultMap.put("isStrikeThrough", String.valueOf(valueAttribute.equalsIgnoreCase("line-through")));
+                    resultMap.put("isStrikeThrough", String.valueOf(valueAttribute.equalsIgnoreCase("isStrikeThrough")));
                 }
 
                 // ******************  Italic ***********************
+                if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_STYLE)) {
+                    resultMap.put("isItalic", String.valueOf(valueAttribute.equalsIgnoreCase("italic")));
+                }
+
                 if (keyAttribute.equalsIgnoreCase("isitalic")) {
                     resultMap.put("isItalic", String.valueOf(Boolean.TRUE));
                 }
 
                 // ******************  Underline ***********************
+                if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.TEXT_DECORATION)) {
+                    resultMap.put("isUnderline", String.valueOf(valueAttribute.equalsIgnoreCase("underline")));
+                }
+
                 if (keyAttribute.equalsIgnoreCase("isunderline")) {
                     resultMap.put("isUnderline", String.valueOf(Boolean.TRUE));
                 }
