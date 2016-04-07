@@ -123,8 +123,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     /**
      * This Enhancer executed First, to setup default TO Criteria override what had came from UI
      */
-    public final void addDefaultTOCriteriaEnhancer(DefaultCriteriaEnhancer<TO> valueConvertor) {
-        defaultTOCriteriaEnhancers.add(valueConvertor);
+    public final void addDefaultTOCriteriaEnhancer(DefaultCriteriaEnhancer<TO> defaultCriteriaEnhancer) {
+        defaultTOCriteriaEnhancers.add(defaultCriteriaEnhancer);
     }
 
     public final void addCriteriaValueConverter(IObject<?> toMember, CriteriaValueConverter valueConvertor) {
@@ -138,8 +138,8 @@ public final class EntityQueryCriteriaBinder<BO extends IEntity, TO extends IEnt
     /**
      * This Enhancer executed last, after all TO Criteria converted
      */
-    public final void addDefaultCriteriaEnhancer(DefaultCriteriaEnhancer<BO> valueConvertor) {
-        defaultCriteriaEnhancers.add(valueConvertor);
+    public final void addDefaultCriteriaEnhancer(DefaultCriteriaEnhancer<BO> defaultCriteriaEnhancer) {
+        defaultCriteriaEnhancers.add(defaultCriteriaEnhancer);
     }
 
     public final void addCriteriaEnhancer(IObject<?> toMember, CriteriaEnhancer<BO> criteriaEnhancer) {

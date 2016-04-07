@@ -41,6 +41,7 @@ import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
@@ -535,6 +536,13 @@ public class EntityMetaWriter {
                 writer.print(Editor.class.getName() + "." + Editor.EditorType.class.getSimpleName() + ".");
                 writer.print(method.getAnnotation(Editor.class).type().name());
                 writer.println(");");
+
+                String descriptor = method.getAnnotation(Editor.class).descriptor();
+                if (CommonsStringUtils.isStringSet(descriptor)) {
+                    writer.print("mm.setEditorDescriptor(");
+                    writer.print(escapeSourceString(descriptor));
+                    writer.println(");");
+                }
             }
 
             for (Annotation annotation : method.getAnnotations()) {

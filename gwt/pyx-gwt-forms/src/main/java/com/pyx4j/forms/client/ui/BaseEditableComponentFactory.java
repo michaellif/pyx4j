@@ -131,10 +131,6 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 } else if (mm.getValueClass() == Boolean.class) {
                     return new CBooleanLabel();
                 }
-            case color:
-                return new CColorPicker();
-            case hue:
-                return new CColorPicker(true);
             default:
                 throw new Error("Unknown");
             }
