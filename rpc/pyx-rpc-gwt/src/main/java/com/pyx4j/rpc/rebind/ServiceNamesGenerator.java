@@ -194,7 +194,9 @@ public class ServiceNamesGenerator extends Generator {
 
             GeneratedResource resource = context.commitResource(logger, os);
             // TODO: change to Deploy when CodeServer supports copy of files  (also need to change server)
-            resource.setVisibility(Visibility.Deploy);
+            if (false) {
+                resource.setVisibility(Visibility.Deploy);
+            }
 
         } catch (IOException e) {
             logger.log(TreeLogger.ERROR, null, e);
