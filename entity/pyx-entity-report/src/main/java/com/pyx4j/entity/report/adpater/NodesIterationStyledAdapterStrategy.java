@@ -77,31 +77,13 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         StringBuffer converted = new StringBuffer();
 
-        // ********************************************************
         // Special treatment for closing <ol> and <li> depth level
+        recalculateIndentsAndIndexForLists(node.previousSibling());
 
-        removeFromStackRecursively(node.previousSibling());
-
-        // Special treatment for closing <ol> and <li> depth level
-        // *********************************************************
-
-        // ********************************************************
         // Special treatment for closing <sup> and <sub>
-        if (node.previousSibling() != null && (node.previousSibling() instanceof Element))
+        treatSpecialSupportedTags(node.previousSibling());
 
-        {
-            if (((Element) node.previousSibling()).tagName().equalsIgnoreCase("sup")) {
-                isSup = false;
-            } else if (((Element) node.previousSibling()).tagName().equalsIgnoreCase("sub")) {
-                isSub = false;
-            }
-        }
-        // ********************************************************
-        // Special treatment for closing <sup> and <sub>
-
-        if (node instanceof TextNode)
-
-        {
+        if (node instanceof TextNode) {
             TextNode textNode = (TextNode) node;
             if (isSup) {
                 Element el = new Element(Tag.valueOf("sup"), "");
@@ -231,7 +213,23 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     }
 
-    private void removeFromStackRecursively(Node node) {
+    private void treatSpecialSupportedTags(Node previousSibling) {
+        if (previousSibling != null && (previousSibling instanceof Element)) {
+            if (((Element) previousSibling).tagName().equalsIgnoreCase("sup")) {
+                isSup = false;
+            } else if (((Element) previousSibling).tagName().equalsIgnoreCase("sub")) {
+                isSub = false;
+            }
+
+            if (previousSibling.childNodes().size() > 0) {
+                for (Node node : previousSibling.childNodes()) {
+                    treatSpecialSupportedTags(node);
+                }
+            }
+        }
+    }
+
+    private void recalculateIndentsAndIndexForLists(Node node) {
         if (!(node instanceof Element)) {
             return;
         }
@@ -250,7 +248,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         if (node.childNodes().size() > 0) {
             for (Node child : node.childNodes()) {
-                removeFromStackRecursively(child);
+                recalculateIndentsAndIndexForLists(child);
             }
         }
 
