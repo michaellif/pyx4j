@@ -27,6 +27,8 @@ import org.jsoup.nodes.Node;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.pyx4j.commons.SimpleMessageFormat;
+
 public class TextDecorationTest extends StyledFeaturesBase {
 
     // ********************************** UNDERLINE ********************************
@@ -46,20 +48,20 @@ public class TextDecorationTest extends StyledFeaturesBase {
     @Test
     public void testTextDecorationCases() throws IOException {
 
-        testSimpleUnderline(SIMPLE_UNDERLINE_TAG, true, "isUnderline");
+        testSimple(SIMPLE_UNDERLINE_TAG, "isUnderline");
 
-        testSimpleUnderline(SIMPLE_UNDERLINE_CSS, false, "isUnderline");
+        testSimple(SIMPLE_UNDERLINE_CSS, "isUnderline");
 
-        testStyledAttributes(SIMPLE_STRIKETROUGH_TAG_S, createDefaultBooleanAttribute("isStrikeThrough"));
+        testSimple(SIMPLE_STRIKETROUGH_TAG_S, "isStrikeThrough");
 
-        testStyledAttributes(SIMPLE_STRIKETROUGH_TAG_DEL, createDefaultBooleanAttribute("isStrikeThrough"));
+        testSimple(SIMPLE_STRIKETROUGH_TAG_DEL, "isStrikeThrough");
 
-        testStyledAttributes(SIMPLE_STRIKETROUGH_TAG_STRIKE, createDefaultBooleanAttribute("isStrikeThrough"));
+        testSimple(SIMPLE_STRIKETROUGH_TAG_STRIKE, "isStrikeThrough");
 
-        testSimpleUnderline(SIMPLE_STRIKETROUGH_CSS, false, "isStrikeThrough");
+        testSimple(SIMPLE_STRIKETROUGH_CSS, "isStrikeThrough");
     }
 
-    public void testSimpleUnderline(String htmlPart, boolean onlyTheseAttributes, String styledAttributeSet) throws IOException {
+    public void testSimple(String htmlPart, String styledAttributeSet) throws IOException {
 
         Element styledContent = getStyledContent(htmlPart);
         Assert.assertTrue("Expected one node", !styledContent.childNodes().isEmpty());
@@ -68,7 +70,8 @@ public class TextDecorationTest extends StyledFeaturesBase {
         Node elementNode = styledContent.childNodes().get(0);
         assertStyledElement(elementNode);
 
-        Assert.assertTrue("Expected underlined attribute", hasAttributesSetToTrue(elementNode, onlyTheseAttributes, styledAttributeSet));
+        Assert.assertTrue(SimpleMessageFormat.format("Expected \"{0}\" attributes but \"{1} \"", styledAttributeSet, elementNode.attributes()),
+                hasAttributesSetToTrue(elementNode, false, styledAttributeSet));
 
     }
 

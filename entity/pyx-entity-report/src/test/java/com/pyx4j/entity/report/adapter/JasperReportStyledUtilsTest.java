@@ -126,9 +126,6 @@ public class JasperReportStyledUtilsTest {
                         return false;
                     }
                 }
-//                if (!attributeValuesIn2.containsKey(entry.getKey()) || !attributeValuesIn2.get(entry.getKey()).equals(entry.getValue())) {
-//                    return false;
-//                }
             }
 
         }

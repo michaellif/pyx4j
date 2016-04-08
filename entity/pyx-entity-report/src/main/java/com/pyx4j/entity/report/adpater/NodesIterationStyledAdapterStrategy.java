@@ -22,10 +22,10 @@ package com.pyx4j.entity.report.adpater;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,10 +35,11 @@ import org.jsoup.parser.Tag;
 
 public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAdapterStrategy {
 
-    private Stack<Integer> olStackIndex;
+    private Stack<Integer> olStackIndex; // Store for <ol> indexes and counter for indents at same time
 
-    private int ulCounter = 0;
+    private int ulCounter = 0; // Counter for <ul> elements (for indents)
 
+    // Markers for spectial tags
     private boolean isSup = false;
 
     private boolean isSub = false;
@@ -77,29 +78,23 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         StringBuffer converted = new StringBuffer();
 
-        // Special treatment for closing <ol> and <li> depth level
+        // After each node, search for closing <ol> and <li> depth level
         recalculateIndentsAndIndexForLists(node.previousSibling());
 
-        // Special treatment for closing <sup> and <sub>
+        // After each node, search for closing <sup> and <sub>
         treatSpecialSupportedTags(node.previousSibling());
 
         if (node instanceof TextNode) {
             TextNode textNode = (TextNode) node;
-            if (isSup) {
-                Element el = new Element(Tag.valueOf("sup"), "");
-                el.text(textNode.text());
-                textNode.text(el.outerHtml());
-            } else if (isSub) {
-                Element el = new Element(Tag.valueOf("sub"), "");
-                el.text(textNode.text());
-                textNode.text(el.outerHtml());
-            }
-            converted.append(
-                    JasperReportStyledUtils.createStyledElement(textNode, JasperReportStyledUtils.toStyledMap(JasperReportStyledUtils.toMap(parentAttribs))));
 
-        } else if ((node instanceof Element && node.childNodes().size() == 0))
+            // Enclose sup or sub tag if needed
+            encloseTextInSpecialTagIfRequired(textNode);
 
-        {
+            Map<String, String> styledMapAttributes = JasperReportStyledUtils.toStyledMap(parentAttribs);
+
+            converted.append(JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes));
+
+        } else if ((node instanceof Element && node.childNodes().size() == 0)) {
             Tag htmlTag = ((Element) node).tag();
 
             // Deal with br
@@ -109,16 +104,13 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                 break;
             }
 
-        } else if (node instanceof Element)
-
-        {
+        } else if (node instanceof Element) {
             Node parent = node.parent();
-            Tag htmlTag = ((Element) node).tag();
+            String elementTagName = ((Element) node).tag().getName();
 
             List<Node> childNodes = new ArrayList<Node>();
 
-            // Deal with spetial tags
-            switch (htmlTag.getName()) {
+            switch (elementTagName) {
             case "p":
             case "div":
                 if (((Element) node).text().length() == 0) {
@@ -138,16 +130,13 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                     olStackIndex = new Stack<Integer>();
                 }
 
-                if (parent != null //
-                        && (((Element) parent).tagName().equalsIgnoreCase("body") && node.siblingIndex() > 0)) {
+                if (parent != null && (isElementBody(parent) && node.siblingIndex() > 0)) {
                     olStackIndex.removeAllElements();
                 }
 
                 olStackIndex.push(new Integer(1));
 
-                if (parent != null //
-                        && (!((Element) parent).tagName().equalsIgnoreCase("body") || node.siblingIndex() > 0) //
-                        && !((Element) parent).tagName().equalsIgnoreCase("li")) {
+                if (parent != null && (!isElementBody(parent) || node.siblingIndex() > 0) && !isElementTag(parent, "li")) {
                     childNodes.add(new TextNode("\n", ""));
                 }
                 childNodes.addAll(node.childNodes());
@@ -160,31 +149,27 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
                 ulCounter++;
 
-                if (parent != null //
-                        && (!((Element) parent).tagName().equalsIgnoreCase("body") || node.siblingIndex() > 0) //
-                        && !((Element) parent).tagName().equalsIgnoreCase("li")) {
+                if (parent != null && (!isElementBody(parent) || node.siblingIndex() > 0) && !isElementTag(parent, "li")) {
                     childNodes.add(new TextNode("\n", ""));
                 }
                 childNodes.addAll(node.childNodes());
                 break;
             case "li":
                 Node firstChild = node.childNodes().get(0);
-                if (firstChild != null //
-                        && (firstChild instanceof Element) //
-                        && (((Element) firstChild).tagName().equalsIgnoreCase("ol") || ((Element) firstChild).tagName().equalsIgnoreCase("li"))) { //
+                if (firstChild != null && (isElementTag(firstChild, "ol") || isElementTag(firstChild, "li"))) { //
                     // Do nothing
-                } else if (parent != null && ((Element) parent).tagName().equalsIgnoreCase("ol")) {
+                } else if (parent != null && isElementTag(parent, "ol")) {
                     int liIndex = olStackIndex.peek();
                     childNodes.add(new TextNode("\n" + getTabSpaces() + liIndex + ".  ", ""));
                     olStackIndex.pop();
                     olStackIndex.push(++liIndex);
                 } else {
-                    childNodes.add(new TextNode("\n" + getTabSpaces() + "\u2022  ", ""));
+                    childNodes.add(new TextNode("\n" + getTabSpaces() + JasperReportStyledUtils.UL_LI_STARTER + "  ", ""));
                 }
                 childNodes.addAll(node.childNodes());
                 break;
             case "font":
-                nodeAttribs = convertFontAttributeToStyleAttribute(node, nodeAttribs);
+                nodeAttribs = JasperReportStyledUtils.convertFontAttributeToStyleAttribute(node, nodeAttribs);
                 childNodes.addAll(node.childNodes());
                 break;
             case "sup":
@@ -200,10 +185,10 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             }
 
             Attributes inheritedAttributes = JasperReportStyledUtils.inheriteAttributes(parentAttribs, nodeAttribs);
-            Attributes tagImplicitAttributes = JasperReportStyledUtils.getTagImplicitAttributes(htmlTag);
+            Attributes tagImplicitAttributes = JasperReportStyledUtils.getTagImplicitAttributes(elementTagName);
 
-            if (tagImplicitAttributes != null && tagImplicitAttributes.size() > 0) {
-                inheritedAttributes = JasperReportStyledUtils.inheriteAttributes(tagImplicitAttributes, inheritedAttributes);
+            if (tagImplicitAttributes.size() > 0) {
+                inheritedAttributes = JasperReportStyledUtils.inheriteAttributes(inheritedAttributes, tagImplicitAttributes);
             }
 
             convertToStyled(childNodes, inheritedAttributes);
@@ -213,6 +198,30 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     }
 
+    private void encloseTextInSpecialTagIfRequired(TextNode textNode) {
+        if (isSup) {
+            Element el = new Element(Tag.valueOf("sup"), "");
+            el.text(textNode.text());
+            textNode.text(el.outerHtml());
+        } else if (isSub) {
+            Element el = new Element(Tag.valueOf("sub"), "");
+            el.text(textNode.text());
+            textNode.text(el.outerHtml());
+        }
+    }
+
+    /**
+     * Treat special supported tags that has no styled attribute conventions and
+     * has to be used "as is". Each chunk of text with these properties has to be enclosed
+     * with style properties and sup at the lowest level.
+     *
+     * Sample:
+     * html source : regular text <sub><b>sup text bold </b><i>sup text italic</i></sub>
+     * styled result : <style >regular text </style><style isBold="true" ><sub>sup text bold </sub></style>
+     * <style isItalic="true" ><sub>sup text italic</sub></style>
+     *
+     * @param previousSibling
+     */
     private void treatSpecialSupportedTags(Node previousSibling) {
         if (previousSibling != null && (previousSibling instanceof Element)) {
             if (((Element) previousSibling).tagName().equalsIgnoreCase("sup")) {
@@ -254,33 +263,11 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     }
 
-    private Attributes convertFontAttributeToStyleAttribute(Node node, Attributes nodeAttribs) {
-        Attributes styleAttribute = new Attributes();
-        StringBuffer newAttributes = new StringBuffer();
-        for (Attribute attribute : nodeAttribs) {
-            if (attribute.getKey().equalsIgnoreCase("size")) {
-                newAttributes.append(JasperReportStyledUtils.FONT_SIZE);
-                newAttributes.append(":");
-                newAttributes.append(JasperReportStyledUtils.getTagFontSize(attribute.getValue()));
-                newAttributes.append(";");
-            } else if (attribute.getKey().equalsIgnoreCase("color")) {
-                newAttributes.append(JasperReportStyledUtils.COLOR);
-                newAttributes.append(":");
-                newAttributes.append(attribute.getValue());
-                newAttributes.append(";");
-            }
-        }
-
-        styleAttribute.put("style", newAttributes.toString());
-
-        return styleAttribute;
-    }
-
     private String getTabSpaces() {
         String spacesStr = "";
         int nSpaces = ulCounter + (olStackIndex != null ? olStackIndex.size() : 0);
         for (int i = 1; i <= nSpaces; i++) {
-            spacesStr += JasperReportStyledUtils.DEFAULT_TAB_SIZE; // Default tab space 4 chars
+            spacesStr += JasperReportStyledUtils.DEFAULT_TAB_SIZE;
         }
         return spacesStr;
     }
@@ -289,18 +276,18 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         Node previous = node.previousSibling();
 
         // Previous node is text
-        if (previous != null && (previous instanceof TextNode)) {
+        if (previous != null && isTextNode(previous)) {
             return false;
         }
 
         // Previous node is tag no break-liner
-        if (previous != null && ((previous instanceof Element) && !JasperReportStyledUtils.isBreakLiner(previous))) {
+        if (previous != null && (isElement(previous) && !JasperReportStyledUtils.isBreakLiner(previous))) {
             return false;
         }
 
         // No siblings, and parent is no break-liner
         Node parent = node.parent();
-        if (parent != null && !((Element) parent).tagName().equalsIgnoreCase("body") && !JasperReportStyledUtils.isBreakLiner(parent)) {
+        if (parent != null && !isElementBody(parent) && !JasperReportStyledUtils.isBreakLiner(parent)) {
             return false;
         }
 
@@ -312,12 +299,12 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         Node after = node.nextSibling();
 
         // Node after is text
-        if (after != null && (after instanceof TextNode)) {
+        if (after != null && isTextNode(after)) {
             return false;
         }
 
         // Node after is tag no break-liner
-        if (after != null && ((after instanceof Element) && !JasperReportStyledUtils.isBreakLiner(after))) {
+        if (after != null && (isElement(after) && !JasperReportStyledUtils.isBreakLiner(after))) {
             return false;
         }
 
@@ -327,12 +314,12 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             Node firstChild = children.get(0);
 
             // First child node is text
-            if (firstChild != null && (firstChild instanceof TextNode)) {
+            if (firstChild != null && (isTextNode(firstChild))) {
                 return false;
             }
 
             // First child node is tag no break-liner
-            if (firstChild != null && ((firstChild instanceof Element) && !JasperReportStyledUtils.isBreakLiner(firstChild))) {
+            if (firstChild != null && (isElement(firstChild) && !JasperReportStyledUtils.isBreakLiner(firstChild))) {
                 return false;
             }
 
@@ -340,6 +327,31 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         return true;
 
+    }
+
+    private static boolean isTextNode(Node node) {
+        return node instanceof TextNode;
+    }
+
+    private static boolean isElement(Node node) {
+        return node instanceof Element;
+    }
+
+    private static Element toElement(Node node) {
+        return (Element) node;
+    }
+
+    private static boolean isElementBody(Node node) {
+        return isElementTag(node, "body");
+    }
+
+    private static boolean isElementTag(Node node, String tagName) {
+        if (node != null && (node instanceof Element)) {
+            Element element = (Element) node;
+            return element.tagName().equalsIgnoreCase(tagName);
+        }
+
+        return false;
     }
 
 }

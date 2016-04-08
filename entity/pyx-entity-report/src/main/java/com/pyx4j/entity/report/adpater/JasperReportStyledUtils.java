@@ -33,13 +33,14 @@ import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import org.jsoup.parser.Tag;
 
 import net.sf.jasperreports.engine.util.JRColorUtil;
 
 public class JasperReportStyledUtils {
 
-    public static final String DEFAULT_TAB_SIZE = "    ";
+    public static final String DEFAULT_TAB_SIZE = "    "; // Default tab space 4 chars
+
+    public static final String UL_LI_STARTER = "\u2022";
 
     public static final String FONT_WEIGHT = "font-weight";
 
@@ -96,7 +97,9 @@ public class JasperReportStyledUtils {
         return "</style>";
     }
 
-    public static Map<String, String> toStyledMap(Map<String, String> parentAttributes) {
+//    public static Map<String, String> toStyledMap(Map<String, String> parentAttributes) {
+    public static Map<String, String> toStyledMap(Attributes attributes) {
+        Map<String, String> parentAttributes = JasperReportStyledUtils.toMap(attributes);
         Map<String, String> styledAttributes = new HashMap<String, String>();
 
         if (parentAttributes == null || parentAttributes.isEmpty()) {
@@ -172,7 +175,6 @@ public class JasperReportStyledUtils {
 
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND_COLOR) //
                         || keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND)) {
-                    String color = getCssColor(valueAttribute);
                     resultMap.put("backcolor", getCssColor(valueAttribute));
                 }
 
@@ -232,22 +234,22 @@ public class JasperReportStyledUtils {
         }
     }
 
-    public static Attributes getTagImplicitAttributes(Tag tag) {
+    public static Attributes getTagImplicitAttributes(String tagName) {
         Attributes attributes = new Attributes();
-        switch (tag.getName()) {
+        switch (tagName) {
         case "b":
-            attributes.put("isBold", true);
+            attributes.put("style", FONT_WEIGHT + ":" + "bold;");
             break;
         case "i":
-            attributes.put("isItalic", true);
+            attributes.put("style", FONT_STYLE + ":" + "italic;");
             break;
         case "u":
-            attributes.put("isUnderline", true);
+            attributes.put("style", TEXT_DECORATION + ":" + "underline;");
             break;
-        case "strike": // This is not supported html5
+        case "strike":
         case "s":
         case "del":
-            attributes.put("isStrikeThrough", true);
+            attributes.put("style", TEXT_DECORATION + ":" + "line-through;");
             break;
         }
 
@@ -299,9 +301,9 @@ public class JasperReportStyledUtils {
             String[] splitedValue = keyValuePair.split(":");
 
             if (splitedValue.length == 1 && splitedValue[0].trim().length() > 0) {
-                map.put(splitedValue[0], null);
+                map.put(splitedValue[0].trim(), null);
             } else if (splitedValue.length == 2) {
-                map.put(splitedValue[0], splitedValue[1]);
+                map.put(splitedValue[0].trim(), splitedValue[1]);
             }
         }
 
@@ -326,5 +328,27 @@ public class JasperReportStyledUtils {
 
     public static String ensureNoBreakLinesNorTabs(String cleanedHtmlPart) {
         return cleanedHtmlPart.replaceAll("\n", "").replaceAll("\t", "");
+    }
+
+    public static Attributes convertFontAttributeToStyleAttribute(Node node, Attributes nodeAttribs) {
+        Attributes styleAttribute = new Attributes();
+        StringBuffer newAttributes = new StringBuffer();
+        for (Attribute attribute : nodeAttribs) {
+            if (attribute.getKey().equalsIgnoreCase("size")) {
+                newAttributes.append(JasperReportStyledUtils.FONT_SIZE);
+                newAttributes.append(":");
+                newAttributes.append(JasperReportStyledUtils.getTagFontSize(attribute.getValue()));
+                newAttributes.append(";");
+            } else if (attribute.getKey().equalsIgnoreCase("color")) {
+                newAttributes.append(JasperReportStyledUtils.COLOR);
+                newAttributes.append(":");
+                newAttributes.append(attribute.getValue());
+                newAttributes.append(";");
+            }
+        }
+
+        styleAttribute.put("style", newAttributes.toString());
+
+        return styleAttribute;
     }
 }

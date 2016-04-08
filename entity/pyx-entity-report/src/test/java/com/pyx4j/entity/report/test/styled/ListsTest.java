@@ -111,7 +111,7 @@ public class ListsTest extends StyledFeaturesBase {
         switch (htmlTagListParent.getName()) {
         case "ul":
             Assert.assertTrue(SimpleMessageFormat.format("Expected to star with {0} but text is \"{1}\"", "\u2022", text),
-                    text.trim().startsWith(String.valueOf("\u2022")));
+                    text.trim().startsWith(String.valueOf(JasperReportStyledUtils.UL_LI_STARTER)));
             break;
         case "ol":
             Assert.assertTrue(SimpleMessageFormat.format("Expected to star with {0} but text is \"{1}\"", String.valueOf(indexInList), text),
