@@ -27,23 +27,37 @@ import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
 import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 
 public class AbstractPrimePaneView<PRESENTER extends IPrimePanePresenter> extends AbstractPaneView<PRESENTER> implements IPrimePaneView<PRESENTER> {
 
-    private final PrimePaneContentHolder contentHolder;
+    private final AbstractPrimePaneViewLayout contentHolder;
 
     public AbstractPrimePaneView() {
-        contentHolder = new PrimePaneContentHolder(this);
-        add(contentHolder);
+        this(LayoutSystem.LayoutPanels);
+    }
+
+    public AbstractPrimePaneView(LayoutSystem layoutSystem) {
+        super(layoutSystem);
+
+        switch (layoutSystem) {
+        case BasicPanels:
+            contentHolder = new AbstractPrimePaneViewLayoutBasicPanels();
+            break;
+        case LayoutPanels:
+            contentHolder = new AbstractPrimePaneViewLayoutLayoutPanels(this);
+            break;
+        default:
+            throw new Error(layoutSystem.name());
+        }
+
+        setCenter(contentHolder.asWidget());
 
         CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
     }
 
     protected IsWidget getContentPane() {
-        if (contentHolder.getWidgetCount() == 0) {
-            return null;
-        }
-        return contentHolder.getWidget(0);
+        return contentHolder.getContentPane();
     }
 
     protected void setContentPane(IsWidget widget) {
@@ -52,12 +66,12 @@ public class AbstractPrimePaneView<PRESENTER extends IPrimePanePresenter> extend
 
     @Override
     public void showVisor(IVisor visor) {
-        contentHolder.showVisorPane(visor);
+        contentHolder.showVisor(visor);
     }
 
     @Override
     public void hideVisor() {
-        contentHolder.hideVisorPane();
+        contentHolder.hideVisor();
     }
 
     @Override

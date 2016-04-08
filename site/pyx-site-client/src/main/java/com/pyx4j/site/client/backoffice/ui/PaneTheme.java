@@ -39,6 +39,8 @@ public class PaneTheme extends Theme {
 
         HeaderToolbar,
 
+        HeaderToolbarLeft,
+
         HeaderBreadcrumbs,
 
         FooterToolbar,
@@ -119,6 +121,10 @@ public class PaneTheme extends Theme {
         style = new Style(".", StyleName.HeaderContainer, " .", StyleName.HeaderToolbar);
         style.addProperty("background-color", ThemeColor.object1, 0.3);
         style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.HeaderContainer, " .", StyleName.HeaderToolbarLeft);
+        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderBreadcrumbs);

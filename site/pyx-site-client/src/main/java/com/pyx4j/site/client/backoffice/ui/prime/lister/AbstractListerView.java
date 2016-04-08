@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-18
  * @author Vlad
  */
@@ -32,21 +32,27 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 
 public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView<IPrimeListerPresenter<E>> implements IPrimeListerView<E> {
 
     private SiteDataTablePanel<E> dataTablePanel = null;
 
     public AbstractListerView() {
-        super();
+        this(LayoutSystem.LayoutPanels);
+    }
+
+    public AbstractListerView(LayoutSystem layoutSystem) {
+        super(layoutSystem);
     }
 
     /*
-     * Should be called by descendant upon initialisation.
+     * Should be called by descendant upon initialization.
      */
     protected void setDataTablePanel(SiteDataTablePanel<E> dataTablePanel) {
-        if (getContentPane() == null) { // finalise UI here:
-            setContentPane(new ScrollPanel());
+        if (getContentPane() == null) { // finalize UI here:
+            ScrollPanel scrollPanel = new ScrollPanel();
+            setContentPane(scrollPanel);
             setSize("100%", "100%");
         }
 

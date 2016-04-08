@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.backoffice.ui.visor.AbstractVisorPaneView;
 import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 
-public class PrimePaneContentHolder extends ComplexPanel implements RequiresResize, ProvidesResize {
+public class AbstractPrimePaneViewLayoutLayoutPanels extends ComplexPanel implements RequiresResize, ProvidesResize, AbstractPrimePaneViewLayout {
 
     private int animationDuration = 0;
 
@@ -44,13 +44,14 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
 
     private final IPrimePaneView<?> parentPane;
 
-    public PrimePaneContentHolder(IPrimePaneView<?> parentPane) {
+    public AbstractPrimePaneViewLayoutLayoutPanels(IPrimePaneView<?> parentPane) {
         this.parentPane = parentPane;
         setAnimationDuration(500);
         setElement(Document.get().createDivElement());
         layout = new Layout(getElement());
     }
 
+    @Override
     public void setContentPane(IsWidget widget) {
         assert widget != null : "Content Pane Widget should not be null";
         assert getWidgetCount() == 0 : "Content Pane is already set";
@@ -70,7 +71,17 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
         layout.layout();
     }
 
-    public void showVisorPane(IVisor visor) {
+    @Override
+    public IsWidget getContentPane() {
+        if (getWidgetCount() == 0) {
+            return null;
+        } else {
+            return getWidget(0);
+        }
+    }
+
+    @Override
+    public void showVisor(IVisor visor) {
         assert visor != null : "Visor Pane Widget should not be null";
         assert getWidgetCount() >= 1 : "Content Pane should be set first";
 
@@ -98,7 +109,8 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
         new VisorShowLayoutCommand(previousVisorPaneWidget).schedule(animationDuration, null);
     }
 
-    public void hideVisorPane() {
+    @Override
+    public void hideVisor() {
         IsWidget previousVisorPaneWidget = visorPaneWidget;
         visorPaneWidget = null;
         if (previousVisorPaneWidget != null) {
@@ -106,6 +118,7 @@ public class PrimePaneContentHolder extends ComplexPanel implements RequiresResi
         }
     }
 
+    @Override
     public boolean isVisorShown() {
         return (visorPaneWidget != null);
     }

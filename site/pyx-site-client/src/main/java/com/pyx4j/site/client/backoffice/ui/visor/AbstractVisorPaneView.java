@@ -33,6 +33,7 @@ import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.ImageFactory;
 
 public abstract class AbstractVisorPaneView extends AbstractPaneView<IPanePresenter> implements IVisor {
@@ -44,11 +45,11 @@ public abstract class AbstractVisorPaneView extends AbstractPaneView<IPanePresen
     private final LayoutPanel contentHolder;
 
     public AbstractVisorPaneView(final Controller controller) {
-        super();
+        super(LayoutSystem.LayoutPanels);
         this.controller = controller;
 
         contentHolder = new LayoutPanel();
-        add(contentHolder);
+        setCenter(contentHolder);
 
         setStyleName(PaneTheme.StyleName.Visor.name());
 

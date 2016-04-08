@@ -20,12 +20,13 @@
 package com.pyx4j.site.client.backoffice.ui.prime.form;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView.IPrimeFormPresenter;
+import com.pyx4j.site.client.ui.layout.AbstractSimpleLayoutPanel;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.SecureConcernsHolder;
 
@@ -40,7 +41,8 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
 
     private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
 
-    public AbstractPrimeFormView() {
+    public AbstractPrimeFormView(LayoutSystem layoutSystem) {
+        super(layoutSystem);
         secureConcerns.addAll(secureConcerns());
     }
 
@@ -74,12 +76,12 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
     }
 
     /*
-     * Should be called by descendant upon initialisation.
+     * Should be called by descendant upon initialization.
      */
     protected void setForm(PrimeEntityForm<E> form) {
 
-        if (getContentPane() == null) { // finalise UI here:
-            super.setContentPane(new LayoutPanel());
+        if (getContentPane() == null) { // finalize UI here:
+            super.setContentPane(getLayoutSystem().createSimpleLayoutPanel());
             setSize("100%", "100%");
         }
 
@@ -88,14 +90,9 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
         }
 
         this.form = form;
-
         this.form.init();
 
-        LayoutPanel center = (LayoutPanel) getContentPane();
-        center.clear(); // remove current form...
-
-        center.add(this.form);
-
+        ((AbstractSimpleLayoutPanel) getContentPane()).setWidget(this.form);
     }
 
     protected PrimeEntityForm<E> getForm() {
