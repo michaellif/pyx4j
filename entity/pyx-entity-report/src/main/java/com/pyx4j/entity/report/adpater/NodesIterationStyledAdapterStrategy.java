@@ -39,9 +39,9 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     private int ulCounter = 0;
 
-    boolean isSup = false;
+    private boolean isSup = false;
 
-    boolean isSub = false;
+    private boolean isSub = false;
 
     private StringBuffer styledResult = new StringBuffer();
 
@@ -263,7 +263,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             if (attribute.getKey().equalsIgnoreCase("size")) {
                 newAttributes.append(JasperReportStyledUtils.FONT_SIZE);
                 newAttributes.append(":");
-                newAttributes.append(JasperReportStyledUtils.getFontSize(attribute.getValue()));
+                newAttributes.append(JasperReportStyledUtils.getTagFontSize(attribute.getValue()));
                 newAttributes.append(";");
             } else if (attribute.getKey().equalsIgnoreCase("color")) {
                 newAttributes.append(JasperReportStyledUtils.COLOR);
@@ -282,7 +282,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         String spacesStr = "";
         int nSpaces = ulCounter + (olStackIndex != null ? olStackIndex.size() : 0);
         for (int i = 1; i <= nSpaces; i++) {
-            spacesStr += "    "; // Default tab space 4 chars
+            spacesStr += JasperReportStyledUtils.DEFAULT_TAB_SIZE; // Default tab space 4 chars
         }
         return spacesStr;
     }

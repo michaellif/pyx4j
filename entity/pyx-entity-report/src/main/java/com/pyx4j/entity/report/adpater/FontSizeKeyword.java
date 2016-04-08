@@ -39,8 +39,10 @@ public enum FontSizeKeyword {
     }
 
     public static double getValueByNumber(int index) {
-        if (index > values().length) {
+        if (index < 0) {
             return DEFAULT.getPt();
+        } else if (index > values().length) {
+            return xxlarge.getPt();
         } else {
             return values()[index].getPt();
         }

@@ -39,6 +39,8 @@ import net.sf.jasperreports.engine.util.JRColorUtil;
 
 public class JasperReportStyledUtils {
 
+    public static final String DEFAULT_TAB_SIZE = "    ";
+
     public static final String FONT_WEIGHT = "font-weight";
 
     public static final String FONT_STYLE = "font-style";
@@ -135,7 +137,11 @@ public class JasperReportStyledUtils {
 
                 // ******************  Strikethrough ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.TEXT_DECORATION)) {
-                    resultMap.put("isStrikeThrough", String.valueOf(valueAttribute.equalsIgnoreCase("isStrikeThrough")));
+                    resultMap.put("isStrikeThrough", String.valueOf(valueAttribute.equalsIgnoreCase("line-through")));
+                }
+
+                if (keyAttribute.equalsIgnoreCase("isStrikeThrough")) {
+                    resultMap.put("isStrikeThrough", String.valueOf(Boolean.TRUE));
                 }
 
                 // ******************  Italic ***********************
@@ -157,28 +163,33 @@ public class JasperReportStyledUtils {
                 }
 
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_SIZE)) {
-                    Matcher matcher = Pattern.compile("(\\d+\\.?\\d*)(.*)").matcher(valueAttribute);
-                    if (matcher.find()) {
-                        resultMap.put("size", String.valueOf(matcher.group(1)));
-                    } else {
-                        resultMap.put("size", getFontSize(valueAttribute));
-                    }
+                    resultMap.put("size", getCssFontSize(valueAttribute));
                 }
 
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.COLOR)) {
-                    Color color = JRColorUtil.getColor(valueAttribute, Color.black);
-                    resultMap.put("forecolor", JRColorUtil.getCssColor(color));
+                    resultMap.put("forecolor", getCssColor(valueAttribute));
                 }
 
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND_COLOR) //
                         || keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND)) {
-                    Color color = JRColorUtil.getColor(valueAttribute, Color.black);
-                    resultMap.put("backcolor", JRColorUtil.getCssColor(color));
+                    String color = getCssColor(valueAttribute);
+                    resultMap.put("backcolor", getCssColor(valueAttribute));
                 }
 
             }
         }
 
+    }
+
+    public static String getCssColor(String strColor) {
+        Color color;
+        try {
+            color = JRColorUtil.getColor(strColor, Color.black);
+        } catch (Exception e) { // This should be JRRuntimeException but this is fine... isn't it?
+            color = Color.black;
+        }
+
+        return JRColorUtil.getCssColor(color);
     }
 
     public static boolean isBreakLiner(Node node) {
@@ -199,7 +210,7 @@ public class JasperReportStyledUtils {
         }
     }
 
-    public static String getFontSize(String fontSize) {
+    public static String getTagFontSize(String fontSize) {
         double pt;
         if (NumberUtils.isNumber(fontSize)) {
             Double value = new Double(fontSize);
@@ -210,6 +221,15 @@ public class JasperReportStyledUtils {
         }
 
         return String.valueOf(pt);
+    }
+
+    public static String getCssFontSize(String fontSize) {
+        Matcher matcher = Pattern.compile("(\\d+\\.?\\d*)(.*)").matcher(fontSize);
+        if (matcher.find()) {
+            return String.valueOf(matcher.group(1));
+        } else {
+            return getTagFontSize(fontSize);
+        }
     }
 
     public static Attributes getTagImplicitAttributes(Tag tag) {
@@ -224,10 +244,14 @@ public class JasperReportStyledUtils {
         case "u":
             attributes.put("isUnderline", true);
             break;
+        case "strike": // This is not supported html5
+        case "s":
+        case "del":
+            attributes.put("isStrikeThrough", true);
+            break;
         }
 
         return attributes;
-
     }
 
     public static Attributes inheriteAttributes(Attributes inhiretedAttr, Attributes nodeAttr) {
@@ -273,7 +297,10 @@ public class JasperReportStyledUtils {
         String[] keyValuePairs = styleProperties.trim().split(";");
         for (String keyValuePair : keyValuePairs) {
             String[] splitedValue = keyValuePair.split(":");
-            if (splitedValue.length == 2) {
+
+            if (splitedValue.length == 1 && splitedValue[0].trim().length() > 0) {
+                map.put(splitedValue[0], null);
+            } else if (splitedValue.length == 2) {
                 map.put(splitedValue[0], splitedValue[1]);
             }
         }

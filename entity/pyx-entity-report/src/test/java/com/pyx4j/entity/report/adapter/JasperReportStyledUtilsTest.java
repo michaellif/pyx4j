@@ -85,7 +85,7 @@ public class JasperReportStyledUtilsTest {
         Assert.assertTrue("Expected attribute does not match!", areSameAttributes(expectedAttributes, result));
     }
 
-    private boolean areSameAttributes(Attributes attributes1, Attributes attributes2) {
+    public static boolean areSameAttributes(Attributes attributes1, Attributes attributes2) {
         // Same size
         if (attributes1.size() != attributes2.size()) {
             return false;
@@ -95,6 +95,14 @@ public class JasperReportStyledUtilsTest {
         for (Attribute attribute : attributes1.asList()) {
             if (!attributes2.hasKey(attribute.getKey())) {
                 return false;
+            }
+
+            if (isSimpleAttribute(attribute)) {
+                if (attributes2.get(attribute.getKey()).equalsIgnoreCase(attribute.getValue())) {
+                    continue;
+                } else {
+                    return false;
+                }
             }
 
             Map<String, Object> attributeValuesIn1 = JasperReportStyledUtils.toMap(attribute.getValue());
@@ -107,13 +115,34 @@ public class JasperReportStyledUtilsTest {
 
             // Same values
             for (Map.Entry<String, Object> entry : attributeValuesIn1.entrySet()) {
-                if (!attributeValuesIn2.containsKey(entry.getKey()) || !attributeValuesIn2.get(entry.getKey()).equals(entry.getValue())) {
+                System.out.println(attributeValuesIn2.containsKey(entry.getKey()));
+                System.out.println(attributeValuesIn2.get(entry.getKey()));
+                if (!attributeValuesIn2.containsKey(entry.getKey())) {
                     return false;
+                } else {
+                    if (entry.getValue() == null && (attributeValuesIn2.get(entry.getKey()) != null)) {
+                        return false;
+                    } else if (entry.getValue() != null && !attributeValuesIn2.get(entry.getKey()).equals(entry.getValue())) {
+                        return false;
+                    }
                 }
+//                if (!attributeValuesIn2.containsKey(entry.getKey()) || !attributeValuesIn2.get(entry.getKey()).equals(entry.getValue())) {
+//                    return false;
+//                }
             }
 
         }
 
         return true;
     }
+
+    private static boolean isSimpleAttribute(Attribute attribute) {
+        String value = attribute.getValue();
+        if (value.split(";").length < 2) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
