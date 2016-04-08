@@ -115,8 +115,6 @@ public class JasperReportStyledUtilsTest {
 
             // Same values
             for (Map.Entry<String, Object> entry : attributeValuesIn1.entrySet()) {
-                System.out.println(attributeValuesIn2.containsKey(entry.getKey()));
-                System.out.println(attributeValuesIn2.get(entry.getKey()));
                 if (!attributeValuesIn2.containsKey(entry.getKey())) {
                     return false;
                 } else {

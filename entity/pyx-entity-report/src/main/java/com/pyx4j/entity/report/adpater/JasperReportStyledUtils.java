@@ -97,7 +97,6 @@ public class JasperReportStyledUtils {
         return "</style>";
     }
 
-//    public static Map<String, String> toStyledMap(Map<String, String> parentAttributes) {
     public static Map<String, String> toStyledMap(Attributes attributes) {
         Map<String, String> parentAttributes = JasperReportStyledUtils.toMap(attributes);
         Map<String, String> styledAttributes = new HashMap<String, String>();
@@ -330,7 +329,7 @@ public class JasperReportStyledUtils {
         return cleanedHtmlPart.replaceAll("\n", "").replaceAll("\t", "");
     }
 
-    public static Attributes convertFontAttributeToStyleAttribute(Node node, Attributes nodeAttribs) {
+    public static Attributes getFontAttributesToStyleAttribute(Node node, Attributes nodeAttribs) {
         Attributes styleAttribute = new Attributes();
         StringBuffer newAttributes = new StringBuffer();
         for (Attribute attribute : nodeAttribs) {

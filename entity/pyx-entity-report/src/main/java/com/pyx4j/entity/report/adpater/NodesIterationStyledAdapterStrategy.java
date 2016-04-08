@@ -55,7 +55,9 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
         List<Node> childNodes = htmlDocument.select("body").get(0).childNodes();
 
-        String converted = convertToStyled(childNodes, null);
+        convertToStyled(null, childNodes);
+
+        String converted = styledResult.toString();
         styledResult.setLength(0); // TODO Enhance this
 
         System.out.println("\n\n************** STYLED CONVERSION ***************");
@@ -65,18 +67,15 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         return converted;
     }
 
-    private String convertToStyled(List<Node> childNodes, Attributes inhiretedAttributes) {
-
-        for (Node node : childNodes) {
-            styledResult.append(convertToStyled(node, inhiretedAttributes, node.attributes()));
+    private void convertToStyled(Attributes parentAttribs, List<Node> nodes) {
+        for (Node node : nodes) {
+            convertToStyled(parentAttribs, node);
         }
-
-        return styledResult.toString();
     }
 
-    private String convertToStyled(Node node, Attributes parentAttribs, Attributes nodeAttribs) {
+    private void convertToStyled(Attributes parentAttribs, Node node) {
 
-        StringBuffer converted = new StringBuffer();
+        Attributes nodeAttribs = node.attributes();
 
         // After each node, search for closing <ol> and <li> depth level
         recalculateIndentsAndIndexForLists(node.previousSibling());
@@ -92,7 +91,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
             Map<String, String> styledMapAttributes = JasperReportStyledUtils.toStyledMap(parentAttribs);
 
-            converted.append(JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes));
+            styledResult.append(JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes));
 
         } else if ((node instanceof Element && node.childNodes().size() == 0)) {
             Tag htmlTag = ((Element) node).tag();
@@ -100,7 +99,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             // Deal with br
             switch (htmlTag.getName()) {
             case "br":
-                converted.append(JasperReportStyledUtils.createStyledElement(new TextNode("\n", ""), null));
+                styledResult.append(JasperReportStyledUtils.createStyledElement(new TextNode("\n", ""), null));
                 break;
             }
 
@@ -169,7 +168,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                 childNodes.addAll(node.childNodes());
                 break;
             case "font":
-                nodeAttribs = JasperReportStyledUtils.convertFontAttributeToStyleAttribute(node, nodeAttribs);
+                nodeAttribs = JasperReportStyledUtils.getFontAttributesToStyleAttribute(node, node.attributes());
                 childNodes.addAll(node.childNodes());
                 break;
             case "sup":
@@ -191,11 +190,8 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                 inheritedAttributes = JasperReportStyledUtils.inheriteAttributes(inheritedAttributes, tagImplicitAttributes);
             }
 
-            convertToStyled(childNodes, inheritedAttributes);
+            convertToStyled(inheritedAttributes, childNodes);
         }
-
-        return converted.toString();
-
     }
 
     private void encloseTextInSpecialTagIfRequired(TextNode textNode) {
@@ -223,6 +219,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
      * @param previousSibling
      */
     private void treatSpecialSupportedTags(Node previousSibling) {
+        // TODO this has issues and not worked properly when sup inside sup inside sub and so on...
         if (previousSibling != null && (previousSibling instanceof Element)) {
             if (((Element) previousSibling).tagName().equalsIgnoreCase("sup")) {
                 isSup = false;
