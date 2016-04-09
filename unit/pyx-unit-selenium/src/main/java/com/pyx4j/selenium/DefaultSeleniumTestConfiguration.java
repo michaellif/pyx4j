@@ -85,4 +85,27 @@ public class DefaultSeleniumTestConfiguration implements ISeleniumTestConfigurat
         return System.getProperty("user.dir") + "/" + propertiesConfiguration.getValue("selenium.screenshots", "target/screenshots");
     }
 
+    @Override
+    public String toString() {
+        return buildConfigurationText();
+    }
+
+    public String buildConfigurationText() {
+        StringBuilder b = new StringBuilder();
+        b.append("selenium.url                   : ").append(this.getTestUrl()).append("\n");
+        b.append("selenium.driver                : ").append(this.getDriver()).append("\n");
+
+        b.append(" -D webdriver.firefox.bin   =  : ").append(System.getProperty("webdriver.firefox.bin")).append("\n");
+        b.append(" -D webdriver.chrome.driver =  : ").append(System.getProperty("webdriver.chrome.driver")).append("\n");
+        b.append(" -D webdriver.ie.driver     =  : ").append(System.getProperty("webdriver.ie.driver")).append("\n");
+
+        b.append("selenium.remoteDriverHost      : ").append(this.getRemoteDriverHost()).append("\n");
+        b.append("selenium.reuseBrowser          : ").append(this.reuseBrowser()).append("\n");
+        b.append("selenium.keepBrowserOnError    : ").append(this.keepBrowserOnError()).append("\n");
+        b.append("selenium.windowMaximize        : ").append(this.windowMaximize()).append("\n");
+        b.append("selenium.waitSeconds           : ").append(this.waitSeconds()).append("\n");
+        b.append("selenium.implicitlyWaitSeconds : ").append(this.implicitlyWaitSeconds()).append("\n");
+        return b.toString();
+    }
+
 }
