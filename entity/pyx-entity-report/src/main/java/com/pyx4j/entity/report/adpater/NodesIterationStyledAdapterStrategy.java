@@ -273,12 +273,12 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         Node previous = node.previousSibling();
 
         // Previous node is text
-        if (previous != null && isTextNode(previous)) {
+        if (isTextNode(previous)) {
             return false;
         }
 
         // Previous node is tag no break-liner
-        if (previous != null && (isElement(previous) && !JasperReportStyledUtils.isBreakLiner(previous))) {
+        if (isElement(previous) && !JasperReportStyledUtils.isBreakLiner(previous)) {
             return false;
         }
 
@@ -296,12 +296,12 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         Node after = node.nextSibling();
 
         // Node after is text
-        if (after != null && isTextNode(after)) {
+        if (isTextNode(after)) {
             return false;
         }
 
         // Node after is tag no break-liner
-        if (after != null && (isElement(after) && !JasperReportStyledUtils.isBreakLiner(after))) {
+        if (isElement(after) && !JasperReportStyledUtils.isBreakLiner(after)) {
             return false;
         }
 
@@ -311,12 +311,12 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             Node firstChild = children.get(0);
 
             // First child node is text
-            if (firstChild != null && (isTextNode(firstChild))) {
+            if (isTextNode(firstChild)) {
                 return false;
             }
 
             // First child node is tag no break-liner
-            if (firstChild != null && (isElement(firstChild) && !JasperReportStyledUtils.isBreakLiner(firstChild))) {
+            if (isElement(firstChild) && !JasperReportStyledUtils.isBreakLiner(firstChild)) {
                 return false;
             }
 
@@ -327,11 +327,19 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
     }
 
     private static boolean isTextNode(Node node) {
-        return node instanceof TextNode;
+        if (node != null) {
+            return node instanceof TextNode;
+        }
+
+        return false;
     }
 
     private static boolean isElement(Node node) {
-        return node instanceof Element;
+        if (node != null) {
+            return node instanceof Element;
+        }
+
+        return false;
     }
 
     private static Element toElement(Node node) {
