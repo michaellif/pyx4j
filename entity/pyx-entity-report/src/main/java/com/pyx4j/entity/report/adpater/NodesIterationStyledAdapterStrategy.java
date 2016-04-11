@@ -39,10 +39,8 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     private int ulCounter = 0; // Counter for <ul> elements (for indents)
 
-    // Markers for spectial tags
-    private boolean isSup = false;
-
-    private boolean isSub = false;
+    // Markers for spectial attributes
+    private SpecialAttributes specialAttributes = new SpecialAttributes();
 
     private StringBuffer styledResult = new StringBuffer();
 
@@ -86,12 +84,9 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         if (node instanceof TextNode) {
             TextNode textNode = (TextNode) node;
 
-            // Enclose sup or sub tag if needed
-            encloseTextInSpecialTagIfRequired(textNode);
-
             Map<String, String> styledMapAttributes = JasperReportStyledUtils.toStyledMap(parentAttribs);
 
-            styledResult.append(JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes));
+            styledResult.append(JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes, specialAttributes));
 
         } else if ((node instanceof Element && node.childNodes().size() == 0)) {
             Tag htmlTag = ((Element) node).tag();
@@ -99,7 +94,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             // Deal with br
             switch (htmlTag.getName()) {
             case "br":
-                styledResult.append(JasperReportStyledUtils.createStyledElement(new TextNode("\n", ""), null));
+                styledResult.append(JasperReportStyledUtils.createStyledElement(new TextNode("\n", ""), null, specialAttributes));
                 break;
             }
 
@@ -172,11 +167,11 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
                 childNodes.addAll(node.childNodes());
                 break;
             case "sup":
-                isSup = true;
+                specialAttributes.isSup = true;
                 childNodes.addAll(node.childNodes());
                 break;
             case "sub":
-                isSub = true;
+                specialAttributes.isSub = true;
                 childNodes.addAll(node.childNodes());
                 break;
             default:
@@ -191,18 +186,6 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
             }
 
             convertToStyled(inheritedAttributes, childNodes);
-        }
-    }
-
-    private void encloseTextInSpecialTagIfRequired(TextNode textNode) {
-        if (isSup) {
-            Element el = new Element(Tag.valueOf("sup"), "");
-            el.text(textNode.text());
-            textNode.text(el.outerHtml());
-        } else if (isSub) {
-            Element el = new Element(Tag.valueOf("sub"), "");
-            el.text(textNode.text());
-            textNode.text(el.outerHtml());
         }
     }
 
@@ -221,10 +204,10 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
     private void treatSpecialSupportedTags(Node previousSibling) {
         // TODO this has issues and not worked properly when sup inside sup inside sub and so on...
         if (previousSibling != null && (previousSibling instanceof Element)) {
-            if (((Element) previousSibling).tagName().equalsIgnoreCase("sup")) {
-                isSup = false;
-            } else if (((Element) previousSibling).tagName().equalsIgnoreCase("sub")) {
-                isSub = false;
+            if (((Element) previousSibling).tagName().equalsIgnoreCase(SpecialAttributes.SUP)) {
+                specialAttributes.isSup = false;
+            } else if (((Element) previousSibling).tagName().equalsIgnoreCase(SpecialAttributes.SUB)) {
+                specialAttributes.isSub = false;
             }
 
             if (previousSibling.childNodes().size() > 0) {

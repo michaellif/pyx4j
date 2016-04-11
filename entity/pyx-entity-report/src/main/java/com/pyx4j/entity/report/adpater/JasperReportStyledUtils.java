@@ -35,6 +35,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 
 import net.sf.jasperreports.engine.util.JRColorUtil;
+import net.sf.jasperreports.engine.util.JRStringUtil;
 
 public class JasperReportStyledUtils {
 
@@ -64,28 +65,50 @@ public class JasperReportStyledUtils {
         p, div
     }
 
-    public static String createStyledElement(Node node, Map<String, String> currentAttribs) {
+    public static String createStyledElement(Node node, Map<String, String> currentAttribs, SpecialAttributes specialAttributes) {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(createOpenStyleTag(node, currentAttribs));
-        buffer.append(((TextNode) node).getWholeText()); // TODO Test with only getting text to not get breaklines
-        buffer.append(createCloseStyleTag());
+        buffer.append(createOpenTag("style", currentAttribs));
+        buffer.append(createFinalText(node, specialAttributes)); // TODO Test with only getting text to not get breaklines
+        buffer.append(createCloseTag("style"));
         return buffer.toString();
     }
 
-    public static String createOpenStyleTag(Node node, Map<String, String> currenAttr) {
+    private static String createFinalText(Node node, SpecialAttributes specialAttributes) {
+        String nodeText = ((TextNode) node).getWholeText();
+        String encodedText = null;
+
+        if (specialAttributes.isSup) {
+            encodedText = encloseSpecialAttribute(SpecialAttributes.SUP, nodeText);
+        } else if (specialAttributes.isSub) {
+            encodedText = encloseSpecialAttribute(SpecialAttributes.SUB, nodeText);
+        } else {
+            encodedText = JRStringUtil.xmlEncode(nodeText);
+        }
+
+        return encodedText;
+    }
+
+    private static String encloseSpecialAttribute(String attribute, String text) {
+        StringBuilder encodedBuilder = new StringBuilder();
+        encodedBuilder.append(createOpenTag(attribute, null));
+        encodedBuilder.append(JRStringUtil.xmlEncode(text));
+        encodedBuilder.append(createCloseTag(attribute));
+        return encodedBuilder.toString();
+    }
+
+    public static String createOpenTag(String tagName, Map<String, String> currenAttr) {
 
         StringBuffer buffer = new StringBuffer();
         buffer.append("<");
-        buffer.append("style");
-        buffer.append(" ");
+        buffer.append(tagName);
         if (currenAttr != null) {
             for (Map.Entry<String, String> entry : currenAttr.entrySet()) {
+                buffer.append(" ");
                 buffer.append(entry.getKey());
                 buffer.append("=");
                 buffer.append("\"");
                 buffer.append(entry.getValue());
                 buffer.append("\"");
-                buffer.append(" ");
             }
         }
         buffer.append(">");
@@ -93,8 +116,12 @@ public class JasperReportStyledUtils {
         return buffer.toString();
     }
 
-    public static String createCloseStyleTag() {
-        return "</style>";
+    public static String createCloseTag(String tagName) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("</");
+        builder.append(tagName);
+        builder.append(">");
+        return builder.toString();
     }
 
     public static Map<String, String> toStyledMap(Attributes attributes) {

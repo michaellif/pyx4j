@@ -66,7 +66,7 @@ public class SupSubTest extends StyledFeaturesBase {
         } else if (supNode instanceof DataNode) {
             DataNode dataNode = (DataNode) supNode;
             if (!dataNode.getWholeData().startsWith("<" + tagName + ">")) {
-                Assert.fail(SimpleMessageFormat.format("Node text should start with \"{}\" but found \"{}\"", tagName, dataNode.getWholeData()));
+                Assert.fail(SimpleMessageFormat.format("Node text should start with \"{0}\" but found \"{1}\"", tagName, dataNode.getWholeData()));
             }
         }
     }
