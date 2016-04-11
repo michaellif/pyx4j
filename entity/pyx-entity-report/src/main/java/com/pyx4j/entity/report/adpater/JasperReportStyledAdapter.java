@@ -26,6 +26,9 @@ public class JasperReportStyledAdapter {
 
     JasperReportStyledAdapterStrategy strategy;
 
+    public JasperReportStyledAdapter() {
+    }
+
     public JasperReportStyledAdapter(JasperReportStyledAdapterStrategy strategy) {
         this.strategy = strategy;
     }
@@ -43,6 +46,10 @@ public class JasperReportStyledAdapter {
      * @return
      */
     public String makeJasperCompatibleStyled(String cleanedHtmlPart) {
+        if (strategy == null) {
+            setStrategy(new NodesIterationStyledAdapterStrategy());
+        }
+
         return strategy.makeJasperCompatibleStyled(cleanedHtmlPart);
     }
 

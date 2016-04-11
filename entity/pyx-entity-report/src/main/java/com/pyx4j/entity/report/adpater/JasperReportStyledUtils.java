@@ -191,14 +191,17 @@ public class JasperReportStyledUtils {
                     resultMap.put("isUnderline", String.valueOf(Boolean.TRUE));
                 }
 
+                // ******************  Font-Size ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_SIZE)) {
                     resultMap.put("size", getCssFontSize(valueAttribute));
                 }
 
+                // ******************  Color ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.COLOR)) {
                     resultMap.put("forecolor", getCssColor(valueAttribute));
                 }
 
+                // ******************  Background color ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND_COLOR) //
                         || keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND)) {
                     resultMap.put("backcolor", getCssColor(valueAttribute));

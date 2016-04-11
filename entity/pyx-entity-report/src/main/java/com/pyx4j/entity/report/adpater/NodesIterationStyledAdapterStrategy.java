@@ -32,14 +32,20 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.parser.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAdapterStrategy {
+
+    private static final Logger log = LoggerFactory.getLogger(NodesIterationStyledAdapterStrategy.class);
+
+    private final boolean debug = true;
 
     private Stack<Integer> olStackIndex; // Store for <ol> indexes and counter for indents at same time
 
     private int ulCounter = 0; // Counter for <ul> elements (for indents)
 
-    // Markers for spectial attributes
+    // Markers for special attributes
     private SpecialAttributes specialAttributes = new SpecialAttributes();
 
     private StringBuffer styledResult = new StringBuffer();
@@ -58,10 +64,11 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         String converted = styledResult.toString();
         styledResult.setLength(0); // TODO Enhance this
 
-        System.out.println("\n\n************** STYLED CONVERSION ***************");
-        System.out.println("Received -> " + cleanedHtmlPart);
-        System.out.println("\nConverted-> " + converted);
-        System.out.println("*******************************************\n\n");
+        if (debug) {
+            log.debug("\nHTML RECEIVED: {}", cleanedHtmlPart);
+            log.debug("\nSTYLED CONVERTED: {}", converted);
+        }
+
         return converted;
     }
 
@@ -230,7 +237,7 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
         }
 
         if (((Element) node).tagName().equalsIgnoreCase("ol")) {
-            if (!olStackIndex.isEmpty()) {
+            if (olStackIndex != null && !olStackIndex.isEmpty()) {
                 olStackIndex.pop();
             }
         }
