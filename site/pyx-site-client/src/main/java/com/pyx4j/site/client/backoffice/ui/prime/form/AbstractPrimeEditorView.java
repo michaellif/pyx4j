@@ -150,7 +150,7 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
 
         if (EditMode.newItem.equals(mode)) {
             setCaption(getCaptionBase() + i18n.tr("New Item..."));
-            getForm().setActiveTab(0);
+            getForm().setActiveFirstTab();
         } else {
             setCaption(getCaptionBase() + value.getStringView());
         }
