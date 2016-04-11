@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
+import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
 import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
@@ -51,6 +52,7 @@ public class AbstractPrimePaneView<PRESENTER extends IPrimePanePresenter> extend
             throw new Error(layoutSystem.name());
         }
 
+        contentHolder.asWidget().setStyleName(PaneTheme.StyleName.PrimePaneContentHolder.name());
         setCenter(contentHolder.asWidget());
 
         CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());

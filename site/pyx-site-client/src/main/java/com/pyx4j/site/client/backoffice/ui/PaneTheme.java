@@ -53,6 +53,8 @@ public class PaneTheme extends Theme {
 
         HighlightedAction,
 
+        PrimePaneContentHolder,
+
         Lister,
 
         ListerFiltersPanel,
