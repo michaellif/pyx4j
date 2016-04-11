@@ -236,6 +236,8 @@ public abstract class FormPanelTheme extends Theme {
 
     protected abstract ThemeColor getBackgroundColor();
 
+    // The name is confusing. in fact this is SingleColumnWidth
+    // Formerly getSingleColumnWidth()
     protected abstract int getContainerWidth();
 
     protected abstract int getLabelWidth();
