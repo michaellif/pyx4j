@@ -35,8 +35,6 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
 
     private PrimeEntityForm<E> form;
 
-    private PRESENTER presenter;
-
     private String captionBase;
 
     private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
@@ -48,18 +46,12 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
 
     @Override
     public void setPresenter(PRESENTER presenter) {
-        this.presenter = presenter;
-
+        super.setPresenter(presenter);
         if (presenter != null && presenter.getPlace() != null) {
             captionBase = AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() + ": ";
         } else {
             captionBase = "";
         }
-    }
-
-    @Override
-    public PRESENTER getPresenter() {
-        return presenter;
     }
 
     protected String getCaptionBase() {
@@ -108,6 +100,13 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
         assert (form != null);
         form.populate(value);
         secureConcerns.setSecurityContext(value);
+        onPopulate();
+    }
+
+    /**
+     * Called after data is shown/propagated to UI components
+     */
+    protected void onPopulate() {
     }
 
     @Override

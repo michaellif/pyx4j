@@ -112,6 +112,10 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
         return (IPrimeEditorView<E>) super.getView();
     }
 
+    protected E getValue() {
+        return getView().getValue();
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         mayStop = false;
@@ -152,6 +156,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                             if (!discarded) {
                                 setEntityParent(result, false);
                                 onPopulateSuccess(result);
+                                onPopulate();
                             }
                         }
                     }, result);
@@ -163,6 +168,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                 public void onSuccess(E result) {
                     if (!discarded) {
                         onPopulateSuccess(result);
+                        onPopulate();
                     }
                 }
             }, entityId, AbstractCrudService.RetrieveOperation.Edit);
@@ -177,6 +183,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                 public void onSuccess(E result) {
                     if (!discarded) {
                         onPopulateSuccess(result);
+                        onPopulate();
                     }
                 }
             }, entityId, RetrieveOperation.Edit);
@@ -214,6 +221,18 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
         return (entityId == null);
     }
 
+    /**
+     * Called after data is shown/propagated to UI components
+     */
+    protected void onPopulate() {
+    }
+
+    /**
+     * TODO refactoring will be done at EOD 1.4.5
+     * 
+     * @deprecated use onPopulate
+     */
+    @Deprecated
     public void onPopulateSuccess(E result) {
         populateView(result);
     }

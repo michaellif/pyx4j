@@ -28,6 +28,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModelEvent;
+import com.pyx4j.forms.client.ui.datatable.DataTableModelListener;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
@@ -64,6 +66,15 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
         dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
 
         ((ScrollPanel) getContentPane()).add(this.dataTablePanel = dataTablePanel);
+
+        dataTablePanel.getDataTableModel().addDataTableModelListener(new DataTableModelListener() {
+            @Override
+            public void onDataTableModelChanged(DataTableModelEvent event) {
+                if (event.getType() == DataTableModelEvent.Type.REBUILD) {
+                    onPopulate();
+                }
+            }
+        });
     }
 
     @Override
@@ -76,6 +87,12 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
     public void setPresenter(IPrimeListerView.IPrimeListerPresenter<E> presenter) {
         super.setPresenter(presenter);
         setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
+    }
+
+    /**
+     * Called after data is shown/propagated to UI components
+     */
+    protected void onPopulate() {
     }
 
     @Override
