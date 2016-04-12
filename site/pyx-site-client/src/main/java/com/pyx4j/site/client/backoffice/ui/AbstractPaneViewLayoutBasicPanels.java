@@ -30,7 +30,7 @@ public class AbstractPaneViewLayoutBasicPanels extends DockPanel implements Abst
 
     @Override
     public void setWidgetHeight(Widget widget, double height) {
-        setCellHeight(widget, String.valueOf(height));
+        setCellHeight(widget, String.valueOf(height) + "px");
     }
 
     @Override
@@ -41,11 +41,13 @@ public class AbstractPaneViewLayoutBasicPanels extends DockPanel implements Abst
     @Override
     public void addNorth(Widget widget, double height) {
         add(widget, DockPanel.NORTH);
+        widget.setHeight(String.valueOf(height) + "px");
     }
 
     @Override
     public void addSouth(Widget widget, double height) {
         add(widget, DockPanel.SOUTH);
+        widget.setHeight(String.valueOf(height) + "px");
     }
 
 }

@@ -133,6 +133,10 @@ public class PaneTheme extends Theme {
         style.addProperty("overflow", "hidden");
         addStyle(style);
 
+        style = new Style(".", StyleName.HeaderContainer, " .", StyleName.HeaderBreadcrumbs);
+        style.addProperty("background-color", ThemeColor.object1, 0.3);
+        addStyle(style);
+
         style = new Style(".", StyleName.FooterToolbar);
         style.addProperty("padding", "2px 0px");
         style.addProperty("border-top", "4px solid");
