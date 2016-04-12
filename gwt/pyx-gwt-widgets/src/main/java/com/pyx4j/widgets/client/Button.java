@@ -30,6 +30,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
@@ -93,7 +94,7 @@ public class Button extends ButtonBase {
         setStylePrimaryName(getElement(), WidgetsTheme.StyleName.Button.name());
         getTextLabel().setStyleName(WidgetsTheme.StyleName.ButtonText.name());
 
-        buttonMenuIndicator = new Label("\u25bc");
+        buttonMenuIndicator = new Label(String.valueOf(HtmlUtils.TRIANGLE_DOWN_SMALL_UTF8));
         buttonMenuIndicator.setStyleName(WidgetsTheme.StyleName.ButtonText.name());
         buttonMenuIndicator.addStyleName(WidgetsTheme.StyleName.ButtonMenuIndicator.name());
         buttonMenuIndicator.setVisible(false);

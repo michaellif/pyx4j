@@ -93,6 +93,8 @@ public abstract class AppSite implements EntryPoint {
 
     private final UserAgentDetection userAgentDetection;
 
+    private String windowTitleSufix = "";
+
     public AppSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory, AppPlaceDispatcher dispatcher) {
         this.appId = appId;
         this.viewFactory = viewFactory;
@@ -290,6 +292,20 @@ public abstract class AppSite implements EntryPoint {
         Element loadingBar = DOM.getElementById("loading-bdr");
         if (loadingBar != null) {
             loadingBar.setInnerHTML(htmMessage);
+        }
+    }
+
+    public void setApplicationWindowTitleSufix(String windowTitleSufix) {
+        this.windowTitleSufix = windowTitleSufix;
+        // Set the application name until it is changed by Activity
+        setWindowTitle(null);
+    }
+
+    public void setWindowTitle(String windowTitlePrefix) {
+        if (windowTitlePrefix == null) {
+            Window.setTitle(windowTitleSufix);
+        } else {
+            Window.setTitle(windowTitlePrefix + " - " + windowTitleSufix);
         }
     }
 

@@ -27,7 +27,11 @@ public enum CCompDebugId implements IDebugId {
     FileName,
 
     // Sufix
-    UploadFile;
+    UploadFile,
+
+    Action,
+
+    Triger;
 
     @Override
     public String debugId() {

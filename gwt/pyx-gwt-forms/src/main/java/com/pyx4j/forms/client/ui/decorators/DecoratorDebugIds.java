@@ -22,7 +22,20 @@ package com.pyx4j.forms.client.ui.decorators;
 import com.pyx4j.commons.IDebugId;
 
 public enum DecoratorDebugIds implements IDebugId {
-    ActionPanel, Validation, Label, Mandatory, BoxFolderItemToolbar, TableFolderDecorator, TableFolderItemDecorator;
+
+    ActionPanel,
+
+    Validation,
+
+    Label,
+
+    Mandatory,
+
+    BoxFolderItemToolbar,
+
+    TableFolderDecorator,
+
+    TableFolderItemDecorator;
 
     @Override
     public String debugId() {

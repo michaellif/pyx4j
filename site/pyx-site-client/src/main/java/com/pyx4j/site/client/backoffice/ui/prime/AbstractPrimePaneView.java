@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.client.backoffice.ui.AbstractPaneView;
 import com.pyx4j.site.client.backoffice.ui.PaneTheme;
 import com.pyx4j.site.client.backoffice.ui.prime.IPrimePaneView.IPrimePanePresenter;
@@ -56,6 +57,8 @@ public class AbstractPrimePaneView<PRESENTER extends IPrimePanePresenter> extend
         setCenter(contentHolder.asWidget());
 
         CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
+
+        setCaptionDebugId(NavigationIDs.PrimePaneCaption);
     }
 
     protected IsWidget getContentPane() {
