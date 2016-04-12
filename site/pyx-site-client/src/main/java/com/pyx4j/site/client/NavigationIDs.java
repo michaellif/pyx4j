@@ -16,6 +16,8 @@ import com.pyx4j.commons.IDebugId;
 
 public enum NavigationIDs implements IDebugId {
 
+    Navig,
+
     PrimePaneCaption;
 
     @Override

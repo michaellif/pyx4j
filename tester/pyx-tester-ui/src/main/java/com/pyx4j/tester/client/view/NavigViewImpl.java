@@ -87,7 +87,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
                 }
 
             });
-            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Item, place.getPlaceId()).toString());
+            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navig, place.getPlaceId()).toString());
             setWidget(anchor);
         }
 

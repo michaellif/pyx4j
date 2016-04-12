@@ -35,7 +35,7 @@ public class FormBasicTest extends TesterSeleniumTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         // Navigate to Test Form
-        selenium.click(DebugIdBuilder.id(NavigationIDs.Navigation_Item, TesterSiteMap.FormTester.class));
+        selenium.click(DebugIdBuilder.id(NavigationIDs.Navig, TesterSiteMap.FormTester.class));
     }
 
     public void testTextBox() {
@@ -67,7 +67,7 @@ public class FormBasicTest extends TesterSeleniumTestBase {
         // Verify the form is populated with data from factory
         assertValueOnForm(entityIpopulated.textBox());
 
-        // Visible is checked by default. Click to un-check. 
+        // Visible is checked by default. Click to un-check.
         selenium.click(DebugIdBuilder.id(proto(CComponentProperties.class).visible()));
 
         // Check that component invisible
