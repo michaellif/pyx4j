@@ -38,6 +38,14 @@ public class HtmlUtils {
 
     public static final String LEFT_ARROW_HTML = "&#8592;";
 
+    public static final char TRIANGLE_UP_UTF8 = '\u25B2';
+
+    public static final char TRIANGLE_DOWN_UTF8 = '\u25BC';
+
+    public static final char TRIANGLE_UP_SMALL_UTF8 = '\u25B4';
+
+    public static final char TRIANGLE_DOWN_SMALL_UTF8 = '\u25BE';
+
     private final static String[] HTML_ENTITIES = {
 
             ">", "&gt;",
