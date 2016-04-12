@@ -105,6 +105,9 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
         }
     }
 
+    /**
+     * The button will be assigned DebugId from component
+     */
     public void setActionButton(Button actionButton) {
         this.actionButton = actionButton;
         if (viewerPanel != null) {
@@ -241,6 +244,13 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
         }
         if (viewer != null) {
             viewer.ensureDebugId(debugId.debugId());
+        }
+
+        if (getTriggerButton() != null) {
+            getTriggerButton().setDebugId(new CompositeDebugId(debugId, CCompDebugId.Triger));
+        }
+        if (actionButton != null) {
+            getTriggerButton().setDebugId(new CompositeDebugId(debugId, CCompDebugId.Action));
         }
     }
 
