@@ -62,6 +62,10 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("margin", "-30px 0 0 10px");
         addStyle(style);
 
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabbar, " .", WidgetsTheme.StyleName.ToolbarItem);
+        style.addProperty("margin", "0");
+        addStyle(style);
+
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", WidgetsTheme.StyleName.Button);
         style.addProperty("margin", "0 4px 0 0");
         style.addProperty("line-height", "30px");
