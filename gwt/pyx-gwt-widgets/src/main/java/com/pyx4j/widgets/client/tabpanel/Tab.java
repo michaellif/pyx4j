@@ -23,10 +23,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
+import com.pyx4j.gwt.commons.concerns.SecureConcern;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.widgets.client.HasSecureConcern;
-import com.pyx4j.widgets.client.SecureConcern;
 
 public class Tab extends LayoutPanel implements HasSecureConcern {
 

@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.security.shared.AccessControlContext;
 
 public class SecureConcernsHolder implements HasSecureConcern {

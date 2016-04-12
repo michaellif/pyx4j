@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 

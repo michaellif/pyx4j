@@ -38,6 +38,9 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
+import com.pyx4j.gwt.commons.concerns.VisibilityConcern;
+import com.pyx4j.gwt.commons.concerns.WidgetConcerns;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
@@ -54,7 +57,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     private boolean active = false;
 
-    protected final SecureConcern visible = new SecureConcern();
+    private final WidgetConcerns concerns = new WidgetConcerns();
 
     private String captionText;
 
@@ -109,7 +112,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     public void setCommand(Command command) {
         this.command = command;
-        setVisibleImpl();
+        applyVisibilityRules();
     }
 
     public Command getCommand() {
@@ -157,8 +160,8 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
     }
 
     public void setPermission(Permission... permission) {
-        visible.setPermission(permission);
-        setVisibleImpl();
+        concerns.setVisiblePermission(permission);
+        applyVisibilityRules();
     }
 
     protected void updateImageState() {
@@ -166,8 +169,8 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         getImageHolder().getElement().getStyle().setProperty("background", "none");
     }
 
-    protected void setVisibleImpl() {
-        setVisibleUIObject(this.visible.getDecision());
+    public void applyVisibilityRules() {
+        setVisibleUIObject(concerns.isVisible());
     }
 
     protected void setVisibleUIObject(boolean visible) {
@@ -176,16 +179,19 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     @Override
     public void setVisible(boolean visible) {
-        this.visible.setDecision(visible);
-        if (this.visible.hasDecision()) {
-            setVisibleImpl();
-        }
+        concerns.setVisible(visible);
+        applyVisibilityRules();
+    }
+
+    public void visible(VisibilityConcern visibilityConcern, String... adapterName) {
+        concerns.visible(visibilityConcern, adapterName);
+        applyVisibilityRules();
     }
 
     @Override
     public void setSecurityContext(AccessControlContext context) {
-        visible.setContext(context);
-        setVisibleImpl();
+        concerns.setSecurityContext(context);
+        applyVisibilityRules();
     }
 
     public boolean isActive() {

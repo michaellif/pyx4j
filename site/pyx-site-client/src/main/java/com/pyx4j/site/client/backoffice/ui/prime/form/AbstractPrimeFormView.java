@@ -22,12 +22,12 @@ package com.pyx4j.site.client.backoffice.ui.prime.form;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView.IPrimeFormPresenter;
 import com.pyx4j.site.client.ui.layout.AbstractSimpleLayoutPanel;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
-import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.SecureConcernsHolder;
 
 public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormPresenter> extends AbstractPrimePaneView<PRESENTER>

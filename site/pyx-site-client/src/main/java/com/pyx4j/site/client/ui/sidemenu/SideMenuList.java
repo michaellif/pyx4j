@@ -26,9 +26,9 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.SecureConcernsHolder;
 
 public class SideMenuList implements ISideMenuNode, HasSecureConcern {

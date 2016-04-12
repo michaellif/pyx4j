@@ -36,6 +36,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
+import com.pyx4j.gwt.commons.concerns.SecureConcern;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -43,8 +45,6 @@ import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.HasSecureConcern;
-import com.pyx4j.widgets.client.SecureConcern;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
 public class SideMenuItem implements ISideMenuNode, HasSecureConcern {

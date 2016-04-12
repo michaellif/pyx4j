@@ -28,10 +28,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
-import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.Toolbar;
 
 public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> implements IPaneView<PRESENTER> {

@@ -17,12 +17,13 @@
  * Created on Jul 21, 2014
  * @author vlads
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.gwt.commons.concerns;
 
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 
+@Deprecated
 public class SecureConcern {
 
     private Permission[] permissions;

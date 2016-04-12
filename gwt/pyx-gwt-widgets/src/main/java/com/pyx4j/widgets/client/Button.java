@@ -31,6 +31,8 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
+import com.pyx4j.gwt.commons.concerns.SecureConcern;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
@@ -100,6 +102,8 @@ public class Button extends ButtonBase {
         buttonMenuIndicator.setVisible(false);
         getImageHolder().add(buttonMenuIndicator);
 
+        visible(() -> (getCommand() != null || (getMenu() != null && !getMenu().isMenuEmpty())), "Menu|Command");
+
     }
 
     @Override
@@ -138,11 +142,11 @@ public class Button extends ButtonBase {
         this.menu = menu;
 
         if (menu != null) {
-            setVisibleImpl();
+            applyVisibilityRules();
             menu.addSecureConcernStateChangeHandler(new SecureConcernStateChangeEvent.Handler() {
                 @Override
                 public void onSecureConcernStateChanged(SecureConcernStateChangeEvent event) {
-                    setVisibleImpl();
+                    applyVisibilityRules();
                 }
             });
         }
@@ -161,11 +165,11 @@ public class Button extends ButtonBase {
     }
 
     @Override
-    protected void setVisibleImpl() {
+    public void applyVisibilityRules() {
         if (buttonMenuIndicator != null) {
             buttonMenuIndicator.setVisible(this.menu != null && !this.menu.isMenuEmpty());
         }
-        setVisibleUIObject(this.visible.getDecision() && (getCommand() != null || (menu != null && !this.menu.isMenuEmpty())));
+        super.applyVisibilityRules();
     }
 
     @Deprecated
