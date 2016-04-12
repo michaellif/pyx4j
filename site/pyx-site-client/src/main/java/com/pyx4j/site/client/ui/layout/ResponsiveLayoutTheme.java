@@ -63,6 +63,7 @@ public class ResponsiveLayoutTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabbar, " .", WidgetsTheme.StyleName.ToolbarItem);
+        style.addProperty("padding", "0");
         style.addProperty("margin", "0");
         addStyle(style);
 
