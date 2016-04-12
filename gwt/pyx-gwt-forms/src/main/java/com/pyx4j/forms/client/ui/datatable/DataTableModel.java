@@ -81,31 +81,31 @@ public class DataTableModel<E extends IEntity> {
      * Adds a listener to the list that's notified each time a change to the data model
      * occurs.
      *
-     * @param l
+     * @param dataTableModelListener
      *            the DataTableModelListener
      */
-    public void addDataTableModelListener(DataTableModelListener l) {
-        listenerList.add(l);
+    public void addDataTableModelListener(DataTableModelListener dataTableModelListener) {
+        listenerList.add(dataTableModelListener);
     }
 
     /**
      * Removes a listener from the list that's notified each time a change to the data
      * model occurs.
      *
-     * @param l
+     * @param dataTableModelListener
      *            the TableModelListener
      */
-    public void removeDataTableModelListener(DataTableModelListener l) {
-        listenerList.remove(l);
+    public void removeDataTableModelListener(DataTableModelListener dataTableModelListener) {
+        listenerList.remove(dataTableModelListener);
     }
 
     public List<DataTableModelListener> getDataTableModelListeners() {
         return listenerList;
     }
 
-    protected void fireTableChanged(DataTableModelEvent e) {
+    protected void fireTableChanged(DataTableModelEvent event) {
         for (DataTableModelListener listener : listenerList) {
-            listener.onDataTableModelChanged(e);
+            listener.onDataTableModelChanged(event);
         }
     }
 

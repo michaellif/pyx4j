@@ -22,24 +22,29 @@ package com.pyx4j.site.client.backoffice.ui;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.HasSecureConcern;
 import com.pyx4j.widgets.client.Toolbar;
 
-public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> extends DockLayoutPanel implements IPaneView<PRESENTER> {
+public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> implements IPaneView<PRESENTER> {
 
     private static final double TOOLBAR_DEFAULT_HEIGHT = 34;
+
+    private final LayoutSystem layoutSystem;
+
+    private final AbstractPaneViewLayout layoutWidget;
 
     private final Label captionLabel;
 
     private final Toolbar headerToolbar;
+
+    private final Toolbar headerToolbarLeft;
 
     private final Toolbar footerToolbar;
 
@@ -49,44 +54,92 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> extends
 
     private final SimplePanel headerToolbarHolder;
 
+    private final SimplePanel headerToolbarHolderLeft;
+
     private final SimplePanel footerToolbarHolder;
 
     private final FlowPanel headerCaption;
 
     private PRESENTER presenter;
 
-    public AbstractPaneView() {
-        super(Unit.PX);
+    public AbstractPaneView(LayoutSystem layoutSystem) {
+        this.layoutSystem = layoutSystem;
+        switch (layoutSystem) {
+        case BasicPanels:
+            layoutWidget = new AbstractPaneViewLayoutBasicPanels();
+            break;
+        case LayoutPanels:
+            layoutWidget = new AbstractPaneViewLayoutLayoutPanels();
+            break;
+        default:
+            throw new Error(layoutSystem.name());
+        }
 
         headerCaption = new FlowPanel();
         captionLabel = new Label();
         captionLabel.setStyleName(PaneTheme.StyleName.HeaderCaptionLabel.name());
         headerCaption.add(captionLabel);
         headerCaption.setStyleName(PaneTheme.StyleName.HeaderCaption.name());
-        addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
+        layoutWidget.addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
 
         headerContainer = new FlowPanel();
         headerContainer.setStyleName(PaneTheme.StyleName.HeaderContainer.name());
-        addNorth(headerContainer, 0);
+        headerContainer.setWidth("100%");
+        layoutWidget.addNorth(headerContainer, 0);
 
         headerToolbarHolder = new SimplePanel();
         headerToolbarHolder.setStyleName(PaneTheme.StyleName.HeaderToolbar.name());
         headerToolbar = new Toolbar();
         headerToolbarHolder.setWidget(headerToolbar);
-
         headerContainer.add(headerToolbarHolder);
 
         headerBreadcrumbHolder = new SimplePanel();
         headerBreadcrumbHolder.setStyleName(PaneTheme.StyleName.HeaderBreadcrumbs.name());
         headerContainer.add(headerBreadcrumbHolder);
 
+        headerToolbarLeft = new Toolbar();
+        headerToolbarHolderLeft = new SimplePanel();
+        headerToolbarHolderLeft.setStyleName(PaneTheme.StyleName.HeaderToolbarLeft.name());
+        headerToolbarHolderLeft.addStyleName(PaneTheme.StyleName.HeaderToolbar.name());
+        headerToolbarHolderLeft.setWidget(headerToolbarLeft);
+        headerContainer.add(headerToolbarHolderLeft);
+
         footerToolbarHolder = new SimplePanel();
         footerToolbarHolder.setStyleName(PaneTheme.StyleName.FooterToolbar.name());
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
-        addSouth(footerToolbarHolder, 0);
+        layoutWidget.addSouth(footerToolbarHolder, 0);
 
     }
+
+    // ---- Layout delegation begin
+
+    protected LayoutSystem getLayoutSystem() {
+        return layoutSystem;
+    }
+
+    @Override
+    public Widget asWidget() {
+        return layoutWidget.asWidget();
+    }
+
+    protected void setCenter(Widget widget) {
+        layoutWidget.setCenter(widget);
+    }
+
+    protected com.google.gwt.dom.client.Element getElement() {
+        return asWidget().getElement();
+    }
+
+    protected void setStyleName(String style) {
+        asWidget().setStyleName(style);
+    }
+
+    protected void setSize(String width, String height) {
+        asWidget().setSize(width, height);
+    }
+
+    // ---- Layout delegation end
 
     protected Collection<HasSecureConcern> secureConcerns() {
         return Arrays.<HasSecureConcern> asList(headerToolbar, footerToolbar);
@@ -105,17 +158,22 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> extends
     }
 
     public void setBreadcrumbsBar(BreadcrumbsBar breadcrumbsBar) {
-        setWidgetSize(headerContainer, TOOLBAR_DEFAULT_HEIGHT);
+        layoutWidget.setWidgetHeight(headerContainer, TOOLBAR_DEFAULT_HEIGHT);
         headerBreadcrumbHolder.setWidget(breadcrumbsBar);
     }
 
     public void addHeaderToolbarItem(Widget widget) {
-        setWidgetSize(headerContainer, TOOLBAR_DEFAULT_HEIGHT);
+        layoutWidget.setWidgetHeight(headerContainer, TOOLBAR_DEFAULT_HEIGHT);
         headerToolbar.addItem(widget);
     }
 
+    public void addHeaderToolbarItemLeft(Widget widget) {
+        layoutWidget.setWidgetHeight(headerContainer, TOOLBAR_DEFAULT_HEIGHT);
+        headerToolbarLeft.addItem(widget);
+    }
+
     public void addFooterToolbarItem(Widget widget) {
-        setWidgetSize(footerToolbarHolder, TOOLBAR_DEFAULT_HEIGHT);
+        layoutWidget.setWidgetHeight(footerToolbarHolder, TOOLBAR_DEFAULT_HEIGHT);
         footerToolbar.addItem(widget);
     }
 

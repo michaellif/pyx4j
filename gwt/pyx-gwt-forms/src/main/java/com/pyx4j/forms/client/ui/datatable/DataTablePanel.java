@@ -323,6 +323,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         return dataTable;
     }
 
+    //TODO rename to getModel()
     public DataTableModel<E> getDataTableModel() {
         return dataTable.getDataTableModel();
     }
@@ -382,6 +383,9 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         }
     }
 
+    /**
+     * Hide filter ToolBars
+     */
     public void setFilteringEnabled(boolean enabled) {
         filterPanel.setVisible(enabled);
     }
@@ -523,6 +527,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     public void setExternalFilters(List<Criterion> externalFilters) {
         this.externalFilters = externalFilters;
+    }
+
+    public void setPreDefinedFilters(List<Criterion> filters) {
+        getDataSource().setPreDefinedFilters(filters);
     }
 
     public E getSelectedItem() {

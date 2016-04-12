@@ -152,6 +152,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         tablePanel.renderTable();
     }
 
+    //TODO rename to getModel()
     public DataTableModel<E> getDataTableModel() {
         return model;
     }

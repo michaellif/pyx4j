@@ -117,6 +117,15 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
         tabPanel.setTabVisible(tab, show);
     }
 
+    /**
+     * Activate the Tab #0 if there are tabs in the form.
+     */
+    public void setActiveFirstTab() {
+        if (tabPanel.size() > 0) {
+            setActiveTab(0);
+        }
+    }
+
     public void setActiveTab(int index) {
         tabPanel.selectTab(index);
     }

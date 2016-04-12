@@ -46,6 +46,11 @@ public interface CComponent<DATA_TYPE> extends IsWidget, HasPropertyChangeHandle
     public void setValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
     /**
+     * Set value again and refresh its visual presentation
+     */
+    public void refresh(boolean fireEvent);
+
+    /**
      * Remove all values from this component; in case of entity, preserves ownership relationships.
      */
     public void clear();

@@ -112,7 +112,7 @@ public abstract class CrudAppPlace extends AppPlace {
         if (parentID != null) {
             addPlaceArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
-        return (CrudAppPlace) addPlaceArg(ARG_NAME_TAB_IDX, String.valueOf(0));
+        return this;
     }
 
     public CrudAppPlace formNewItemPlace(Key parentID, Class<?> parentClass) {
@@ -126,7 +126,7 @@ public abstract class CrudAppPlace extends AppPlace {
         this.initializationData = initializationData;
         setType(Type.editor);
         setStable(false);
-        return (CrudAppPlace) addPlaceArg(ARG_NAME_TAB_IDX, String.valueOf(0));
+        return this;
     }
 
     public InitializationData getInitializationData() {

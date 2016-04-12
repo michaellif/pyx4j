@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,13 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 8, 2009
- * @author michaellif
+ * Created on Apr 8, 2016
+ * @author vlads
  */
-package com.pyx4j.forms.client.ui.datatable;
+package com.pyx4j.site.client.backoffice.ui;
 
-public interface DataTableModelListener {
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
-    public void onDataTableModelChanged(DataTableModelEvent event);
+/**
+ * LayoutSystem defendant part of PaneView
+ */
+public interface AbstractPaneViewLayout extends IsWidget {
+
+    public void addNorth(Widget widget, double height);
+
+    public void setCenter(Widget widget);
+
+    public void addSouth(Widget widget, double height);
+
+    public void setWidgetHeight(Widget widget, double height);
 
 }

@@ -39,6 +39,8 @@ public class PaneTheme extends Theme {
 
         HeaderToolbar,
 
+        HeaderToolbarLeft,
+
         HeaderBreadcrumbs,
 
         FooterToolbar,
@@ -50,6 +52,8 @@ public class PaneTheme extends Theme {
         HighlightedButton,
 
         HighlightedAction,
+
+        PrimePaneContentHolder,
 
         Lister,
 
@@ -121,8 +125,16 @@ public class PaneTheme extends Theme {
         style.addProperty("float", "right");
         addStyle(style);
 
+        style = new Style(".", StyleName.HeaderContainer, " .", StyleName.HeaderToolbarLeft);
+        style.addProperty("float", "left");
+        addStyle(style);
+
         style = new Style(".", StyleName.HeaderBreadcrumbs);
         style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(".", StyleName.HeaderContainer, " .", StyleName.HeaderBreadcrumbs);
+        style.addProperty("background-color", ThemeColor.object1, 0.3);
         addStyle(style);
 
         style = new Style(".", StyleName.FooterToolbar);

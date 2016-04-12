@@ -28,6 +28,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
+import com.pyx4j.forms.client.ui.datatable.DataTableModelEvent;
+import com.pyx4j.forms.client.ui.datatable.DataTableModelListener;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
 import com.pyx4j.site.client.memento.MementoManager;
@@ -42,6 +44,7 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
 
     private List<Criterion> externalFilters;
 
+    //TODO Investigate why we need this.
     private boolean populateOnStart = true;
 
     public AbstractPrimeListerActivity(Class<E> entityClass, AppPlace place, IPrimeListerView<E> view) {
@@ -61,6 +64,16 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
         if (filters.getFilters().size() > 0) {
             externalFilters = filters.getFilters();
         }
+
+        view.getDataTablePanel().getDataTableModel().addDataTableModelListener(new DataTableModelListener() {
+
+            @Override
+            public void onDataTableModelChanged(DataTableModelEvent event) {
+                if (event.getType() == DataTableModelEvent.Type.REBUILD) {
+                    onPopulate();
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -128,6 +141,12 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
             populate();
         }
         containerWidget.setWidget(getView());
+    }
+
+    /**
+     * Called after data is shown/propagated to UI components
+     */
+    protected void onPopulate() {
     }
 
     public void onDiscard() {
