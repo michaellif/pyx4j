@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.HasSecureConcern;
@@ -151,6 +152,7 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> impleme
 
     public void setCaption(String caption) {
         captionLabel.setText(caption);
+        AppSite.instance().setWindowTitle(caption);
     }
 
     public String getCaption() {
