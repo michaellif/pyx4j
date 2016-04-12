@@ -67,4 +67,9 @@ public abstract class AbstractPrimeViewerView<E extends IEntity> extends Abstrac
 
         setCaption(caption);
     }
+
+    public E getValue() {
+        return getForm().getValue();
+    }
+
 }
