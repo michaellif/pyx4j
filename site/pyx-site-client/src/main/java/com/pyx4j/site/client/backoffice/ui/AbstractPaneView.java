@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
@@ -148,6 +149,10 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> impleme
 
     protected FlowPanel getHeaderCaption() {
         return headerCaption;
+    }
+
+    protected void setCaptionDebugId(IDebugId debugId) {
+        captionLabel.ensureDebugId(debugId.debugId());
     }
 
     public void setCaption(String caption) {
