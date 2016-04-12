@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -27,24 +27,23 @@ import org.junit.Test;
 
 public class FontTest extends StyledFeaturesBase {
 
-    private static final String SIMPLE_FONT_TAG = "<font>This is a bold text</font>";
-
-    private static final String SIMPLE_FONT_TAG_SIZE = "<font size=\"8\">This is a bold text</font>";
-
-    private static final String SIMPLE_FONT_TAG_COLOR = "<font color=\"green\">This is a bold text</font>"; // TODO Add other colors formats
-
-    private static final String SIMPLE_FONT_TAG_SIZE_AND_COLOR = "<font size=\"1\" color=\"blue\">This is a bold text</font>";
-
     @Test
     public void testFontCases() throws IOException {
 
-        testStyledAttributes(SIMPLE_FONT_TAG);
+        final String font_tag = "<font>This is a bold text</font>";
+        testStyledAttributes(font_tag);
 
-        testStyledAttributes(SIMPLE_FONT_TAG_SIZE, createFontSizeAttribute("8"));
+        final String font_tag_empty_size = "<font size=\"\">This is a bold text</font>";
+        testStyledAttributes(font_tag_empty_size);
 
-        testStyledAttributes(SIMPLE_FONT_TAG_COLOR, createStyledColorAttribute("green"));
+        final String font_tag_size = "<font size=\"8\">This is a bold text</font>";
+        testStyledAttributes(font_tag_size, createFontSizeAttribute("8"));
 
-        testStyledAttributes(SIMPLE_FONT_TAG_SIZE_AND_COLOR, new Attribute[] { createFontSizeAttribute("1"), createStyledColorAttribute("blue") });
+        final String font_tag_color = "<font color=\"green\">This is a bold text</font>";
+        testStyledAttributes(font_tag_color, createStyledColorAttribute("green"));
+
+        final String font_tag_size_and_color = "<font size=\"1\" color=\"blue\">This is a bold text</font>";
+        testStyledAttributes(font_tag_size_and_color, new Attribute[] { createFontSizeAttribute("1"), createStyledColorAttribute("blue") });
     }
 
 }

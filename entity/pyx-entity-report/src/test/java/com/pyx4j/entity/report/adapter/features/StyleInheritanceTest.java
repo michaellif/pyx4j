@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -30,27 +30,23 @@ import org.junit.Test;
 
 public class StyleInheritanceTest extends StyledFeaturesBase {
 
-    // *********** INHERITANCE WITH TAGS ***********
-    private static final String TAGS_1 = "<b><i>This is a bold + italic text</i></b>";
-
-    private static final String TAGS_2 = "<b>This is a bold but <i> this is bold + italic </i> and this is bold again</b>";
-
-    // *********** INHERITANCE WITH CSS ***********
-    // NOTE: Use span tag because div and p insert breaklines and each one is treated as other text node
-    private static final String CSS_1 = "<span style=\"background-color:red;\"><span style=\"font-size:25;\">this is big blue text</span></span>";
-
-    private static final String CSS_2 = "<span style=\"font-weight:bold;\">This is a bold but<span style=\"font-style:italic;\"> this is bold + italic </span> and this is bold again</span>";
-
     @Test
     public void testInheritanceCases() throws IOException {
 
-        testSimple(TAGS_1, createDefaultBooleanAttribute("isBold"), createDefaultBooleanAttribute("isItalic"));
+        // *********** INHERITANCE WITH TAGS ***********
+        String tags_1 = "<b><i>This is a bold + italic text</i></b>";
+        testSimple(tags_1, createDefaultBooleanAttribute("isBold"), createDefaultBooleanAttribute("isItalic"));
 
-        testComplex(TAGS_2);
+        String tags_2 = "<b>This is a bold but <i> this is bold + italic </i> and this is bold again</b>";
+        testComplex(tags_2);
 
-        testSimple(CSS_1, createStyledBackgroundColorAttribute("red"), createCssStyleSizeAttribute("25"));
+        // *********** INHERITANCE WITH CSS ***********
+        // NOTE: Use span tag because div and p insert breaklines and each one is treated as other text node
+        String css_1 = "<span style=\"background-color:red;\"><span style=\"font-size:25;\">this is big blue text</span></span>";
+        testSimple(css_1, createStyledBackgroundColorAttribute("red"), createCssStyleSizeAttribute("25"));
 
-        testComplex(CSS_2);
+        String css_2 = "<span style=\"font-weight:bold;\">This is a bold but<span style=\"font-style:italic;\"> this is bold + italic </span> and this is bold again</span>";
+        testComplex(css_2);
 
     }
 

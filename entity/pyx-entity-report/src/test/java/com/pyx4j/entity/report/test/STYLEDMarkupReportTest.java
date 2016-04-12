@@ -35,7 +35,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.report.adpater.JasperReportStyledAdapter;
-import com.pyx4j.entity.report.adpater.NodesIterationStyledAdapterStrategy;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class STYLEDMarkupReportTest extends ReportsTestBase {
@@ -59,8 +58,7 @@ public class STYLEDMarkupReportTest extends ReportsTestBase {
         String htmlSource = IOUtils.getTextResource(resourceName, this.getClass());
         ent.source().setValue(htmlSource);
 
-        JasperReportStyledAdapter styledAdapter = new JasperReportStyledAdapter(new NodesIterationStyledAdapterStrategy());
-        String htmlStyled = styledAdapter.makeJasperCompatibleStyled(htmlSource);
+        String htmlStyled = new JasperReportStyledAdapter().makeJasperCompatibleStyled(htmlSource);
 
         ent.styled().setValue(htmlStyled);
 

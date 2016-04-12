@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -29,24 +29,20 @@ import org.junit.Test;
 
 public class BoldTest extends StyledFeaturesBase {
 
-    private static final String SIMPLE_BOLD_TAG = "<b>This is a bold text</b>";
-
-    private static final String SIMPLE_BOLD_CSS = "<span style=\"font-weight:bold;\">This is a bold text</span>";
-
-    private static final String COMPLEX_BOLD_TAG = "regular text 1<b>This is a bold text</b> regular text 2";
-
-    private static final String COMPLEX_BOLD_CSS = "regular text 1 <span style=\"font-weight:bold;\">This is a bold text</span> regular text 2 ";
-
     @Test
     public void testBoldCases() throws IOException {
 
-        testStyledAttributes(SIMPLE_BOLD_TAG, createDefaultBooleanAttribute("isBold"));
+        final String simple_bold_tag = "<b>This is a bold text</b>";
+        testStyledAttributes(simple_bold_tag, createDefaultBooleanAttribute("isBold"));
 
-        testStyledAttributes(SIMPLE_BOLD_CSS, createDefaultBooleanAttribute("isBold"));
+        final String simple_bold_css = "<span style=\"font-weight:bold;\">This is a bold text</span>";
+        testStyledAttributes(simple_bold_css, createDefaultBooleanAttribute("isBold"));
 
-        testComplexBold(COMPLEX_BOLD_TAG);
+        final String complex_bold_tag = "regular text 1<b>This is a bold text</b> regular text 2";
+        testComplexBold(complex_bold_tag);
 
-        testComplexBold(COMPLEX_BOLD_CSS);
+        final String complex_bold_css = "regular text 1 <span style=\"font-weight:bold;\">This is a bold text</span> regular text 2 ";
+        testComplexBold(complex_bold_css);
     }
 
     public void testComplexBold(String htmlPart) throws IOException {

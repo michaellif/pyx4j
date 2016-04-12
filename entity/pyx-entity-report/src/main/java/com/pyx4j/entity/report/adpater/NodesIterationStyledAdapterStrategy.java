@@ -35,7 +35,16 @@ import org.jsoup.parser.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAdapterStrategy {
+/**
+ *
+ * Strategy: Iteration through Jsoup Nodes tree
+ *
+ * @see <a href="https://docs.google.com/presentation/d/1fVqwAojKMgQJgJjne1srtKchfeB0V7RRnJeHm0cm6T4/">Algorithm explanation</a>
+ *
+ * @author ernestog
+ *
+ */
+public class NodesIterationStyledAdapterStrategy {
 
     private static final Logger log = LoggerFactory.getLogger(NodesIterationStyledAdapterStrategy.class);
 
@@ -50,7 +59,6 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
 
     private StringBuffer styledResult = new StringBuffer();
 
-    @Override
     public String makeJasperCompatibleStyled(String cleanedHtmlPart) {
 
         cleanedHtmlPart = JasperReportStyledUtils.ensureNoBreakLinesNorTabs(cleanedHtmlPart);
@@ -317,23 +325,11 @@ public class NodesIterationStyledAdapterStrategy implements JasperReportStyledAd
     }
 
     private static boolean isTextNode(Node node) {
-        if (node != null) {
-            return node instanceof TextNode;
-        }
-
-        return false;
+        return node instanceof TextNode;
     }
 
     private static boolean isElement(Node node) {
-        if (node != null) {
-            return node instanceof Element;
-        }
-
-        return false;
-    }
-
-    private static Element toElement(Node node) {
-        return (Element) node;
+        return node instanceof Element;
     }
 
     private static boolean isElementBody(Node node) {

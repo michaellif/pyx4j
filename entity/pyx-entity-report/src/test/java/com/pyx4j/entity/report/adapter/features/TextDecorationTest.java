@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -31,34 +31,28 @@ import com.pyx4j.commons.SimpleMessageFormat;
 
 public class TextDecorationTest extends StyledFeaturesBase {
 
-    // ********************************** UNDERLINE ********************************
-    private static final String SIMPLE_UNDERLINE_TAG = "<u>This is a underlined text</u>";
-
-    private static final String SIMPLE_UNDERLINE_CSS = "<span style=\"text-decoration:underline;\">This is a underlined text</span>";
-
-    // ********************************** STRIKETHROUGH ********************************
-    private static final String SIMPLE_STRIKETROUGH_TAG_S = "<s>This is a strikethrough text</s>";
-
-    private static final String SIMPLE_STRIKETROUGH_TAG_DEL = "<del>This is a strikethrough text</del>";
-
-    private static final String SIMPLE_STRIKETROUGH_TAG_STRIKE = "<strike>This is a strikethrough text</strike>";
-
-    private static final String SIMPLE_STRIKETROUGH_CSS = "<span style=\"text-decoration:line-through;\">This is a strikethrough text</span>";
-
     @Test
     public void testTextDecorationCases() throws IOException {
 
-        testSimple(SIMPLE_UNDERLINE_TAG, "isUnderline");
+        // ********************************** UNDERLINE ********************************
+        final String underline_tag = "<u>This is a underlined text</u>";
+        testSimple(underline_tag, "isUnderline");
 
-        testSimple(SIMPLE_UNDERLINE_CSS, "isUnderline");
+        final String underline_css = "<span style=\"text-decoration:underline;\">This is a underlined text</span>";
+        testSimple(underline_css, "isUnderline");
 
-        testSimple(SIMPLE_STRIKETROUGH_TAG_S, "isStrikeThrough");
+        // ********************************** STRIKETHROUGH ********************************
+        final String striketrough_tag_s = "<s>This is a strikethrough text</s>";
+        testSimple(striketrough_tag_s, "isStrikeThrough");
 
-        testSimple(SIMPLE_STRIKETROUGH_TAG_DEL, "isStrikeThrough");
+        final String striketrough_tag_del = "<del>This is a strikethrough text</del>";
+        testSimple(striketrough_tag_del, "isStrikeThrough");
 
-        testSimple(SIMPLE_STRIKETROUGH_TAG_STRIKE, "isStrikeThrough");
+        final String striketrough_tag_strike = "<strike>This is a strikethrough text</strike>";
+        testSimple(striketrough_tag_strike, "isStrikeThrough");
 
-        testSimple(SIMPLE_STRIKETROUGH_CSS, "isStrikeThrough");
+        final String striketrough_tag_css = "<span style=\"text-decoration:line-through;\">This is a strikethrough text</span>";
+        testSimple(striketrough_tag_css, "isStrikeThrough");
     }
 
     public void testSimple(String htmlPart, String styledAttributeSet) throws IOException {

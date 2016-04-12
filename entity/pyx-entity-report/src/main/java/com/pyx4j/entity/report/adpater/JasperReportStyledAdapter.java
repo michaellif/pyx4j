@@ -24,17 +24,10 @@ import com.pyx4j.entity.report.JasperReportHTMLAdapter;
 
 public class JasperReportStyledAdapter {
 
-    JasperReportStyledAdapterStrategy strategy;
+    NodesIterationStyledAdapterStrategy strategy;
 
     public JasperReportStyledAdapter() {
-    }
-
-    public JasperReportStyledAdapter(JasperReportStyledAdapterStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public void setStrategy(JasperReportStyledAdapterStrategy strategy) {
-        this.strategy = strategy;
+        strategy = new NodesIterationStyledAdapterStrategy();
     }
 
     /**
@@ -46,10 +39,6 @@ public class JasperReportStyledAdapter {
      * @return
      */
     public String makeJasperCompatibleStyled(String cleanedHtmlPart) {
-        if (strategy == null) {
-            setStrategy(new NodesIterationStyledAdapterStrategy());
-        }
-
         return strategy.makeJasperCompatibleStyled(cleanedHtmlPart);
     }
 

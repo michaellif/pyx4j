@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -31,31 +31,27 @@ import org.junit.Test;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.report.adpater.JasperReportStyledAdapter;
-import com.pyx4j.entity.report.adpater.NodesIterationStyledAdapterStrategy;
 
 public class SupSubTest extends StyledFeaturesBase {
-
-    private static final String SIMPLE_SUP = "<sup>This is sup text</sup>";
-
-    private static final String SIMPLE_SUB = "<sub>This is sub text</sup>";
-
-    private static final String COMPLEX_SUP = "regular text<sup><span style=\"color:red;\">sup text red</span>sup black text</sup>";
 
     @Test
     public void testSupSubCases() throws IOException {
 
-        testSpecialTagSimple(SIMPLE_SUP, "sup");
+        final String simple_SUP = "<sup>This is sup text</sup>";
+        testSpecialTagSimple(simple_SUP, "sup");
 
-        testSpecialTagSimple(SIMPLE_SUB, "sub");
+        final String simple_SUB = "<sub>This is sub text</sup>";
+        testSpecialTagSimple(simple_SUB, "sub");
 
-        testSpecialTagComplex(COMPLEX_SUP, "sub");
+        final String complex_SUP = "regular text<sup><span style=\"color:red;\">sup text red</span>sup black text</sup>";
+        testSpecialTagComplex(complex_SUP, "sub");
     }
 
     private void testSpecialTagSimple(String htmlPart, String tagName) {
         Element elementContent = Jsoup.parse(htmlPart).select("body").get(0);
         Assert.assertTrue("No nodes found in test html source", !elementContent.childNodes().isEmpty());
 
-        String styledText = new JasperReportStyledAdapter(new NodesIterationStyledAdapterStrategy()).makeJasperCompatibleStyled(elementContent.html());
+        String styledText = new JasperReportStyledAdapter().makeJasperCompatibleStyled(elementContent.html());
 
         Element styledContent = Jsoup.parse(styledText).select("head").first(); // Because styled text tag, jsoup inserts in head instead of body
 
@@ -75,7 +71,7 @@ public class SupSubTest extends StyledFeaturesBase {
         Element elementContent = Jsoup.parse(htmlPart).select("body").get(0);
         Assert.assertTrue("No nodes found in test html source", !elementContent.childNodes().isEmpty());
 
-        String styledText = new JasperReportStyledAdapter(new NodesIterationStyledAdapterStrategy()).makeJasperCompatibleStyled(elementContent.html());
+        String styledText = new JasperReportStyledAdapter().makeJasperCompatibleStyled(elementContent.html());
 
         Element styledContent = Jsoup.parse(styledText).select("head").first(); // Because styled text tag, jsoup inserts in head instead of body
 

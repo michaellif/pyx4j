@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -33,7 +33,6 @@ import org.junit.Test;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.report.adpater.JasperReportStyledAdapter;
 import com.pyx4j.entity.report.adpater.JasperReportStyledUtils;
-import com.pyx4j.entity.report.adpater.NodesIterationStyledAdapterStrategy;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class ListsTest extends StyledFeaturesBase {
@@ -46,7 +45,7 @@ public class ListsTest extends StyledFeaturesBase {
         Element elementContent = Jsoup.parse(htmlPart).select("body").get(0);
         Assert.assertTrue("No nodes found in test html source", !elementContent.childNodes().isEmpty());
 
-        String styledText = new JasperReportStyledAdapter(new NodesIterationStyledAdapterStrategy()).makeJasperCompatibleStyled(elementContent.html());
+        String styledText = new JasperReportStyledAdapter().makeJasperCompatibleStyled(elementContent.html());
         Element styledContent = Jsoup.parse(styledText).select("head").first(); // Because styled text tag, jsoup inserts in head instead of body
 
         // Assert 1st <li> in 1st <ol> element

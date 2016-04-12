@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -29,14 +29,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.junit.Assert;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.report.adapter.JasperReportStyledUtilsTest;
 import com.pyx4j.entity.report.adpater.JasperReportStyledAdapter;
 import com.pyx4j.entity.report.adpater.JasperReportStyledUtils;
-import com.pyx4j.entity.report.adpater.NodesIterationStyledAdapterStrategy;
 
 public class StyledFeaturesBase {
 
-    protected static void testStyledAttributes(String htmlPart, Attribute... attributes) throws IOException {
+    protected static void testStyledAttributes(String htmlPart, Attribute... expected) throws IOException {
         Element styledContent = getStyledContent(htmlPart);
         Assert.assertTrue("Expected one node", !styledContent.childNodes().isEmpty());
 
@@ -44,13 +44,13 @@ public class StyledFeaturesBase {
         Node elementNode = styledContent.childNodes().get(0);
         assertStyledElement(elementNode);
 
-        assertAttributes(elementNode, attributes);
+        assertAttributes(elementNode, expected);
     }
 
     protected static Element getStyledContent(String htmlPart) {
         Element elementContent = Jsoup.parse(htmlPart).select("body").get(0);
         Assert.assertTrue("No nodes found in test html source", !elementContent.childNodes().isEmpty());
-        String styledText = new JasperReportStyledAdapter(new NodesIterationStyledAdapterStrategy()).makeJasperCompatibleStyled(elementContent.html());
+        String styledText = new JasperReportStyledAdapter().makeJasperCompatibleStyled(elementContent.html());
         Element styledContent = Jsoup.parse(styledText).select("head").first(); // Because styled text tag, jsoup inserts in head instead of body
 
         return styledContent;
@@ -65,7 +65,9 @@ public class StyledFeaturesBase {
     protected static void assertAttributes(Node node, Attribute... expected) {
         Element element = (Element) node;
         Attributes expectedAttributes = createAttributes(expected);
-        Assert.assertTrue("Expected attributes do not match", JasperReportStyledUtilsTest.areSameAttributes(element.attributes(), expectedAttributes));
+        Assert.assertTrue(
+                SimpleMessageFormat.format("Expected attributes do not match. Expected \"{0}\" but found \"{1}\"", expectedAttributes, element.attributes()),
+                JasperReportStyledUtilsTest.areSameAttributes(element.attributes(), expectedAttributes));
     }
 
     protected static Attribute createStyledAttribute(String key, String value) {

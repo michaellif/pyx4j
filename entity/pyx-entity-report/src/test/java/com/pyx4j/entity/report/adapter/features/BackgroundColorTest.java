@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -27,16 +27,14 @@ import org.junit.Test;
 
 public class BackgroundColorTest extends StyledFeaturesBase {
 
-    private static final String SIMPLE_BACKGROUND_CSS_1 = "<p style=\"background-color:red;\">black color text over red background color</p>";
-
-    private static final String SIMPLE_BACKGROUND_CSS_2 = "<p style=\"color:green; background-color:yellow;\">black color text over red background color</p>";
-
     @Test
-    public void testBoldCases() throws IOException {
+    public void testBackgroundColorCases() throws IOException {
 
-        testStyledAttributes(SIMPLE_BACKGROUND_CSS_1, createStyledBackgroundColorAttribute("red"));
+        final String css_1 = "<p style=\"background-color:red;\">black color text over red background color</p>";
+        testStyledAttributes(css_1, createStyledBackgroundColorAttribute("red"));
 
-        testStyledAttributes(SIMPLE_BACKGROUND_CSS_2, new Attribute[] { createStyledColorAttribute("green"), createStyledBackgroundColorAttribute("yellow") });
+        final String css_2 = "<p style=\"color:green; background-color:yellow;\">black color text over red background color</p>";
+        testStyledAttributes(css_2, new Attribute[] { createStyledColorAttribute("green"), createStyledBackgroundColorAttribute("yellow") });
 
     }
 

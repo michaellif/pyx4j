@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.report.adpater;
 
-public class SpecialAttributes {
+class SpecialAttributes {
 
     public static final String SUP = "sup";
 

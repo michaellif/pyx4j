@@ -105,8 +105,8 @@ public class JasperReportStyledUtilsTest {
                 }
             }
 
-            Map<String, Object> attributeValuesIn1 = JasperReportStyledUtils.toMap(attribute.getValue());
-            Map<String, Object> attributeValuesIn2 = JasperReportStyledUtils.toMap(attributes2.get(attribute.getKey()));
+            Map<String, String> attributeValuesIn1 = JasperReportStyledUtils.toMap(attribute.getValue());
+            Map<String, String> attributeValuesIn2 = JasperReportStyledUtils.toMap(attributes2.get(attribute.getKey()));
 
             // Same values size
             if (attributeValuesIn1.size() != attributeValuesIn2.size()) {
@@ -114,7 +114,7 @@ public class JasperReportStyledUtilsTest {
             }
 
             // Same values
-            for (Map.Entry<String, Object> entry : attributeValuesIn1.entrySet()) {
+            for (Map.Entry<String, String> entry : attributeValuesIn1.entrySet()) {
                 if (!attributeValuesIn2.containsKey(entry.getKey())) {
                     return false;
                 } else {

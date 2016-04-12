@@ -20,8 +20,6 @@
  */
 package com.pyx4j.entity.report.adpater;
 
-import org.apache.commons.lang3.EnumUtils;
-
 public enum FontSizeKeyword {
 
     xxsmall(6), xsmall(7.5), small(10), medium(12), large(13.5), xlarge(18), xxlarge(24);
@@ -38,22 +36,25 @@ public enum FontSizeKeyword {
         return this.pt;
     }
 
-    public static double getValueByNumber(int index) {
-        if (index < 0) {
-            return DEFAULT.getPt();
+    public static String getValueByNumber(int index) {
+        if (index == 0) {
+            return String.valueOf(xsmall.getPt());
         } else if (index > values().length) {
-            return xxlarge.getPt();
+            return String.valueOf(xxlarge.getPt());
+        } else if (index >= 0 && index <= values().length) {
+            return String.valueOf(values()[index].getPt());
         } else {
-            return values()[index].getPt();
+            return null;
         }
     }
 
-    public static double getValueByName(String name) {
+    public static String getValueByName(String name) {
         String convertedName = name.replaceAll("-", "");
-        if (EnumUtils.isValidEnum(FontSizeKeyword.class, convertedName)) {
-            return FontSizeKeyword.valueOf(convertedName).getPt();
+        if (JasperReportStyledUtils.isValidEnum(FontSizeKeyword.class, convertedName)) {
+            FontSizeKeyword keyword = FontSizeKeyword.valueOf(convertedName);
+            return String.valueOf(keyword.getPt());
         } else {
-            return DEFAULT.getPt();
+            return null;
         }
     }
 }

@@ -21,8 +21,11 @@
 package com.pyx4j.entity.report.adpater;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +36,8 @@ import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
+
+import com.pyx4j.commons.CommonsStringUtils;
 
 import net.sf.jasperreports.engine.util.JRColorUtil;
 import net.sf.jasperreports.engine.util.JRStringUtil;
@@ -63,6 +68,14 @@ public class JasperReportStyledUtils {
 
     public enum BreakLiners {
         p, div
+    }
+
+    static Map<String, Set<String>> cssAcceptedAttributes = new HashMap<String, Set<String>>();
+
+    static {
+        cssAcceptedAttributes.put(FONT_WEIGHT, new HashSet<String>(Arrays.asList("normal", "bold")));
+        cssAcceptedAttributes.put(FONT_STYLE, new HashSet<String>(Arrays.asList("normal", "italic")));
+        cssAcceptedAttributes.put(TEXT_DECORATION, new HashSet<String>(Arrays.asList("line-through", "underline")));
     }
 
     public static String createStyledElement(Node node, Map<String, String> currentAttribs, SpecialAttributes specialAttributes) {
@@ -125,6 +138,7 @@ public class JasperReportStyledUtils {
     }
 
     public static Map<String, String> toStyledMap(Attributes attributes) {
+        System.out.println("");
         Map<String, String> parentAttributes = JasperReportStyledUtils.toMap(attributes);
         Map<String, String> styledAttributes = new HashMap<String, String>();
 
@@ -133,17 +147,19 @@ public class JasperReportStyledUtils {
         }
 
         for (Map.Entry<String, String> entry : parentAttributes.entrySet()) {
-
             if (entry.getKey().equalsIgnoreCase("style")) {
                 parseStyleProperty(styledAttributes, entry.getValue());
-            } else if (EnumUtils.isValidEnum(ReservedStyledWords.class, entry.getKey())) {
-                parseStyleProperty(styledAttributes, entry.getKey() + ":true;");
             }
-
         }
 
         return styledAttributes;
+    }
 
+    static <E extends Enum<E>> boolean isValidEnum(final Class<E> enumClass, final String enumName) {
+        if (enumName == null) {
+            return false;
+        }
+        return EnumUtils.isValidEnum(enumClass, enumName.toLowerCase());
     }
 
     public static void parseStyleProperty(Map<String, String> resultMap, String value) {
@@ -157,6 +173,7 @@ public class JasperReportStyledUtils {
 
                 // ******************  Bold ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_WEIGHT)) {
+//                    if (valueAttribute)
                     resultMap.put("isBold", String.valueOf(valueAttribute.equalsIgnoreCase("bold")));
                 }
 
@@ -193,18 +210,27 @@ public class JasperReportStyledUtils {
 
                 // ******************  Font-Size ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_SIZE)) {
-                    resultMap.put("size", getCssFontSize(valueAttribute));
+                    String fontSizeValue = getCssFontSize(valueAttribute);
+                    if (fontSizeValue != null) {
+                        resultMap.put("size", fontSizeValue);
+                    }
                 }
 
                 // ******************  Color ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.COLOR)) {
-                    resultMap.put("forecolor", getCssColor(valueAttribute));
+                    String colorValue = getCssColor(valueAttribute);
+                    if (colorValue != null) {
+                        resultMap.put("forecolor", colorValue);
+                    }
                 }
 
                 // ******************  Background color ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND_COLOR) //
                         || keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.BACKGROUND)) {
-                    resultMap.put("backcolor", getCssColor(valueAttribute));
+                    String backgroundColorValue = getCssColor(valueAttribute);
+                    if (backgroundColorValue != null) {
+                        resultMap.put("backcolor", backgroundColorValue);
+                    }
                 }
 
             }
@@ -215,12 +241,16 @@ public class JasperReportStyledUtils {
     public static String getCssColor(String strColor) {
         Color color;
         try {
-            color = JRColorUtil.getColor(strColor, Color.black);
+            color = JRColorUtil.getColor(strColor.toLowerCase(), null);
         } catch (Exception e) { // This should be JRRuntimeException but this is fine... isn't it?
-            color = Color.black;
+            color = null;
         }
 
-        return JRColorUtil.getCssColor(color);
+        if (color != null) {
+            return JRColorUtil.getCssColor(color);
+        } else {
+            return null;
+        }
     }
 
     public static boolean isBreakLiner(Node node) {
@@ -234,7 +264,7 @@ public class JasperReportStyledUtils {
             return false;
         }
 
-        if (EnumUtils.isValidEnum(BreakLiners.class, element.tagName()) && element.text().length() > 0) {
+        if (isValidEnum(BreakLiners.class, element.tagName()) && element.text().length() > 0) {
             return true;
         } else {
             return false;
@@ -242,7 +272,7 @@ public class JasperReportStyledUtils {
     }
 
     public static String getTagFontSize(String fontSize) {
-        double pt;
+        String pt;
         if (NumberUtils.isNumber(fontSize)) {
             Double value = new Double(fontSize);
             int index = (int) Math.round(value);
@@ -251,7 +281,7 @@ public class JasperReportStyledUtils {
             pt = FontSizeKeyword.getValueByName(fontSize);
         }
 
-        return String.valueOf(pt);
+        return pt;
     }
 
     public static String getCssFontSize(String fontSize) {
@@ -290,12 +320,12 @@ public class JasperReportStyledUtils {
             if (nodeAttr != null) {
                 for (Attribute inhiretedAttribute : inhiretedAttr.asList()) {
 
-                    Map<String, Object> inhiretedValues = toMap(inhiretedAttribute.getValue().trim());
-                    Map<String, Object> currentValues = toMap(nodeAttr.get(inhiretedAttribute.getKey()).trim());
+                    Map<String, String> inhiretedValues = toMap(inhiretedAttribute.getValue().trim());
+                    Map<String, String> currentValues = toMap(nodeAttr.get(inhiretedAttribute.getKey()).trim());
 
                     if (nodeAttr.hasKey(inhiretedAttribute.getKey())) {
                         // Copy carefully
-                        for (Map.Entry<String, Object> entry : inhiretedValues.entrySet()) {
+                        for (Map.Entry<String, String> entry : inhiretedValues.entrySet()) {
                             String key = entry.getKey();
                             if (!currentValues.containsKey(key)) {
                                 currentValues.put(key, entry.getValue());
@@ -306,7 +336,7 @@ public class JasperReportStyledUtils {
                     }
 
                     StringBuffer newAttribs = new StringBuffer();
-                    for (Map.Entry<String, Object> entry : currentValues.entrySet()) {
+                    for (Map.Entry<String, String> entry : currentValues.entrySet()) {
                         newAttribs.append(entry.getKey());
                         newAttribs.append(":");
                         newAttribs.append(entry.getValue());
@@ -323,8 +353,33 @@ public class JasperReportStyledUtils {
         return nodeAttr;
     }
 
-    public static Map<String, Object> toMap(String styleProperties) {
-        Map<String, Object> map = new HashMap<String, Object>();
+    private static boolean isValidCssAttributeValue(String key, String value) {
+        if (value == null) {
+            return false;
+        }
+
+        switch (key) {
+        case COLOR:
+        case BACKGROUND:
+        case BACKGROUND_COLOR:
+            return getCssColor(value) != null;
+        case FONT_SIZE:
+            return getCssFontSize(value) != null;
+        default:
+            // do nothing; check hash
+        }
+
+        if (cssAcceptedAttributes.containsKey(key)) {
+            if (cssAcceptedAttributes.get(key).contains(value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static Map<String, String> toMap(String styleProperties) {
+        Map<String, String> map = new HashMap<String, String>();
         String[] keyValuePairs = styleProperties.trim().split(";");
         for (String keyValuePair : keyValuePairs) {
             String[] splitedValue = keyValuePair.split(":");
@@ -332,7 +387,11 @@ public class JasperReportStyledUtils {
             if (splitedValue.length == 1 && splitedValue[0].trim().length() > 0) {
                 map.put(splitedValue[0].trim(), null);
             } else if (splitedValue.length == 2) {
-                map.put(splitedValue[0].trim(), splitedValue[1]);
+                String key = splitedValue[0].trim();
+                String value = splitedValue[1];
+                if (isValidCssAttributeValue(key, value)) {
+                    map.put(key, value);
+                }
             }
         }
 
@@ -344,15 +403,34 @@ public class JasperReportStyledUtils {
 
         if (attributes != null) {
             for (Attribute attr : attributes) {
-                if (attr.getKey() != "text") { // avoid text attribute
-                    String key = attr.getKey() != null ? attr.getKey().trim() : null;
-                    String value = attr.getValue() != null ? attr.getValue().trim() : null;
-                    attrMap.put(key, value);
+                if (attr.getKey() != "text") { // avoid text attribute of TextNodes
+                    String key = attr.getKey().trim();
+                    String cleanedValue = cleanAttributeValues(attr);
+                    if (!CommonsStringUtils.isEmpty(cleanedValue)) {
+                        attrMap.put(key, cleanedValue);
+                    }
                 }
             }
         }
 
         return attrMap;
+    }
+
+    private static String cleanAttributeValues(Attribute attribute) {
+        StringBuilder builder = new StringBuilder();
+        if (attribute.getKey().equalsIgnoreCase("style")) {
+            Map<String, String> mapValues = toMap(attribute.getValue());
+            for (Map.Entry<String, String> entry : mapValues.entrySet()) {
+                if (entry.getValue() != null && isValidCssAttributeValue(entry.getKey().trim(), entry.getValue().trim())) {
+                    builder.append(entry.getKey());
+                    builder.append(":");
+                    builder.append(entry.getValue());
+                    builder.append(";");
+                }
+            }
+        }
+
+        return builder.toString();
     }
 
     public static String ensureNoBreakLinesNorTabs(String cleanedHtmlPart) {
@@ -364,15 +442,21 @@ public class JasperReportStyledUtils {
         StringBuffer newAttributes = new StringBuffer();
         for (Attribute attribute : nodeAttribs) {
             if (attribute.getKey().equalsIgnoreCase("size")) {
-                newAttributes.append(JasperReportStyledUtils.FONT_SIZE);
-                newAttributes.append(":");
-                newAttributes.append(JasperReportStyledUtils.getTagFontSize(attribute.getValue()));
-                newAttributes.append(";");
+                String sizeValue = JasperReportStyledUtils.getTagFontSize(attribute.getValue());
+                if (sizeValue != null) {
+                    newAttributes.append(JasperReportStyledUtils.FONT_SIZE);
+                    newAttributes.append(":");
+                    newAttributes.append(sizeValue);
+                    newAttributes.append(";");
+                }
             } else if (attribute.getKey().equalsIgnoreCase("color")) {
-                newAttributes.append(JasperReportStyledUtils.COLOR);
-                newAttributes.append(":");
-                newAttributes.append(attribute.getValue());
-                newAttributes.append(";");
+                String color = JasperReportStyledUtils.getCssColor(attribute.getValue());
+                if (color != null) {
+                    newAttributes.append(JasperReportStyledUtils.COLOR);
+                    newAttributes.append(":");
+                    newAttributes.append(color);
+                    newAttributes.append(";");
+                }
             }
         }
 

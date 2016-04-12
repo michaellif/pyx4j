@@ -18,7 +18,7 @@
  * @author ernestog
  * @version $Id: code-templates.xml 12647 2013-05-01 18:01:19Z vlads $
  */
-package com.pyx4j.entity.report.test.styled;
+package com.pyx4j.entity.report.adapter.features;
 
 import java.io.IOException;
 
@@ -30,24 +30,20 @@ import org.junit.Test;
 
 public class ItalicTest extends StyledFeaturesBase {
 
-    private static final String SIMPLE_ITALIC_TAG = "<i>This is a bold text</i>";
-
-    private static final String SIMPLE_ITALIC_CSS = "<span style=\"font-style:italic;\">This is a italic text</span>";
-
-    private static final String COMPLEX_ITALIC_TAG = "regular text 1<i>This is a italic text</i> regular text 2";
-
-    private static final String COMPLEX_ITALIC_CSS = "regular text 1 <span style=\"font-style:italic;\">This is a italic text</span> regular text 2";
-
     @Test
     public void testItalicCases() throws IOException {
 
-        testStyledAttributes(SIMPLE_ITALIC_TAG, createDefaultBooleanAttribute("isItalic"));
+        final String simple_italic_tag = "<i>This is a bold text</i>";
+        testStyledAttributes(simple_italic_tag, createDefaultBooleanAttribute("isItalic"));
 
-        testStyledAttributes(SIMPLE_ITALIC_CSS, createDefaultBooleanAttribute("isItalic"));
+        final String simple_italic_css = "<span style=\"font-style:italic;\">This is a italic text</span>";
+        testStyledAttributes(simple_italic_css, createDefaultBooleanAttribute("isItalic"));
 
-        testComplexItalic(COMPLEX_ITALIC_TAG);
+        final String complex_italic_tag = "regular text 1<i>This is a italic text</i> regular text 2";
+        testComplexItalic(complex_italic_tag);
 
-        testComplexItalic(COMPLEX_ITALIC_CSS);
+        final String complex_italic_css = "regular text 1 <span style=\"font-style:italic;\">This is a italic text</span> regular text 2";
+        testComplexItalic(complex_italic_css);
     }
 
     public void testComplexItalic(String htmlPart) throws IOException {
