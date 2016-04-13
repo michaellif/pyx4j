@@ -27,7 +27,7 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
     @Override
     default void setSecurityContext(AccessControlContext context) {
         HasSecureConcern.setSecurityContext(concerns(), context);
-        applyVisibilityRules();
+        applyConcernRules();
     }
 
     // Permissions base Concern builder
@@ -52,5 +52,11 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
         } else {
             concerns().add(0, parentConcern);
         }
+    }
+
+    @Override
+    default void applyConcernRules() {
+        applyVisibilityRules();
+        applyEnablingRules();
     }
 }

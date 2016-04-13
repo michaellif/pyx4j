@@ -25,4 +25,6 @@ public interface HasConcerns {
 
     List<AbstractConcern> concerns();
 
+    void applyConcernRules();
+
 }

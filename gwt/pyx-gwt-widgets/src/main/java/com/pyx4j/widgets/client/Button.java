@@ -19,25 +19,12 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.gwt.commons.concerns.AbstractConcern;
-import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
-import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
-import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.security.annotations.ActionId;
-import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.widgets.client.event.shared.SecureConcernStateChangeEvent;
@@ -47,7 +34,7 @@ public class Button extends ButtonBase {
 
     private ContextMenuHolder menuHolder;
 
-    private ButtonMenuBar menu;
+    private MenuBar menu;
 
     private final Label buttonMenuIndicator;
 
@@ -134,7 +121,7 @@ public class Button extends ButtonBase {
         }
     }
 
-    public void setMenu(ButtonMenuBar menu) {
+    public void setMenu(MenuBar menu) {
         if (menuHolder == null && menu != null) {
             menuHolder = new ContextMenuHolder();
             getImageHolder().add(menuHolder);
@@ -158,7 +145,7 @@ public class Button extends ButtonBase {
         }
     }
 
-    public ButtonMenuBar getMenu() {
+    public MenuBar getMenu() {
         return menu;
     }
 
@@ -176,206 +163,41 @@ public class Button extends ButtonBase {
         return menu;
     }
 
-    // TODO rename to MenuBar and move to new File
-    public static class ButtonMenuBar extends MenuBar implements HasWidgetConcerns, HasSecureConcernedChildren {
-
-        protected final List<AbstractConcern> concerns = new ArrayList<>();
-
-        private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
-
-        private HumanInputInfo humanInputInfo = HumanInputInfo.robot;
+    /**
+     *
+     * @deprecated renamed to com.pyx4j.widgets.client.MenuBar
+     *
+     */
+    @Deprecated
+    public static class ButtonMenuBar extends com.pyx4j.widgets.client.MenuBar {
 
         public ButtonMenuBar() {
-            super(true);
-            setAutoOpen(true);
-            setAnimationEnabled(true);
-        }
-
-        public HandlerRegistration addSecureConcernStateChangeHandler(SecureConcernStateChangeEvent.Handler handler) {
-            return addHandler(handler, SecureConcernStateChangeEvent.getType());
-        }
-
-        @Override
-        public MenuItem insertItem(MenuItem item, int beforeIndex) {
-            if (item.getScheduledCommand() != null) {
-                final ScheduledCommand origCommand = item.getScheduledCommand();
-                item.setScheduledCommand(new Command() {
-
-                    @Override
-                    public void execute() {
-                        if (origCommand instanceof HumanInputCommand) {
-                            ((HumanInputCommand) origCommand).execute(humanInputInfo);
-                        } else {
-                            origCommand.execute();
-                        }
-
-                    }
-                });
-            }
-            if (item instanceof HasSecureConcern) {
-                addSecureConcern((HasSecureConcern) item);
-            }
-            try {
-                return super.insertItem(item, beforeIndex);
-            } finally {
-                fireEvent(new SecureConcernStateChangeEvent());
-            }
-        }
-
-        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Permission... permissions) {
-            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, permissions);
-            addItem(menuItem);
-            return menuItem;
-        }
-
-        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
-            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, actionId);
-            addItem(menuItem);
-            return menuItem;
-        }
-
-        public boolean isMenuEmpty() {
-            boolean empty = getItems().isEmpty();
-            if (!empty) {
-                empty = true;
-                for (MenuItem item : getItems()) {
-                    if (item.isVisible()) {
-                        empty = false;
-                        break;
-                    }
-                }
-            }
-            return empty;
-        }
-
-        public boolean isControlKeyDown() {
-            return humanInputInfo.isControlKeyDown();
-        }
-
-        @Override
-        public void onBrowserEvent(Event event) {
-            if ((DOM.eventGetType(event) == Event.ONCLICK) && (event.getCtrlKey())) {
-                humanInputInfo = new HumanInputInfo(event);
-            } else {
-                humanInputInfo = HumanInputInfo.robot;
-            }
-            super.onBrowserEvent(event);
-        }
-
-        @Override
-        public List<MenuItem> getItems() {
-            return super.getItems();
-        }
-
-        @Override
-        public void clearItems() {
-            super.clearItems();
-            clearSecureConcerns();
-            fireEvent(new SecureConcernStateChangeEvent()); // TODO remove
-        }
-
-        // --- concerns implementation - start
-
-        @Override
-        public void setSecurityContext(AccessControlContext context) {
-            HasWidgetConcerns.super.setSecurityContext(context);
-            HasSecureConcernedChildren.super.setSecurityContext(context);
-
-            // TODO Fire when state actually changes.
-            fireEvent(new SecureConcernStateChangeEvent()); // TODO remove
-        }
-
-        @Override
-        public void inserConcernedParent(AbstractConcern parentConcern) {
-            HasWidgetConcerns.super.inserConcernedParent(parentConcern);
-            HasSecureConcernedChildren.super.inserConcernedParent(parentConcern);
-        }
-
-        @Override
-        public void applyEnablingRules() {
-            //TODO review
-        }
-
-        @Override
-        public void setVisible(boolean visible) {
-            setConcernsVisible(visible);
-        }
-
-        // ---  save to copy paste to other class
-
-        @Override
-        protected void onAttach() {
-            super.onAttach();
-            applyVisibilityRules();
-        }
-
-        @Override
-        public void applyVisibilityRules() {
-            if (this.isAttached()) {
-                super.setVisible(HasWidgetConcerns.super.isVisible());
-            }
-        }
-
-        @Override
-        public List<AbstractConcern> concerns() {
-            return concerns;
-        }
-
-        @Override
-        public SecureConcernsHolder secureConcernsHolder() {
-            return secureConcernsHolder;
+            super();
         }
     }
 
-    // TODO rename to MenuItem and move to new File
-    public static class SecureMenuItem extends MenuItem implements HasWidgetConcerns {
+    /**
+     *
+     * @deprecated renamed to com.pyx4j.widgets.client.MenuItem
+     *
+     */
+    @Deprecated
+    public static class SecureMenuItem extends com.pyx4j.widgets.client.MenuItem {
 
-        protected final List<AbstractConcern> concerns = new ArrayList<>();
-
-        public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
-            super(text, cmd);
-            setPermission(permissions);
-        }
-
-        public SecureMenuItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
-            this(text, cmd, new ActionPermission(actionId));
+        public SecureMenuItem(String text, Class<? extends ActionId> actionId, ScheduledCommand cmd) {
+            super(text, cmd, actionId);
         }
 
         public SecureMenuItem(String text, ButtonMenuBar subMenu, Permission... permissions) {
-            super(text, subMenu);
-            setPermission(permissions);
+            super(text, subMenu, permissions);
         }
 
-        // Historic method to avoid refactoring
-        public void setPermission(Permission... permission) {
-            setVisiblePermission(permission);
+        public SecureMenuItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
+            super(text, cmd, actionId);
         }
 
-        @Override
-        public void setVisible(boolean visible) {
-            setConcernsVisible(visible);
-        }
-
-        @Override
-        public void applyVisibilityRules() {
-            //if (this.isAttached()) {
-            super.setVisible(HasWidgetConcerns.super.isVisible());
-            //}
-        }
-
-        @Override
-        public void setEnabled(boolean enabled) {
-            setConcernsEnabled(enabled);
-        }
-
-        @Override
-        public void applyEnablingRules() {
-            super.setEnabled(HasWidgetConcerns.super.isEnabled());
-        }
-
-        @Override
-        public List<AbstractConcern> concerns() {
-            return concerns;
+        public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
+            super(text, cmd, permissions);
         }
 
     }

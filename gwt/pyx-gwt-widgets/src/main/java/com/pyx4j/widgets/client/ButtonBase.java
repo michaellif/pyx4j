@@ -191,7 +191,7 @@ public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns
     @Override
     protected void onAttach() {
         super.onAttach();
-        applyVisibilityRules();
+        applyConcernRules();
     }
 
     @Override
@@ -221,6 +221,12 @@ public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns
     public void inserConcernedParent(AbstractConcern parentConcern) {
         HasWidgetConcerns.super.inserConcernedParent(parentConcern);
         HasSecureConcernedChildren.super.inserConcernedParent(parentConcern);
+    }
+
+    @Override
+    public void applyConcernRules() {
+        HasWidgetConcerns.super.applyConcernRules();
+        HasSecureConcernedChildren.super.applyConcernRules();
     }
 
     // --- concerns implementation - end

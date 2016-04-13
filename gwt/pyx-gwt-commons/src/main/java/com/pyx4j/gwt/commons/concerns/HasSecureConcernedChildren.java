@@ -48,6 +48,14 @@ public interface HasSecureConcernedChildren extends HasSecureConcern {
         }
     }
 
+    default void applyConcernRules() {
+        for (HasSecureConcern concern : secureConcerns()) {
+            if (concern instanceof HasConcerns) {
+                ((HasConcerns) concern).applyConcernRules();
+            }
+        }
+    }
+
     @Override
     default void inserConcernedParent(AbstractConcern parentConcern) {
         for (HasSecureConcern concernedChild : secureConcerns()) {

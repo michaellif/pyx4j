@@ -21,6 +21,14 @@ package com.google.gwt.user.client.ui;
 
 public class AccessibleMenuBar extends MenuBar {
 
+    public AccessibleMenuBar() {
+        this(false);
+    }
+
+    public AccessibleMenuBar(boolean vertical) {
+        super(vertical);
+    }
+
     public void openItem(MenuItem menuItem) {
         doItemAction(menuItem, true, false);
     }
