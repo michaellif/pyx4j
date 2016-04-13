@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.report.adpater;
 
-public enum FontSizeKeyword {
+enum FontSizeKeyword {
 
     xxsmall(6), xsmall(7.5), small(10), medium(12), large(13.5), xlarge(18), xxlarge(24);
 

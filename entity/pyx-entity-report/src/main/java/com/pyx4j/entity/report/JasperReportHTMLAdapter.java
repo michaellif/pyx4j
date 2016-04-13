@@ -50,7 +50,7 @@ import com.steadystate.css.parser.SACParserCSS3;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
-public class JasperReportHTMLAdapter {
+public final class JasperReportHTMLAdapter {
 
     // The css properties supported by jasper without modification
     private static List<String> supportedStyleProperties = Arrays.asList(//

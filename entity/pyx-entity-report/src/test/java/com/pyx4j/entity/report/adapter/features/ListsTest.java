@@ -45,7 +45,7 @@ public class ListsTest extends StyledFeaturesBase {
         Element elementContent = Jsoup.parse(htmlPart).select("body").get(0);
         Assert.assertTrue("No nodes found in test html source", !elementContent.childNodes().isEmpty());
 
-        String styledText = new JasperReportStyledAdapter().makeJasperCompatibleStyled(elementContent.html());
+        String styledText = JasperReportStyledAdapter.makeJasperCompatibleStyled(elementContent.html());
         Element styledContent = Jsoup.parse(styledText).select("head").first(); // Because styled text tag, jsoup inserts in head instead of body
 
         // Assert 1st <li> in 1st <ol> element

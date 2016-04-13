@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * @author ernestog
  *
  */
-public class NodesIterationStyledAdapterStrategy {
+class NodesIterationStyledAdapterStrategy {
 
     private static final Logger log = LoggerFactory.getLogger(NodesIterationStyledAdapterStrategy.class);
 

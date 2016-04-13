@@ -22,13 +22,7 @@ package com.pyx4j.entity.report.adpater;
 
 import com.pyx4j.entity.report.JasperReportHTMLAdapter;
 
-public class JasperReportStyledAdapter {
-
-    NodesIterationStyledAdapterStrategy strategy;
-
-    public JasperReportStyledAdapter() {
-        strategy = new NodesIterationStyledAdapterStrategy();
-    }
+public final class JasperReportStyledAdapter {
 
     /**
      * Create Jasper STYLED markup document from already cleaned HTML fragment part
@@ -38,8 +32,8 @@ public class JasperReportStyledAdapter {
      * @param htmlPart
      * @return
      */
-    public String makeJasperCompatibleStyled(String cleanedHtmlPart) {
-        return strategy.makeJasperCompatibleStyled(cleanedHtmlPart);
+    public static String makeJasperCompatibleStyled(String cleanedHtmlPart) {
+        return new NodesIterationStyledAdapterStrategy().makeJasperCompatibleStyled(cleanedHtmlPart);
     }
 
 }

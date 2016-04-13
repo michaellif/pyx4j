@@ -58,7 +58,7 @@ public class STYLEDMarkupReportTest extends ReportsTestBase {
         String htmlSource = IOUtils.getTextResource(resourceName, this.getClass());
         ent.source().setValue(htmlSource);
 
-        String htmlStyled = new JasperReportStyledAdapter().makeJasperCompatibleStyled(htmlSource);
+        String htmlStyled = JasperReportStyledAdapter.makeJasperCompatibleStyled(htmlSource);
 
         ent.styled().setValue(htmlStyled);
 
