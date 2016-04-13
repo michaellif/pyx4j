@@ -22,13 +22,12 @@ package com.pyx4j.site.client.backoffice.ui.prime.form;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
+import com.pyx4j.gwt.commons.concerns.VisibilityConcern;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeFormView.IPrimeFormPresenter;
 import com.pyx4j.site.client.ui.layout.AbstractSimpleLayoutPanel;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
-import com.pyx4j.widgets.client.SecureConcernsHolder;
 
 public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormPresenter> extends AbstractPrimePaneView<PRESENTER>
         implements IPrimeFormView<E, PRESENTER> {
@@ -37,11 +36,20 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
 
     private String captionBase;
 
-    private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
+    private final VisibilityConcern controllerVisibilityConcern = new ControllerVisibilityConcern();
+
+    private class ControllerVisibilityConcern implements VisibilityConcern {
+
+        @Override
+        public Boolean isVisible() {
+            return form != null && form.isPopulated();
+        }
+
+    }
 
     public AbstractPrimeFormView(LayoutSystem layoutSystem) {
         super(layoutSystem);
-        secureConcerns.addAll(secureConcerns());
+        inserConcernedParent(controllerVisibilityConcern);
     }
 
     @Override
@@ -91,15 +99,11 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
         return form;
     }
 
-    protected void addSecureConcern(HasSecureConcern secureConcern) {
-        secureConcerns.addSecureConcern(secureConcern);
-    }
-
     @Override
     public void populate(E value) {
         assert (form != null);
         form.populate(value);
-        secureConcerns.setSecurityContext(value);
+        setSecurityContext(value);
         onPopulate();
     }
 
@@ -117,7 +121,7 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
         if (isVisorShown()) {
             hideVisor();
         }
-        secureConcerns.setSecurityContext(null);
+        setSecurityContext(null);
     }
 
     @Override

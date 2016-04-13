@@ -19,11 +19,12 @@
  */
 package com.pyx4j.gwt.commons.concerns;
 
-public final class ExplicitVisibilityConcern implements VisibilityConcern {
+//Internal class
+final class ExplicitVisibilityConcern implements VisibilityConcern {
 
     private boolean visible;
 
-    public ExplicitVisibilityConcern() {
+    ExplicitVisibilityConcern() {
         visible = true;
     }
 

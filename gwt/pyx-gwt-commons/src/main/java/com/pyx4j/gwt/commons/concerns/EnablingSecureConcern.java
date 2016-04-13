@@ -19,22 +19,17 @@
  */
 package com.pyx4j.gwt.commons.concerns;
 
-// Internal class
-final class ExplicitEnablingConcern implements EnablingConcern {
+import com.pyx4j.security.shared.Permission;
 
-    private boolean enabled = true;
+public class EnablingSecureConcern extends AbstractPermissionDrivenConcern implements EnablingConcern {
 
-    ExplicitEnablingConcern() {
-        enabled = true;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public EnablingSecureConcern(Permission[] permissions) {
+        super(permissions);
     }
 
     @Override
     public Boolean isEnabled() {
-        return enabled;
+        return getSecurityControllerDecision();
     }
 
 }

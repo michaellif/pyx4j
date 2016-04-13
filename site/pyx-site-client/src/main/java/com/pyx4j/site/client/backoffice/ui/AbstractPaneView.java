@@ -19,22 +19,19 @@
  */
 package com.pyx4j.site.client.backoffice.ui;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.Toolbar;
 
-public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> implements IPaneView<PRESENTER> {
+public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> implements IPaneView<PRESENTER>, HasSecureConcernedChildren {
 
     private static final double TOOLBAR_DEFAULT_HEIGHT = 34;
 
@@ -63,6 +60,8 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> impleme
     private final FlowPanel headerCaption;
 
     private PRESENTER presenter;
+
+    private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
 
     public AbstractPaneView(LayoutSystem layoutSystem) {
         this.layoutSystem = layoutSystem;
@@ -94,6 +93,7 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> impleme
         headerToolbar = new Toolbar();
         headerToolbarHolder.setWidget(headerToolbar);
         headerContainer.add(headerToolbarHolder);
+        addSecureConcern(headerToolbar);
 
         headerBreadcrumbHolder = new SimplePanel();
         headerBreadcrumbHolder.setStyleName(PaneTheme.StyleName.HeaderBreadcrumbs.name());
@@ -105,12 +105,14 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> impleme
         headerToolbarHolderLeft.addStyleName(PaneTheme.StyleName.HeaderToolbar.name());
         headerToolbarHolderLeft.setWidget(headerToolbarLeft);
         headerContainer.add(headerToolbarHolderLeft);
+        addSecureConcern(headerToolbarLeft);
 
         footerToolbarHolder = new SimplePanel();
         footerToolbarHolder.setStyleName(PaneTheme.StyleName.FooterToolbar.name());
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
         layoutWidget.addSouth(footerToolbarHolder, 0);
+        addSecureConcern(footerToolbar);
 
     }
 
@@ -143,8 +145,9 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> impleme
 
     // ---- Layout delegation end
 
-    protected Collection<HasSecureConcern> secureConcerns() {
-        return Arrays.<HasSecureConcern> asList(headerToolbar, footerToolbar);
+    @Override
+    public SecureConcernsHolder secureConcernsHolder() {
+        return secureConcernsHolder;
     }
 
     protected FlowPanel getHeaderCaption() {

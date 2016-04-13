@@ -24,12 +24,15 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.gwt.commons.concerns.AbstractConcern;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.security.shared.AccessControlContext;
 
 public class SecureConcernsHolder implements HasSecureConcern {
 
     private final Collection<HasSecureConcern> secureConcerns = new ArrayList<>();
+
+    private AbstractConcern parentConcern = null;
 
     public void add(IsWidget widget) {
         if (widget instanceof HasSecureConcern) {
@@ -38,11 +41,22 @@ public class SecureConcernsHolder implements HasSecureConcern {
     }
 
     public void addSecureConcern(HasSecureConcern secureConcern) {
+        if (parentConcern != null) {
+            secureConcern.inserConcernedParent(parentConcern);
+        }
         secureConcerns.add(secureConcern);
     }
 
     public void addAll(Collection<HasSecureConcern> secureConcerns) {
-        this.secureConcerns.addAll(secureConcerns);
+        for (HasSecureConcern c : secureConcerns) {
+            addSecureConcern(c);
+        }
+    }
+
+    @Override
+    public void inserConcernedParent(AbstractConcern parentConcern) {
+        HasSecureConcern.super.inserConcernedParent(parentConcern);
+        this.parentConcern = parentConcern;
     }
 
     @Override

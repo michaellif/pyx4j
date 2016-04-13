@@ -14,27 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 12, 2016
+ * Created on Apr 13, 2016
  * @author vlads
  */
 package com.pyx4j.gwt.commons.concerns;
 
-// Internal class
-final class ExplicitEnablingConcern implements EnablingConcern {
+import java.util.List;
 
-    private boolean enabled = true;
+public interface HasConcerns {
 
-    ExplicitEnablingConcern() {
-        enabled = true;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
-    public Boolean isEnabled() {
-        return enabled;
-    }
+    List<AbstractConcern> concerns();
 
 }

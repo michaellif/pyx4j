@@ -19,6 +19,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -31,8 +32,10 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.gwt.commons.concerns.AbstractConcern;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
-import com.pyx4j.gwt.commons.concerns.SecureConcern;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
+import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
@@ -139,9 +142,12 @@ public class Button extends ButtonBase {
         if (menuHolder != null) {
             menuHolder.setMenu(menu);
         }
-        this.menu = menu;
 
+        this.menu = menu;
         if (menu != null) {
+
+            addSecureConcern(menu);
+
             applyVisibilityRules();
             menu.addSecureConcernStateChangeHandler(new SecureConcernStateChangeEvent.Handler() {
                 @Override
@@ -154,14 +160,6 @@ public class Button extends ButtonBase {
 
     public ButtonMenuBar getMenu() {
         return menu;
-    }
-
-    @Override
-    public void setSecurityContext(AccessControlContext context) {
-        super.setSecurityContext(context);
-        if (menu != null) {
-            menu.setSecurityContext(context);
-        }
     }
 
     @Override
@@ -178,9 +176,12 @@ public class Button extends ButtonBase {
         return menu;
     }
 
-    public static class ButtonMenuBar extends MenuBar implements HasSecureConcern {
+    // TODO rename to MenuBar and move to new File
+    public static class ButtonMenuBar extends MenuBar implements HasWidgetConcerns, HasSecureConcernedChildren {
 
-        private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
+        protected final List<AbstractConcern> concerns = new ArrayList<>();
+
+        private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
 
         private HumanInputInfo humanInputInfo = HumanInputInfo.robot;
 
@@ -212,7 +213,7 @@ public class Button extends ButtonBase {
                 });
             }
             if (item instanceof HasSecureConcern) {
-                secureConcerns.addSecureConcern((HasSecureConcern) item);
+                addSecureConcern((HasSecureConcern) item);
             }
             try {
                 return super.insertItem(item, beforeIndex);
@@ -269,22 +270,67 @@ public class Button extends ButtonBase {
         @Override
         public void clearItems() {
             super.clearItems();
-            secureConcerns.clear();
-            fireEvent(new SecureConcernStateChangeEvent());
+            clearSecureConcerns();
+            fireEvent(new SecureConcernStateChangeEvent()); // TODO remove
         }
+
+        // --- concerns implementation - start
 
         @Override
         public void setSecurityContext(AccessControlContext context) {
-            secureConcerns.setSecurityContext(context);
+            HasWidgetConcerns.super.setSecurityContext(context);
+            HasSecureConcernedChildren.super.setSecurityContext(context);
 
             // TODO Fire when state actually changes.
-            fireEvent(new SecureConcernStateChangeEvent());
+            fireEvent(new SecureConcernStateChangeEvent()); // TODO remove
+        }
+
+        @Override
+        public void inserConcernedParent(AbstractConcern parentConcern) {
+            HasWidgetConcerns.super.inserConcernedParent(parentConcern);
+            HasSecureConcernedChildren.super.inserConcernedParent(parentConcern);
+        }
+
+        @Override
+        public void applyEnablingRules() {
+            //TODO review
+        }
+
+        @Override
+        public void setVisible(boolean visible) {
+            setConcernsVisible(visible);
+        }
+
+        // ---  save to copy paste to other class
+
+        @Override
+        protected void onAttach() {
+            super.onAttach();
+            applyVisibilityRules();
+        }
+
+        @Override
+        public void applyVisibilityRules() {
+            if (this.isAttached()) {
+                super.setVisible(HasWidgetConcerns.super.isVisible());
+            }
+        }
+
+        @Override
+        public List<AbstractConcern> concerns() {
+            return concerns;
+        }
+
+        @Override
+        public SecureConcernsHolder secureConcernsHolder() {
+            return secureConcernsHolder;
         }
     }
 
-    public static class SecureMenuItem extends MenuItem implements HasSecureConcern {
+    // TODO rename to MenuItem and move to new File
+    public static class SecureMenuItem extends MenuItem implements HasWidgetConcerns {
 
-        private final SecureConcern visible = new SecureConcern();
+        protected final List<AbstractConcern> concerns = new ArrayList<>();
 
         public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
             super(text, cmd);
@@ -300,27 +346,36 @@ public class Button extends ButtonBase {
             setPermission(permissions);
         }
 
+        // Historic method to avoid refactoring
         public void setPermission(Permission... permission) {
-            visible.setPermission(permission);
-            setVisibleImpl();
-        }
-
-        private void setVisibleImpl() {
-            super.setVisible(this.visible.getDecision());
+            setVisiblePermission(permission);
         }
 
         @Override
         public void setVisible(boolean visible) {
-            this.visible.setDecision(visible);
-            if (this.visible.hasDecision()) {
-                setVisibleImpl();
-            }
+            setConcernsVisible(visible);
         }
 
         @Override
-        public void setSecurityContext(AccessControlContext context) {
-            visible.setContext(context);
-            super.setVisible(visible.getDecision());
+        public void applyVisibilityRules() {
+            //if (this.isAttached()) {
+            super.setVisible(HasWidgetConcerns.super.isVisible());
+            //}
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            setConcernsEnabled(enabled);
+        }
+
+        @Override
+        public void applyEnablingRules() {
+            super.setEnabled(HasWidgetConcerns.super.isEnabled());
+        }
+
+        @Override
+        public List<AbstractConcern> concerns() {
+            return concerns;
         }
 
     }

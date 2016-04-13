@@ -23,7 +23,7 @@ import java.util.Collection;
 
 import com.pyx4j.security.shared.AccessControlContext;
 
-public interface HasSecureConcern extends AbstractConcern {
+public interface HasSecureConcern {
 
     // Force to Recalculate Permissions
     public void setSecurityContext(AccessControlContext context);
@@ -35,4 +35,9 @@ public interface HasSecureConcern extends AbstractConcern {
             }
         }
     }
+
+    default void inserConcernedParent(AbstractConcern parentConcern) {
+
+    }
+
 }
