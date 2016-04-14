@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
@@ -31,7 +32,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import org.jsoup.parser.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +59,16 @@ class NodesIterationStyledAdapterStrategy {
 
     private StringBuffer styledResult = new StringBuffer();
 
+    private boolean isTextInBuffer = false;
+
+    private static final String VISTA_BR_MARKER = "@VISTA_BR_MARKER@";
+
+    private static final Pattern breakLinePattern = Pattern.compile("<(style[a-z]*) *[^/]*?>\n</style>");
+
+    private static final Pattern endsWithBrBreakLinePattern = Pattern.compile("(.*)<(style[a-z]*) *[^/]*?>" + VISTA_BR_MARKER + "</style>", Pattern.DOTALL);
+
+    private static final Pattern endsWithPorDivBreakLinePattern = Pattern.compile("(.*)<(style[a-z]*) *[^/]*?>\n</style>", Pattern.DOTALL);
+
     public String makeJasperCompatibleStyled(String cleanedHtmlPart) {
 
         cleanedHtmlPart = JasperReportStyledUtils.ensureNoBreakLinesNorTabs(cleanedHtmlPart);
@@ -69,7 +79,7 @@ class NodesIterationStyledAdapterStrategy {
 
         convertToStyled(null, childNodes);
 
-        String converted = styledResult.toString();
+        String converted = removeExtraBreakLines(styledResult.toString());
         styledResult.setLength(0); // TODO Enhance this
 
         if (debug) {
@@ -78,6 +88,21 @@ class NodesIterationStyledAdapterStrategy {
         }
 
         return converted;
+    }
+
+    private String removeExtraBreakLines(String converted) {
+        final String breakLineTermination = "\n</style>";
+
+        // Remove extra breakline at the end added by p or div tags
+        if (converted.endsWith(breakLineTermination)) {
+            StringBuilder builder = new StringBuilder(converted);
+            builder.replace(converted.lastIndexOf(breakLineTermination), converted.lastIndexOf(breakLineTermination) + breakLineTermination.length(),
+                    "</style>");
+            converted = builder.toString();
+        }
+
+        // Replace BR markers with real breakline
+        return converted.replaceAll(VISTA_BR_MARKER, "\n");
     }
 
     private void convertToStyled(Attributes parentAttribs, List<Node> nodes) {
@@ -101,16 +126,22 @@ class NodesIterationStyledAdapterStrategy {
 
             Map<String, String> styledMapAttributes = JasperReportStyledUtils.toStyledMap(parentAttribs);
 
-            styledResult.append(JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes, specialAttributes));
+            if (((TextNode) node).getWholeText() != "\n") {
+                isTextInBuffer = true;
+            }
 
-        } else if ((node instanceof Element && node.childNodes().size() == 0)) {
-            Tag htmlTag = ((Element) node).tag();
+            String textToStyled = JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes, specialAttributes);
 
-            // Deal with br
-            switch (htmlTag.getName()) {
-            case "br":
-                styledResult.append(JasperReportStyledUtils.createStyledElement(new TextNode("\n", ""), null, specialAttributes));
-                break;
+            // Check conditions before appending breakline
+            if (breakLinePattern.matcher(textToStyled).matches()) {
+                // Do not append two consecutive breaklines if they come from <p> or <div> tags and there
+                // is already breakliner
+                if (!endsWithPorDivBreakLinePattern.matcher(styledResult.toString()).matches()
+                        && !endsWithBrBreakLinePattern.matcher(styledResult.toString()).matches()) {
+                    styledResult.append(textToStyled);
+                }
+            } else {
+                styledResult.append(textToStyled);
             }
 
         } else if (node instanceof Element) {
@@ -120,18 +151,17 @@ class NodesIterationStyledAdapterStrategy {
             List<Node> childNodes = new ArrayList<Node>();
 
             switch (elementTagName) {
+            case "br":
+                styledResult.append(JasperReportStyledUtils.createStyledElement(new TextNode(VISTA_BR_MARKER, ""), null, specialAttributes));
+                break;
             case "p":
             case "div":
-                if (((Element) node).text().length() == 0) {
+                if (isTextInBuffer) {
                     childNodes.add(new TextNode("\n", ""));
-                } else {
-                    if (!hasPreviousBreakLiner(node)) {
-                        childNodes.add(new TextNode("\n", ""));
-                    }
-                    childNodes.addAll(node.childNodes());
-                    if (!hasPosteriorBreakLiner(node)) {
-                        childNodes.add(new TextNode("\n", ""));
-                    }
+                }
+                childNodes.addAll(node.childNodes());
+                if (isTextInBuffer) {
+                    childNodes.add(new TextNode("\n", ""));
                 }
                 break;
             case "ol":
@@ -265,71 +295,6 @@ class NodesIterationStyledAdapterStrategy {
             spacesStr += JasperReportStyledUtils.DEFAULT_TAB_SIZE;
         }
         return spacesStr;
-    }
-
-    private boolean hasPreviousBreakLiner(Node node) {
-        Node previous = node.previousSibling();
-
-        // Previous node is text
-        if (isTextNode(previous)) {
-            return false;
-        }
-
-        // Previous node is tag no break-liner
-        if (isElement(previous) && !JasperReportStyledUtils.isBreakLiner(previous)) {
-            return false;
-        }
-
-        // No siblings, and parent is no break-liner
-        Node parent = node.parent();
-        if (parent != null && !isElementBody(parent) && !JasperReportStyledUtils.isBreakLiner(parent)) {
-            return false;
-        }
-
-        return true;
-
-    }
-
-    private boolean hasPosteriorBreakLiner(Node node) {
-        Node after = node.nextSibling();
-
-        // Node after is text
-        if (isTextNode(after)) {
-            return false;
-        }
-
-        // Node after is tag no break-liner
-        if (isElement(after) && !JasperReportStyledUtils.isBreakLiner(after)) {
-            return false;
-        }
-
-        // No siblings, check first child
-        List<Node> children = node.childNodes();
-        if (!children.isEmpty()) {
-            Node firstChild = children.get(0);
-
-            // First child node is text
-            if (isTextNode(firstChild)) {
-                return false;
-            }
-
-            // First child node is tag no break-liner
-            if (isElement(firstChild) && !JasperReportStyledUtils.isBreakLiner(firstChild)) {
-                return false;
-            }
-
-        }
-
-        return true;
-
-    }
-
-    private static boolean isTextNode(Node node) {
-        return node instanceof TextNode;
-    }
-
-    private static boolean isElement(Node node) {
-        return node instanceof Element;
     }
 
     private static boolean isElementBody(Node node) {
