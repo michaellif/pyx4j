@@ -32,13 +32,23 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
 
     // Permissions base Concern builder
 
-    default void setVisiblePermission(Permission... permissions) {
+    /**
+     * Permit component to become Visible when one (any) of the Permission is satisfied
+     *
+     * @param permissions
+     */
+    default void setVisibilityPermission(Permission... permissions) {
         if (!AbstractPermissionDrivenConcern.arraysIsEmpty(permissions)) {
             visible(new VisibilitySecureConcern(permissions), permissions[0].toString());
         }
     }
 
-    default void setEnabledPermission(Permission... permissions) {
+    /**
+     * Permit component to become Enabled when one (any) of the Permission is satisfied
+     *
+     * @param permissions
+     */
+    default void setEnablingPermission(Permission... permissions) {
         if (!AbstractPermissionDrivenConcern.arraysIsEmpty(permissions)) {
             enabled(new EnablingSecureConcern(permissions), permissions[0].toString());
         }

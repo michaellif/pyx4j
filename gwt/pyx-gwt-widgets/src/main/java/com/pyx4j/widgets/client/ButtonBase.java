@@ -201,7 +201,7 @@ public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns
 
     // Historic method to avoid refactoring
     public void setPermission(Permission... permission) {
-        setVisiblePermission(permission);
+        setVisibilityPermission(permission);
     }
 
     @Override

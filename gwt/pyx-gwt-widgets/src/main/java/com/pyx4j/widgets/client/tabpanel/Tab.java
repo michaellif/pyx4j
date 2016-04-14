@@ -19,16 +19,18 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
-import com.pyx4j.gwt.commons.concerns.SecureConcern;
-import com.pyx4j.security.shared.AccessControlContext;
+import com.pyx4j.gwt.commons.concerns.AbstractConcern;
+import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.security.shared.Permission;
 
-public class Tab extends LayoutPanel implements HasSecureConcern {
+public class Tab extends LayoutPanel implements HasWidgetConcerns {
 
     private String tabTitle;
 
@@ -36,13 +38,11 @@ public class Tab extends LayoutPanel implements HasSecureConcern {
 
     private TabPanel tabPanel;
 
-    private final SecureConcern enabled = new SecureConcern();
-
     private boolean dirty = false;
 
-    private final SecureConcern visible = new SecureConcern();
-
     private String warning = null;
+
+    protected final List<AbstractConcern> concerns = new ArrayList<>();
 
     public Tab(ImageResource tabImage, boolean closable) {
         this(null, null, tabImage, closable);
@@ -54,7 +54,7 @@ public class Tab extends LayoutPanel implements HasSecureConcern {
         if (contentPane != null) {
             add(contentPane);
         }
-        visible.setPermission(permissions);
+        setVisibilityPermission(permissions);
         setTabVisible(true);
     }
 
@@ -87,57 +87,52 @@ public class Tab extends LayoutPanel implements HasSecureConcern {
         return dirty;
     }
 
-    public void setTabVisible(boolean visible) {
-        this.visible.setDecision(visible);
-        if (this.visible.hasDecision()) {
-            setTabVisibleImpl();
-        }
-    }
+    // --- concerns implementation - start
 
-    private void setTabVisibleImpl() {
-        super.setVisible(this.visible.getDecision());
-        tabBarItem.onVisible(this.visible.getDecision());
-        if (tabPanel != null) {
-            tabPanel.getTabBar().layout();
-        }
-    }
-
-    public boolean isTabVisible() {
-        return visible.getDecision();
-    }
-
-    public void setPermitVisiblePermission(Permission... permission) {
-        visible.setPermission(permission);
-        setTabVisibleImpl();
-    }
-
-    public void setTabEnabled(boolean enabled) {
-        this.enabled.setDecision(enabled);
-        if (this.enabled.hasDecision()) {
-            setTabEnabledImpl();
-        }
-    }
-
-    private void setTabEnabledImpl() {
-        tabBarItem.onEnabled(this.enabled.getDecision());
-    }
-
-    public boolean isTabEnabled() {
-        return enabled.getDecision();
-    }
-
-    public void setPermitEnabledPermission(Permission... permission) {
-        enabled.setPermission(permission);
-        setTabEnabledImpl();
+    @Override
+    public List<AbstractConcern> concerns() {
+        return concerns;
     }
 
     @Override
-    public void setSecurityContext(AccessControlContext context) {
-        visible.setContext(context);
-        enabled.setContext(context);
-        setTabVisibleImpl();
-        setTabEnabledImpl();
+    public void applyVisibilityRules() {
+        if (this.isAttached()) {
+            boolean visible = HasWidgetConcerns.super.isVisible();
+            super.setVisible(visible);
+            tabBarItem.onVisible(visible);
+            if (visible && tabPanel != null) {
+                tabPanel.getTabBar().layout();
+            }
+        }
     }
+
+    public void setTabVisible(boolean visible) {
+        setConcernsVisible(visible);
+    }
+
+    public boolean isTabVisible() {
+        return isVisible();
+    }
+
+    public void setTabEnabled(boolean enabled) {
+        setConcernsEnabled(enabled);
+    }
+
+    @Override
+    public void applyEnablingRules() {
+        tabBarItem.onEnabled(isEnabled());
+    }
+
+    public boolean isTabEnabled() {
+        return isEnabled();
+    }
+
+    @Deprecated // use setEnablingPermission
+    public void setPermitEnabledPermission(Permission... permission) {
+        setEnablingPermission(permission);
+    }
+
+    // --- concerns implementation - end
 
     public void setTabWarning(String message) {
         this.warning = message;

@@ -43,6 +43,7 @@ public abstract class AbstractPermissionDrivenConcern implements HasSecureConcer
         securityControllerDecision = SecurityController.check(permissions);
     }
 
+    // java varargs creates empty arrays,  so consider it as no permissions set
     // Where is the same function in JDK, GWT / Guava ?
     public static boolean arraysIsEmpty(Permission[] permissions) {
         return (permissions == null || permissions.length == 0);

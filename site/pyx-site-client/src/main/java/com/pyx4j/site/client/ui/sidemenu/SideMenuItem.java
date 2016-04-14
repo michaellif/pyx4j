@@ -174,7 +174,7 @@ public class SideMenuItem implements ISideMenuNode, HasWidgetConcerns {
     }
 
     public void setPermission(Permission... permission) {
-        setVisiblePermission(permission);
+        setVisibilityPermission(permission);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
 
     // Historic method to avoid refactoring
     public void setPermission(Permission... permission) {
-        setVisiblePermission(permission);
+        setVisibilityPermission(permission);
     }
 
     @Override
