@@ -48,13 +48,13 @@
             <artifactId>pyx-log-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
-<!--
+
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-rpc-shared</artifactId>
+            <artifactId>pyx-security-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
--->
+
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>

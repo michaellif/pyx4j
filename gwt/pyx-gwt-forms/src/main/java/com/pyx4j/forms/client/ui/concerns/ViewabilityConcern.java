@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,16 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 21, 2014
+ * Created on Apr 13, 2016
  * @author vlads
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.forms.client.ui.concerns;
 
-import com.pyx4j.security.shared.AccessControlContext;
+import com.pyx4j.gwt.commons.concerns.AbstractConcern;
 
-public interface HasSecureConcern {
+@FunctionalInterface
+public interface ViewabilityConcern extends AbstractConcern {
 
-    // Force to Recalculate Permissions
-    public void setSecurityContext(AccessControlContext context);
+    Boolean isViewable();
 
 }

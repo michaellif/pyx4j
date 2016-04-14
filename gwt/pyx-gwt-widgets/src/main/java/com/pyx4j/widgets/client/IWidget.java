@@ -20,23 +20,17 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.ui.HasEnabled;
+import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
 
-public interface IWidget extends IsWidget {
-
-    void setEnabled(boolean enabled);
-
-    boolean isEnabled();
+public interface IWidget extends IsWidget, HasVisibility, HasEnabled {
 
     void setEditable(boolean editable);
 
     boolean isEditable();
-
-    void setVisible(boolean visible);
-
-    boolean isVisible();
 
     void setWidth(String width);
 

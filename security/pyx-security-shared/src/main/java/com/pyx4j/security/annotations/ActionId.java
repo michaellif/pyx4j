@@ -21,9 +21,15 @@ package com.pyx4j.security.annotations;
 
 import java.io.Serializable;
 
+import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.security.shared.Permission;
+
 /**
  * Security marker. without using string literals
  */
 public interface ActionId extends Serializable {
 
+    public static Permission asPermission(Class<? extends ActionId> actionId) {
+        return new ActionPermission(actionId);
+    }
 }

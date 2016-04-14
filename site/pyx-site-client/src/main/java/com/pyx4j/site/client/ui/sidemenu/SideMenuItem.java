@@ -19,6 +19,9 @@
  */
 package com.pyx4j.site.client.ui.sidemenu;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -36,18 +39,17 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.concerns.AbstractConcern;
+import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.HasSecureConcern;
-import com.pyx4j.widgets.client.SecureConcern;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public class SideMenuItem implements ISideMenuNode, HasSecureConcern {
+public class SideMenuItem implements ISideMenuNode, HasWidgetConcerns {
 
     private final ContentPanel contentPanel;
 
@@ -65,7 +67,7 @@ public class SideMenuItem implements ISideMenuNode, HasSecureConcern {
 
     private SideMenuList parent;
 
-    private final SecureConcern visible = new SecureConcern();
+    protected final List<AbstractConcern> concerns = new ArrayList<>();
 
     public SideMenuItem(final SideMenuCommand command, String caption, final ButtonImages images, Permission... permission) {
         super();
@@ -164,30 +166,20 @@ public class SideMenuItem implements ISideMenuNode, HasSecureConcern {
         return selected;
     }
 
-    protected void setVisibleImpl() {
-        contentPanel.setVisible(this.visible.getDecision());
-    }
-
-    public boolean isVisible() {
-        return contentPanel.isVisible();
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible.setDecision(visible);
-        if (this.visible.hasDecision()) {
-            setVisibleImpl();
+    @Override
+    public void applyVisibilityRules() {
+        if (contentPanel.isAttached()) {
+            contentPanel.setVisible(HasWidgetConcerns.super.isVisible());
         }
     }
 
-    @Override
-    public void setSecurityContext(AccessControlContext context) {
-        visible.setContext(context);
-        setVisibleImpl();
+    public void setPermission(Permission... permission) {
+        setVisibilityPermission(permission);
     }
 
-    public void setPermission(Permission... permission) {
-        visible.setPermission(permission);
-        setVisible(contentPanel.isVisible());
+    @Override
+    public List<AbstractConcern> concerns() {
+        return concerns;
     }
 
     @Override
@@ -249,4 +241,21 @@ public class SideMenuItem implements ISideMenuNode, HasSecureConcern {
     FlowPanel getItemPanel() {
         return itemPanel;
     }
+
+    @Override
+    public void applyEnablingRules() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        throw new UnsupportedOperationException();
+
+    }
+
 }

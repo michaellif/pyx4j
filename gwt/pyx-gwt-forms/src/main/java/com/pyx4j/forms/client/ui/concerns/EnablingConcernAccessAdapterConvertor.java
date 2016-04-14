@@ -14,26 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 25, 2016
+ * Created on Apr 13, 2016
  * @author vlads
  */
-package com.google.gwt.user.client.ui;
+package com.pyx4j.forms.client.ui.concerns;
 
-public class AccessibleMenuBar extends MenuBar {
+import com.pyx4j.gwt.commons.concerns.EnablingConcern;
 
-    public AccessibleMenuBar() {
-        this(false);
-    }
+/**
+ * Internal framework assistant. Should not be used in application code
+ */
+public class EnablingConcernAccessAdapterConvertor extends AbstractAccessAdapter {
 
-    public AccessibleMenuBar(boolean vertical) {
-        super(vertical);
-    }
+    public final EnablingConcern enablingConcern;
 
-    public void openItem(MenuItem menuItem) {
-        doItemAction(menuItem, true, false);
-    }
-
-    public PopupPanel getPopupPanel() {
-        return super.getPopup();
+    public EnablingConcernAccessAdapterConvertor(EnablingConcern enablingConcern) {
+        this.enablingConcern = enablingConcern;
     }
 }

@@ -58,7 +58,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.MenuBar;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 import com.pyx4j.widgets.client.memento.IMementoAware;
 import com.pyx4j.widgets.client.memento.IMementoInput;
@@ -264,10 +264,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             exportButton = new Button(i18n.tr("Export"), command);
             topActionsBar.getToolbar().insertItem(exportButton, 0);
         } else {
-            ButtonMenuBar exportMenuBar = exportButton.getMenu();
+            MenuBar exportMenuBar = exportButton.getMenu();
             if (exportMenuBar == null) {
                 // Move the Command to Menu of the Same Button
-                exportMenuBar = new ButtonMenuBar();
+                exportMenuBar = new MenuBar();
                 exportMenuBar.addItem(new MenuItem(exportButton.getCaption(), exportButton.getCommand()));
                 exportButton.setMenu(exportMenuBar);
                 exportButton.setTitle(i18n.tr("Export"));

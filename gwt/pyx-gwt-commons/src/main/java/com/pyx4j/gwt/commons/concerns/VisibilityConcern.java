@@ -14,26 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 25, 2016
+ * Created on Apr 12, 2016
  * @author vlads
  */
-package com.google.gwt.user.client.ui;
+package com.pyx4j.gwt.commons.concerns;
 
-public class AccessibleMenuBar extends MenuBar {
+import java.util.Collection;
 
-    public AccessibleMenuBar() {
-        this(false);
+@FunctionalInterface
+public interface VisibilityConcern extends AbstractConcern {
+
+    public Boolean isVisible();
+
+    public static boolean isVisible(Collection<AbstractConcern> concerns) {
+        for (AbstractConcern concern : concerns) {
+            if (concern instanceof VisibilityConcern) {
+                Boolean visible = ((VisibilityConcern) concern).isVisible();
+                if (visible != null && !visible) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
-    public AccessibleMenuBar(boolean vertical) {
-        super(vertical);
-    }
-
-    public void openItem(MenuItem menuItem) {
-        doItemAction(menuItem, true, false);
-    }
-
-    public PopupPanel getPopupPanel() {
-        return super.getPopup();
-    }
 }

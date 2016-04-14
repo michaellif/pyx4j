@@ -14,26 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 25, 2016
+ * Created on Apr 13, 2016
  * @author vlads
  */
-package com.google.gwt.user.client.ui;
+package com.pyx4j.forms.client.ui.concerns;
 
-public class AccessibleMenuBar extends MenuBar {
+import com.pyx4j.gwt.commons.concerns.AbstractPermissionDrivenConcern;
+import com.pyx4j.security.annotations.ActionId;
+import com.pyx4j.security.shared.Permission;
 
-    public AccessibleMenuBar() {
-        this(false);
+public class ViewabilitySecureConcern extends AbstractPermissionDrivenConcern implements ViewabilityConcern {
+
+    public ViewabilitySecureConcern(Permission[] permissions) {
+        super(permissions);
     }
 
-    public AccessibleMenuBar(boolean vertical) {
-        super(vertical);
+    public ViewabilitySecureConcern(Class<? extends ActionId> actionId) {
+        super(actionId);
     }
 
-    public void openItem(MenuItem menuItem) {
-        doItemAction(menuItem, true, false);
-    }
-
-    public PopupPanel getPopupPanel() {
-        return super.getPopup();
+    @Override
+    public Boolean isViewable() {
+        return getSecurityControllerDecision();
     }
 }
