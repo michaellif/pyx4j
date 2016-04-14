@@ -95,6 +95,12 @@ public class Tab extends LayoutPanel implements HasWidgetConcerns {
     }
 
     @Override
+    protected void onAttach() {
+        super.onAttach();
+        applyConcernRules();
+    }
+
+    @Override
     public void applyVisibilityRules() {
         if (this.isAttached()) {
             boolean visible = HasWidgetConcerns.super.isVisible();
@@ -111,7 +117,7 @@ public class Tab extends LayoutPanel implements HasWidgetConcerns {
     }
 
     public boolean isTabVisible() {
-        return isVisible();
+        return HasWidgetConcerns.super.isVisible();
     }
 
     public void setTabEnabled(boolean enabled) {
