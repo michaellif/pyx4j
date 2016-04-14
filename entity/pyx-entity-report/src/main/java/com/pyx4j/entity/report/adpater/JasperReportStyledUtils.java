@@ -173,12 +173,7 @@ public class JasperReportStyledUtils {
 
                 // ******************  Bold ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_WEIGHT)) {
-//                    if (valueAttribute)
                     resultMap.put("isBold", String.valueOf(valueAttribute.equalsIgnoreCase("bold")));
-                }
-
-                if (keyAttribute.equalsIgnoreCase("isbold")) {
-                    resultMap.put("isBold", String.valueOf(Boolean.TRUE));
                 }
 
                 // ******************  Strikethrough ***********************
@@ -186,26 +181,14 @@ public class JasperReportStyledUtils {
                     resultMap.put("isStrikeThrough", String.valueOf(valueAttribute.equalsIgnoreCase("line-through")));
                 }
 
-                if (keyAttribute.equalsIgnoreCase("isStrikeThrough")) {
-                    resultMap.put("isStrikeThrough", String.valueOf(Boolean.TRUE));
-                }
-
                 // ******************  Italic ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.FONT_STYLE)) {
                     resultMap.put("isItalic", String.valueOf(valueAttribute.equalsIgnoreCase("italic")));
                 }
 
-                if (keyAttribute.equalsIgnoreCase("isitalic")) {
-                    resultMap.put("isItalic", String.valueOf(Boolean.TRUE));
-                }
-
                 // ******************  Underline ***********************
                 if (keyAttribute.equalsIgnoreCase(JasperReportStyledUtils.TEXT_DECORATION)) {
                     resultMap.put("isUnderline", String.valueOf(valueAttribute.equalsIgnoreCase("underline")));
-                }
-
-                if (keyAttribute.equalsIgnoreCase("isunderline")) {
-                    resultMap.put("isUnderline", String.valueOf(Boolean.TRUE));
                 }
 
                 // ******************  Font-Size ***********************
