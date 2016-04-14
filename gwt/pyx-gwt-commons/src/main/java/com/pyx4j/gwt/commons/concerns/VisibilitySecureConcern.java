@@ -19,12 +19,17 @@
  */
 package com.pyx4j.gwt.commons.concerns;
 
+import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.Permission;
 
 public class VisibilitySecureConcern extends AbstractPermissionDrivenConcern implements VisibilityConcern {
 
     public VisibilitySecureConcern(Permission[] permissions) {
         super(permissions);
+    }
+
+    public VisibilitySecureConcern(Class<? extends ActionId> actionId) {
+        super(actionId);
     }
 
     @Override

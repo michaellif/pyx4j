@@ -25,10 +25,12 @@ public interface HasEnablingConcerns extends HasConcerns, HasEnabled {
 
     void applyEnablingRules();
 
+    @Override
     default boolean isEnabled() {
         return EnablingConcern.isEnabled(concerns());
     }
 
+    @Override
     default void setEnabled(boolean enabled) {
         setConcernsEnabled(enabled);
     }
@@ -47,7 +49,14 @@ public interface HasEnablingConcerns extends HasConcerns, HasEnabled {
         applyEnablingRules();
     }
 
-    default void enabled(EnablingConcern concern, String... adapterName) {
+    /**
+     * Component will become Enabled when function returns true.
+     *
+     * Multiple concerns:
+     * - all concerns of the same type should return true for component to become Enabled.
+     * - if any of concerns returns false the component will not become Enabled.
+     */
+    default void enabled(EnablingConcern concern, String... debuggingAdapterName) {
         // TODO Wrapper with 'adapterName' to simplify debug
         concerns().add(concern);
         applyEnablingRules();

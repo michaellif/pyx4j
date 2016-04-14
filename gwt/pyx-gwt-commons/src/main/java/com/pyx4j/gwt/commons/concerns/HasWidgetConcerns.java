@@ -30,12 +30,14 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
         applyConcernRules();
     }
 
-    // Permissions base Concern builder
+    // Permissions base Concern builder 'ConcernBuilderPermissionsBase'?
 
     /**
-     * Permit component to become Visible when one (any) of the Permission is satisfied
+     * Permit component to become Visible when one (any) of the Permission is satisfied.
+     * Mind other 'visible' concerns.
      *
      * @param permissions
+     *            null or empty permissions are ignored for compatibility with component constructors
      */
     default void setVisibilityPermission(Permission... permissions) {
         if (!AbstractPermissionDrivenConcern.arraysIsEmpty(permissions)) {
@@ -44,9 +46,24 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
     }
 
     /**
-     * Permit component to become Enabled when one (any) of the Permission is satisfied
+     * Permit component to become Visible when one (any) of the Permission is satisfied.
+     * Mind other 'visible' concerns.
+     *
+     * Synonym to setVisibilityPermission
      *
      * @param permissions
+     *            null or empty permissions are ignored for compatibility with component constructors
+     */
+    default void visible(Permission... permissions) {
+        setVisibilityPermission(permissions);
+    }
+
+    /**
+     * Permit component to become Enabled when one (any) of the Permission is satisfied.
+     * Mind other 'enabled' concerns.
+     *
+     * @param permissions
+     *            null or empty permissions are ignored for compatibility with component constructors
      */
     default void setEnablingPermission(Permission... permissions) {
         if (!AbstractPermissionDrivenConcern.arraysIsEmpty(permissions)) {
@@ -54,6 +71,20 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
         }
     }
 
+    /**
+     * Permit component to become Enabled when one (any) of the Permission is satisfied.
+     * Mind other 'enabled' concerns.
+     *
+     * Synonym to setEnablingPermission
+     *
+     * @param permissions
+     *            null or empty permissions are ignored for compatibility with component constructors
+     */
+    default void enabled(Permission... permissions) {
+        setEnablingPermission(permissions);
+    }
+
+    // TODO review concept in a 2017, probably can be done differently and less cumbersome
     @Override
     default void inserConcernedParent(AbstractConcern parentConcern) {
         HasSecureConcern.super.inserConcernedParent(parentConcern);

@@ -25,7 +25,11 @@ import com.pyx4j.security.shared.AccessControlContext;
 
 public interface HasSecureConcern {
 
-    // Force to Recalculate Permissions
+    /**
+     * Force to recalculation of Permissions within context
+     *
+     * @param context
+     */
     public void setSecurityContext(AccessControlContext context);
 
     public static void setSecurityContext(Collection<AbstractConcern> concerns, AccessControlContext context) {
@@ -36,6 +40,7 @@ public interface HasSecureConcern {
         }
     }
 
+    // TODO review concept in a 2017, probably can be done differently and less cumbersome
     default void inserConcernedParent(AbstractConcern parentConcern) {
 
     }

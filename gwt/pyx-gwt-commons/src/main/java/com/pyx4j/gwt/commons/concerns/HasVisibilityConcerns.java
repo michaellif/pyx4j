@@ -49,7 +49,14 @@ public interface HasVisibilityConcerns extends HasConcerns, HasVisibility {
         applyVisibilityRules();
     }
 
-    default void visible(VisibilityConcern concern, String... adapterName) {
+    /**
+     * Component will become Visible when function returns true.
+     *
+     * Multiple concerns:
+     * - all concerns of the same type should return true for component to become Visible.
+     * - if any of concerns returns false the component will not become Visible.
+     */
+    default void visible(VisibilityConcern concern, String... debuggingAdapterName) {
         // TODO Wrapper with 'adapterName' to simplify debug
         concerns().add(concern);
         applyVisibilityRules();

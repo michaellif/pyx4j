@@ -19,7 +19,9 @@
  */
 package com.pyx4j.gwt.commons.concerns;
 
+import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -35,8 +37,12 @@ public abstract class AbstractPermissionDrivenConcern implements HasSecureConcer
 
     boolean securityControllerDecision;
 
+    public AbstractPermissionDrivenConcern(Class<? extends ActionId> actionId) {
+        this(new Permission[] { new ActionPermission(actionId) });
+    }
+
     public AbstractPermissionDrivenConcern(Permission[] permissions) {
-        assert !arraysIsEmpty(permissions) : "Use factory to optimize concern creation, see WidgetConcerns";
+        assert !arraysIsEmpty(permissions) : "Use factory to optimize concern creation, see HasWidgetConcerns";
         this.permissions = permissions;
 
         // This may change and re evaluated base on context

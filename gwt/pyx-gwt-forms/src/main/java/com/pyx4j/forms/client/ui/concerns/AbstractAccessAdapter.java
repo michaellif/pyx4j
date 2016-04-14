@@ -14,27 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 12, 2016
+ * Created on Apr 13, 2016
  * @author vlads
  */
-package com.pyx4j.gwt.commons.concerns;
+package com.pyx4j.forms.client.ui.concerns;
 
-import com.pyx4j.security.annotations.ActionId;
-import com.pyx4j.security.shared.Permission;
+import com.pyx4j.forms.client.ui.IAccessAdapter;
 
-public class EnablingSecureConcern extends AbstractPermissionDrivenConcern implements EnablingConcern {
-
-    public EnablingSecureConcern(Permission[] permissions) {
-        super(permissions);
-    }
-
-    public EnablingSecureConcern(Class<? extends ActionId> actionId) {
-        super(actionId);
-    }
+public abstract class AbstractAccessAdapter implements IAccessAdapter {
 
     @Override
     public Boolean isEnabled() {
-        return getSecurityControllerDecision();
+        return null;
+    }
+
+    @Override
+    public Boolean isEditable() {
+        return null;
+    }
+
+    @Override
+    public Boolean isVisible() {
+        return null;
+    }
+
+    @Override
+    public Boolean isViewable() {
+        return null;
     }
 
 }
