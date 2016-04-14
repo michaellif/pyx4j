@@ -87,7 +87,6 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
     // TODO review concept in a 2017, probably can be done differently and less cumbersome
     @Override
     default void inserConcernedParent(AbstractConcern parentConcern) {
-        HasSecureConcern.super.inserConcernedParent(parentConcern);
         if (concerns().size() == 0) {
             concerns().add(parentConcern);
         } else {
