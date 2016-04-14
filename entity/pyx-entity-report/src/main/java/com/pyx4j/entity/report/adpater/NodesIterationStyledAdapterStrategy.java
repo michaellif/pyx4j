@@ -65,10 +65,6 @@ public class NodesIterationStyledAdapterStrategy {
 
     private static final Pattern breakLinePattern = Pattern.compile("<(style[a-z]*) *[^/]*?>\n</style>");
 
-    private static final Pattern endsWithBrBreakLinePattern = Pattern.compile("(.*)<(style[a-z]*) *[^/]*?>" + VISTA_BR_MARKER + "</style>", Pattern.DOTALL);
-
-    private static final Pattern endsWithPorDivBreakLinePattern = Pattern.compile("(.*)<(style[a-z]*) *[^/]*?>\n</style>", Pattern.DOTALL);
-
     public String makeJasperCompatibleStyled(String cleanedHtmlPart) {
 
         cleanedHtmlPart = JasperReportStyledUtils.ensureNoBreakLinesNorTabs(cleanedHtmlPart);
@@ -132,12 +128,11 @@ public class NodesIterationStyledAdapterStrategy {
 
             String textToStyled = JasperReportStyledUtils.createStyledElement(textNode, styledMapAttributes, specialAttributes);
 
-            // Check conditions before appending breakline
+            // Check current buffer ending before appending news breakline
             if (breakLinePattern.matcher(textToStyled).matches()) {
                 // Do not append two consecutive breaklines if they come from <p> or <div> tags and there
-                // is already breakliner
-                if (!endsWithPorDivBreakLinePattern.matcher(styledResult.toString()).matches()
-                        && !endsWithBrBreakLinePattern.matcher(styledResult.toString()).matches()) {
+                // is already breakliner at the end of current buffer
+                if (!styledResult.toString().endsWith("\n</style>") && !styledResult.toString().endsWith(VISTA_BR_MARKER + "</style>")) {
                     styledResult.append(textToStyled);
                 }
             } else {
