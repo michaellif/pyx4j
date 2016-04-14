@@ -97,7 +97,7 @@ public class AbstractPrimePaneViewLayoutLayoutPanels extends ComplexPanel implem
         getChildren().insert(visor.asWidget(), 1);
 
         // Physical attach.
-        Layer layer = layout.attachChild(visor.asWidget().getElement(), visor);
+        Layer layer = layout.attachChild(visor.asWidget().getElement(), visor.asWidget());
         setWidgetVisible(visor.asWidget(), layer, false);
         visor.asWidget().setLayoutData(layer);
 
