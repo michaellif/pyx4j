@@ -357,4 +357,42 @@ public class MailMessage implements Serializable {
         return b.toString();
     }
 
+    @Override
+    public MailMessage clone() {
+        MailMessage cloneMsg = new MailMessage();
+
+        cloneMsg.setMailQueueId(mailQueueId);
+        cloneMsg.setSender(sender);
+        cloneMsg.setTo(to);
+        cloneMsg.setCc(cc);
+        cloneMsg.setBcc(bcc);
+        cloneMsg.setSubject(subject);
+        cloneMsg.setTextBody(textBody);
+        cloneMsg.setHtmlBody(htmlBody);
+        cloneMsg.addKeywords(keywords);
+        cloneMsg.setDeliveryErrorMessage(deliveryErrorMessage);
+
+        if (replyTo != null) {
+            for (String obj : replyTo) {
+                cloneMsg.addReplyTo(obj);
+            }
+        }
+        if (attachments != null) {
+            for (MailAttachment obj : attachments) {
+                cloneMsg.addAttachment(obj);
+            }
+        }
+        if (headers != null) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                cloneMsg.setHeader(header.getKey(), header.getValue());
+            }
+        }
+        if (applicationAttributes != null) {
+            for (Serializable obj : applicationAttributes) {
+                cloneMsg.addApplicationAttribute(obj);
+            }
+        }
+
+        return cloneMsg;
+    }
 }
