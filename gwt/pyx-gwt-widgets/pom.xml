@@ -58,6 +58,7 @@
         <dependency>
             <groupId>com.allen-sauer.gwt.dnd</groupId>
             <artifactId>gwt-dnd</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
