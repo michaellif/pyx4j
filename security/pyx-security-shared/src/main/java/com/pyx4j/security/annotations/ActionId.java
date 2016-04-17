@@ -25,7 +25,9 @@ import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 
 /**
- * Security marker. without using string literals
+ * Security marker. without using string literals.
+ *
+ * Actions are assigned to Behaviors in ACL builder and used in UI components to check where to hide or disable component .
  */
 public interface ActionId extends Serializable {
 
