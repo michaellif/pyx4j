@@ -56,9 +56,9 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
     public void setPresenter(PRESENTER presenter) {
         super.setPresenter(presenter);
         if (presenter != null && presenter.getPlace() != null) {
-            captionBase = AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() + ": ";
+            setCaptionBase(AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() + ": ");
         } else {
-            captionBase = "";
+            setCaptionBase("");
         }
     }
 
