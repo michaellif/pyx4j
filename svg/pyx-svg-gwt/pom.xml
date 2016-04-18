@@ -19,7 +19,6 @@
 
     <dependencies>
 
-
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-commons</artifactId>
