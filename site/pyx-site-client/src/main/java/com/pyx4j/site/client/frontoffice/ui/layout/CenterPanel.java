@@ -20,8 +20,8 @@
 package com.pyx4j.site.client.frontoffice.ui.layout;
 
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
@@ -35,11 +35,11 @@ public class CenterPanel extends FlowPanel {
         getElement().getStyle().setPosition(Position.RELATIVE);
 
         SimplePanel backgroundPanel = new SimplePanel();
-        backgroundPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        backgroundPanel.getElement().getStyle().setProperty("top", "0");
-        backgroundPanel.getElement().getStyle().setProperty("bottom", "0");
-        backgroundPanel.getElement().getStyle().setProperty("left", "0");
-        backgroundPanel.getElement().getStyle().setProperty("right", "0");
+        backgroundPanel.getStyle().setPosition(Position.ABSOLUTE);
+        backgroundPanel.getStyle().setProperty("top", "0");
+        backgroundPanel.getStyle().setProperty("bottom", "0");
+        backgroundPanel.getStyle().setProperty("left", "0");
+        backgroundPanel.getStyle().setProperty("right", "0");
         backgroundPanel.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutContentBackground.name());
         add(backgroundPanel);
 

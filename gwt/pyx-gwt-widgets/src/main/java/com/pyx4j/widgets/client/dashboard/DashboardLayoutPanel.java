@@ -26,7 +26,7 @@ import java.util.Vector;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
@@ -186,8 +186,8 @@ class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
         for (int col = 0; col < layoutType.columns(); ++col) {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             DashboardColumnFlowPanel columnPanel = new DashboardColumnFlowPanel(this);
-            columnPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            columnPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            columnPanel.getStyle().setDisplay(Display.INLINE_BLOCK);
+            columnPanel.getStyle().setVerticalAlign(VerticalAlign.TOP);
 
             switch (layoutType) {
             case Two12:

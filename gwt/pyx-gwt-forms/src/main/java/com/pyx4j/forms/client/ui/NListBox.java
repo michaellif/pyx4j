@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 

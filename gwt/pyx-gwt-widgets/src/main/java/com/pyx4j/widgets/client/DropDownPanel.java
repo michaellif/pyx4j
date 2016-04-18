@@ -26,9 +26,10 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.ui.HasStyle;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class DropDownPanel extends PopupPanel {
+public class DropDownPanel extends PopupPanel implements HasStyle {
 
     static {
         Window.addResizeHandler(new ResizeHandler() {

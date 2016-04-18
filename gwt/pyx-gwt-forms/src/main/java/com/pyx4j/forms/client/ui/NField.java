@@ -38,8 +38,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -277,8 +277,8 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             setWidth("100%");
 
             editorHolder = new SimplePanel();
-            editorHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-            editorHolder.getElement().getStyle().setProperty("display", "table-cell");
+            editorHolder.getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+            editorHolder.getStyle().setProperty("display", "table-cell");
             editorHolder.setWidth("100%");
             add(editorHolder);
 
@@ -291,8 +291,8 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
             { // Trigger Button
                 triggerButtonHolder = new SimplePanel();
-                triggerButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
-                triggerButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+                triggerButtonHolder.getStyle().setProperty("display", "table-cell");
+                triggerButtonHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
                 add(triggerButtonHolder);
 
@@ -301,8 +301,8 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
 
             { // Clear Button
                 clearButtonHolder = new SimplePanel();
-                clearButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
-                clearButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+                clearButtonHolder.getStyle().setProperty("display", "table-cell");
+                clearButtonHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
                 add(clearButtonHolder);
 
@@ -395,7 +395,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
                 clearButtonHandlerRegistrations.add(clearButton.addBlurHandler(groupFocusHandler));
 
                 clearButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, WidgetDebugId.trigger));
-                clearButton.getElement().getStyle().setDisplay(Display.BLOCK);
+                clearButton.getStyle().setDisplay(Display.BLOCK);
                 clearButtonHolder.setWidget(clearButton);
             }
         }
@@ -435,18 +435,18 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             setWidth("100%");
 
             viewerLabelHolder = new SimplePanel();
-            viewerLabelHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+            viewerLabelHolder.getStyle().setWhiteSpace(WhiteSpace.NORMAL);
             viewerLabelHolder.setWidth("100%");
-            viewerLabelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            viewerLabelHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
             add(viewerLabelHolder);
 
             viewerLinkHolder = new Link();
             viewerLinkHolder.setWidth("100%");
-            viewerLinkHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            viewerLinkHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
             add(viewerLinkHolder);
 
             actionButtonHolder = new SimplePanel();
-            actionButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            actionButtonHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
             add(actionButtonHolder);
 
             initActionButton();

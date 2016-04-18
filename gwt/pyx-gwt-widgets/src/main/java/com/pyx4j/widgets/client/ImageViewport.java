@@ -23,7 +23,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.gwt.shared.Dimension;

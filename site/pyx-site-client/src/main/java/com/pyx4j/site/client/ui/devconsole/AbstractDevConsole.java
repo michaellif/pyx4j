@@ -29,11 +29,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -58,11 +58,11 @@ public abstract class AbstractDevConsole extends FlowPanel {
 
         deviceImage = new Image();
         SimplePanel deviceImageHolder = new SimplePanel(deviceImage);
-        deviceImageHolder.getElement().getStyle().setFloat(Float.RIGHT);
-        deviceImageHolder.getElement().getStyle().setProperty("padding", "5px");
-        deviceImageHolder.getElement().getStyle().setProperty("marginRight", "15px");
-        deviceImageHolder.getElement().getStyle().setProperty("borderRadius", "5px");
-        deviceImageHolder.getElement().getStyle().setProperty("background", "white");
+        deviceImageHolder.getStyle().setFloat(Float.RIGHT);
+        deviceImageHolder.getStyle().setProperty("padding", "5px");
+        deviceImageHolder.getStyle().setProperty("marginRight", "15px");
+        deviceImageHolder.getStyle().setProperty("borderRadius", "5px");
+        deviceImageHolder.getStyle().setProperty("background", "white");
 
         add(deviceImageHolder);
 

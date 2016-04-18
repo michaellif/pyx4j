@@ -29,8 +29,8 @@ import com.google.gwt.storage.client.StorageEvent;
 import com.google.gwt.storage.client.StorageEvent.Handler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 
 import com.pyx4j.widgets.client.GroupBoxPanel;

@@ -28,7 +28,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
 import com.pyx4j.commons.LogicalDate;
@@ -114,9 +114,9 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
             };
 
             photoAlbum.setWidth("700px");
-            photoAlbum.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            photoAlbum.getElement().getStyle().setBorderColor("black");
-            photoAlbum.getElement().getStyle().setBorderWidth(2, Unit.PX);
+            photoAlbum.getStyle().setBorderStyle(BorderStyle.SOLID);
+            photoAlbum.getStyle().setBorderColor("black");
+            photoAlbum.getStyle().setBorderWidth(2, Unit.PX);
             final BasicPhotoAlbumModel model = new BasicPhotoAlbumModel();
             photoAlbum.setPhotoAlbumModel(model);
 

@@ -22,8 +22,9 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.validators.IValidatable;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 
-public interface INativeComponent<E> extends IsWidget, IValidatable {
+public interface INativeComponent<E> extends IsWidget, IValidatable, HasStyle {
 
     CComponent<?> getCComponent();
 

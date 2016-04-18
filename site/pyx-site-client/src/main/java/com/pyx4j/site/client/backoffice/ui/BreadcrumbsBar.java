@@ -26,12 +26,12 @@ import java.util.Vector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
@@ -60,7 +60,7 @@ public class BreadcrumbsBar extends HorizontalPanel {
                 add(anchor);
                 setCellVerticalAlignment(anchor, HorizontalPanel.ALIGN_MIDDLE);
                 if (i < breadcrumbTrail.size() - 1) {
-                    Label separator = new HTML("&nbsp;>&nbsp;");
+                    HTML separator = new HTML("&nbsp;>&nbsp;");
                     add(separator);
                     setCellVerticalAlignment(separator, HorizontalPanel.ALIGN_MIDDLE);
                 }

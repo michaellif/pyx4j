@@ -23,8 +23,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ListBox;
@@ -57,7 +57,7 @@ public class JasperCompatibleRichTextToolbar extends RichTextToolbar {
 
         lb.addItem(i18n.tr("Font Family"), "");
         lb.addItem(i18n.tr("Normal"), "");
-        lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+        lb.getStyle().setMarginRight(4, Unit.PX);
 
         groupFocusHandler.addFocusable(lb);
 

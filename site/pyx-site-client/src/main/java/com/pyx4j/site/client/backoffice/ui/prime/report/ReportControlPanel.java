@@ -19,7 +19,7 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime.report;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;

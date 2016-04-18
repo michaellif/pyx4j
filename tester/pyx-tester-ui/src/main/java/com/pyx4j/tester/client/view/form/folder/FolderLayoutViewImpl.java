@@ -19,7 +19,7 @@
  */
 package com.pyx4j.tester.client.view.form.folder;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 

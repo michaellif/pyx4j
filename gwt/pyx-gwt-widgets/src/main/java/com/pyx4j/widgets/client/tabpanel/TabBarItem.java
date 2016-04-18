@@ -29,13 +29,13 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
 
@@ -96,8 +96,8 @@ public class TabBarItem extends HorizontalPanel {
 
             final Image closeImage = new Image(ImageFactory.getImages().closeTab());
 
-            closeImage.getElement().getStyle().setCursor(Cursor.POINTER);
-            closeImage.getElement().getStyle().setMarginRight(3, Unit.PX);
+            closeImage.getStyle().setCursor(Cursor.POINTER);
+            closeImage.getStyle().setMarginRight(3, Unit.PX);
             closeImage.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

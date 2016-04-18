@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 
 import com.pyx4j.dnd.client.DataTransfer;
 import com.pyx4j.dnd.client.DnDAdapter;

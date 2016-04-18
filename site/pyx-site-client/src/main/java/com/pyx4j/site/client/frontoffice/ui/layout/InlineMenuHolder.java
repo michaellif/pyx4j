@@ -22,8 +22,8 @@ package com.pyx4j.site.client.frontoffice.ui.layout;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 

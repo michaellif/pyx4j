@@ -17,13 +17,13 @@ import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
@@ -223,22 +223,22 @@ public class MessageDialog extends Dialog {
             }
 
             SimplePanel imageHolder = new SimplePanel(new Image(imageResource));
-            imageHolder.getElement().getStyle().setProperty("display", "table-cell");
-            imageHolder.getElement().getStyle().setPadding(10, Unit.PX);
-            imageHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            imageHolder.getStyle().setProperty("display", "table-cell");
+            imageHolder.getStyle().setPadding(10, Unit.PX);
+            imageHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             add(imageHolder);
 
             htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
-            htmlMessage.getElement().getStyle().setPadding(10, Unit.PX);
-            htmlMessage.getElement().getStyle().setProperty("wordWrap", "break-word");
-            htmlMessage.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+            htmlMessage.getStyle().setPadding(10, Unit.PX);
+            htmlMessage.getStyle().setProperty("wordWrap", "break-word");
+            htmlMessage.getStyle().setWhiteSpace(WhiteSpace.NORMAL);
 
             htmlScroll = new ScrollPanel();
             htmlScroll.setWidget(htmlMessage);
 
             SimplePanel htmlHolder = new SimplePanel(htmlScroll);
-            htmlHolder.getElement().getStyle().setProperty("display", "table-cell");
-            htmlHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            htmlHolder.getStyle().setProperty("display", "table-cell");
+            htmlHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
             add(htmlHolder);
 

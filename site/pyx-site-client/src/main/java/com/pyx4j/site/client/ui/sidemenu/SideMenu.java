@@ -19,7 +19,7 @@
  */
 package com.pyx4j.site.client.ui.sidemenu;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.concerns.HasSecureConcern;

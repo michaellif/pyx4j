@@ -21,7 +21,7 @@ package com.pyx4j.site.client.ui.layout;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 

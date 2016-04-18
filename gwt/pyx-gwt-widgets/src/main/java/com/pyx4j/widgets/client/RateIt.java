@@ -31,9 +31,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme.StyleName;
@@ -69,8 +69,8 @@ public class RateIt extends FocusPanel implements HasValueChangeHandlers<Integer
         ratingBar.setStyleName(StyleName.RateItBar.name());
 
         container.add(ratingBar);
-        ratingBar.getElement().getStyle().setFloat(Float.LEFT);
-        ratingBar.getElement().getStyle().setProperty("background", "url('" + emptyStarImage.getSafeUri().asString() + "') repeat-x 0%");
+        ratingBar.getStyle().setFloat(Float.LEFT);
+        ratingBar.getStyle().setProperty("background", "url('" + emptyStarImage.getSafeUri().asString() + "') repeat-x 0%");
 
         starWidth = emptyStarImage.getWidth();
         int starHeight = emptyStarImage.getHeight();
@@ -79,8 +79,8 @@ public class RateIt extends FocusPanel implements HasValueChangeHandlers<Integer
         ratingBar.setHeight(starHeight + "px");
 
         ratingStars = new SimplePanel();
-        ratingStars.getElement().getStyle().setFloat(Float.LEFT);
-        ratingStars.getElement().getStyle().setProperty("background", "url('" + fullStarImage.getSafeUri().asString() + "') repeat-x 0%");
+        ratingStars.getStyle().setFloat(Float.LEFT);
+        ratingStars.getStyle().setProperty("background", "url('" + fullStarImage.getSafeUri().asString() + "') repeat-x 0%");
         ratingStars.setWidth("0px");
         ratingStars.setHeight(starHeight + "px");
         ratingBar.setWidget(ratingStars);

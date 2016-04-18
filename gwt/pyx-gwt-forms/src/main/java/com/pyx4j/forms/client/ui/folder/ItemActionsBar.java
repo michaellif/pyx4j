@@ -26,7 +26,7 @@ import java.util.Map;
 
 import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;

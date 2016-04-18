@@ -40,10 +40,11 @@ import com.pyx4j.gwt.commons.concerns.EnablingConcern;
 import com.pyx4j.gwt.commons.concerns.EnablingSecureConcern;
 import com.pyx4j.gwt.commons.concerns.VisibilityConcern;
 import com.pyx4j.gwt.commons.concerns.VisibilitySecureConcern;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.Permission;
 
-public interface CComponent<DATA_TYPE> extends IsWidget, HasPropertyChangeHandlers, HasValueChangeHandlers<DATA_TYPE> {
+public interface CComponent<DATA_TYPE> extends IsWidget, HasPropertyChangeHandlers, HasValueChangeHandlers<DATA_TYPE>, HasStyle {
 
     // -- Data
 

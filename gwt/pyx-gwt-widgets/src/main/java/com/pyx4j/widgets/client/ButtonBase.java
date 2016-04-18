@@ -36,19 +36,20 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.commons.concerns.AbstractConcern;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
 import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns, IFocusWidget, HasSecureConcernedChildren {
+public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns, IFocusWidget, HasSecureConcernedChildren, HasStyle {
 
     private final HTML textLabel;
 
@@ -76,7 +77,7 @@ public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns
         setTextLabel(text);
 
         imageHolder = new FlowPanel();
-        imageHolder.getElement().getStyle().setProperty("height", "100%");
+        imageHolder.getStyle().setProperty("height", "100%");
 
         imageHolder.add(textLabel);
 
@@ -165,8 +166,8 @@ public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns
     }
 
     protected void updateImageState() {
-        getImageHolder().getElement().getStyle().setProperty("paddingLeft", "0px");
-        getImageHolder().getElement().getStyle().setProperty("background", "none");
+        getImageHolder().getStyle().setProperty("paddingLeft", "0px");
+        getImageHolder().getStyle().setProperty("background", "none");
     }
 
     // --- concerns implementation - start

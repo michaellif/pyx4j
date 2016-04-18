@@ -20,7 +20,7 @@
 package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.site.client.backoffice.ui.visor.IVisor;
 

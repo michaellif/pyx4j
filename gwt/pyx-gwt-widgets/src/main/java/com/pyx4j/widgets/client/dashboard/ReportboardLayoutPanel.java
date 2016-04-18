@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 import com.allen_sauer.gwt.dnd.client.util.WidgetArea;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {

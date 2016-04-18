@@ -19,9 +19,9 @@
  */
 package com.pyx4j.site.client.backoffice.ui;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;

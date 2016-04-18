@@ -21,7 +21,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.widgets.client.CheckBox;
 

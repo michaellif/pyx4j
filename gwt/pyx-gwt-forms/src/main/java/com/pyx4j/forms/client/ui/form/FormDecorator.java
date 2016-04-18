@@ -19,17 +19,17 @@
  */
 package com.pyx4j.forms.client.ui.form;
 
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.IFormDecorator;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.Panel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.Toolbar;
 
 public class FormDecorator<E extends IEntity> extends FlowPanel implements IFormDecorator<E> {

@@ -22,7 +22,7 @@ package com.pyx4j.site.client.backoffice.ui.prime.lister;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
@@ -62,8 +62,8 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
             return; // already!?.
         }
 
-        dataTablePanel.getElement().getStyle().setPadding(6, Unit.PX);
-        dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
+        dataTablePanel.getStyle().setPadding(6, Unit.PX);
+        dataTablePanel.getStyle().setPaddingBottom(40, Unit.PX);
 
         ((ScrollPanel) getContentPane()).add(this.dataTablePanel = dataTablePanel);
 

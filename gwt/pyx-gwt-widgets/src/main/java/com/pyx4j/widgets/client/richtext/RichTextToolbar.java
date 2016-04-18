@@ -30,8 +30,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -155,8 +155,8 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         topToolbar.setWidth("100%");
 
         topButtonBar = new Toolbar();
-        topButtonBar.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        topButtonBar.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        topButtonBar.getStyle().setDisplay(Display.INLINE_BLOCK);
+        topButtonBar.getStyle().setFontWeight(FontWeight.BOLD);
         topToolbar.add(topButtonBar);
 
         editModeSwitch = new CheckBox(i18n.tr("HTML"));
@@ -477,7 +477,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         lb.addItem(i18n.tr("Yellow"), "yellow");
         lb.addItem(i18n.tr("Blue"), "blue");
 
-        lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+        lb.getStyle().setMarginRight(4, Unit.PX);
 
         groupFocusHandler.addFocusable(lb);
 
@@ -505,7 +505,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         lb.addItem(i18n.tr("Trebuchet"), "Trebuchet");
         lb.addItem(i18n.tr("Verdana"), "Verdana");
 
-        lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+        lb.getStyle().setMarginRight(4, Unit.PX);
 
         groupFocusHandler.addFocusable(lb);
 
@@ -534,7 +534,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
         lb.addItem(i18n.tr("X-Large"));
         lb.addItem(i18n.tr("XX-Large"));
 
-        lb.getElement().getStyle().setMarginRight(4, Unit.PX);
+        lb.getStyle().setMarginRight(4, Unit.PX);
 
         groupFocusHandler.addFocusable(lb);
 
@@ -653,7 +653,7 @@ public class RichTextToolbar extends FlowPanel implements IFocusGroup {
 
         private IsWidget initBody(String labelText) {
             FlowPanel body = new FlowPanel();
-            body.getElement().getStyle().setProperty("padding", "20px 10px");
+            body.getStyle().setProperty("padding", "20px 10px");
             body.add(new HTML(labelText));
             body.add(new HTML("<br/>"));
             inputTextBox = new StringBox();

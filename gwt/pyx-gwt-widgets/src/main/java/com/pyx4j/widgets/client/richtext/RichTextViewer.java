@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 public class RichTextViewer extends HTML {
 

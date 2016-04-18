@@ -21,10 +21,10 @@ package com.pyx4j.tester.client.old;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.dialog.Custom1Option;

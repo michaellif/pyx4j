@@ -29,10 +29,10 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.IWatermarkWidget;
 
@@ -49,7 +49,7 @@ public abstract class AbstractCaptchaComposite extends SimplePanel implements IF
      */
     public static void setPublicKey(String publicKey) {
         log.debug("reCAPTCHA key set [{}]", publicKey);
-        CaptchaCompositeV1.publicKey = publicKey;
+        AbstractCaptchaComposite.publicKey = publicKey;
     }
 
     public static boolean isPublicKeySet() {

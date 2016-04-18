@@ -26,10 +26,11 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.gwt.commons.ui.Image;
 
 public class GroupBoxPanel extends FieldSetPanel {
 
@@ -64,6 +65,7 @@ public class GroupBoxPanel extends FieldSetPanel {
 
             legend.add(collapseButton);
             ClickHandler expandClickHandler = new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     setExpanded(!isExpended());
                 }
@@ -109,6 +111,7 @@ public class GroupBoxPanel extends FieldSetPanel {
         ((HasWidgets) container).add(w);
     }
 
+    @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
         return addDomHandler(handler, KeyUpEvent.getType());
     }

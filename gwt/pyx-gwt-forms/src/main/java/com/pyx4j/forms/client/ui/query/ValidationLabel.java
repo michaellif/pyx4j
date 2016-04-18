@@ -23,8 +23,8 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 

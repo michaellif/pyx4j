@@ -34,9 +34,9 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
 

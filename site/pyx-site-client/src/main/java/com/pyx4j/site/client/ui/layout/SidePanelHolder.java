@@ -21,8 +21,8 @@ package com.pyx4j.site.client.ui.layout;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.DisplayPanel;
 
 public class SidePanelHolder extends SimplePanel {

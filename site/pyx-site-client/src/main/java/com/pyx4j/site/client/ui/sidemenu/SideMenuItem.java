@@ -33,9 +33,9 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;

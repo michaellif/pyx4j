@@ -20,9 +20,10 @@
 package com.pyx4j.widgets.client;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IFocusWidget {
+public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IFocusWidget, HasStyle {
 
     private boolean enabled = true;
 

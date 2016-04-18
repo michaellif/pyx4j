@@ -19,7 +19,7 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 class DashboardGadgetPositioner extends SimplePanel {
 

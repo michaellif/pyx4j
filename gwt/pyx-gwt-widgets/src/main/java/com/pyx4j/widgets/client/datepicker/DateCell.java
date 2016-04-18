@@ -28,7 +28,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.Label;
 
 import com.pyx4j.commons.LogicalDate;
 

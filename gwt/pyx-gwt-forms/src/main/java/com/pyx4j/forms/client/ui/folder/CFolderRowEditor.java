@@ -26,9 +26,9 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;

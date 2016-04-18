@@ -20,7 +20,7 @@
 package com.pyx4j.forms.client.ui.wizard;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidatableWidget;

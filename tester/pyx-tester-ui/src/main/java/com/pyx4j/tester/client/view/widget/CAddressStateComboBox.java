@@ -13,8 +13,8 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;

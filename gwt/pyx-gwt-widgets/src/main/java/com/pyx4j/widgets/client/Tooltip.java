@@ -29,9 +29,9 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.CSSClass;
@@ -69,10 +69,10 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler {
         public TooltipPanel() {
             super(true);
             SimplePanel content = new SimplePanel();
-            content.getElement().getStyle().setProperty("boxShadow", "5px 2px 2px #888");
-            content.getElement().getStyle().setProperty("MozBoxShadow", "5px 2px 2px #888");
-            content.getElement().getStyle().setProperty("WebkitBoxShadow", "5px 2px 2px #888");
-            content.getElement().getStyle().setMargin(20, Unit.PX);
+            content.getStyle().setProperty("boxShadow", "5px 2px 2px #888");
+            content.getStyle().setProperty("MozBoxShadow", "5px 2px 2px #888");
+            content.getStyle().setProperty("WebkitBoxShadow", "5px 2px 2px #888");
+            content.getStyle().setMargin(20, Unit.PX);
             add(content);
 
             textPane = new HTML();
@@ -80,7 +80,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler {
 
             content.setWidget(textPane);
 
-            textPane.getElement().getStyle().setZIndex(30);
+            textPane.getStyle().setZIndex(30);
         }
 
         private void scheduleShow(final Widget target, final String text) {

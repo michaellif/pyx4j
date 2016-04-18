@@ -23,7 +23,7 @@ import java.text.ParseException;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;

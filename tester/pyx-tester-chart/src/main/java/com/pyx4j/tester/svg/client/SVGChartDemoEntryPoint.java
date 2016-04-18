@@ -23,7 +23,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.tester.svg.client.chart.TestChartBuilder;

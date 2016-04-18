@@ -20,7 +20,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.widgets.client.richtext.RichTextEditor;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;

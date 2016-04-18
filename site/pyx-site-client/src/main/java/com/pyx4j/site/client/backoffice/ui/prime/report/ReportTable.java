@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;

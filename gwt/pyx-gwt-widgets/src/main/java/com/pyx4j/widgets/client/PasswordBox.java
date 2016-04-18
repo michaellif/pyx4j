@@ -33,9 +33,9 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
@@ -150,19 +150,19 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
             add(caption);
 
             label = new Label();
-            label.getElement().getStyle().setPosition(Position.ABSOLUTE);
-            label.getElement().getStyle().setRight(0, Unit.PX);
-            label.getElement().getStyle().setTop(0, Unit.PX);
+            label.getStyle().setPosition(Position.ABSOLUTE);
+            label.getStyle().setRight(0, Unit.PX);
+            label.getStyle().setTop(0, Unit.PX);
             add(label);
 
             SimplePanel progressHolder = new SimplePanel();
             progressHolder.setWidth("100%");
-            progressHolder.getElement().getStyle().setProperty("backgroundColor", "#e0e0e0");
+            progressHolder.getStyle().setProperty("backgroundColor", "#e0e0e0");
             add(progressHolder);
 
             progressMarker = new SimplePanel();
             progressMarker.setHeight("4px");
-            progressMarker.getElement().getStyle().setMarginBottom(4, Unit.PX);
+            progressMarker.getStyle().setMarginBottom(4, Unit.PX);
             progressHolder.setWidget(progressMarker);
 
             textBox.addKeyUpHandler(new KeyUpHandler() {
@@ -192,7 +192,7 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
             if (verdict == null) {
                 label.setText("");
                 progressMarker.setWidth("0%");
-                progressMarker.getElement().getStyle().setProperty("backgroundColor", "#e0e0e0");
+                progressMarker.getStyle().setProperty("backgroundColor", "#e0e0e0");
             } else {
                 label.setText(verdict.toString());
                 String color = "red";
@@ -222,8 +222,8 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
                     progressMarker.setWidth("100%");
                     break;
                 }
-                progressMarker.getElement().getStyle().setProperty("backgroundColor", color);
-                label.getElement().getStyle().setColor(color);
+                progressMarker.getStyle().setProperty("backgroundColor", color);
+                label.getStyle().setColor(color);
             }
 
         }

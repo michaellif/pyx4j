@@ -27,13 +27,13 @@ import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.SidePanelHolder;
@@ -90,10 +90,10 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
         stickyToolbarHolder = new StickyToolbarHolder(this);
         pageHolder.add(stickyToolbarHolder);
 
-        getDisplay(DisplayType.notification).getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        getDisplay(DisplayType.content).getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        getDisplay(DisplayType.notification).getStyle().setTextAlign(TextAlign.CENTER);
+        getDisplay(DisplayType.content).getStyle().setTextAlign(TextAlign.CENTER);
 
-        getDisplay(DisplayType.toolbar).getElement().getStyle().setProperty("maxWidth", WebSiteLayoutPanel.MAX_WIDTH + "px");
+        getDisplay(DisplayType.toolbar).getStyle().setProperty("maxWidth", WebSiteLayoutPanel.MAX_WIDTH + "px");
         getDisplay(DisplayType.toolbar).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         contentHolder = new ContentHolder(this);
@@ -101,7 +101,7 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.ensureDebugId(getClass().getSimpleName() + ".contentPanel");
-        contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        contentPanel.getStyle().setPosition(Position.RELATIVE);
 
         contentPanel.add(contentHolder);
 
@@ -116,7 +116,7 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
 
         footerHolder = new SimplePanel(getDisplay(DisplayType.footer));
         footerHolder.setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutFooterHolder.name());
-        getDisplay(DisplayType.footer).getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        getDisplay(DisplayType.footer).getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getDisplay(DisplayType.footer).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         pagePanel.add(headerHolder);

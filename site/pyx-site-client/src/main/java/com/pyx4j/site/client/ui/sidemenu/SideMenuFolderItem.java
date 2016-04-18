@@ -19,7 +19,7 @@
  */
 package com.pyx4j.site.client.ui.sidemenu;
 
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.Image;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.security.shared.AccessControlContext;

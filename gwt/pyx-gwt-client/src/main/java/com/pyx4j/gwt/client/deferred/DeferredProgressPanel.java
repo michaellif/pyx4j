@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
@@ -85,7 +85,7 @@ public class DeferredProgressPanel extends VerticalPanel {
         add(messageBar = new Label(initialMessage));
         add(progressBar = new ProgressBar());
 
-        messageBar.getElement().getStyle().setProperty("fontWeight", "bold");
+        messageBar.getStyle().setProperty("fontWeight", "bold");
     }
 
     public void setSuccessMessage(String message) {

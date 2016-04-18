@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.commons.BrowserType;

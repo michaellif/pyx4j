@@ -24,10 +24,10 @@ import java.util.HashMap;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;

@@ -24,7 +24,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -48,7 +48,7 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
         AddressEditorForm form = new AddressEditorForm();
         form.init();
         form.asWidget().setWidth("920px");
-        form.asWidget().getElement().getStyle().setProperty("marginTop", "20px");
+        form.asWidget().getStyle().setProperty("marginTop", "20px");
         add(form);
     }
 

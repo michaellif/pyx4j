@@ -28,7 +28,7 @@ import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
 import com.allen_sauer.gwt.dnd.client.util.Area;
 import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;

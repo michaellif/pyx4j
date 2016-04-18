@@ -113,8 +113,8 @@ public class Button extends ButtonBase {
     @Override
     protected void updateImageState() {
         if (imageResource != null) {
-            getImageHolder().getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
-            getImageHolder().getElement().getStyle().setProperty("background",
+            getImageHolder().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
+            getImageHolder().getStyle().setProperty("background",
                     "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
             super.updateImageState();

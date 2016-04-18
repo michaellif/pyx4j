@@ -29,9 +29,9 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -106,7 +106,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
             }
 
             HTML label = new HTML(caption);
-            label.getElement().getStyle().setMarginLeft(3, Unit.PX);
+            label.getStyle().setMarginLeft(3, Unit.PX);
             headerLabelPanel.add(label);
             headerLabelPanel.setCellVerticalAlignment(label, HorizontalPanel.ALIGN_BOTTOM);
 
@@ -187,9 +187,9 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
     public void setHeaderVisible(boolean visible) {
         if (visible && showHeader) {
-            header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            header.getStyle().setDisplay(Display.INLINE_BLOCK);
         } else {
-            header.getElement().getStyle().setDisplay(Display.NONE);
+            header.getStyle().setDisplay(Display.NONE);
         }
     }
 

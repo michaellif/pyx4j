@@ -19,7 +19,7 @@
  */
 package com.pyx4j.site.client.website.ui.layout;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 

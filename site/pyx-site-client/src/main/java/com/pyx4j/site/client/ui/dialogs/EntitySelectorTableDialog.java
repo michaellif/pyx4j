@@ -27,7 +27,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;

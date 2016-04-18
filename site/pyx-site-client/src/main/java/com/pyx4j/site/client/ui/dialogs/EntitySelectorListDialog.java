@@ -30,8 +30,7 @@ import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -40,6 +39,7 @@ import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class EntitySelectorListDialog<E extends IEntity> extends AbstractEntitySelectorDialog<E> {
