@@ -42,14 +42,14 @@ public interface HasStyle extends IsWidget {
     /**
      * Access to styles without breaking 'hot code replacement'
      */
-    // If left unchanged this add 8K more to portal code (5,376K -> 5,384K ); There are optimization for this
-    default Style getStyle() {
-        return new Style(asWidget().getElement().getStyle());
-    }
-
-    // This is compiler optimization to be inserted in production mode by adding to build HasStyleOptimized.gwt.xml
-//    default com.google.gwt.dom.client.Style getStyle() {
-//        return asWidget().getElement().getStyle();
+//    If left unchanged this add 8K more to portal code (5,376K -> 5,384K ); There are optimization for this
+//    default Style getStyle() {
+//        return new Style(asWidget().getElement().getStyle());
 //    }
+
+    // This is compiler optimization to be inserted in production mode
+    default com.google.gwt.dom.client.Style getStyle() {
+        return asWidget().getElement().getStyle();
+    }
 
 }

@@ -7,5 +7,4 @@
     <inherits name='com.pyx4j.gwt.BrowserType' />
 
 	<source path="commons"/>
-    <super-source path="emul"/>
 </module>

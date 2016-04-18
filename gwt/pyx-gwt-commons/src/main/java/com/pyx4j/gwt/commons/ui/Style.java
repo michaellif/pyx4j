@@ -44,6 +44,8 @@ import com.google.gwt.dom.client.Style.WhiteSpace;
 /**
  * Hosted mode safe style.<br/>
  *
+ * N.B. This class do not exists in compiled mode.
+ *
  * Avoid the usage of 'com.google.gwt.dom.' in application code.<br/>
  *
  * Solution for classic problems 'hot code replace breaks'<br/>
