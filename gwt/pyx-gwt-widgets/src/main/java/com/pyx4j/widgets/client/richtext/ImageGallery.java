@@ -31,12 +31,12 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.ImageFactory;
@@ -57,7 +57,7 @@ public abstract class ImageGallery implements IsWidget {
         this.editable = editable;
 
         mainPanel = new FlowPanel();
-        mainPanel.getElement().getStyle().setPadding(4, Unit.PX);
+        mainPanel.getStyle().setPadding(4, Unit.PX);
 
         contentPanel = new ScrollPanel();
         contentPanel.setSize("700px", "500px");
@@ -97,7 +97,7 @@ public abstract class ImageGallery implements IsWidget {
                 });
             }
 
-            image.getElement().getStyle().setCursor(Cursor.POINTER);
+            image.getStyle().setCursor(Cursor.POINTER);
             image.addDomHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -113,19 +113,19 @@ public abstract class ImageGallery implements IsWidget {
             caption.setStyleName("ImageGallery-ImageFrameCaption");
             caption.setHeight(captionHeight + "px");
             caption.setWidth(captionWidth + "px");
-            caption.getElement().getStyle().setProperty("overflow", "hidden");
+            caption.getStyle().setProperty("overflow", "hidden");
             add(caption, SOUTH);
             setCellHorizontalAlignment(caption, HorizontalPanel.ALIGN_CENTER);
 
             if (editable) {
                 final FlowPanel controls = new FlowPanel();
                 controls.setHeight(controlsHeight + "px");
-                controls.getElement().getStyle().setProperty("visibility", "hidden");
+                controls.getStyle().setProperty("visibility", "hidden");
                 add(controls, NORTH);
 
                 final Image delButt = new Image(ImageFactory.getImages().delButton().regular());
-                delButt.getElement().getStyle().setCursor(Cursor.POINTER);
-                delButt.getElement().getStyle().setFloat(Style.Float.RIGHT);
+                delButt.getStyle().setCursor(Cursor.POINTER);
+                delButt.getStyle().setFloat(Style.Float.RIGHT);
 
                 delButt.addDomHandler(new ClickHandler() {
                     @Override
@@ -139,14 +139,14 @@ public abstract class ImageGallery implements IsWidget {
                 addDomHandler(new MouseOverHandler() {
                     @Override
                     public void onMouseOver(MouseOverEvent event) {
-                        controls.getElement().getStyle().setProperty("visibility", "visible");
+                        controls.getStyle().setProperty("visibility", "visible");
                     }
                 }, MouseOverEvent.getType());
 
                 addDomHandler(new MouseOutHandler() {
                     @Override
                     public void onMouseOut(MouseOutEvent event) {
-                        controls.getElement().getStyle().setProperty("visibility", "hidden");
+                        controls.getStyle().setProperty("visibility", "hidden");
                     }
                 }, MouseOutEvent.getType());
             }

@@ -22,8 +22,8 @@ package com.pyx4j.site.client.frontoffice.ui.layout;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
@@ -38,9 +38,9 @@ public class InlineMenuHolder extends SimplePanel {
     public void setMenuDisplay(DisplayPanel display) {
         super.setWidget(display);
         onPositionChange();
-        getElement().getStyle().setTop(0, Unit.PX);
-        getElement().getStyle().setProperty("width", "auto");
-        getElement().getStyle().setPosition(Position.ABSOLUTE);
+        getStyle().setTop(0, Unit.PX);
+        getStyle().setProperty("width", "auto");
+        getStyle().setPosition(Position.ABSOLUTE);
     }
 
     public void onPositionChange() {
@@ -63,7 +63,7 @@ public class InlineMenuHolder extends SimplePanel {
             }
 
         } else {
-            getElement().getStyle().setWidth(0, Unit.PX);
+            getStyle().setWidth(0, Unit.PX);
         }
     }
 

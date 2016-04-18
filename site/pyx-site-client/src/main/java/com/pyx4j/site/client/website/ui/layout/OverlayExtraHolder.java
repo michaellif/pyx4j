@@ -20,9 +20,9 @@
 package com.pyx4j.site.client.website.ui.layout;
 
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
+import com.pyx4j.gwt.commons.ui.LayoutPanel;
 import com.pyx4j.site.client.ui.layout.AbstractOverlayHolder;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
@@ -41,14 +41,14 @@ public class OverlayExtraHolder extends AbstractOverlayHolder {
         this.parent = parent;
 
         overlayExtra1Holder = new LayoutPanel();
-        overlayExtra1Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        overlayExtra1Holder.getStyle().setTextAlign(TextAlign.CENTER);
         overlayExtra1ScrollPanel = new ScrollPanel();
         overlayExtra1Holder.add(overlayExtra1ScrollPanel);
         addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
         setTabVisible(getTabIndex(overlayExtra1Holder), false);
 
         overlayExtra2Holder = new LayoutPanel();
-        overlayExtra2Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        overlayExtra2Holder.getStyle().setTextAlign(TextAlign.CENTER);
         addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
         setTabVisible(getTabIndex(overlayExtra2Holder), false);
 

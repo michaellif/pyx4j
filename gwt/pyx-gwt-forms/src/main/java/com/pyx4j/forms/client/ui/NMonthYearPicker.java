@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.LogicalDate;

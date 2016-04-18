@@ -20,18 +20,18 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.widgets.client.richtext.RichTextArea.EditMode;
 import com.pyx4j.widgets.client.richtext.RichTextEditor;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 import com.pyx4j.widgets.client.richtext.RichTextViewer;
-import com.pyx4j.widgets.client.richtext.RichTextArea.EditMode;
 
 public class NRichTextArea extends NValueBoxBase<String, RichTextEditor, CRichTextArea> {
 
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
-        getElement().getStyle().setProperty("resize", "none");
+        getStyle().setProperty("resize", "none");
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
 

@@ -19,7 +19,7 @@
  */
 package com.pyx4j.site.client.ui.layout;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class LayoutSimplePanelBasicPanels extends SimplePanel implements AbstractSimpleLayoutPanel {
 

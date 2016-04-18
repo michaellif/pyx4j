@@ -27,10 +27,11 @@ import org.slf4j.LoggerFactory;
 import com.allen_sauer.gwt.dnd.client.util.WidgetArea;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
 
@@ -40,7 +41,7 @@ public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
 
     public ReportboardLayoutPanel(BoardEvent handler) {
         this.handler = handler;
-        getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        getStyle().setVerticalAlign(VerticalAlign.TOP);
         setWidth("100%");
     }
 
@@ -238,8 +239,8 @@ public class ReportboardLayoutPanel extends FlowPanel implements BoardEvent {
         private Reportboard.Location location;
 
         public CellPanel(Reportboard.Location location) {
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            getStyle().setDisplay(Display.INLINE_BLOCK);
+            getStyle().setVerticalAlign(VerticalAlign.TOP);
             setLocation(location);
             setWidget(new SpaceHolder());
         }

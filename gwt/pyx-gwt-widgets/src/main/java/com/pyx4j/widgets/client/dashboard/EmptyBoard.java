@@ -19,8 +19,8 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class EmptyBoard extends SimplePanel implements IBoard {
 
@@ -32,7 +32,7 @@ public class EmptyBoard extends SimplePanel implements IBoard {
 
     public void setMessage(String message) {
         HTML label = new HTML(message);
-        label.getElement().getStyle().setProperty("padding", "0 10px");
+        label.getStyle().setProperty("padding", "0 10px");
         setWidget(label);
     }
 

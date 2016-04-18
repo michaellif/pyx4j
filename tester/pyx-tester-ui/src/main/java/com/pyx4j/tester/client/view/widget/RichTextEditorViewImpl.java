@@ -20,8 +20,8 @@
 package com.pyx4j.tester.client.view.widget;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -79,7 +79,7 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
 
         RichTextEditor editor = new RichTextEditor();
         editor.setSize("800px", "450px");
-        editor.getElement().getStyle().setProperty("padding", "40px");
+        editor.getStyle().setProperty("padding", "40px");
         add(editor);
 
         RichTextImageDialog imageProvider = new RichTextImageDialog();

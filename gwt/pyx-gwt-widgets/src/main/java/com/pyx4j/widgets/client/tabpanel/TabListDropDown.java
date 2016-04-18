@@ -35,8 +35,8 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Label;
 
 import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.tabpanel.TabBar.TabListAction;
@@ -71,14 +71,14 @@ public class TabListDropDown extends DropDownPanel {
             final Label item = new Label(tab.getTabTitle(), false);
             item.setStyleName(TabTheme.StyleName.TabListItem.name());
 
-            item.getElement().getStyle().setPadding(2, Unit.PX);
-            item.getElement().getStyle().setPaddingLeft(4, Unit.PX);
-            item.getElement().getStyle().setPaddingRight(4, Unit.PX);
+            item.getStyle().setPadding(2, Unit.PX);
+            item.getStyle().setPaddingLeft(4, Unit.PX);
+            item.getStyle().setPaddingRight(4, Unit.PX);
             if (tab.isTabSelected()) {
-                item.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                item.getStyle().setFontWeight(FontWeight.BOLD);
             }
             if (!tab.getTabBarItem().isTabExposed() || tab.getTabBarItem().isTabMasked()) {
-                item.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
+                item.getStyle().setFontStyle(FontStyle.ITALIC);
             }
             if (tab.isTabEnabled()) {
                 item.addClickHandler(new ClickHandler() {
@@ -89,7 +89,7 @@ public class TabListDropDown extends DropDownPanel {
                         hideSelector();
                     }
                 });
-                item.getElement().getStyle().setCursor(Cursor.POINTER);
+                item.getStyle().setCursor(Cursor.POINTER);
 
                 item.addDomHandler(new MouseOverHandler() {
                     @Override

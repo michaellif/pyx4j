@@ -27,10 +27,7 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.EntityFactory;
@@ -46,6 +43,9 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
@@ -282,7 +282,7 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
                 super.layout();
                 // adjust scroll panel accordingly
                 if (scrollPanel != null) {
-                    scrollPanel.getElement().getStyle().setProperty("maxHeight", getContentMaxHeight() + "px");
+                    scrollPanel.getStyle().setProperty("maxHeight", getContentMaxHeight() + "px");
                 }
             }
 

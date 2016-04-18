@@ -21,6 +21,8 @@ package com.pyx4j.site.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IsView extends IsWidget {
+import com.pyx4j.gwt.commons.ui.HasStyle;
+
+public interface IsView extends IsWidget, HasStyle {
 
 }

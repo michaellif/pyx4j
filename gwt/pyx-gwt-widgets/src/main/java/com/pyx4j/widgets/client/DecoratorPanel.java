@@ -21,7 +21,7 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class DecoratorPanel extends DockPanel {

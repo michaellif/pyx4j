@@ -20,7 +20,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.Label;
 
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;

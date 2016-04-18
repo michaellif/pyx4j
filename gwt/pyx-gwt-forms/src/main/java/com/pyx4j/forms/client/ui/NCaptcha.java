@@ -25,7 +25,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.widgets.client.captcha.CaptchaCompositeV1;
 import com.pyx4j.widgets.client.captcha.AbstractCaptchaComposite;
 import com.pyx4j.widgets.client.captcha.CaptchaCompositeV2;
 
@@ -40,12 +39,7 @@ public class NCaptcha extends NFocusField<Pair<String, String>, AbstractCaptchaC
 
     public NCaptcha(final CCaptcha component) {
         super(component);
-
-        if (false) {
-            captchaComposite = new CaptchaCompositeV1();
-        } else {
-            captchaComposite = new CaptchaCompositeV2();
-        }
+        captchaComposite = new CaptchaCompositeV2();
 
         captchaComposite.addResponseValueChangeHandler(new ValueChangeHandler<String>() {
             @Override

@@ -21,7 +21,7 @@ package com.pyx4j.gwt.client.upload;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
@@ -81,7 +81,7 @@ public class FileUploadDialog<U extends IEntity, B extends AbstractIFileBlob> ex
 
         };
 
-        uploadPanel.getElement().getStyle().setPadding(20, Style.Unit.PX);
+        uploadPanel.getStyle().setPadding(20, Style.Unit.PX);
 
     }
 

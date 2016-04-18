@@ -51,7 +51,7 @@ public class ImageButton extends ButtonBase {
             @Override
             public void onMouseOver(MouseOverEvent event) {
                 if (buttonImages != null) {
-                    getImageHolder().getElement().getStyle().setProperty("background",
+                    getImageHolder().getStyle().setProperty("background",
                             "url('" + buttonImages.hover().getSafeUri().asString() + "') no-repeat scroll left center");
                 }
             }
@@ -61,7 +61,7 @@ public class ImageButton extends ButtonBase {
             @Override
             public void onMouseDown(MouseDownEvent event) {
                 if (buttonImages != null) {
-                    getImageHolder().getElement().getStyle().setProperty("background",
+                    getImageHolder().getStyle().setProperty("background",
                             "url('" + buttonImages.active().getSafeUri().asString() + "') no-repeat scroll left center");
                 }
             }
@@ -71,7 +71,7 @@ public class ImageButton extends ButtonBase {
             @Override
             public void onMouseUp(MouseUpEvent event) {
                 if (buttonImages != null) {
-                    getImageHolder().getElement().getStyle().setProperty("background",
+                    getImageHolder().getStyle().setProperty("background",
                             "url('" + buttonImages.hover().getSafeUri().asString() + "') no-repeat scroll left center");
                 }
             }
@@ -81,7 +81,7 @@ public class ImageButton extends ButtonBase {
             @Override
             public void onMouseOut(MouseOutEvent event) {
                 if (buttonImages != null) {
-                    getImageHolder().getElement().getStyle().setProperty("background",
+                    getImageHolder().getStyle().setProperty("background",
                             "url('" + buttonImages.regular().getSafeUri().asString() + "') no-repeat scroll left center");
                 }
             }
@@ -96,10 +96,10 @@ public class ImageButton extends ButtonBase {
     @Override
     protected void updateImageState() {
         if (buttonImages != null) {
-            getImageHolder().getElement().getStyle().setProperty("paddingLeft", buttonImages.regular().getWidth() + "px");
-            getImageHolder().getElement().getStyle().setProperty("height", buttonImages.regular().getHeight() + "px");
-            getTextLabel().getElement().getStyle().setProperty("lineHeight", buttonImages.regular().getHeight() + "px");
-            getImageHolder().getElement().getStyle().setProperty("background",
+            getImageHolder().getStyle().setProperty("paddingLeft", buttonImages.regular().getWidth() + "px");
+            getImageHolder().getStyle().setProperty("height", buttonImages.regular().getHeight() + "px");
+            getTextLabel().getStyle().setProperty("lineHeight", buttonImages.regular().getHeight() + "px");
+            getImageHolder().getStyle().setProperty("background",
                     "url('" + buttonImages.regular().getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
             super.updateImageState();

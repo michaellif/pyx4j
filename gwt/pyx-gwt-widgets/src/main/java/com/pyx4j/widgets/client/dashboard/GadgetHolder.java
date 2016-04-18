@@ -37,15 +37,15 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -112,7 +112,7 @@ final class GadgetHolder extends SimplePanel {
 
         maximizer = new Image(images.WindowMaximize());
         maximizer.setTitle(STR_MAXIMIZE);
-        maximizer.getElement().getStyle().setCursor(Cursor.POINTER);
+        maximizer.getStyle().setCursor(Cursor.POINTER);
         maximizer.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -126,21 +126,21 @@ final class GadgetHolder extends SimplePanel {
         caption.setCellWidth(gadgetMmenu, "1%");
 
         caption.addStyleName(DashboardTheme.StyleName.DashboardGadgetHolderCaption.name());
-        caption.getElement().getStyle().setProperty("minHeight", "20px");
+        caption.getStyle().setProperty("minHeight", "20px");
         // override possible inherited style in order to avoid caption "jumping" on mouse over in IE9
-        caption.getElement().getStyle().setProperty("lineHeight", "normal");
+        caption.getStyle().setProperty("lineHeight", "normal");
         caption.setWidth("100%");
 
         // put it together:
         content.add(caption);
 
         holder.setWidget(holdedGadget.asWidget());
-        holder.getElement().getStyle().setOverflow(Overflow.AUTO);
+        holder.getStyle().setOverflow(Overflow.AUTO);
         content.add(holder);
 
-        this.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
-        this.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
-        this.getElement().getStyle().setProperty("boxSizing", "border-box");
+        this.getStyle().setProperty("WebkitBoxSizing", "border-box");
+        this.getStyle().setProperty("MozBoxSizing", "border-box");
+        this.getStyle().setProperty("boxSizing", "border-box");
 
         // handle mouse over UI tweaking:
         setIconsVisible(false);
@@ -190,7 +190,7 @@ final class GadgetHolder extends SimplePanel {
 
     private Widget createGadgetMenu() {
         final Image btn = new Image(images.WindowMenu());
-        btn.getElement().getStyle().setCursor(Cursor.POINTER);
+        btn.getStyle().setCursor(Cursor.POINTER);
         btn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

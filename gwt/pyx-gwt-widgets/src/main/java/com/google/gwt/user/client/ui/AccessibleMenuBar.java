@@ -19,7 +19,9 @@
  */
 package com.google.gwt.user.client.ui;
 
-public class AccessibleMenuBar extends MenuBar {
+import com.pyx4j.gwt.commons.ui.HasStyle;
+
+public class AccessibleMenuBar extends MenuBar implements HasStyle {
 
     public AccessibleMenuBar() {
         this(false);

@@ -32,17 +32,17 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
@@ -74,7 +74,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends FlowPane
     public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
-        getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        getStyle().setTextAlign(TextAlign.LEFT);
         setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
 
         captionFormatter = new IFormatter<E, SafeHtml>() {
@@ -85,20 +85,20 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends FlowPane
         };
 
         captionHolder = new FlowPanel();
-        captionHolder.getElement().getStyle().setMarginLeft(40, Unit.PX);
-        captionHolder.getElement().getStyle().setMarginRight(60, Unit.PX);
-        captionHolder.getElement().getStyle().setLineHeight(2, Unit.EM);
+        captionHolder.getStyle().setMarginLeft(40, Unit.PX);
+        captionHolder.getStyle().setMarginRight(60, Unit.PX);
+        captionHolder.getStyle().setLineHeight(2, Unit.EM);
 
         caption = new HTML("");
         caption.setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
-        caption.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
-        caption.getElement().getStyle().setOverflow(Overflow.HIDDEN);
-        caption.getElement().getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
+        caption.getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+        caption.getStyle().setOverflow(Overflow.HIDDEN);
+        caption.getStyle().setTextOverflow(TextOverflow.ELLIPSIS);
 
         titleIcon = new Image();
-        titleIcon.getElement().getStyle().setFloat(Float.LEFT);
-        titleIcon.getElement().getStyle().setMarginTop(2, Unit.PX);
-        titleIcon.getElement().getStyle().setPaddingRight(2, Unit.PX);
+        titleIcon.getStyle().setFloat(Float.LEFT);
+        titleIcon.getStyle().setMarginTop(2, Unit.PX);
+        titleIcon.getStyle().setPaddingRight(2, Unit.PX);
         titleIcon.setVisible(false);
 
         captionHolder.add(titleIcon);
@@ -107,13 +107,13 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends FlowPane
 
         SimplePanel captionPanel = new SimplePanel(captionHolder);
         captionPanel.setWidth("100%");
-        captionPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        captionPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        captionPanel.getStyle().setDisplay(Display.INLINE_BLOCK);
+        captionPanel.getStyle().setTextAlign(TextAlign.LEFT);
 
         Toolbar actionsPanel = new Toolbar();
-        actionsPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        actionsPanel.getElement().getStyle().setTop(0, Unit.PX);
-        actionsPanel.getElement().getStyle().setRight(0, Unit.PX);
+        actionsPanel.getStyle().setPosition(Position.ABSOLUTE);
+        actionsPanel.getStyle().setTop(0, Unit.PX);
+        actionsPanel.getStyle().setRight(0, Unit.PX);
 
         warnImage = new Image(images.warn());
         warnImage.setVisible(false);

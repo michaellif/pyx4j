@@ -19,8 +19,8 @@
  */
 package com.pyx4j.tester.client.view.form.folder;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class FolderValidationViewImpl extends SimplePanel implements FolderValidationView {
 

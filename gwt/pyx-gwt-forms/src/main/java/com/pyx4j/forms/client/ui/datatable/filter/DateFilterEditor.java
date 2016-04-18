@@ -23,7 +23,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
@@ -55,7 +55,7 @@ public class DateFilterEditor extends FilterEditorBase {
         fromBox = new DatePicker();
         contentPanel.add(fromBox);
         fromBoxValidationLabel = new ValidationLabel(fromBox);
-        fromBoxValidationLabel.getElement().getStyle().setColor("red");
+        fromBoxValidationLabel.getStyle().setColor("red");
         contentPanel.add(fromBoxValidationLabel);
 
         fromBox.addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
@@ -71,7 +71,7 @@ public class DateFilterEditor extends FilterEditorBase {
         toBox = new DatePicker();
         contentPanel.add(toBox);
         toBoxValidationLabel = new ValidationLabel(toBox);
-        toBoxValidationLabel.getElement().getStyle().setColor("red");
+        toBoxValidationLabel.getStyle().setColor("red");
         contentPanel.add(toBoxValidationLabel);
 
         toBox.addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {

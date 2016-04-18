@@ -33,12 +33,12 @@ import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPane
 
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CField;
@@ -117,27 +117,27 @@ public abstract class AbstractFormPanel {
     private Widget hx(ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());
-        header.getElement().getStyle().setProperty("display", "table");
-        header.getElement().getStyle().setProperty("width", "100%");
+        header.getStyle().setProperty("display", "table");
+        header.getStyle().setProperty("width", "100%");
 
         if (imageResource != null) {
             Image image = new Image(imageResource);
             image.setStyleName(imageStyle.name());
-            image.getElement().getStyle().setProperty("display", "table-cell");
-            image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            image.getStyle().setProperty("display", "table-cell");
+            image.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             header.add(image);
         }
 
         Label label = new Label(caption);
-        label.getElement().getStyle().setProperty("display", "table-cell");
-        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        label.getStyle().setProperty("display", "table-cell");
+        label.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         label.setStyleName(labelStyle.name());
         header.add(label);
 
         if (actionWidget != null) {
             SimplePanel actionWidgetHolder = new SimplePanel();
-            actionWidgetHolder.getElement().getStyle().setProperty("display", "table-cell");
-            actionWidgetHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            actionWidgetHolder.getStyle().setProperty("display", "table-cell");
+            actionWidgetHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             actionWidgetHolder.setWidget(actionWidget);
             actionWidgetHolder.setStyleName(FormPanelActionWidget.name());
             header.add(actionWidgetHolder);

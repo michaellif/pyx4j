@@ -38,13 +38,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -58,6 +53,10 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.ILayoutable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayoutable {
 
@@ -105,7 +104,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     protected FieldDecorator(final Builder<?> builder) {
         this.builder = builder;
         setStyleName(WidgetDecorator.name());
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getStyle().setDisplay(Display.INLINE_BLOCK);
 
         contentHolder = new SimplePanel();
     }
@@ -121,33 +120,33 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         this.component = component;
 
         label = new Label();
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        label.getStyle().setDisplay(Display.INLINE_BLOCK);
         label.setStyleName(WidgetDecoratorLabel.name());
 
         infoImageHolder = new SimplePanel();
-        infoImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        infoImageHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        infoImageHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
+        infoImageHolder.getStyle().setVerticalAlign(VerticalAlign.TOP);
 
         mandatoryImageHolder = new SimplePanel();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
 
         FlowPanel labelContent = new FlowPanel();
-        labelContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        labelContent.getElement().getStyle().setPosition(Position.RELATIVE);
+        labelContent.getStyle().setDisplay(Display.INLINE_BLOCK);
+        labelContent.getStyle().setPosition(Position.RELATIVE);
         labelContent.add(mandatoryImageHolder);
         labelContent.add(label);
 
         labelHolder = new SimplePanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
-        labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        labelHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         labelHolder.setWidth(builder.labelWidth);
         labelHolder.setWidget(labelContent);
 
-        contentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        contentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        contentHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
+        contentHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         contentHolder.setStyleName(WidgetDecoratorContentHolder.name());
-        contentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        contentHolder.getStyle().setProperty("textAlign", builder.componentAlignment.name());
         contentHolder.setWidth(builder.componentWidth);
 
         messagePannel = new MessagePannel(MessagePannel.Location.Bottom);
@@ -155,22 +154,22 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         messagePannel.init(component);
 
         assistantWidgetHolder = new SimplePanel();
-        assistantWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        assistantWidgetHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        assistantWidgetHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
+        assistantWidgetHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         assistantWidgetHolder.setWidget(builder.assistantWidget);
 
         contentPanel = new FlowPanel();
 
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
-        contentPanel.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        contentPanel.getStyle().setProperty("textAlign", builder.componentAlignment.name());
         contentPanel.add(contentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
 
         containerPanel = new FlowPanel();
         containerPanel.setStyleName(WidgetDecoratorContainerPanel.name());
-        containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        containerPanel.getStyle().setDisplay(Display.INLINE_BLOCK);
+        containerPanel.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         containerPanel.add(contentPanel);
         containerPanel.add(messagePannel);
@@ -182,11 +181,9 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
         final INativeField<?> nativeComponent = component.getNativeComponent();
 
-        Widget content = nativeComponent.asWidget();
-
-        content.addStyleName(WidgetDecoratorContent.name());
-        content.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
-        content.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        nativeComponent.addStyleName(WidgetDecoratorContent.name());
+        nativeComponent.getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        nativeComponent.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         if (nativeComponent instanceof Focusable) {
             label.addClickHandler(new ClickHandler() {
@@ -247,7 +244,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (visible) {
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            getStyle().setDisplay(Display.INLINE_BLOCK);
         }
     }
 
@@ -288,16 +285,16 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
             return;
         }
         if (builder.labelPosition == LabelPosition.hidden) {
-            labelHolder.getElement().getStyle().setDisplay(Display.NONE);
+            labelHolder.getStyle().setDisplay(Display.NONE);
         } else if (builder.labelPosition == LabelPosition.left && !narrowLayout) {
-            labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-            containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            labelHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
+            labelHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            containerPanel.getStyle().setDisplay(Display.INLINE_BLOCK);
+            containerPanel.getStyle().setVerticalAlign(VerticalAlign.TOP);
             removeStyleDependentName(WidgetDecoratorTheme.StyleDependent.verticalAlign.name());
         } else {
-            labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
-            containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+            labelHolder.getStyle().setDisplay(Display.BLOCK);
+            containerPanel.getStyle().setDisplay(Display.BLOCK);
             addStyleDependentName(WidgetDecoratorTheme.StyleDependent.verticalAlign.name());
         }
 

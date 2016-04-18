@@ -31,9 +31,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -47,6 +45,8 @@ import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
 import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
@@ -178,9 +178,9 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     @Override
     public void adoptItemActionsBar() {
         final ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
-        actionsBar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        actionsBar.getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         if (BrowserType.isIE7()) {
-            actionsBar.getElement().getStyle().setMarginRight(40, Unit.PX);
+            actionsBar.getStyle().setMarginRight(40, Unit.PX);
         }
         actionsBar.ensureDebugId(
                 new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DecoratorDebugIds.ActionPanel)).debugId());

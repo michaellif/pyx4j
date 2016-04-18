@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.i18n.shared.I18n;

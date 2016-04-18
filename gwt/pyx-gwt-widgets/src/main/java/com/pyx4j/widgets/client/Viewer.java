@@ -19,7 +19,7 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 

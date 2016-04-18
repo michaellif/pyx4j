@@ -61,8 +61,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
         } else {
             throw new Error("Filter can't be created");
         }
-        editor.asWidget().getElement().getStyle().setProperty("maxWidth", "250px");
-        editor.asWidget().getElement().getStyle().setProperty("minWidth", "200px");
+        editor.getStyle().setProperty("maxWidth", "250px");
+        editor.getStyle().setProperty("minWidth", "200px");
         editor.populate();
 
         return editor;

@@ -166,7 +166,7 @@ public class DatePicker extends ValueBoxBase<LogicalDate> implements HasValueCha
         private final FocusPanel focusPanel;
 
         public DatePickerDropDownPanel() {
-            this.getElement().getStyle().setProperty("zIndex", "100");
+            this.getStyle().setProperty("zIndex", "100");
 
             focusPanel = new FocusPanel();
             focusPanel.getElement().getStyle().setProperty("outline", "0");

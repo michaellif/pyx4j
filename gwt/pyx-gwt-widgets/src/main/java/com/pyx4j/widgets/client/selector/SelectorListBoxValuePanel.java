@@ -34,7 +34,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -279,7 +279,7 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
             remove(actionButton);
         }
         if (command == null) {
-            itemsPanel.getElement().getStyle().setMarginRight(0, Unit.PX);
+            itemsPanel.getStyle().setMarginRight(0, Unit.PX);
         } else {
             actionButton = new ImageButton(ImageFactory.getImages().addButton(), new Command() {
 
@@ -294,16 +294,16 @@ public class SelectorListBoxValuePanel<E> extends FocusPanel implements ISelecto
                 @Override
                 protected void onAttach() {
                     super.onAttach();
-                    itemsPanel.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
+                    itemsPanel.getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
 
                 }
 
             };
             actionButton.setEnabled(isEditable() && isEnabled());
 
-            actionButton.getElement().getStyle().setRight(0, Unit.PX);
-            actionButton.getElement().getStyle().setTop(0, Unit.PX);
-            actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
+            actionButton.getStyle().setRight(0, Unit.PX);
+            actionButton.getStyle().setTop(0, Unit.PX);
+            actionButton.getStyle().setPosition(Position.ABSOLUTE);
 
             contentPanel.add(actionButton);
             groupFocusHandler.addFocusable(actionButton);

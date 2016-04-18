@@ -32,7 +32,7 @@ public class FrontOfficeDevConsole extends AbstractDevConsole {
     public FrontOfficeDevConsole(final FrontOfficeLayoutPanel layoutPanel) {
         this.layoutPanel = layoutPanel;
 
-        getElement().getStyle().setPadding(20, Unit.PX);
+        getStyle().setPadding(20, Unit.PX);
 
         Toolbar toolbar = new Toolbar();
         add(toolbar);

@@ -30,13 +30,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.Hidden;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.client.ClientDeploymentConfig;
@@ -117,7 +117,7 @@ public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends
         line.add(upload);
         line.add(deferredProgressPanel = new DeferredProgressPanel("Connecting...", ApplicationBackend.getBackendType() == ApplicationBackendType.GAE, this));
         deferredProgressPanel.setSize("100%", "20px");
-        deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
+        deferredProgressPanel.getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
 
         service.obtainSupportedExtensions(new AsyncCallback<Vector<String>>() {

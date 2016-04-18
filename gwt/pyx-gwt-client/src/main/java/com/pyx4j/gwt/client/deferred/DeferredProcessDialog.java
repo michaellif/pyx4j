@@ -22,11 +22,10 @@ package com.pyx4j.gwt.client.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.VerticalPanel;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.CloseOption;
@@ -50,7 +49,7 @@ public class DeferredProcessDialog extends MessageDialog implements CloseOption,
         messagePanel.setWidth("100%");
 
         deferredProgressPanel = new DeferredProgressPanel(initialMessage, executeByUserRequests, this);
-        deferredProgressPanel.getElement().getStyle().setProperty("border", "10px solid transparent"); // set content margin
+        deferredProgressPanel.getStyle().setProperty("border", "10px solid transparent"); // set content margin
         deferredProgressPanel.setSize("100%", "100%");
         deferredProgressPanel.setVisible(false);
         messagePanel.add(deferredProgressPanel);
@@ -118,7 +117,7 @@ public class DeferredProcessDialog extends MessageDialog implements CloseOption,
             return;
         }
         ScrollPanel scrollPanel = new ScrollPanel(new MessagePanel(message, type));
-        scrollPanel.getElement().getStyle().setProperty("maxHeight", "400px");
+        scrollPanel.getStyle().setProperty("maxHeight", "400px");
         messagePanel.add(scrollPanel);
         layout();
     }

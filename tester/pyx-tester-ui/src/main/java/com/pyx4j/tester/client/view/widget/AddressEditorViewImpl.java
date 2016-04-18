@@ -24,7 +24,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -32,8 +31,9 @@ import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.EntityDataSource;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.TestAddress;
@@ -48,7 +48,7 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
         AddressEditorForm form = new AddressEditorForm();
         form.init();
         form.asWidget().setWidth("920px");
-        form.asWidget().getElement().getStyle().setProperty("marginTop", "20px");
+        form.getStyle().setProperty("marginTop", "20px");
         add(form);
     }
 

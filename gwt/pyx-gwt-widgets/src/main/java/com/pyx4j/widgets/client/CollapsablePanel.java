@@ -26,11 +26,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.event.shared.BeforeToggleEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeToggleHandler;
 import com.pyx4j.widgets.client.event.shared.HasToggleHandlers;
@@ -56,16 +56,16 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers, Ac
 
         setStyleName(WidgetsTheme.StyleName.CollapsablePanel.name());
 
-        getElement().getStyle().setPosition(Position.RELATIVE);
+        getStyle().setPosition(Position.RELATIVE);
 
         collapseImage = new Image();
 
         collapseImage.setResource(images.collapse());
 
-        collapseImage.getElement().getStyle().setPosition(Position.RELATIVE);
-        collapseImage.getElement().getStyle().setMarginTop(-collapseImage.getHeight() / 2, Unit.PX);
-        collapseImage.getElement().getStyle().setTop(50, Unit.PCT);
-        collapseImage.getElement().getStyle().setDisplay(Display.BLOCK);
+        collapseImage.getStyle().setPosition(Position.RELATIVE);
+        collapseImage.getStyle().setMarginTop(-collapseImage.getHeight() / 2, Unit.PX);
+        collapseImage.getStyle().setTop(50, Unit.PCT);
+        collapseImage.getStyle().setDisplay(Display.BLOCK);
         collapseImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -76,10 +76,10 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers, Ac
         SimplePanel collapseImageHolder = new SimplePanel(collapseImage);
         collapseImageHolder.setStyleName(WidgetsTheme.StyleName.CollapsablePanelImage.name());
 
-        collapseImageHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        collapseImageHolder.getElement().getStyle().setDisplay(Display.INLINE);
-        collapseImageHolder.getElement().getStyle().setTop(0, Unit.PX);
-        collapseImageHolder.getElement().getStyle().setLeft(0, Unit.PX);
+        collapseImageHolder.getStyle().setPosition(Position.ABSOLUTE);
+        collapseImageHolder.getStyle().setDisplay(Display.INLINE);
+        collapseImageHolder.getStyle().setTop(0, Unit.PX);
+        collapseImageHolder.getStyle().setLeft(0, Unit.PX);
 
         add(collapseImageHolder);
 

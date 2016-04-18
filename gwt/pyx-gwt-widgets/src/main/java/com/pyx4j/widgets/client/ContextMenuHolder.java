@@ -25,10 +25,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AccessibleMenuBar;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class ContextMenuHolder extends SimplePanel {
 
@@ -40,17 +40,17 @@ public class ContextMenuHolder extends SimplePanel {
 
     public ContextMenuHolder() {
         setSize("0", "0");
-        getElement().getStyle().setProperty("position", "relative");
-        getElement().getStyle().setProperty("overflow", "hidden");
+        getStyle().setProperty("position", "relative");
+        getStyle().setProperty("overflow", "hidden");
 
         menuBar = new AccessibleMenuBar();
         add(menuBar);
-        menuBar.getElement().getStyle().setProperty("position", "relative");
-        menuBar.getElement().getStyle().setProperty("overflow", "hidden");
+        menuBar.getStyle().setProperty("position", "relative");
+        menuBar.getStyle().setProperty("overflow", "hidden");
         menuBar.setSize("0", "0");
 
         // This is magical number to work in CRM, Make a better positioning of Popup
-        menuBar.getElement().getStyle().setPropertyPx("top", 2);
+        menuBar.getStyle().setPropertyPx("top", 2);
 
         hrgc.add(Window.addResizeHandler(new ResizeHandler() {
             @Override
@@ -103,7 +103,7 @@ public class ContextMenuHolder extends SimplePanel {
         if (relativeTo.getParent() instanceof Button) {
             Widget button = relativeTo.getParent();
             int left = button.getAbsoluteLeft() - relativeTo.getAbsoluteLeft();
-            menuBar.getElement().getStyle().setPropertyPx("left", left);
+            menuBar.getStyle().setPropertyPx("left", left);
         }
     }
 

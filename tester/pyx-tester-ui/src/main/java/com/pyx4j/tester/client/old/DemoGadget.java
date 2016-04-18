@@ -20,9 +20,9 @@
 package com.pyx4j.tester.client.old;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -91,8 +91,8 @@ public class DemoGadget extends HTML implements IGadget {
                 content.setWidth("100%");
                 setupPanel.add(content);
 
-                setupPanel.getElement().getStyle().setPadding(10, Unit.PX);
-                setupPanel.getElement().getStyle().setPaddingBottom(0, Unit.PX);
+                setupPanel.getStyle().setPadding(10, Unit.PX);
+                setupPanel.getStyle().setPaddingBottom(0, Unit.PX);
                 return setupPanel;
             }
 

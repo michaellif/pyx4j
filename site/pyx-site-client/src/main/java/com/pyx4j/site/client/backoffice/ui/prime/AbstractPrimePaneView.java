@@ -56,7 +56,7 @@ public class AbstractPrimePaneView<PRESENTER extends IPrimePanePresenter> extend
         contentHolder.asWidget().setStyleName(PaneTheme.StyleName.PrimePaneContentHolder.name());
         setCenter(contentHolder.asWidget());
 
-        CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
+        CssVariable.setVariable(asWidget().getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
 
         setCaptionDebugId(NavigationIDs.PrimePaneCaption);
     }

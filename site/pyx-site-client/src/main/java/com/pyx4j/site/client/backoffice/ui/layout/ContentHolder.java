@@ -21,7 +21,7 @@ package com.pyx4j.site.client.backoffice.ui.layout;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 
@@ -36,11 +36,11 @@ public class ContentHolder extends FlowPanel implements RequiresResize, Provides
     public ContentHolder(BackOfficeLayoutPanel parent, OverlayExtraHolder overlayExtraHolder) {
 
         contentPanel = parent.getDisplay(DisplayType.content);
-        contentPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        contentPanel.getElement().getStyle().setTop(0, Unit.PX);
-        contentPanel.getElement().getStyle().setBottom(0, Unit.PX);
-        contentPanel.getElement().getStyle().setLeft(0, Unit.PX);
-        contentPanel.getElement().getStyle().setRight(0, Unit.PX);
+        contentPanel.getStyle().setPosition(Position.ABSOLUTE);
+        contentPanel.getStyle().setTop(0, Unit.PX);
+        contentPanel.getStyle().setBottom(0, Unit.PX);
+        contentPanel.getStyle().setLeft(0, Unit.PX);
+        contentPanel.getStyle().setRight(0, Unit.PX);
         add(contentPanel);
 
         add(overlayExtraHolder);

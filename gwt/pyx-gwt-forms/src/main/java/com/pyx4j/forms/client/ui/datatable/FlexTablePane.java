@@ -37,13 +37,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.FlexTable;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
@@ -78,7 +78,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         flexTable = new FlexTable();
 
         flexTable.setStyleName(DataTableTheme.StyleName.DataTable.name());
-        flexTable.getElement().getStyle().setTableLayout(TableLayout.AUTO);
+        flexTable.getStyle().setTableLayout(TableLayout.AUTO);
 
         flexTable.addClickHandler(new ClickHandler() {
             @Override
@@ -294,7 +294,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                     SimplePanel contentHolder = new SimplePanel(contentHtml);
                     contentHolder.setStyleName(DataTableTheme.StyleName.DataTableCellHolder.name());
                     if (columnDescriptor.getWidth() != null) {
-                        contentHolder.getElement().getStyle().setProperty("minWidth", columnDescriptor.getWidth());
+                        contentHolder.getStyle().setProperty("minWidth", columnDescriptor.getWidth());
                     }
 
                     flexTable.setWidget(rowIndex, colIndex, contentHolder);
