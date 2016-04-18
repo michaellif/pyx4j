@@ -25,15 +25,16 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
-import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
+import com.pyx4j.gwt.commons.ui.HasStyle;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.tester.svg.client.chart.TestChartBuilder;
 import com.pyx4j.tester.svg.client.config.ChartTestConfiguration;
 
-public class ChartTestPanel extends SplitLayoutPanel {
+public class ChartTestPanel extends SplitLayoutPanel implements HasStyle {
 
     private final TestChartBuilder testChartBuilder;
 
