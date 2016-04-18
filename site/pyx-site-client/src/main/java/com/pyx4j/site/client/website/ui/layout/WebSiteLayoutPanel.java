@@ -27,12 +27,12 @@ import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
-import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
@@ -81,7 +81,7 @@ public class WebSiteLayoutPanel extends ResponsiveLayoutPanel {
         headerHolder.setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutHeaderHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
-        pageScroll.getElement().getStyle().setOverflowY(Overflow.SCROLL);
+        pageScroll.getStyle().setOverflowY(Overflow.SCROLL);
         pageScroll.setHeight("100%");
         pageHolder.add(pageScroll);
 

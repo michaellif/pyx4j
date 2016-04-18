@@ -38,9 +38,9 @@ public class InlineMenuHolder extends SimplePanel {
     public void setMenuDisplay(DisplayPanel display) {
         super.setWidget(display);
         onPositionChange();
-        getElement().getStyle().setTop(0, Unit.PX);
-        getElement().getStyle().setProperty("width", "auto");
-        getElement().getStyle().setPosition(Position.ABSOLUTE);
+        getStyle().setTop(0, Unit.PX);
+        getStyle().setProperty("width", "auto");
+        getStyle().setPosition(Position.ABSOLUTE);
     }
 
     public void onPositionChange() {
@@ -63,7 +63,7 @@ public class InlineMenuHolder extends SimplePanel {
             }
 
         } else {
-            getElement().getStyle().setWidth(0, Unit.PX);
+            getStyle().setWidth(0, Unit.PX);
         }
     }
 

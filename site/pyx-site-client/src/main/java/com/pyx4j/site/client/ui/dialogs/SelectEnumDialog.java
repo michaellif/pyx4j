@@ -28,12 +28,12 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellList;
-import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -81,7 +81,7 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
         list.setRowData(listOfValues);
         selectionModel.setSelected(listOfValues.get(0), true);
         ScrollPanel panel = new ScrollPanel(list);
-        panel.getElement().getStyle().setProperty("padding", "5px");
+        panel.getStyle().setProperty("padding", "5px");
         return panel;
     }
 

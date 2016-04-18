@@ -17,12 +17,12 @@ import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.gwt.commons.ui.HTML;
 import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -200,7 +200,7 @@ public class MessageDialog extends Dialog {
 
         public MessagePanel(final String message, Type type) {
             super();
-            getElement().getStyle().setProperty("display", "table");
+            getStyle().setProperty("display", "table");
 
             WidgetsImageBundle imageBundle = ImageFactory.getImages();
             ImageResource imageResource = null;
@@ -246,7 +246,7 @@ public class MessageDialog extends Dialog {
 
         public void layout() {
             int offsetHeight = getActualDialogHeight() - htmlScroll.getOffsetHeight();
-            htmlScroll.getElement().getStyle().setPropertyPx("maxHeight", Math.max(100, (int) (Window.getClientHeight() * 0.9) - offsetHeight));
+            htmlScroll.getStyle().setPropertyPx("maxHeight", Math.max(100, (int) (Window.getClientHeight() * 0.9) - offsetHeight));
         }
 
     }

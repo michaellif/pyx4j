@@ -33,15 +33,15 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
-import com.pyx4j.gwt.commons.ui.Label;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.PasswordBox.PasswordStrengthRule.PasswordStrengthVerdict;
@@ -145,7 +145,7 @@ public class PasswordBox extends FlowPanel implements IValueBoxWidget<String> {
         private final SimplePanel progressMarker;
 
         private PasswordStrengthWidget() {
-            getElement().getStyle().setPosition(Position.RELATIVE);
+            getStyle().setPosition(Position.RELATIVE);
             Label caption = new Label(i18n.tr("Password Strength:"));
             add(caption);
 

@@ -23,12 +23,12 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
-import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 
@@ -47,7 +47,7 @@ public class InlineExtraHolder extends SimplePanel {
         this.extra1Caption = extra1Caption;
         this.extra2Caption = extra2Caption;
 
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getStyle().setDisplay(Display.INLINE_BLOCK);
 
         setWidget(contentPanel = new FlowPanel());
         contentPanel.getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -88,13 +88,13 @@ public class InlineExtraHolder extends SimplePanel {
             contentPanel.setHeight("auto");
 
             //TODO investigate why container's getAbsoluteTop() changes when child's position changes from STATIC to FIXED
-            //Workaround - use 10px threshold 
+            //Workaround - use 10px threshold
             if (getAbsoluteTop() > offsetTop + 10) {
                 contentPanel.getStyle().setPosition(Position.STATIC);
-                getElement().getStyle().setProperty("width", "auto");
+                getStyle().setProperty("width", "auto");
             } else if (getAbsoluteTop() < offsetTop - 10) {
                 contentPanel.getStyle().setPosition(Position.FIXED);
-                getElement().getStyle().setWidth(contentPanel.getOffsetWidth(), Unit.PX);
+                getStyle().setWidth(contentPanel.getOffsetWidth(), Unit.PX);
                 if ((offsetTop + contentPanel.getOffsetHeight()) <= offsetBottom) {
                     contentPanel.getStyle().setProperty("top", offsetTop + "px");
                     contentPanel.getStyle().setProperty("bottom", "auto");
@@ -105,7 +105,7 @@ public class InlineExtraHolder extends SimplePanel {
             }
 
         } else {
-            getElement().getStyle().setWidth(0, Unit.PX);
+            getStyle().setWidth(0, Unit.PX);
         }
 
     }

@@ -21,7 +21,9 @@ package com.pyx4j.widgets.client;
 
 import java.util.ArrayList;
 
-public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel {
+import com.pyx4j.gwt.commons.ui.HasStyle;
+
+public class PopupPanel extends com.google.gwt.user.client.ui.PopupPanel implements HasStyle {
 
     // Set of open panels so we can close them on window resize, because resizing
     // the window is equivalent to the user clicking outside the widget.

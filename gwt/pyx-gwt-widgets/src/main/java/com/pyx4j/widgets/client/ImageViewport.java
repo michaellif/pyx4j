@@ -23,9 +23,9 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
-import com.pyx4j.gwt.commons.ui.Image;
-import com.google.gwt.user.client.ui.LayoutPanel;
 
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.LayoutPanel;
 import com.pyx4j.gwt.shared.Dimension;
 
 public class ImageViewport extends LayoutPanel {
@@ -39,8 +39,8 @@ public class ImageViewport extends LayoutPanel {
     public ImageViewport(Dimension dimension, ScaleMode scaleMode) {
         setPixelSize(dimension.getWidth(), dimension.getHeight());
         this.scaleMode = scaleMode;
-        getElement().getStyle().setOverflow(Overflow.HIDDEN);
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getStyle().setOverflow(Overflow.HIDDEN);
+        getStyle().setDisplay(Display.INLINE_BLOCK);
     }
 
     public void setImage(final Image img) {
@@ -61,15 +61,15 @@ public class ImageViewport extends LayoutPanel {
     }
 
     private void adoptImage(Image img) {
-        getElement().getStyle().setProperty("background", "url('" + img.getUrl() + "') no-repeat center center");
+        getStyle().setProperty("background", "url('" + img.getUrl() + "') no-repeat center center");
         switch (scaleMode) {
         case None:
             break;
         case Cover:
-            getElement().getStyle().setProperty("backgroundSize", "cover");
+            getStyle().setProperty("backgroundSize", "cover");
             break;
         case Contain:
-            getElement().getStyle().setProperty("backgroundSize", "contain");
+            getStyle().setProperty("backgroundSize", "contain");
             break;
         }
 

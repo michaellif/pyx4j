@@ -40,7 +40,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -105,7 +104,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     protected FieldDecorator(final Builder<?> builder) {
         this.builder = builder;
         setStyleName(WidgetDecorator.name());
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getStyle().setDisplay(Display.INLINE_BLOCK);
 
         contentHolder = new SimplePanel();
     }
@@ -182,11 +181,9 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
         final INativeField<?> nativeComponent = component.getNativeComponent();
 
-        Widget content = nativeComponent.asWidget();
-
-        content.addStyleName(WidgetDecoratorContent.name());
-        content.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
-        content.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        nativeComponent.addStyleName(WidgetDecoratorContent.name());
+        nativeComponent.getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        nativeComponent.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         if (nativeComponent instanceof Focusable) {
             label.addClickHandler(new ClickHandler() {
@@ -247,7 +244,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (visible) {
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            getStyle().setDisplay(Display.INLINE_BLOCK);
         }
     }
 

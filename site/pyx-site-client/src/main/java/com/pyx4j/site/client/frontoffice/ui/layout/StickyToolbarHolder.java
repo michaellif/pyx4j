@@ -22,8 +22,8 @@ package com.pyx4j.site.client.frontoffice.ui.layout;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class StickyToolbarHolder extends SimplePanel implements RequiresResize {
@@ -33,13 +33,13 @@ public class StickyToolbarHolder extends SimplePanel implements RequiresResize {
     public StickyToolbarHolder(FrontOfficeLayoutPanel parent) {
         this.parent = parent;
 
-        getElement().getStyle().setZIndex(10);
+        getStyle().setZIndex(10);
 
         setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutStickyToolbarHolder.name());
 
-        getElement().getStyle().setTop(0, Unit.PX);
-        getElement().getStyle().setLeft(0, Unit.PX);
-        getElement().getStyle().setPosition(Position.ABSOLUTE);
+        getStyle().setTop(0, Unit.PX);
+        getStyle().setLeft(0, Unit.PX);
+        getStyle().setPosition(Position.ABSOLUTE);
 
     }
 

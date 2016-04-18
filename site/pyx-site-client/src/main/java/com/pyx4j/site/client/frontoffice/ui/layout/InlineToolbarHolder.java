@@ -20,8 +20,8 @@
 package com.pyx4j.site.client.frontoffice.ui.layout;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class InlineToolbarHolder extends SimplePanel {
@@ -37,7 +37,7 @@ public class InlineToolbarHolder extends SimplePanel {
 
     public void setDisplay() {
         setWidget(parent.getDisplay(DisplayType.toolbar));
-        getElement().getStyle().setHeight(parent.getDisplay(DisplayType.toolbar).getOffsetHeight(), Unit.PX);
+        getStyle().setHeight(parent.getDisplay(DisplayType.toolbar).getOffsetHeight(), Unit.PX);
     }
 
 }

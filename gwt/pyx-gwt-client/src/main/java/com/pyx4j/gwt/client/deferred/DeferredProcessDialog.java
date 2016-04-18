@@ -22,10 +22,9 @@ package com.pyx4j.gwt.client.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.gwt.commons.ui.ScrollPanel;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.pyx4j.gwt.commons.ui.VerticalPanel;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -118,7 +117,7 @@ public class DeferredProcessDialog extends MessageDialog implements CloseOption,
             return;
         }
         ScrollPanel scrollPanel = new ScrollPanel(new MessagePanel(message, type));
-        scrollPanel.getElement().getStyle().setProperty("maxHeight", "400px");
+        scrollPanel.getStyle().setProperty("maxHeight", "400px");
         messagePanel.add(scrollPanel);
         layout();
     }

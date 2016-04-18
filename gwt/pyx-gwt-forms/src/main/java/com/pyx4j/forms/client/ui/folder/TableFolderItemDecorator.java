@@ -27,9 +27,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -40,6 +38,8 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
@@ -69,7 +69,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         super(images);
 
         setStyleName(CFolderRowItemDecorator.name());
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getStyle().setDisplay(Display.INLINE_BLOCK);
 
         DockPanel mainPanel = new DockPanel();
         setWidget(mainPanel);

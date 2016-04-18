@@ -69,8 +69,8 @@ public class FilterItemHolder extends EditableItemHolder<FilterItem> {
     public IFilterEditor getEditor() {
         if (editor == null) {
             editor = createFilterEditor(getItem().getColumnDescriptor().getMemeber());
-            editor.asWidget().getElement().getStyle().setProperty("maxWidth", "250px");
-            editor.asWidget().getElement().getStyle().setProperty("minWidth", "200px");
+            editor.getStyle().setProperty("maxWidth", "250px");
+            editor.getStyle().setProperty("minWidth", "200px");
         }
         return editor;
     }

@@ -32,17 +32,17 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
-import com.pyx4j.gwt.commons.ui.HTML;
-import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
@@ -74,7 +74,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends FlowPane
     public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
-        getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        getStyle().setTextAlign(TextAlign.LEFT);
         setStyleName(WidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
 
         captionFormatter = new IFormatter<E, SafeHtml>() {

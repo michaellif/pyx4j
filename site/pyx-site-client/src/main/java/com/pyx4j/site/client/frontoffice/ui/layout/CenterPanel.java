@@ -20,9 +20,9 @@
 package com.pyx4j.site.client.frontoffice.ui.layout;
 
 import com.google.gwt.dom.client.Style.Position;
+
 import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.gwt.commons.ui.SimplePanel;
-
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class CenterPanel extends FlowPanel {
@@ -30,9 +30,9 @@ public class CenterPanel extends FlowPanel {
     public CenterPanel(FlowPanel contentPanel, InlineMenuHolder inlineMenuHolder) {
         ensureDebugId(getClass().getSimpleName());
         setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutContentHolder.name());
-        getElement().getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
+        getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
         addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
-        getElement().getStyle().setPosition(Position.RELATIVE);
+        getStyle().setPosition(Position.RELATIVE);
 
         SimplePanel backgroundPanel = new SimplePanel();
         backgroundPanel.getStyle().setPosition(Position.ABSOLUTE);

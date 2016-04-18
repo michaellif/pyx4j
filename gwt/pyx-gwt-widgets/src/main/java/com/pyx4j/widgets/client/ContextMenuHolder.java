@@ -40,8 +40,8 @@ public class ContextMenuHolder extends SimplePanel {
 
     public ContextMenuHolder() {
         setSize("0", "0");
-        getElement().getStyle().setProperty("position", "relative");
-        getElement().getStyle().setProperty("overflow", "hidden");
+        getStyle().setProperty("position", "relative");
+        getStyle().setProperty("overflow", "hidden");
 
         menuBar = new AccessibleMenuBar();
         add(menuBar);

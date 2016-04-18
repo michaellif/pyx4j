@@ -26,10 +26,10 @@ class ReportboardGadgetPositioner extends SimplePanel {
     public ReportboardGadgetPositioner(int height) {
         addStyleName(DashboardTheme.StyleName.DashboardDndReportPositioner.name());
 
-        getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
-        getElement().getStyle().setProperty("MozBoxSizing", "border-box");
-        getElement().getStyle().setProperty("boxSizing", "border-box");
-        getElement().getStyle().setZIndex(100);
+        getStyle().setProperty("WebkitBoxSizing", "border-box");
+        getStyle().setProperty("MozBoxSizing", "border-box");
+        getStyle().setProperty("boxSizing", "border-box");
+        getStyle().setZIndex(100);
 
         setHeight(height + "px");
     }

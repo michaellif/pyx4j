@@ -26,8 +26,9 @@ import java.util.Vector;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
 
@@ -43,7 +44,7 @@ class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
         this.gadgetDragController = gadgetDragController;
         this.handler = handler;
 
-        getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        getStyle().setVerticalAlign(VerticalAlign.TOP);
         setWidth("100%");
         initColumns();
     }
@@ -73,7 +74,7 @@ class DashboardLayoutPanel extends FlowPanel implements BoardEvent {
         }
     }
 
-    // Widget manipulation: 
+    // Widget manipulation:
     public boolean addGadget(Widget widget) {
         return insertGadget(widget, 0, 0);
     }

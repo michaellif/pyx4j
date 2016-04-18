@@ -26,11 +26,11 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.pyx4j.gwt.commons.ui.HorizontalPanel;
-import com.pyx4j.gwt.commons.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.images.DataTableImages;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ListBox;
@@ -72,7 +72,7 @@ public class PageNavigBar extends Toolbar {
     public PageNavigBar(final DataTableActionsBar actionsBar) {
         this.actionsBar = actionsBar;
 
-        getElement().getStyle().setProperty("textAlign", "right");
+        getStyle().setProperty("textAlign", "right");
 
         firstButton = new Button(DataTableImages.INSTANCE.first(), new Command() {
             @Override

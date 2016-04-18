@@ -19,13 +19,13 @@
  */
 package com.pyx4j.site.client.backoffice.ui;
 
-import com.pyx4j.gwt.commons.ui.FlowPanel;
-import com.pyx4j.gwt.commons.ui.Label;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.IPaneView.IPanePresenter;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
@@ -129,10 +129,6 @@ public abstract class AbstractPaneView<PRESENTER extends IPanePresenter> impleme
 
     protected void setCenter(Widget widget) {
         layoutWidget.setCenter(widget);
-    }
-
-    protected com.google.gwt.dom.client.Element getElement() {
-        return asWidget().getElement();
     }
 
     protected void setStyleName(String style) {

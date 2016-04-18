@@ -685,8 +685,8 @@ public class Dialog implements ProvidesResize, IsWidget {
         public CaptionPanel() {
             setWordWrap(false);
             setStylePrimaryName(DialogTheme.StyleName.DialogCaption.name());
-            getElement().getStyle().setHeight(1.5, Unit.EM);
-            getElement().getStyle().setLineHeight(1.5, Unit.EM);
+            getStyle().setHeight(1.5, Unit.EM);
+            getStyle().setLineHeight(1.5, Unit.EM);
         }
 
     }

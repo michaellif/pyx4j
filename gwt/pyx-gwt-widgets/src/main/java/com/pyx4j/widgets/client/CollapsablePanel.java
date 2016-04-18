@@ -26,11 +26,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.gwt.commons.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.gwt.commons.ui.SimplePanel;
-
 import com.pyx4j.widgets.client.event.shared.BeforeToggleEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeToggleHandler;
 import com.pyx4j.widgets.client.event.shared.HasToggleHandlers;
@@ -56,7 +56,7 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers, Ac
 
         setStyleName(WidgetsTheme.StyleName.CollapsablePanel.name());
 
-        getElement().getStyle().setPosition(Position.RELATIVE);
+        getStyle().setPosition(Position.RELATIVE);
 
         collapseImage = new Image();
 

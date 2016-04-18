@@ -20,13 +20,13 @@
 package com.pyx4j.forms.client.ui.svg;
 
 import com.google.gwt.user.client.Command;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.forms.client.ui.INativeFocusField;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.forms.client.ui.svg.NColorPicker.ColorButton;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -158,7 +158,7 @@ public class NColorPicker extends NFocusField<Integer, ColorButton, CColorPicker
             getTextLabelComponent().getStyle().setProperty("width", "60px");
             getTextLabelComponent().getStyle().setProperty("height", "1.5em");
             getTextLabelComponent().getStyle().setProperty("border", "1px inset #C2C2C2");
-            getElement().getStyle().setProperty("opacity", "1");
+            getStyle().setProperty("opacity", "1");
 
             setCommand(new Command() {
 

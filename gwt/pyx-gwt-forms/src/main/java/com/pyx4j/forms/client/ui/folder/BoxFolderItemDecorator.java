@@ -178,9 +178,9 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     @Override
     public void adoptItemActionsBar() {
         final ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
-        actionsBar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        actionsBar.getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         if (BrowserType.isIE7()) {
-            actionsBar.getElement().getStyle().setMarginRight(40, Unit.PX);
+            actionsBar.getStyle().setMarginRight(40, Unit.PX);
         }
         actionsBar.ensureDebugId(
                 new CompositeDebugId(parentDebugId, new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, DecoratorDebugIds.ActionPanel)).debugId());

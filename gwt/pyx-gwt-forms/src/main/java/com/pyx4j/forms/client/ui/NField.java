@@ -38,12 +38,12 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.HumanInputCommand;
@@ -273,7 +273,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
         public EditorPanel() {
             super();
             setStyleName(CComponentTheme.StyleName.FieldEditorPanel.name());
-            getElement().getStyle().setProperty("display", "table");
+            getStyle().setProperty("display", "table");
             setWidth("100%");
 
             editorHolder = new SimplePanel();
@@ -431,7 +431,7 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
             super();
 
             setStyleName(CComponentTheme.StyleName.FieldViewerPanel.name());
-            getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+            getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
             setWidth("100%");
 
             viewerLabelHolder = new SimplePanel();

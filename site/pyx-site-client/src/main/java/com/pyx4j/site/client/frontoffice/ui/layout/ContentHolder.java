@@ -20,13 +20,12 @@
 package com.pyx4j.site.client.frontoffice.ui.layout;
 
 import com.pyx4j.gwt.commons.ui.FlowPanel;
-
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class ContentHolder extends FlowPanel {
 
     public ContentHolder(FrontOfficeLayoutPanel parent) {
-        getElement().getStyle().setProperty("verticalAlign", "top");
+        getStyle().setProperty("verticalAlign", "top");
         add(parent.getDisplay(DisplayType.notification));
         add(parent.getDisplay(DisplayType.content));
     }

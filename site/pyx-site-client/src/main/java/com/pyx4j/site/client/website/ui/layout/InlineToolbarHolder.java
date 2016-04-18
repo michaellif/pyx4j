@@ -21,8 +21,8 @@ package com.pyx4j.site.client.website.ui.layout;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class InlineToolbarHolder extends SimplePanel {
@@ -33,12 +33,12 @@ public class InlineToolbarHolder extends SimplePanel {
         this.parent = parent;
 
         setStyleName(WebSiteLayoutTheme.StyleName.WebSiteLayoutInlineToolbarHolder.name());
-        getElement().getStyle().setPosition(Position.RELATIVE);
+        getStyle().setPosition(Position.RELATIVE);
     }
 
     public void setDisplay() {
         setWidget(parent.getDisplay(DisplayType.toolbar));
-        getElement().getStyle().setHeight(parent.getDisplay(DisplayType.toolbar).getOffsetHeight(), Unit.PX);
+        getStyle().setHeight(parent.getDisplay(DisplayType.toolbar).getOffsetHeight(), Unit.PX);
     }
 
 }

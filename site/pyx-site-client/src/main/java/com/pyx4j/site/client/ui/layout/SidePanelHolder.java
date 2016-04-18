@@ -35,8 +35,8 @@ public class SidePanelHolder extends SimplePanel {
         getWidget().getElement().getStyle().setPosition(Position.STATIC);
         getWidget().getElement().getStyle().setProperty("width", "auto");
         getWidget().getElement().getStyle().setProperty("height", "100%");
-        getElement().getStyle().setProperty("height", "100%");
-        getElement().getStyle().setProperty("width", "100%");
+        getStyle().setProperty("height", "100%");
+        getStyle().setProperty("width", "100%");
     }
 
     @Override
