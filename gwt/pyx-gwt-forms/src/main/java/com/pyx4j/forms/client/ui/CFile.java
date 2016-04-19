@@ -30,8 +30,6 @@ public class CFile extends CField<IFile<?>, NFile> {
 
     private final UploadService<?, ?> service;
 
-    private final boolean editableUploadOnly;
-
     private IFileURLBuilder fileUrlBuilder;
 
     public CFile(UploadService<?, ?> service, IFileURLBuilder fileURLBuilder) {
@@ -42,7 +40,6 @@ public class CFile extends CField<IFile<?>, NFile> {
         super();
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
-        this.editableUploadOnly = editableUploadOnly;
 
         setNativeComponent(new NFile(this));
 
@@ -78,9 +75,5 @@ public class CFile extends CField<IFile<?>, NFile> {
     @Override
     public boolean isValueEmpty() {
         return super.isValueEmpty() || !getValue().hasValues();
-    }
-
-    public boolean canUpload() {
-        return isEditable() || !editableUploadOnly;
     }
 }
