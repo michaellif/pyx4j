@@ -45,6 +45,9 @@ import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
 
+/**
+ * Two modes of operations on options: Loading from optionsDataSource or setting explicitly.
+ */
 public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
         implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptsText, AsyncOptionsReadyCallback<E> {
 
@@ -78,6 +81,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
             }
         };
         // Do not load the Data here. We don't know if it is isViewable component of not.
+        // Load Data on populate
         // retriveOptions(null);
     }
 
@@ -93,14 +97,26 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
         asyncOptionDelegate.resetCriteria();
     }
 
+    /**
+     * In memory filter on top of optionsDataSource or explicitly set Options.
+     *
+     * Need to be called after setOptions(..) since UnFiltered options are not stored in model
+     *
+     * @param optionsFilter
+     */
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {
         this.optionsFilter = optionsFilter;
-        setOptions(getOptions());
+        updateOptionsViewIfLoaded();
     }
 
+    /**
+     * This changes the display order in UI to override the order from optionsDataSource
+     *
+     * @param comparator
+     */
     public void setOptionsComparator(Comparator<E> comparator) {
         this.comparator = comparator;
-        setOptions(getOptions());
+        updateOptionsViewIfLoaded();
     }
 
     public boolean isOptionsLoaded() {
@@ -140,10 +156,21 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
         asyncOptionDelegate.resetOptions();
     }
 
+    //TODO Looks like this does not do what is expected, The actual super.options (Model) not changed
     public void refreshOptions() {
         resetOptions();
         retriveOptions(null);
-        getNativeComponent().refreshOptions();
+        getNativeComponent().refreshOptions(); // This intended to clear list in UI.
+    }
+
+    // called when model is changed and options available, TODO refactor
+    private void updateOptionsViewIfLoaded() {
+        if (isViewable()) {
+            return;
+        }
+        if (isOptionsLoaded()) {
+            setOptions(getOptions());
+        }
     }
 
     @Override
@@ -224,6 +251,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
         if (populate && (optionsFilter != null || asyncOptionDelegate.hasCriteria())) {
             // Fire options reload since optionsFilter may depend on other values in the model.
             refreshOptions();
+        } else if (populate && !isOptionsLoaded() && isEditable()) {
+            retriveOptions(null);
         }
     }
 
@@ -292,7 +321,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E>
         return b.toString();
     }
 
-    /** To be used by AsyncOptionLoadingDelegate */
+    /** TODO MOVE to private, To be used ONLY by AsyncOptionLoadingDelegate */
     @Override
     public void onOptionsReady(List<E> opt) {
         if (isOptionsLoaded()) {
