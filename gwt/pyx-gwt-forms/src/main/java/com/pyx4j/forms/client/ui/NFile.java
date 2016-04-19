@@ -143,7 +143,7 @@ public class NFile extends NField<IFile<?>, NFile.ContentPanel, CFile, NFile.Con
 
             if (value == null || value.isNull()) {
                 clearButton.setVisible(false);
-                uploadAnchor.setVisible(true);
+                uploadAnchor.setVisible(getCComponent().canUpload());
                 fileNameAnchor.setVisible(false);
                 fileNameAnchor.setText("");
             } else {
