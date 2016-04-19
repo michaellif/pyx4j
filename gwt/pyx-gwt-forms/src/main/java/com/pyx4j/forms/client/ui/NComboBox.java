@@ -152,13 +152,14 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
                     notInOptionsValue = null;
                 }
 
+                for (E o : getCComponent().getOptions()) {
+                    shownOptions.add(o);
+                }
+
+                // See if value is in list created above.
                 if ((this.value != null) && (getCComponent().getPolicy() == NotInOptionsPolicy.DISCARD) && (getNativeOptionIndex(this.value) == -1)) {
                     // Discard selection
                     getCComponent().setValue(null, false);
-                }
-
-                for (E o : getCComponent().getOptions()) {
-                    shownOptions.add(o);
                 }
 
                 for (E o : shownOptions) {
