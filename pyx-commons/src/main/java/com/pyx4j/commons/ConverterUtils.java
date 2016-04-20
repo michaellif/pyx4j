@@ -48,6 +48,18 @@ public abstract class ConverterUtils {
         }
     }
 
+    public static class StringViewConverter<T extends IStringView> implements ToStringConverter<T> {
+
+        @Override
+        public String toString(T value) {
+            if (value != null) {
+                return value.getStringView();
+            } else {
+                return "";
+            }
+        }
+    }
+
     public static Object collectionFirstElement(Collection<?> collection) {
         if ((collection == null) || (collection.size() == 0)) {
             return null;
@@ -76,6 +88,10 @@ public abstract class ConverterUtils {
 
     public static <T> String convertArray(T[] objectsArray, String separator) {
         return convertCollection(Arrays.asList(objectsArray), new ObjectConverter<T>(), separator);
+    }
+
+    public static <T extends IStringView> String convertCollectionStringView(Collection<T> objectsCollection, String separator) {
+        return convertCollection(objectsCollection, new StringViewConverter<T>(), separator);
     }
 
     public static <T> String convertCollection(Collection<T> objectsCollection, String separator) {
