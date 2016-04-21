@@ -24,10 +24,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.widgets.client.event.shared.SecureConcernStateChangeEvent;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Button extends ButtonBase {
@@ -114,8 +114,7 @@ public class Button extends ButtonBase {
     protected void updateImageState() {
         if (imageResource != null) {
             getImageHolder().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
-            getImageHolder().getStyle().setProperty("background",
-                    "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
+            getImageHolder().getStyle().setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
             super.updateImageState();
         }
@@ -136,10 +135,10 @@ public class Button extends ButtonBase {
             addSecureConcern(menu);
 
             applyVisibilityRules();
-            menu.addSecureConcernStateChangeHandler(new SecureConcernStateChangeEvent.Handler() {
+            menu.addSecureConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
                 @Override
-                public void onSecureConcernStateChanged(SecureConcernStateChangeEvent event) {
-                    applyVisibilityRules();
+                public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
+                    applyConcernRules();
                 }
             });
         }

@@ -101,6 +101,7 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
 
     @Override
     public void populate(E value) {
+        System.out.println("View populate");
         assert (form != null);
         form.populate(value);
         setSecurityContext(value);
@@ -115,6 +116,7 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
 
     @Override
     public void reset() {
+        System.out.println("View reset");
         setCaption(null);
         assert (form != null);
         form.reset();
@@ -122,6 +124,11 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
             hideVisor();
         }
         setSecurityContext(null);
+    }
+
+    @Override
+    public boolean isPopulated() {
+        return (form == null) ? false : form.isPopulated();
     }
 
     @Override

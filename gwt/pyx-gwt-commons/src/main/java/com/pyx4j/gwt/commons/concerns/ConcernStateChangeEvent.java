@@ -17,7 +17,7 @@
  * Created on Apr 3, 2016
  * @author vlads
  */
-package com.pyx4j.widgets.client.event.shared;
+package com.pyx4j.gwt.commons.concerns;
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -25,20 +25,23 @@ import com.google.gwt.event.shared.GwtEvent;
 /**
  * Fired when the event source changes is state (visibility) due to security context changes.
  *
- * @see SecureConcern
+ * @see AbstractConcern
  */
-public class SecureConcernStateChangeEvent extends GwtEvent<SecureConcernStateChangeEvent.Handler> {
+public class ConcernStateChangeEvent extends GwtEvent<ConcernStateChangeEvent.Handler> {
 
-    private static Type<SecureConcernStateChangeEvent.Handler> TYPE = new Type<SecureConcernStateChangeEvent.Handler>();
+    private static Type<ConcernStateChangeEvent.Handler> TYPE = new Type<ConcernStateChangeEvent.Handler>();
 
     public interface Handler extends EventHandler {
 
-        void onSecureConcernStateChanged(SecureConcernStateChangeEvent event);
+        void onSecureConcernStateChanged(ConcernStateChangeEvent event);
 
     }
 
-    public static Type<SecureConcernStateChangeEvent.Handler> getType() {
+    public static Type<ConcernStateChangeEvent.Handler> getType() {
         return TYPE;
+    }
+
+    public ConcernStateChangeEvent() {
     }
 
     @Override

@@ -36,14 +36,15 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.gwt.commons.concerns.AbstractConcern;
+import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
 import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.pyx4j.gwt.commons.ui.HasStyle;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
@@ -185,7 +186,11 @@ public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns
     @Override
     public void applyVisibilityRules() {
         if (this.isAttached()) {
-            super.setVisible(HasWidgetConcerns.super.isVisible());
+            boolean state = HasWidgetConcerns.super.isVisible();
+            if (super.isVisible() != state) {
+                super.setVisible(state);
+                fireEvent(new ConcernStateChangeEvent());
+            }
         }
     }
 

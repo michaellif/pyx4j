@@ -143,6 +143,9 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
             @Override
             public void onSuccess(E result) {
                 if (!discarded) {
+                    if (getView().isPopulated()) {
+                        getView().reset();
+                    }
                     onPopulateSuccess(result);
                     onPopulate();
                 }
@@ -156,6 +159,9 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
             @Override
             public void onSuccess(E result) {
                 if (!discarded) {
+                    if (getView().isPopulated()) {
+                        getView().reset();
+                    }
                     onPopulateSuccess(result);
                     onPopulate();
                 }
@@ -171,7 +177,7 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
 
     /**
      * TODO refactoring will be done at EOD 1.4.5
-     * 
+     *
      * @deprecated use onPopulate
      */
     @Deprecated

@@ -19,6 +19,10 @@
  */
 package com.pyx4j.gwt.commons.concerns;
 
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
+
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 
@@ -98,5 +102,13 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
     default void applyConcernRules() {
         applyVisibilityRules();
         applyEnablingRules();
+    }
+
+    <H extends EventHandler> HandlerRegistration addHandler(H handler, GwtEvent.Type<H> type);
+
+    void fireEvent(GwtEvent<?> event);
+
+    default HandlerRegistration addSecureConcernStateChangeHandler(ConcernStateChangeEvent.Handler handler) {
+        return addHandler(handler, ConcernStateChangeEvent.getType());
     }
 }

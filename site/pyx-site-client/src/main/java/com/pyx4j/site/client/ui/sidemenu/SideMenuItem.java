@@ -30,12 +30,12 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
-import com.pyx4j.gwt.commons.ui.Image;
-import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
@@ -44,6 +44,9 @@ import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.Image;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -125,6 +128,18 @@ public class SideMenuItem implements ISideMenuNode, HasWidgetConcerns {
         itemPanel.add(label);
 
         setPermission(permission);
+    }
+
+    // Events as in Widget
+
+    @Override
+    public final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {
+        return asWidget().addHandler(handler, type);
+    }
+
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        asWidget().fireEvent(event);
     }
 
     @Override

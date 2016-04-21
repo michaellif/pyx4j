@@ -41,12 +41,10 @@ public class ContextMenuHolder extends SimplePanel {
     public ContextMenuHolder() {
         setSize("0", "0");
         getStyle().setProperty("position", "relative");
-        getStyle().setProperty("overflow", "hidden");
 
         menuBar = new AccessibleMenuBar();
         add(menuBar);
         menuBar.getStyle().setProperty("position", "relative");
-        menuBar.getStyle().setProperty("overflow", "hidden");
         menuBar.setSize("0", "0");
 
         // This is magical number to work in CRM, Make a better positioning of Popup

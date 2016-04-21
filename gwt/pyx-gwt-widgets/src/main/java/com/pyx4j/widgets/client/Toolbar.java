@@ -20,14 +20,16 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Element;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
+import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.gwt.commons.ui.HasStyle;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Toolbar implements IsWidget, HasSecureConcern, HasSecureConcernedChildren, HasStyle {
@@ -53,6 +55,15 @@ public class Toolbar implements IsWidget, HasSecureConcern, HasSecureConcernedCh
         panel.insert(itemHolder, beforeIndex);
 
         addWidgetSecureConcern(widget);
+
+        if (widget instanceof HasWidgetConcerns) {
+            ((HasWidgetConcerns) widget).addSecureConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+                @Override
+                public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
+                    itemHolder.setVisible(((HasWidgetConcerns) widget).isVisible());
+                }
+            });
+        }
     }
 
     @Override

@@ -30,13 +30,13 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AccessibleMenuBar;
 
 import com.pyx4j.gwt.commons.concerns.AbstractConcern;
+import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
 import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
 import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.widgets.client.event.shared.SecureConcernStateChangeEvent;
 
 public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, HasSecureConcernedChildren {
 
@@ -52,8 +52,9 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
         setAnimationEnabled(true);
     }
 
-    public HandlerRegistration addSecureConcernStateChangeHandler(SecureConcernStateChangeEvent.Handler handler) {
-        return addHandler(handler, SecureConcernStateChangeEvent.getType());
+    @Override
+    public HandlerRegistration addSecureConcernStateChangeHandler(ConcernStateChangeEvent.Handler handler) {
+        return addHandler(handler, ConcernStateChangeEvent.getType());
     }
 
     @Override
@@ -76,10 +77,18 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
         if (item instanceof HasSecureConcern) {
             addSecureConcern((HasSecureConcern) item);
         }
+        if (item instanceof HasWidgetConcerns) {
+            ((HasWidgetConcerns) item).addSecureConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+                @Override
+                public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
+                    applyConcernRules();
+                }
+            });
+        }
         try {
             return super.insertItem(item, beforeIndex);
         } finally {
-            fireEvent(new SecureConcernStateChangeEvent());
+            fireEvent(new ConcernStateChangeEvent());
         }
     }
 
@@ -95,6 +104,9 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
         return menuItem;
     }
 
+    /**
+     * @Depreacted use isVisible()
+     */
     public boolean isMenuEmpty() {
         boolean empty = getItems().isEmpty();
         if (!empty) {
@@ -132,7 +144,7 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
     public void clearItems() {
         super.clearItems();
         clearSecureConcerns();
-        fireEvent(new SecureConcernStateChangeEvent()); // TODO remove
+        fireEvent(new ConcernStateChangeEvent()); // TODO remove
     }
 
     // --- concerns implementation - start
@@ -141,9 +153,6 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
     public void setSecurityContext(AccessControlContext context) {
         HasWidgetConcerns.super.setSecurityContext(context);
         HasSecureConcernedChildren.super.setSecurityContext(context);
-
-        // TODO Fire when state actually changes.
-        fireEvent(new SecureConcernStateChangeEvent()); // TODO remove
     }
 
     @Override
@@ -163,6 +172,25 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
         //TODO review
     }
 
+    private boolean hasVisibleSubMenuOrEmpty() {
+        boolean empty = getItems().isEmpty();
+        if (empty) {
+            return true;
+        } else {
+            for (com.google.gwt.user.client.ui.MenuItem item : getItems()) {
+                if (item.isVisible()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isVisible() {
+        return HasWidgetConcerns.super.isVisible() && hasVisibleSubMenuOrEmpty();
+    }
+
     @Override
     public void setVisible(boolean visible) {
         setConcernsVisible(visible);
@@ -179,7 +207,11 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
     @Override
     public void applyVisibilityRules() {
         if (this.isAttached()) {
-            super.setVisible(HasWidgetConcerns.super.isVisible());
+            boolean state = isVisible();
+            if (super.isVisible() != state) {
+                super.setVisible(state);
+                fireEvent(new ConcernStateChangeEvent());
+            }
         }
     }
 
