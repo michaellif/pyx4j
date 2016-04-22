@@ -57,7 +57,7 @@ public class Toolbar implements IsWidget, HasSecureConcern, HasSecureConcernedCh
         addWidgetSecureConcern(widget);
 
         if (widget instanceof HasWidgetConcerns) {
-            ((HasWidgetConcerns) widget).addSecureConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+            ((HasWidgetConcerns) widget).addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
                 @Override
                 public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
                     itemHolder.setVisible(((HasWidgetConcerns) widget).isVisible());

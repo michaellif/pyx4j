@@ -92,13 +92,13 @@ public class Button extends ButtonBase {
         buttonMenuIndicator.setVisible(false);
         getImageHolder().add(buttonMenuIndicator);
 
-        visible(() -> (getCommand() != null || (getMenu() != null && !getMenu().isMenuEmpty())), "Menu|Command");
+        visible(() -> (getMenu() == null || (getCommand() != null || (getMenu() != null && !getMenu().isMenuEmpty()))), "Menu|Command");
 
     }
 
     @Override
     protected final void execute(HumanInputInfo humanInputInfo) {
-        if (menu != null) {
+        if ((menu != null) && isEnabled()) {
             menuHolder.togleMenu();
         } else {
             super.execute(humanInputInfo);
@@ -135,7 +135,7 @@ public class Button extends ButtonBase {
             addSecureConcern(menu);
 
             applyVisibilityRules();
-            menu.addSecureConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+            menu.addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
                 @Override
                 public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
                     applyConcernRules();
@@ -151,7 +151,7 @@ public class Button extends ButtonBase {
     @Override
     public void applyVisibilityRules() {
         if (buttonMenuIndicator != null) {
-            buttonMenuIndicator.setVisible(this.menu != null && !this.menu.isMenuEmpty());
+            buttonMenuIndicator.setVisible(this.menu != null && !this.menu.isVisible());
         }
         super.applyVisibilityRules();
     }

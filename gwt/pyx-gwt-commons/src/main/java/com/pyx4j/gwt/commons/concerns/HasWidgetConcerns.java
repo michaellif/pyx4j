@@ -28,6 +28,8 @@ import com.pyx4j.security.shared.Permission;
 
 public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityConcerns, HasSecureConcern {
 
+    static final boolean debugMenuConcerns = false;
+
     @Override
     default void setSecurityContext(AccessControlContext context) {
         HasSecureConcern.setSecurityContext(concerns(), context);
@@ -108,7 +110,7 @@ public interface HasWidgetConcerns extends HasEnablingConcerns, HasVisibilityCon
 
     void fireEvent(GwtEvent<?> event);
 
-    default HandlerRegistration addSecureConcernStateChangeHandler(ConcernStateChangeEvent.Handler handler) {
+    default HandlerRegistration addConcernStateChangeHandler(ConcernStateChangeEvent.Handler handler) {
         return addHandler(handler, ConcernStateChangeEvent.getType());
     }
 }

@@ -22,24 +22,34 @@ package com.pyx4j.widgets.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 import com.pyx4j.gwt.commons.concerns.AbstractConcern;
 import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
 import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.security.annotations.ActionId;
+import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 
-public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements HasWidgetConcerns {
+public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements HasWidgetConcerns, HasSecureConcernedChildren {
+
+    private static final Logger log = LoggerFactory.getLogger(MenuItem.class);
 
     private HandlerManager handlerManager;
 
     protected final List<AbstractConcern> concerns = new ArrayList<>();
+
+    private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
 
     public MenuItem(String text, Class<? extends ActionId> actionId, ScheduledCommand cmd) {
         this(text, cmd, actionId);
@@ -55,8 +65,33 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
     }
 
     public MenuItem(String text, MenuBar subMenu, Permission... permissions) {
-        super(text, subMenu);
+        super(SafeHtmlUtils.fromString(text));
+        setSubMenu(subMenu);
         setPermission(permissions);
+    }
+
+    @Override
+    public MenuBar getSubMenu() {
+        return (MenuBar) super.getSubMenu();
+    }
+
+    @Override
+    public void setSubMenu(com.google.gwt.user.client.ui.MenuBar subMenu) {
+        assert getSubMenu() == null : "Override subMenu not supported";
+        assert (subMenu instanceof MenuBar) : "Menu Hierarchy will not work when using raw GWT components";
+
+        super.setSubMenu(subMenu);
+        getSubMenu().setParentMenuItem(this);
+        addSecureConcern(getSubMenu());
+
+        visible(() -> getSubMenu().isVisible(), "SubMenuBar");
+
+        getSubMenu().addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+            @Override
+            public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
+                applyConcernRules();
+            }
+        });
     }
 
     // Historic method to avoid refactoring
@@ -69,14 +104,29 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
         setConcernsVisible(visible);
     }
 
+    boolean isHierarchyAttached() {
+        if (getParentMenu() instanceof MenuBar) {
+            return ((MenuBar) getParentMenu()).isHierarchyAttached();
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void applyVisibilityRules() {
-        if (getParentMenu() != null && getParentMenu().isAttached()) {
+        if (isHierarchyAttached()) {
             boolean state = HasWidgetConcerns.super.isVisible();
             if (super.isVisible() != state) {
+                if (HasWidgetConcerns.debugMenuConcerns) {
+                    log.debug("MenuItem {} visible state {} -> {}", this.getText(), super.isVisible(), state);
+                }
                 super.setVisible(state);
                 fireEvent(new ConcernStateChangeEvent());
+            } else if (HasWidgetConcerns.debugMenuConcerns) {
+                log.debug("MenuItem {} visible state not change and is {}", this.getText(), state);
             }
+        } else if (HasWidgetConcerns.debugMenuConcerns) {
+            log.debug("MenuItem {} not yet Attached", this.getText());
         }
     }
 
@@ -91,8 +141,31 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
     }
 
     @Override
+    public void setSecurityContext(AccessControlContext context) {
+        HasWidgetConcerns.super.setSecurityContext(context);
+        HasSecureConcernedChildren.super.setSecurityContext(context);
+    }
+
+    @Override
+    public void inserConcernedParent(AbstractConcern parentConcern) {
+        HasWidgetConcerns.super.inserConcernedParent(parentConcern);
+        HasSecureConcernedChildren.super.inserConcernedParent(parentConcern);
+    }
+
+    @Override
+    public void applyConcernRules() {
+        HasWidgetConcerns.super.applyConcernRules();
+        HasSecureConcernedChildren.super.applyConcernRules();
+    }
+
+    @Override
     public List<AbstractConcern> concerns() {
         return concerns;
+    }
+
+    @Override
+    public SecureConcernsHolder secureConcernsHolder() {
+        return secureConcernsHolder;
     }
 
     // Events as in Widget

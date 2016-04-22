@@ -22,8 +22,10 @@ package com.pyx4j.widgets.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -40,21 +42,23 @@ import com.pyx4j.security.shared.Permission;
 
 public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, HasSecureConcernedChildren {
 
+    private static final Logger log = LoggerFactory.getLogger(MenuBar.class);
+
     protected final List<AbstractConcern> concerns = new ArrayList<>();
 
     private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
 
     private HumanInputInfo humanInputInfo = HumanInputInfo.robot;
 
+    private MenuItem parentMenuItem;
+
+    public MenuBar(boolean vertical) {
+        super(vertical);
+    }
+
     public MenuBar() {
         super(true);
         setAutoOpen(true);
-        setAnimationEnabled(true);
-    }
-
-    @Override
-    public HandlerRegistration addSecureConcernStateChangeHandler(ConcernStateChangeEvent.Handler handler) {
-        return addHandler(handler, ConcernStateChangeEvent.getType());
     }
 
     @Override
@@ -78,7 +82,7 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
             addSecureConcern((HasSecureConcern) item);
         }
         if (item instanceof HasWidgetConcerns) {
-            ((HasWidgetConcerns) item).addSecureConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+            ((HasWidgetConcerns) item).addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
                 @Override
                 public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
                     applyConcernRules();
@@ -102,6 +106,18 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
         MenuItem menuItem = new MenuItem(text, cmd, actionId);
         addItem(menuItem);
         return menuItem;
+    }
+
+    MenuItem getParentMenuItem() {
+        return parentMenuItem;
+    }
+
+    void setParentMenuItem(MenuItem parentMenuItem) {
+        this.parentMenuItem = parentMenuItem;
+    }
+
+    boolean isHierarchyAttached() {
+        return isAttached() || ((getParentMenuItem() != null) && getParentMenuItem().isHierarchyAttached());
     }
 
     /**
@@ -196,22 +212,32 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
         setConcernsVisible(visible);
     }
 
-    // ---  save to copy paste to other class
+    // ---  safe to copy paste to other class
 
     @Override
     protected void onAttach() {
         super.onAttach();
+        if (HasWidgetConcerns.debugMenuConcerns) {
+            log.debug("MenuBar {} onAttach()", this.getTitle());
+        }
         applyConcernRules();
     }
 
     @Override
     public void applyVisibilityRules() {
-        if (this.isAttached()) {
+        if (this.isHierarchyAttached()) {
             boolean state = isVisible();
             if (super.isVisible() != state) {
+                if (HasWidgetConcerns.debugMenuConcerns) {
+                    log.debug("MenuBar {} visible state {} -> {}", this.getTitle(), super.isVisible(), state);
+                }
                 super.setVisible(state);
                 fireEvent(new ConcernStateChangeEvent());
+            } else if (HasWidgetConcerns.debugMenuConcerns) {
+                log.debug("MenuBar {} visible state not change and is {}", this.getTitle(), state);
             }
+        } else if (HasWidgetConcerns.debugMenuConcerns) {
+            log.debug("MenuBar {} not yet Attached", this.getTitle());
         }
     }
 

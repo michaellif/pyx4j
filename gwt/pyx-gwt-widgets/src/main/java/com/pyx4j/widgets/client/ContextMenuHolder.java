@@ -22,17 +22,15 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AccessibleMenuBar;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
 import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class ContextMenuHolder extends SimplePanel {
 
-    private final AccessibleMenuBar menuBar;
+    private final MenuBar menuBar;
 
     private MenuItem menuItem;
 
@@ -42,7 +40,10 @@ public class ContextMenuHolder extends SimplePanel {
         setSize("0", "0");
         getStyle().setProperty("position", "relative");
 
-        menuBar = new AccessibleMenuBar();
+        menuBar = new MenuBar(false);
+        if (HasWidgetConcerns.debugMenuConcerns) {
+            menuBar.setTitle("ContextMenuBar");
+        }
         add(menuBar);
         menuBar.getStyle().setProperty("position", "relative");
         menuBar.setSize("0", "0");
@@ -68,9 +69,9 @@ public class ContextMenuHolder extends SimplePanel {
         return menuBar;
     }
 
-    public void setMenu(MenuBar item) {
+    public void setMenu(MenuBar subMenu) {
         menuBar.clearItems();
-        menuBar.addItem(menuItem = new MenuItem("", item));
+        menuBar.addItem(menuItem = new MenuItem(HasWidgetConcerns.debugMenuConcerns ? "ContextSubMenu" : "", subMenu));
         menuItem.setSize("0", "0");
     }
 
