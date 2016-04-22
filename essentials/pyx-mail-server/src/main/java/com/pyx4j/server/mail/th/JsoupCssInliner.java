@@ -23,6 +23,7 @@ package com.pyx4j.server.mail.th;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -49,6 +50,32 @@ public class JsoupCssInliner implements CssInliner {
     private boolean removeClasses = false;
 
     private boolean removeEmbededStyles = false;
+
+    public JsoupCssInliner() {
+
+    }
+
+    /**
+     * 'class' attributes on HTML elements to be preserved
+     *
+     * @param removeClasses
+     * @return
+     */
+    public JsoupCssInliner withRemoveClasses(boolean removeClasses) {
+        this.removeClasses = removeClasses;
+        return this;
+    }
+
+    /**
+     * Remove the <style> declaration in body of HTML
+     *
+     * @param removeEmbededStyles
+     * @return this
+     */
+    public JsoupCssInliner withRemoveEmbededStyles(boolean removeEmbededStyles) {
+        this.removeEmbededStyles = removeEmbededStyles;
+        return this;
+    }
 
     @Override
     public String inline(String htmlContent) {
@@ -109,7 +136,7 @@ public class JsoupCssInliner implements CssInliner {
         Document.OutputSettings settings = document.outputSettings();
         settings.prettyPrint(ApplicationMode.isDevelopment());
         settings.escapeMode(Entities.EscapeMode.extended);
-        settings.charset("ASCII");
+        settings.charset(StandardCharsets.UTF_8);
 
         return document.html();
     }
