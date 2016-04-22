@@ -51,6 +51,8 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
 
     private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
 
+    private boolean updatingSubmenuIcon = false;
+
     public MenuItem(String text, Class<? extends ActionId> actionId, ScheduledCommand cmd) {
         this(text, cmd, actionId);
     }
@@ -72,7 +74,15 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
 
     @Override
     public MenuBar getSubMenu() {
-        return (MenuBar) super.getSubMenu();
+        if (updatingSubmenuIcon && !isVisible()) {
+            return null;
+        } else {
+            return (MenuBar) super.getSubMenu();
+        }
+    }
+
+    private boolean hasSubMenu() {
+        return super.getSubMenu() != null;
     }
 
     @Override
@@ -81,12 +91,14 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
         assert (subMenu instanceof MenuBar) : "Menu Hierarchy will not work when using raw GWT components";
 
         super.setSubMenu(subMenu);
-        getSubMenu().setParentMenuItem(this);
-        addSecureConcern(getSubMenu());
+        MenuBar subMenuBar = (MenuBar) subMenu;
 
-        visible(() -> getSubMenu().isVisible(), "SubMenuBar");
+        subMenuBar.setParentMenuItem(this);
+        addSecureConcern(subMenuBar);
 
-        getSubMenu().addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+        visible(() -> subMenuBar.isVisible(), "SubMenuBar");
+
+        subMenuBar.addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
             @Override
             public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
                 applyConcernRules();
@@ -112,6 +124,15 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
         }
     }
 
+    private void updateSubmenuIcon() {
+        try {
+            updatingSubmenuIcon = true;
+            ((MenuBar) getParentMenu()).updateSubmenuIcon(this);
+        } finally {
+            updatingSubmenuIcon = false;
+        }
+    }
+
     @Override
     public void applyVisibilityRules() {
         if (isHierarchyAttached()) {
@@ -121,6 +142,9 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
                     log.debug("MenuItem {} visible state {} -> {}", this.getText(), super.isVisible(), state);
                 }
                 super.setVisible(state);
+                if (hasSubMenu()) {
+                    updateSubmenuIcon();
+                }
                 fireEvent(new ConcernStateChangeEvent());
             } else if (HasWidgetConcerns.debugMenuConcerns) {
                 log.debug("MenuItem {} visible state not change and is {}", this.getText(), state);

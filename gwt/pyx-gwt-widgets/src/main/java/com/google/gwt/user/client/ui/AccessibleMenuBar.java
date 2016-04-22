@@ -38,4 +38,9 @@ public class AccessibleMenuBar extends MenuBar implements HasStyle {
     public PopupPanel getPopupPanel() {
         return super.getPopup();
     }
+
+    @Override
+    public void updateSubmenuIcon(MenuItem item) {
+        super.updateSubmenuIcon(item);
+    }
 }
