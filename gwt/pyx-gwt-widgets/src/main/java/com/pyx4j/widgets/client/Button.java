@@ -151,7 +151,7 @@ public class Button extends ButtonBase {
     @Override
     public void applyVisibilityRules() {
         if (buttonMenuIndicator != null) {
-            buttonMenuIndicator.setVisible(this.menu != null && !this.menu.isVisible());
+            buttonMenuIndicator.setVisible(this.menu != null && this.menu.isVisible());
         }
         super.applyVisibilityRules();
     }
