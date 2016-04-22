@@ -20,6 +20,7 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 
@@ -35,6 +36,8 @@ public class Button extends ButtonBase {
     private ContextMenuHolder menuHolder;
 
     private MenuBar menu;
+
+    private HandlerRegistration menuHandlerRegistration;
 
     private final Label buttonMenuIndicator;
 
@@ -129,13 +132,17 @@ public class Button extends ButtonBase {
             menuHolder.setMenu(menu);
         }
 
+        if (this.menu != null) {
+            removeSecureConcern(this.menu);
+            menuHandlerRegistration.removeHandler();
+        }
+
         this.menu = menu;
         if (menu != null) {
-
             addSecureConcern(menu);
 
             applyVisibilityRules();
-            menu.addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+            menuHandlerRegistration = menu.addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
                 @Override
                 public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
                     applyConcernRules();

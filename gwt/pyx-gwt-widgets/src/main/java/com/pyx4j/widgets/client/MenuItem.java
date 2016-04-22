@@ -88,6 +88,7 @@ public class MenuItem extends com.google.gwt.user.client.ui.MenuItem implements 
     @Override
     public void setSubMenu(com.google.gwt.user.client.ui.MenuBar subMenu) {
         assert getSubMenu() == null : "Override subMenu not supported";
+        assert subMenu != null : "Removal of subMenu not supported";
         assert (subMenu instanceof MenuBar) : "Menu Hierarchy will not work when using raw GWT components";
 
         super.setSubMenu(subMenu);

@@ -71,8 +71,12 @@ public class ContextMenuHolder extends SimplePanel {
 
     public void setMenu(MenuBar subMenu) {
         menuBar.clearItems();
-        menuBar.addItem(menuItem = new MenuItem(HasWidgetConcerns.debugMenuConcerns ? "ContextSubMenu" : "", subMenu));
-        menuItem.setSize("0", "0");
+        if (subMenu != null) {
+            menuBar.addItem(menuItem = new MenuItem(HasWidgetConcerns.debugMenuConcerns ? "ContextSubMenu" : "", subMenu));
+            menuItem.setSize("0", "0");
+        } else {
+            menuItem = null;
+        }
     }
 
     public void togleMenu() {

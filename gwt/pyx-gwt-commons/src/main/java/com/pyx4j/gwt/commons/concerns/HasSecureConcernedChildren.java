@@ -71,6 +71,10 @@ public interface HasSecureConcernedChildren extends HasSecureConcern {
         secureConcerns().add(secureConcern);
     }
 
+    default void removeSecureConcern(HasSecureConcern secureConcern) {
+        secureConcerns().remove(secureConcern);
+    }
+
     default void addWidgetSecureConcern(IsWidget widget) {
         if (widget instanceof HasSecureConcern) {
             addSecureConcern((HasSecureConcern) widget);
