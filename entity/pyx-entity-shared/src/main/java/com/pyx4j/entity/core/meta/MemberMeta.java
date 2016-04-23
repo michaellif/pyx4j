@@ -153,6 +153,8 @@ public interface MemberMeta {
      */
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
 
+    public <T extends Annotation> T[] getAnnotations(Class<T> annotationClass);
+
     /**
      * @param annotationClass
      *            that was marked with GwtAnnotation

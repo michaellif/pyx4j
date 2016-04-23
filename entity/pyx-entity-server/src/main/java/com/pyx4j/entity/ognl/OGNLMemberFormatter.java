@@ -17,25 +17,15 @@
  * Created on Apr 22, 2016
  * @author vlads
  */
-package com.pyx4j.entity.annotations.ognl;
+package com.pyx4j.entity.ognl;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.meta.MemberMeta;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Repeatable(OGNLModelColumns.class)
-@Target({ ElementType.METHOD })
-public @interface OGNLModelColumn {
+public interface OGNLMemberFormatter {
 
-    /**
-     * By Default Applicable for all Models
-     */
-    Class<? extends OGNLModel> model() default OGNLModel.class;
+    void append(IEntity proto, IObject<?> member, Path memberPath, MemberMeta memberMeta);
 
-    String description() default "";
-
-    boolean hide() default false;
 }

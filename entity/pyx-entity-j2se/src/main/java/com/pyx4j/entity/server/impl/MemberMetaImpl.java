@@ -417,6 +417,11 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public <T extends Annotation> T[] getAnnotations(Class<T> annotationClass) {
+        return method.getAnnotationsByType(annotationClass);
+    }
+
+    @Override
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return method.isAnnotationPresent(annotationClass);
     }

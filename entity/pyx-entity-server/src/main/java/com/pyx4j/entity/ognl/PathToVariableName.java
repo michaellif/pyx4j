@@ -17,25 +17,12 @@
  * Created on Apr 22, 2016
  * @author vlads
  */
-package com.pyx4j.entity.annotations.ognl;
+package com.pyx4j.entity.ognl;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.core.Path;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Repeatable(OGNLModelColumns.class)
-@Target({ ElementType.METHOD })
-public @interface OGNLModelColumn {
+public interface PathToVariableName {
 
-    /**
-     * By Default Applicable for all Models
-     */
-    Class<? extends OGNLModel> model() default OGNLModel.class;
+    String pathToVarname(Path memberPath);
 
-    String description() default "";
-
-    boolean hide() default false;
 }

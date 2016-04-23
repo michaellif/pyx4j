@@ -597,6 +597,12 @@
                 <version>3.13</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.googlecode.jatl</groupId>
+                <artifactId>jatl</artifactId>
+                <version>0.2.2</version>
+            </dependency>
+
             <!-- use the latest version instead of one ref by poi -->
             <dependency>
                 <groupId>org.apache.xmlbeans</groupId>
