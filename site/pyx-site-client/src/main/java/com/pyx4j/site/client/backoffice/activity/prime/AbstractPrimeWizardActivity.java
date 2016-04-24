@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-04
  * @author Vlad
  */
@@ -73,6 +73,7 @@ public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends Abs
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         getView().setPresenter(this);
+        onStart();
         populate();
         panel.setWidget(getView());
     }
@@ -111,7 +112,7 @@ public abstract class AbstractPrimeWizardActivity<E extends IEntity> extends Abs
 
     /**
      * Descendants may override this method to supply some initialization info.
-     * 
+     *
      */
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
         if (getPlace().getInitializationData() != null) {

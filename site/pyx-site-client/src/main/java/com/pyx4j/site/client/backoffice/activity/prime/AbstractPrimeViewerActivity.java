@@ -111,6 +111,7 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         getView().setPresenter(this);
+        onStart();
         populate();
         panel.setWidget(getView());
         MementoManager.restoreState(getView(), getPlace());

@@ -122,6 +122,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
         // should be called first in start - some views can set appropriate form according to the current mode
         getView().setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
         getView().setPresenter(this);
+        onStart();
         populate();
         panel.setWidget(getView());
     }
@@ -229,7 +230,7 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
 
     /**
      * TODO refactoring will be done at EOD 1.4.5
-     * 
+     *
      * @deprecated use onPopulate
      */
     @Deprecated

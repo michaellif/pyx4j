@@ -135,7 +135,7 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
         getView().getDataTablePanel().getDataSource().setParentEntityId(parentEntityId);
         getView().getDataTablePanel().setExternalFilters(externalFilters);
         getView().setPresenter(this);
-
+        onStart();
         MementoManager.restoreState(getView(), getPlace());
         if (populateOnStart) {
             populate();
