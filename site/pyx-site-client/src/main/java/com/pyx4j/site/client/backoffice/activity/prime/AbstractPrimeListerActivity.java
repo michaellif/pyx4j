@@ -127,6 +127,12 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
     }
 
     protected void parseExternalFilters(AppPlace place, Class<E> entityClass, EntityFiltersBuilder<E> filters) {
+        if (place instanceof CrudAppPlace) {
+            EntityFiltersBuilder<?> initializeFilters = ((CrudAppPlace) place).getListerInitializeFilters();
+            if (initializeFilters != null) {
+                filters.addAll(initializeFilters.getFilters());
+            }
+        }
     }
 
     @Override

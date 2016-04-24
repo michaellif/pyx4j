@@ -20,6 +20,7 @@
 package com.pyx4j.site.rpc;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
@@ -35,7 +36,11 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_TAB_IDX = "tabIdx";
 
+    // Used in New Entity
     private InitializationData initializationData;
+
+    // Used in Filter
+    private EntityFiltersBuilder<?> listerInitializeFilters;
 
     public static enum Type {
         lister, viewer, editor
@@ -133,11 +138,24 @@ public abstract class CrudAppPlace extends AppPlace {
         return initializationData;
     }
 
+    /**
+     * This filters are preserved by Lister Memento once parsed. The same way as used entered filters.
+     */
+    public EntityFiltersBuilder<?> getListerInitializeFilters() {
+        return listerInitializeFilters;
+    }
+
+    public void setListerInitializeFilters(EntityFiltersBuilder<?> filters) {
+        this.listerInitializeFilters = filters;
+    }
+
+    // I don't believe we ever used this.
     @Override
     public CrudAppPlace copy(AppPlace place) {
         super.copy(place);
         if (place instanceof CrudAppPlace) {
             initializationData = ((CrudAppPlace) place).initializationData;
+            listerInitializeFilters = ((CrudAppPlace) place).listerInitializeFilters;
         }
         return this;
     }
