@@ -31,7 +31,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -39,6 +38,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.CheckGroup;
@@ -122,11 +122,14 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
                 throw new Error("Filter editor member doesn't match filter criterion path");
             }
 
-            if (!(propertyCriterion.getValue() instanceof Collection)) {
-                throw new Error("Filter criterion value class is" + propertyCriterion.getValue().getClass().getSimpleName() + ". Collection is expected.");
+            Collection value;
+            if (propertyCriterion.getValue() instanceof Collection) {
+                value = (Collection) propertyCriterion.getValue();
+            } else {
+                value = Arrays.asList(propertyCriterion.getValue());
             }
 
-            checkGroup.setValue((Collection) propertyCriterion.getValue());
+            checkGroup.setValue(value);
         }
     }
 
@@ -147,6 +150,7 @@ public class MultiSelectFilterEditor extends FilterEditorBase {
     }
 
     class Selector<E> extends FlowPanel {
+
         private final CheckBox selectAll;
 
         private final CheckGroup<E> selectGroup;

@@ -42,7 +42,11 @@ public class RangeCriterion implements Criterion {
     }
 
     public RangeCriterion(IObject<?> member, Serializable fromValue, Serializable toValue) {
-        this.propertyPath = member.getPath();
+        this(member.getPath(), fromValue, toValue);
+    }
+
+    public RangeCriterion(Path path, Serializable fromValue, Serializable toValue) {
+        this.propertyPath = path;
         this.fromValue = fromValue;
         this.toValue = toValue;
     }

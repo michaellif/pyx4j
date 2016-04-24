@@ -29,15 +29,16 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.Label;
@@ -124,11 +125,33 @@ public class NumberFilterEditor extends FilterEditorBase {
             fromBox.setValue(null);
             toBox.setValue(null);
         } else {
-            if (!(criterion instanceof RangeCriterion)) {
-                throw new Error("Filter criterion isn't supported by editor");
+            RangeCriterion rangeCriterion;
+            if (criterion instanceof RangeCriterion) {
+                rangeCriterion = (RangeCriterion) criterion;
+            } else if (criterion instanceof PropertyCriterion) {
+                // TODO Change the editor type in future
+                PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
+                Serializable fromValue = null;
+                Serializable toValue = null;
+                switch (propertyCriterion.getRestriction()) {
+                case EQUAL:
+                    fromValue = toValue = propertyCriterion.getValue();
+                    break;
+                case GREATER_THAN:
+                case GREATER_THAN_OR_EQUAL:
+                    fromValue = propertyCriterion.getValue();
+                    break;
+                case LESS_THAN:
+                case LESS_THAN_OR_EQUAL:
+                    toValue = propertyCriterion.getValue();
+                    break;
+                default:
+                    throw new Error("Conversion from " + criterion + " to range unimplemented");
+                }
+                rangeCriterion = new RangeCriterion(propertyCriterion.getPropertyPath(), fromValue, toValue);
+            } else {
+                throw new Error("Conversion from " + criterion + " to range unimplemented");
             }
-
-            RangeCriterion rangeCriterion = (RangeCriterion) criterion;
 
             if (!getMember().getPath().equals(rangeCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't match filter criterion path");
