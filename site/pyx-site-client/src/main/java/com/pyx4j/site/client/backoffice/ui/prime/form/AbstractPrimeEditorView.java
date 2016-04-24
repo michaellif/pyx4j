@@ -149,6 +149,8 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
         }
 
         if (EditMode.newItem.equals(mode)) {
+            // TODO VladS this needs do be reviewed and generalized
+            // There is also an option to add Plural forms to Lister Places
             setCaption(getCaptionBase() + i18n.tr("New Item..."));
             getForm().setActiveFirstTab();
         } else {
