@@ -24,6 +24,7 @@ import java.util.Collection;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -54,7 +55,7 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
         if (selector.getValue() == null || selector.getValue().size() == 0) {
             return null;
         } else {
-            return PropertyCriterion.in(getMember(), selector.getValue());
+            return PropertyCriterion.in(getMember(), selector.getValue(), AttachLevel.ToStringMembers);
         }
     }
 

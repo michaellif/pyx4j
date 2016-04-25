@@ -26,6 +26,7 @@ import java.util.EnumSet;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
@@ -174,6 +175,17 @@ public class PropertyCriterion implements Criterion {
 
     public static <T extends Collection<?>> PropertyCriterion in(IObject<?> member, T values) {
         return new PropertyCriterion(member, Restriction.IN, values);
+    }
+
+    // Create collection with To String values / Not just IDs as above so this can be used in presentation
+    public static <E extends IEntity, T extends Collection<E>> PropertyCriterion in(IObject<?> member, T values, AttachLevel attachLevel) {
+        Vector<E> serializableValues = new Vector<>();
+        for (E value : values) {
+            value = value.duplicate();
+            value.setAttachLevel(attachLevel);
+            serializableValues.add(value);
+        }
+        return new PropertyCriterion(member.getPath(), Restriction.IN, (Serializable) serializableValues);
     }
 
     public static PropertyCriterion in(IObject<?> member, Class<? extends IEntity> values) {
