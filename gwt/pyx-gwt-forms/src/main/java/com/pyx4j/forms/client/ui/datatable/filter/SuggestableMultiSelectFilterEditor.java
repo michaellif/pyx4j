@@ -19,6 +19,7 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.gwt.core.client.Scheduler;
@@ -80,11 +81,14 @@ public class SuggestableMultiSelectFilterEditor<E extends IEntity> extends Filte
                 throw new Error("Filter editor member doesn't match filter criterion path");
             }
 
-            if (!(propertyCriterion.getValue() instanceof Collection)) {
-                throw new Error("Filter criterion value class is" + propertyCriterion.getValue().getClass().getSimpleName() + ". Collection is expected.");
+            Collection<E> value;
+            if (propertyCriterion.getValue() instanceof Collection) {
+                value = (Collection<E>) propertyCriterion.getValue();
+            } else {
+                value = Arrays.asList((E) propertyCriterion.getValue());
             }
 
-            selector.setValue((Collection<E>) propertyCriterion.getValue());
+            selector.setValue(value);
         }
     }
 

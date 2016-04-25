@@ -82,10 +82,12 @@ public class FilterItem implements Comparable<FilterItem> {
         } else if (criterion instanceof PropertyCriterion) {
             Serializable value = ((PropertyCriterion) criterion).getValue();
             if (value instanceof Collection) {
-                if (((Collection<?>) value).size() == 0) {
+                @SuppressWarnings("unchecked")
+                Collection<Object> valuesCollection = (Collection<Object>) value;
+                if (valuesCollection.size() == 0) {
                     valueToString = i18n.tr("None");
                 } else if (!columnDescriptor.getMemeber().getValueClass().equals(Boolean.class)) {
-                    valueToString = ConverterUtils.convertCollection((Collection<Object>) value, new ToStringConverter<Object>() {
+                    valueToString = ConverterUtils.convertCollection(valuesCollection, new ToStringConverter<Object>() {
 
                         @Override
                         public String toString(Object value) {
@@ -98,7 +100,7 @@ public class FilterItem implements Comparable<FilterItem> {
 
                     }, ",");
                 } else {
-                    valueToString = ConverterUtils.convertCollection((Collection<Object>) value, new ToStringConverter<Object>() {
+                    valueToString = ConverterUtils.convertCollection(valuesCollection, new ToStringConverter<Object>() {
 
                         @Override
                         public String toString(Object value) {
@@ -114,7 +116,11 @@ public class FilterItem implements Comparable<FilterItem> {
                     }, ",");
                 }
             } else {
-                valueToString = (value == null) ? i18n.tr("All") : value.toString();
+                if (value instanceof IStringView) {
+                    valueToString = ((IStringView) value).getStringView();
+                } else {
+                    valueToString = value.toString();
+                }
             }
         } else if (criterion instanceof RangeCriterion) {
             Serializable fromValue = ((RangeCriterion) criterion).getFromValue();

@@ -103,6 +103,15 @@ public class PropertyCriterion implements Criterion {
         this(member, restriction, EntityFactory.create(value));
     }
 
+    // Filter with To String values / Not just IDs as above so this can be used in presentation
+    public PropertyCriterion(IObject<?> member, Restriction restriction, IEntity value, AttachLevel attachLevel) {
+        this.propertyPath = member.getPath();
+        this.restriction = restriction;
+        value = value.duplicate();
+        value.setAttachLevel(attachLevel);
+        this.value = value;
+    }
+
     public PropertyCriterion(IObject<?> member, Restriction restriction, Collection<?> value) {
         this(member, restriction, createSerializableCollection(value));
     }

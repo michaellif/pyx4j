@@ -130,25 +130,7 @@ public class NumberFilterEditor extends FilterEditorBase {
                 rangeCriterion = (RangeCriterion) criterion;
             } else if (criterion instanceof PropertyCriterion) {
                 // TODO Change the editor type in future
-                PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
-                Serializable fromValue = null;
-                Serializable toValue = null;
-                switch (propertyCriterion.getRestriction()) {
-                case EQUAL:
-                    fromValue = toValue = propertyCriterion.getValue();
-                    break;
-                case GREATER_THAN:
-                case GREATER_THAN_OR_EQUAL:
-                    fromValue = propertyCriterion.getValue();
-                    break;
-                case LESS_THAN:
-                case LESS_THAN_OR_EQUAL:
-                    toValue = propertyCriterion.getValue();
-                    break;
-                default:
-                    throw new Error("Conversion from " + criterion + " to range unimplemented");
-                }
-                rangeCriterion = new RangeCriterion(propertyCriterion.getPropertyPath(), fromValue, toValue);
+                rangeCriterion = toRangeCriterion((PropertyCriterion) criterion);
             } else {
                 throw new Error("Conversion from " + criterion + " to range unimplemented");
             }

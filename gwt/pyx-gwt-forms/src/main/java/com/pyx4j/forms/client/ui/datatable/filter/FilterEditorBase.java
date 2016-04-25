@@ -19,9 +19,13 @@
  */
 package com.pyx4j.forms.client.ui.datatable.filter;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.core.criterion.RangeCriterion;
 
 public abstract class FilterEditorBase extends Composite implements IFilterEditor {
 
@@ -43,5 +47,26 @@ public abstract class FilterEditorBase extends Composite implements IFilterEdito
     @Override
     public void onHidden() {
 
+    }
+
+    protected RangeCriterion toRangeCriterion(PropertyCriterion propertyCriterion) {
+        Serializable fromValue = null;
+        Serializable toValue = null;
+        switch (propertyCriterion.getRestriction()) {
+        case EQUAL:
+            fromValue = toValue = propertyCriterion.getValue();
+            break;
+        case GREATER_THAN:
+        case GREATER_THAN_OR_EQUAL:
+            fromValue = propertyCriterion.getValue();
+            break;
+        case LESS_THAN:
+        case LESS_THAN_OR_EQUAL:
+            toValue = propertyCriterion.getValue();
+            break;
+        default:
+            throw new Error("Conversion from " + propertyCriterion + " to range unimplemented");
+        }
+        return new RangeCriterion(propertyCriterion.getPropertyPath(), fromValue, toValue);
     }
 }
