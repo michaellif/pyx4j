@@ -35,7 +35,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.shared.TextSearchDocument;
 
 @SuppressWarnings("serial")
-public class PropertyCriterion implements Criterion {
+public class PropertyCriterion implements Criterion, CriterionPathBound {
 
     public static final char WILDCARD_CHAR = '*';
 
@@ -241,6 +241,7 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member, Restriction.LESS_THAN_OR_EQUAL, value);
     }
 
+    @Override
     public Path getPropertyPath() {
         return this.propertyPath;
     }
@@ -285,5 +286,14 @@ public class PropertyCriterion implements Criterion {
     @Override
     public boolean isEmpty() {
         return false;
+    }
+
+    @Override
+    public PropertyCriterion duplicated(Path newPath) {
+        PropertyCriterion propertyCriterion = new PropertyCriterion();
+        propertyCriterion.propertyPath = newPath;
+        propertyCriterion.restriction = this.getRestriction();
+        propertyCriterion.value = this.getValue();
+        return propertyCriterion;
     }
 }

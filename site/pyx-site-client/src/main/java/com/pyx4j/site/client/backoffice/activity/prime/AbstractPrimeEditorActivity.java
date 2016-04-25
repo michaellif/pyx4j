@@ -202,6 +202,8 @@ public abstract class AbstractPrimeEditorActivity<E extends IEntity> extends Abs
                     }
                     parent.setPrimaryKey(getParentId());
                 }
+            } else {
+                assert false : "Can't EntityParent";
             }
         }
     }

@@ -79,6 +79,8 @@ public abstract class CrudAppPlace extends AppPlace {
         return this;
     }
 
+    // TODO remove this: See why AbstractPrimeListerActivity parentEntityId
+    @Deprecated
     public CrudAppPlace formListerPlace(Key parentID) {
         setType(Type.lister);
         if (parentID != null) {

@@ -21,12 +21,17 @@ package com.pyx4j.site.client.backoffice.activity.prime;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.CriterionPathBound;
 import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.forms.client.ui.datatable.DataTableModelEvent;
 import com.pyx4j.forms.client.ui.datatable.DataTableModelListener;
@@ -38,8 +43,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class AbstractPrimeListerActivity<E extends IEntity> extends AbstractPrimeActivity<IPrimeListerView<?>> implements IPrimeListerPresenter<E> {
 
+    private static final Logger log = LoggerFactory.getLogger(AbstractPrimeListerActivity.class);
+
     private final Class<E> entityClass;
 
+    // This is very bad filter since it is stored in View or Lister forever and never resets
+    // And is not show in filter.
+    // There is a solution in CEntityCollectionCrudHyperlink AppPlaceByOwnerBuilder
+    @Deprecated
     private Key parentEntityId;
 
     private List<Criterion> externalFilters;
@@ -130,7 +141,22 @@ public abstract class AbstractPrimeListerActivity<E extends IEntity> extends Abs
         if (place instanceof CrudAppPlace) {
             EntityFiltersBuilder<?> initializeFilters = ((CrudAppPlace) place).getListerInitializeFilters();
             if (initializeFilters != null) {
-                filters.addAll(initializeFilters.getFilters());
+                // TODO Considerer having rootEntityClass forgiving Path
+                // Filters BO and TO are the same
+                if (entityClass == initializeFilters.proto().getValueClass()) {
+                    filters.addAll(initializeFilters.getFilters());
+                } else {
+                    // Convert filters BO to TO when possible
+                    for (Criterion criterion : initializeFilters.getFilters()) {
+                        if (criterion instanceof CriterionPathBound) {
+                            // Convert to TO path
+                            Path propertyPath = new Path(entityClass, ((CriterionPathBound) criterion).getPropertyPath().getPathMembers());
+                            filters.add(((CriterionPathBound) criterion).duplicated(propertyPath));
+                        } else {
+                            throw new IllegalArgumentException("criterion conversion required " + criterion + " to path of " + entityClass);
+                        }
+                    }
+                }
             }
         }
     }

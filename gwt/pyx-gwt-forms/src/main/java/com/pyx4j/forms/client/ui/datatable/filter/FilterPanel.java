@@ -34,6 +34,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -168,7 +169,11 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
                     }
                 }
                 if (!columnFound) {
-                    log.error("Filter ColumnDescriptor not found for {}", criterion);
+                    if (ApplicationMode.isDevelopment()) {
+                        throw new Error("Filter ColumnDescriptor not found for " + criterion);
+                    } else {
+                        log.error("Filter ColumnDescriptor not found for {}", criterion);
+                    }
                 }
             }
         }
