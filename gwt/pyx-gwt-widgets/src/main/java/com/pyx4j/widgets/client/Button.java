@@ -122,6 +122,14 @@ public class Button extends ButtonBase {
         }
     }
 
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+        if (imageResource != null) {
+            ensureDebugId(getImageHolder().getElement(), baseID, "image");
+        }
+    }
+
     public void setMenu(MenuBar menu) {
         if (menuHolder == null && menu != null) {
             menuHolder = new ContextMenuHolder();
