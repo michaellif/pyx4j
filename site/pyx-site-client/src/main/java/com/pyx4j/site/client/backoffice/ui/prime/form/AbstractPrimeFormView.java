@@ -130,6 +130,11 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
     }
 
     @Override
+    public E getValue() {
+        return getForm().getValue();
+    }
+
+    @Override
     public void setActiveTab(int index) {
         if (index >= 0) {
             assert (form != null);

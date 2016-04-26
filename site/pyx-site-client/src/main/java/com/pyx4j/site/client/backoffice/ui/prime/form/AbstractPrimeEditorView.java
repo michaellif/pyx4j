@@ -177,11 +177,6 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
     }
 
     @Override
-    public E getValue() {
-        return getForm().getValue();
-    }
-
-    @Override
     public boolean onSaveFail(Throwable caught) {
         if (caught instanceof UniqueConstraintUserRuntimeException) {
             showErrorDialog(caught.getMessage());
