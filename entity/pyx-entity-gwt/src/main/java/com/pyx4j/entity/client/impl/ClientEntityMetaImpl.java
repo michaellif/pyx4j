@@ -40,14 +40,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 public abstract class ClientEntityMetaImpl implements EntityMeta {
 
-    //TODO make it private
-    protected static final I18n i18n = I18n.get(ClientEntityMetaImpl.class);
+    private static final I18n i18n = I18n.get(ClientEntityMetaImpl.class);
 
     private final Class<? extends IEntity> entityClass;
 
     private final Class<? extends IEntity> expandedFromClass;
-
-    private final String captionNL;
 
     private final String caption;
 
@@ -75,12 +72,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private Set<Class<?>> annotations;
 
-    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, Class<? extends IEntity> expandedFromClass, String captionNL, String caption,
-            String description, String watermark, boolean persistenceTransient, boolean rpcTransient, String toStringFormat, String nullString,
-            String ownerMemberName, String[] memberNamesToString, String[] businessEqualMemberNames) {
+    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, Class<? extends IEntity> expandedFromClass, String caption, String description,
+            String watermark, boolean persistenceTransient, boolean rpcTransient, String toStringFormat, String nullString, String ownerMemberName,
+            String[] memberNamesToString, String[] businessEqualMemberNames) {
         this.entityClass = entityClass;
         this.expandedFromClass = expandedFromClass;
-        this.captionNL = captionNL;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
@@ -115,22 +111,22 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     @Override
     public String getCaption() {
-        return caption;
+        return i18n.tr(caption);
     }
 
     @Override
     public String getCaptionNL() {
-        return captionNL;
+        return caption;
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return i18n.tr(description);
     }
 
     @Override
     public String getWatermark() {
-        return watermark;
+        return i18n.tr(watermark);
     }
 
     @Override
@@ -185,7 +181,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
      */
     protected abstract MemberMeta createMemberMeta(String memberName);
 
-    private static MemberMeta primaryKeyMeta = new ClientMemberMetaImpl(IEntity.PRIMARY_KEY, "Id", i18n.tr("Id"), "", "", com.pyx4j.commons.Key.class,
+    private static MemberMeta primaryKeyMeta = new ClientMemberMetaImpl(IEntity.PRIMARY_KEY, "Id", "", "", com.pyx4j.commons.Key.class,
             com.pyx4j.entity.core.IPrimitive.class, ObjectClassType.Primitive, false, false, false, false, AttachLevel.Attached, false, true, false, false,
             false, -1, null, false, "", false, null);
 
@@ -227,12 +223,12 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     @Override
     public String getToStringFormat() {
-        return toStringFormat;
+        return i18n.tr(toStringFormat);
     }
 
     @Override
     public String getNullString() {
-        return nullString;
+        return i18n.tr(nullString);
     }
 
     @Override

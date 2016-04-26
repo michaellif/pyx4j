@@ -114,15 +114,6 @@ public class AppPlaceListingGenerator extends Generator {
         }
     }
 
-    static String i18nEscapeSourceString(String value) {
-        String s = escapeSourceString(value);
-        if (s.equals("\"\"") || s.equals("null")) {
-            return s;
-        } else {
-            return "i18n.tr(" + s + ")";
-        }
-    }
-
     JClassType getSiteMapClass(JClassType placeClassType) {
         JClassType type = placeClassType.getEnclosingType();
         while (type != null) {
@@ -195,8 +186,7 @@ public class AppPlaceListingGenerator extends Generator {
                 }
                 writer.print("new ");
                 writer.print(AppPlaceInfo.class.getSimpleName());
-                writer.print(
-                        "(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", " + i18nEscapeSourceString(captionPlural) + ")");
+                writer.print("(" + escapeSourceString(navigLabel) + ", " + escapeSourceString(caption) + ", " + escapeSourceString(captionPlural) + ")");
 
                 writer.println(");");
             }
