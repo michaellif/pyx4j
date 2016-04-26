@@ -33,7 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.IPrimeEditorPresenter;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.MenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class AbstractPrimeEditorView<E extends IEntity> extends AbstractPrimeFormView<E, IPrimeEditorPresenter> implements IPrimeEditorView<E> {
@@ -130,7 +130,7 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
         enableButtons(false);
 
         if (value instanceof ILooseVersioning && value.getPrimaryKey() != null) {
-            ButtonMenuBar menu = btnSave.createMenu();
+            MenuBar menu = new MenuBar();
             menu.addItem(i18n.tr("Save as New Version"), new Command() {
                 @Override
                 public void execute() {
