@@ -239,6 +239,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public <T extends Annotation> T[] getAnnotations(Class<T> annotationClass) {
+        throw new UnsupportedOperationException();
+    }
+
     public void addAnnotation(Class<? extends Annotation> annotationClass) {
         if (annotations == null) {
             annotations = new HashSet<Class<?>>();

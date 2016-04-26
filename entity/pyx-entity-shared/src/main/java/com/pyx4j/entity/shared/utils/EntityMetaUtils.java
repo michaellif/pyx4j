@@ -20,6 +20,7 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -76,6 +77,14 @@ public class EntityMetaUtils {
         EntityMeta em = proto.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+
+            if (memberMeta.getValueClass().equals(IEntity.class)) {
+                if (false) {
+                    throw new Error("Should not use abstract IEntity class as member '" + memberName + "' of " + proto.getValueClass().getName());
+                }
+                continue;
+            }
+
             IObject<?> member = proto.getMember(memberName);
             Path memberPath = proto.getMember(memberName).getPath();
 
@@ -86,8 +95,19 @@ public class EntityMetaUtils {
                 result.add(memberPath);
                 break;
             case AcceptRecursively:
-                if (acceptance == Acceptance.AcceptRecursively && memberMeta.isEntity()) {
-                    getMembersRecursively((IEntity) member, filter, processed, result);
+                if (acceptance == Acceptance.AcceptRecursively) {
+                    switch (memberMeta.getObjectClassType()) {
+                    case Entity:
+                        getMembersRecursively((IEntity) member, filter, processed, result);
+                        break;
+                    case EntityList:
+                    case EntitySet:
+                        @SuppressWarnings("unchecked")
+                        ICollection<IEntity, ?> memberCollection = (ICollection<IEntity, ?>) member;
+                        getMembersRecursively(memberCollection.$(), filter, processed, result);
+                    default:
+                        break;
+                    }
                 }
                 break;
             default:
@@ -96,9 +116,19 @@ public class EntityMetaUtils {
         }
     }
 
+    // TODO create a better name
     public static interface IEntityClassProcesor {
 
         Collection<Class<? extends IEntity>> getClasses(IEntity proto, IObject<?> member, Path memberPath, MemberMeta memberMeta);
+
+    }
+
+    public static class NoHierarchyIEntityClassesProcesor implements IEntityClassProcesor {
+
+        @Override
+        public Collection<Class<? extends IEntity>> getClasses(IEntity proto, IObject<?> member, Path memberPath, MemberMeta memberMeta) {
+            return Arrays.asList(proto.getValueClass());
+        }
 
     }
 
@@ -118,6 +148,12 @@ public class EntityMetaUtils {
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (ObjectClassType.Primitive == memberMeta.getObjectClassType() || ObjectClassType.PrimitiveSet == memberMeta.getObjectClassType()) {
+                continue;
+            }
+            if (memberMeta.getValueClass().equals(IEntity.class)) {
+                if (false) {
+                    throw new Error("Should not use abstract IEntity class as member '" + memberName + "' of " + proto.getValueClass().getName());
+                }
                 continue;
             }
 
@@ -141,7 +177,6 @@ public class EntityMetaUtils {
                         memberCollection, memberPath, memberMeta)) {
                     referencedClasses.add(entityClass);
                     getRefferencesRecursively(EntityFactory.getEntityPrototype(entityClass), processor, processed, referencedClasses);
-
                 }
             default:
                 break;
