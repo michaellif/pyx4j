@@ -54,41 +54,82 @@ public class OGNLModelGraph {
         return variables;
     }
 
+    private static class ParsingState {
+
+        String itemName;
+
+        String arrayPathPrefix;
+
+        public ParsingState(String itemName, String arrayPathPrefix) {
+            this.itemName = itemName;
+            this.arrayPathPrefix = arrayPathPrefix;
+        }
+
+        String toItemName(String fullVariableName) {
+            return "${" + itemName + "." + fullVariableName.replace(arrayPathPrefix + "[0].", "");
+        }
+
+    }
+
     public static <E extends OGNLModel & IEntity> String createThymeleafExample(final Class<E> modelClass) {
         StringWriter stringWriter = new StringWriter();
         final Html html = new Html(stringWriter);
 
         final PathToVariableName namesFormatter = new OGNLPathToVariableName();
 
-        Stack<String> arrays = new Stack<>();
+        Stack<ParsingState> nestedCollections = new Stack<>();
 
         apply(modelClass, new OGNLMemberFormatter() {
 
             @Override
             public void append(IEntity proto, IObject<?> member, Path memberPath, MemberMeta memberMeta) {
-                String name = namesFormatter.pathToVarname(memberPath);
+                String variableName = namesFormatter.pathToVarname(memberPath);
+
+                while ((!nestedCollections.isEmpty()) && !variableName.startsWith(nestedCollections.peek().arrayPathPrefix)) {
+                    // End of member of array
+                    nestedCollections.pop();
+                    html.end().end().end();
+                    // Fallback to default print
+                }
 
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    arrays.push(name.substring(0, name.length() - 1)); // remove last } from name
+                    ParsingState state;
+                    state = new ParsingState(member.getFieldName(), variableName.substring(0, variableName.length() - 1)); // remove last } from name
+
+                    if (!nestedCollections.isEmpty()) {
+                        ParsingState topState = nestedCollections.peek();
+                        variableName = topState.toItemName(variableName);
+                    }
+
+                    nestedCollections.push(state);
                     // Start array
-                    html.b().text("listing  of " + member.getFieldName()).end();
-                    html.table().tr().attr("th:each", "item : " + name);
+                    html.b().text("Listing of " + member.getFieldName()).attr("style", "margin:0 0 0 10");
+
+                    html.end();
+                    html.table().attr("style", "margin:0 0 0 10");
+                    html.tr().attr("th:each", state.itemName + " : " + variableName).td();
                     return;
-                } else if ((arrays.size() > 0) && !name.startsWith(arrays.peek())) {
-                    // End of member of array
-                    arrays.pop();
-                    html.end().end();
-                    // Fallback to default print
-                } else if (arrays.size() > 0) {
+                } else if (!nestedCollections.isEmpty()) {
                     // change the name to start with 'item'
-                    name = "${item." + name.replace(arrays.peek() + "[0].", "");
+                    ParsingState state = nestedCollections.peek();
+                    variableName = state.toItemName(variableName);
                 }
 
                 //TODO Something more creative can be done here.
 
-                html.span().text(name + " = ").end().span().attr("th:text", name).text(name).end().br();
+                html.span().text(variableName + " = ").end();
+
+                html.span().attr("th:text", variableName).text(variableName).end();
+
+                html.br().end();
+
             }
         });
+
+        while (!nestedCollections.isEmpty()) {
+            nestedCollections.pop();
+            html.end().end().end();
+        }
 
         return stringWriter.getBuffer().toString();
     }
