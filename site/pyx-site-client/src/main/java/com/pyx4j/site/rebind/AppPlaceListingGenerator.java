@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.atteo.evo.inflector.English;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.core.ext.Generator;
@@ -172,10 +174,12 @@ public class AppPlaceListingGenerator extends Generator {
 
                 String caption = null;
                 String navigLabel = null;
+                String captionPlural = null;
 
                 PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
                 if (placeProperties != null) {
                     caption = placeProperties.caption();
+                    captionPlural = placeProperties.captionPlural();
                     navigLabel = placeProperties.navigLabel();
                 }
 
@@ -183,12 +187,16 @@ public class AppPlaceListingGenerator extends Generator {
                 if (caption == null || I18nAnnotation.DEFAULT_VALUE.equals(caption)) {
                     caption = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(jClassType.getSimpleSourceName()));
                 }
+                if (captionPlural == null || I18nAnnotation.DEFAULT_VALUE.equals(captionPlural)) {
+                    captionPlural = English.plural(caption);
+                }
                 if (navigLabel == null || I18nAnnotation.DEFAULT_VALUE.equals(navigLabel)) {
-                    navigLabel = caption;
+                    navigLabel = captionPlural;
                 }
                 writer.print("new ");
                 writer.print(AppPlaceInfo.class.getSimpleName());
-                writer.print("(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ")");
+                writer.print(
+                        "(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", " + i18nEscapeSourceString(captionPlural) + ")");
 
                 writer.println(");");
             }

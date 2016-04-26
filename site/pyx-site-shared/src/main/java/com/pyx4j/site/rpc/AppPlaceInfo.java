@@ -31,6 +31,14 @@ public class AppPlaceInfo {
 
     private final String caption;
 
+    private final String captionPlural;
+
+    public AppPlaceInfo(String navigLabel, String caption, String captionPlural) {
+        this.navigLabel = navigLabel;
+        this.caption = caption;
+        this.captionPlural = captionPlural;
+    }
+
     public String getNavigLabel() {
         return navigLabel;
     }
@@ -39,9 +47,8 @@ public class AppPlaceInfo {
         return caption;
     }
 
-    public AppPlaceInfo(String navigLabel, String caption) {
-        this.navigLabel = navigLabel != null && !navigLabel.equals("") ? navigLabel : null;
-        this.caption = caption != null && !caption.equals("") ? caption : null;
+    public String getCaptionPlural() {
+        return captionPlural;
     }
 
     public static String getPlaceId(Class<? extends Place> clazz) {
