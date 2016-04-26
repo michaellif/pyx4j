@@ -19,7 +19,6 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
@@ -161,51 +160,6 @@ public class Button extends ButtonBase {
             buttonMenuIndicator.setVisible(this.menu != null && this.menu.isVisible());
         }
         super.applyVisibilityRules();
-    }
-
-    @Deprecated
-    public ButtonMenuBar createMenu() {
-        ButtonMenuBar menu = new ButtonMenuBar();
-        return menu;
-    }
-
-    /**
-     *
-     * @deprecated renamed to com.pyx4j.widgets.client.MenuBar
-     *
-     */
-    @Deprecated
-    public static class ButtonMenuBar extends com.pyx4j.widgets.client.MenuBar {
-
-        public ButtonMenuBar() {
-            super();
-        }
-    }
-
-    /**
-     *
-     * @deprecated renamed to com.pyx4j.widgets.client.MenuItem
-     *
-     */
-    @Deprecated
-    public static class SecureMenuItem extends com.pyx4j.widgets.client.MenuItem {
-
-        public SecureMenuItem(String text, Class<? extends ActionId> actionId, ScheduledCommand cmd) {
-            super(text, cmd, actionId);
-        }
-
-        public SecureMenuItem(String text, ButtonMenuBar subMenu, Permission... permissions) {
-            super(text, subMenu, permissions);
-        }
-
-        public SecureMenuItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
-            super(text, cmd, actionId);
-        }
-
-        public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
-            super(text, cmd, permissions);
-        }
-
     }
 
 }

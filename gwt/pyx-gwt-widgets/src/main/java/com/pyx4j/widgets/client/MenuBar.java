@@ -152,8 +152,15 @@ public class MenuBar extends AccessibleMenuBar implements HasWidgetConcerns, Has
     }
 
     @Override
+    @Deprecated
     public List<com.google.gwt.user.client.ui.MenuItem> getItems() {
         return super.getItems();
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public List<MenuItem> getMenuItems() {
+        List raw = super.getItems();
+        return raw;
     }
 
     @Override
