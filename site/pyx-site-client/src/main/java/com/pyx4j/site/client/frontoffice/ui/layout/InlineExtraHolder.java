@@ -23,12 +23,12 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 
@@ -47,10 +47,10 @@ public class InlineExtraHolder extends SimplePanel {
         this.extra1Caption = extra1Caption;
         this.extra2Caption = extra2Caption;
 
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getStyle().setDisplay(Display.INLINE_BLOCK);
 
         setWidget(contentPanel = new FlowPanel());
-        contentPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        contentPanel.getStyle().setDisplay(Display.INLINE_BLOCK);
 
         layout();
     }
@@ -88,24 +88,24 @@ public class InlineExtraHolder extends SimplePanel {
             contentPanel.setHeight("auto");
 
             //TODO investigate why container's getAbsoluteTop() changes when child's position changes from STATIC to FIXED
-            //Workaround - use 10px threshold 
+            //Workaround - use 10px threshold
             if (getAbsoluteTop() > offsetTop + 10) {
-                contentPanel.getElement().getStyle().setPosition(Position.STATIC);
-                getElement().getStyle().setProperty("width", "auto");
+                contentPanel.getStyle().setPosition(Position.STATIC);
+                getStyle().setProperty("width", "auto");
             } else if (getAbsoluteTop() < offsetTop - 10) {
-                contentPanel.getElement().getStyle().setPosition(Position.FIXED);
-                getElement().getStyle().setWidth(contentPanel.getOffsetWidth(), Unit.PX);
+                contentPanel.getStyle().setPosition(Position.FIXED);
+                getStyle().setWidth(contentPanel.getOffsetWidth(), Unit.PX);
                 if ((offsetTop + contentPanel.getOffsetHeight()) <= offsetBottom) {
-                    contentPanel.getElement().getStyle().setProperty("top", offsetTop + "px");
-                    contentPanel.getElement().getStyle().setProperty("bottom", "auto");
+                    contentPanel.getStyle().setProperty("top", offsetTop + "px");
+                    contentPanel.getStyle().setProperty("bottom", "auto");
                 } else {
-                    contentPanel.getElement().getStyle().setProperty("bottom", Window.getClientHeight() - offsetBottom + "px");
-                    contentPanel.getElement().getStyle().setProperty("top", "auto");
+                    contentPanel.getStyle().setProperty("bottom", Window.getClientHeight() - offsetBottom + "px");
+                    contentPanel.getStyle().setProperty("top", "auto");
                 }
             }
 
         } else {
-            getElement().getStyle().setWidth(0, Unit.PX);
+            getStyle().setWidth(0, Unit.PX);
         }
 
     }

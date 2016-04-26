@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2015 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 11, 2010
- * @author Misha
+ * Created on Apr 18, 2016
+ * @author vlads
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.gwt.commons.ui;
 
-public class CColorPicker extends CFocusComponent<Integer, NColorPicker> {
+public class SplitLayoutPanel extends com.google.gwt.user.client.ui.SplitLayoutPanel implements HasStyle {
 
-    private boolean hueOnly = false;
-
-    public CColorPicker() {
-        this(false);
+    public SplitLayoutPanel() {
     }
 
-    public CColorPicker(boolean hueOnly) {
-        this.hueOnly = hueOnly;
-        setNativeComponent(new NColorPicker(this));
-    }
-
-    public boolean isHueOnly() {
-        return hueOnly;
+    public SplitLayoutPanel(int splitterSize) {
+        super(splitterSize);
     }
 
 }

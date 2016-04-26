@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.forms.client.ui.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.IPrimeEditorPresenter;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -48,7 +49,11 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
     protected EditMode mode;
 
     public AbstractPrimeEditorView() {
-        super();
+        this(LayoutSystem.LayoutPanels);
+    }
+
+    public AbstractPrimeEditorView(LayoutSystem layoutSystem) {
+        super(layoutSystem);
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
@@ -144,8 +149,10 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
         }
 
         if (EditMode.newItem.equals(mode)) {
+            // TODO VladS this needs do be reviewed and generalized
+            // There is also an option to add Plural forms to Lister Places
             setCaption(getCaptionBase() + i18n.tr("New Item..."));
-            getForm().setActiveTab(0);
+            getForm().setActiveFirstTab();
         } else {
             setCaption(getCaptionBase() + value.getStringView());
         }

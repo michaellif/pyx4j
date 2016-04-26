@@ -19,8 +19,9 @@
  */
 package com.pyx4j.site.client.ui.sidemenu;
 
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.Image;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.site.client.resources.SiteImages;
@@ -35,7 +36,15 @@ public class SideMenuFolderItem extends SideMenuItem {
 
     private boolean expanded;
 
+    /**
+     * @deprecated use the one with IDebugId
+     */
+    @Deprecated
     public SideMenuFolderItem(SideMenuList submenu, String caption, ButtonImages images, Permission... permission) {
+        this(submenu, null, caption, images, permission);
+    }
+
+    public SideMenuFolderItem(SideMenuList submenu, IDebugId debugId, String caption, ButtonImages images, Permission... permission) {
         super(null, caption, images, permission);
         assert submenu != null;
 
@@ -56,6 +65,10 @@ public class SideMenuFolderItem extends SideMenuItem {
         });
 
         setExpanded(false);
+
+        if (debugId != null) {
+            this.setDebugId(debugId);
+        }
     }
 
     @Override

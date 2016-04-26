@@ -22,8 +22,8 @@ package com.pyx4j.forms.client.ui.datatable;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.Toolbar;
 

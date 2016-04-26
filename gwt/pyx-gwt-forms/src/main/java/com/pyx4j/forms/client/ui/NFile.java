@@ -23,7 +23,6 @@ import java.text.ParseException;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -31,6 +30,7 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -112,7 +112,7 @@ public class NFile extends NField<IFile<?>, NFile.ContentPanel, CFile, NFile.Con
         private final Anchor uploadAnchor;
 
         public ContentPanel() {
-            getElement().getStyle().setProperty("wordBreak", "break-all");
+            getStyle().setProperty("wordBreak", "break-all");
             fileNameAnchor = new Anchor("", new Command() {
 
                 @Override
@@ -143,7 +143,7 @@ public class NFile extends NField<IFile<?>, NFile.ContentPanel, CFile, NFile.Con
 
             if (value == null || value.isNull()) {
                 clearButton.setVisible(false);
-                uploadAnchor.setVisible(true);
+                uploadAnchor.setVisible(NFile.this.isEditable());
                 fileNameAnchor.setVisible(false);
                 fileNameAnchor.setText("");
             } else {

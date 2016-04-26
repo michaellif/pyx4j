@@ -27,7 +27,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -152,13 +152,19 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
                     notInOptionsValue = null;
                 }
 
-                if ((this.value != null) && (getCComponent().getPolicy() == NotInOptionsPolicy.DISCARD) && (getNativeOptionIndex(this.value) == -1)) {
-                    // Discard selection
-                    getCComponent().setValue(null, false);
-                }
-
                 for (E o : getCComponent().getOptions()) {
                     shownOptions.add(o);
+                }
+
+                // See if value is in list created above.
+                if ((this.value != null) && (getCComponent().getPolicy() == NotInOptionsPolicy.DISCARD) && (getNativeOptionIndex(this.value) == -1)) {
+                    // Discard selection
+                    if (getCComponent().isPopulated()) {
+                        getCComponent().setValue(null, false);
+                    } else {
+                        // can't reset the value, it should be ignored.
+                        this.value = null;
+                    }
                 }
 
                 for (E o : shownOptions) {

@@ -29,15 +29,16 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.Label;
@@ -75,7 +76,7 @@ public class NumberFilterEditor extends FilterEditorBase {
         fromBox = new NumberBox();
         contentPanel.add(fromBox);
         fromBoxValidationLabel = new ValidationLabel(fromBox);
-        fromBoxValidationLabel.getElement().getStyle().setColor("red");
+        fromBoxValidationLabel.getStyle().setColor("red");
         contentPanel.add(fromBoxValidationLabel);
 
         fromBox.addValueChangeHandler(new ValueChangeHandler<Serializable>() {
@@ -91,7 +92,7 @@ public class NumberFilterEditor extends FilterEditorBase {
         toBox = new NumberBox();
         contentPanel.add(toBox);
         toBoxValidationLabel = new ValidationLabel(toBox);
-        toBoxValidationLabel.getElement().getStyle().setColor("red");
+        toBoxValidationLabel.getStyle().setColor("red");
         contentPanel.add(toBoxValidationLabel);
 
         toBox.addValueChangeHandler(new ValueChangeHandler<Serializable>() {
@@ -103,7 +104,7 @@ public class NumberFilterEditor extends FilterEditorBase {
         });
 
         Label descrLabel = new Label(i18n.tr("Enter a minimum, maximum or range limit"));
-        descrLabel.getElement().getStyle().setPaddingTop(10, Unit.PX);
+        descrLabel.getStyle().setPaddingTop(10, Unit.PX);
         contentPanel.add(descrLabel);
     }
 
@@ -124,11 +125,15 @@ public class NumberFilterEditor extends FilterEditorBase {
             fromBox.setValue(null);
             toBox.setValue(null);
         } else {
-            if (!(criterion instanceof RangeCriterion)) {
-                throw new Error("Filter criterion isn't supported by editor");
+            RangeCriterion rangeCriterion;
+            if (criterion instanceof RangeCriterion) {
+                rangeCriterion = (RangeCriterion) criterion;
+            } else if (criterion instanceof PropertyCriterion) {
+                // TODO Change the editor type in future
+                rangeCriterion = toRangeCriterion((PropertyCriterion) criterion);
+            } else {
+                throw new Error("Conversion from " + criterion + " to range unimplemented");
             }
-
-            RangeCriterion rangeCriterion = (RangeCriterion) criterion;
 
             if (!getMember().getPath().equals(rangeCriterion.getPropertyPath())) {
                 throw new Error("Filter editor member doesn't match filter criterion path");

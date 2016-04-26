@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IFormatter;
@@ -152,6 +152,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         tablePanel.renderTable();
     }
 
+    //TODO rename to getModel()
     public DataTableModel<E> getDataTableModel() {
         return model;
     }

@@ -278,8 +278,8 @@ public class WidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.ButtonMenuIndicator);
         style.addProperty("display", "inline-block");
-        style.addProperty("font-size", "0.5em");
         style.addProperty("margin-left", "0px");
+        style.addProperty("padding-left", "0px");
         style.addProperty("vertical-align", "top");
         addStyle(style);
 

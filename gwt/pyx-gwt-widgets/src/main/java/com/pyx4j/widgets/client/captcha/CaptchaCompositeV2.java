@@ -28,7 +28,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
@@ -68,8 +68,8 @@ public class CaptchaCompositeV2 extends AbstractCaptchaComposite implements HasV
         this.clear();
         divName = "recaptcha_div" + String.valueOf(instanceId++);
         divHolder = new SimplePanel();
-        divHolder.getElement().getStyle().setWidth(100, Unit.PCT);
-        divHolder.getElement().getStyle().setHeight(74, Unit.PX);
+        divHolder.getStyle().setWidth(100, Unit.PCT);
+        divHolder.getStyle().setHeight(74, Unit.PX);
         divHolder.getElement().setId(divName);
         this.add(divHolder);
     }

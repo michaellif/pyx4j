@@ -31,37 +31,33 @@ public class MenuBarTheme extends Theme {
 
     protected void initStyles() {
         Style style = new Style(".gwt-MenuBar");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("color", ThemeColor.foreground, 0.2);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
         addStyle(style);
 
         style = new Style(".gwt-MenuItem");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColor.foreground, 0.2);
-        style.addProperty("background", "transparent");
-        style.addProperty("color", "#E5F0E1");
-        style.addProperty("border", "0");
+        style.addProperty("color", "#666666");
         addStyle(style);
 
         style = new Style(".gwt-MenuItem-selected");
-        style.addProperty("background", ThemeColor.foreground, 0.8);
+        style.addGradient(ThemeColor.foreground, 0.17, ThemeColor.foreground, 0.32);
+        style.addProperty("color", "#333333");
         style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("text-decoration", "underline");
-        style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style(".gwt-MenuItem-disabled");
+        style.addProperty("color", ThemeColor.foreground, 0.6);
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical");
-        style.addProperty("margin-top", "0px");
-        style.addProperty("margin-left", "0px");
         style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.6);
+
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
-        style.addProperty("padding", "4px 14px 4px 1px");
-        style.addProperty("color", "#666666");
+        style.addProperty("padding", "4px 8px 6px 4px");
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-horizontal");
@@ -69,7 +65,6 @@ public class MenuBarTheme extends Theme {
 
         style = new Style(".gwt-MenuBar-horizontal .gwt-MenuItem");
         style.addProperty("vertical-align", "bottom");
-        style.addProperty("background", "transparent");
         addStyle(style);
     }
 

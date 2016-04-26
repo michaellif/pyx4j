@@ -22,8 +22,9 @@ package com.pyx4j.forms.client.ui.query;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.query.ICondition;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 
-public interface IFilterEditor extends IsWidget {
+public interface IFilterEditor extends IsWidget, HasStyle {
 
     ICondition getCondition();
 

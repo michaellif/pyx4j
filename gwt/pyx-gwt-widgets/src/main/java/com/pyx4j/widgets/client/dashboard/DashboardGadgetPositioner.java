@@ -19,17 +19,17 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 class DashboardGadgetPositioner extends SimplePanel {
 
     public DashboardGadgetPositioner(int width, int height) {
         addStyleName(DashboardTheme.StyleName.DashboardDndPositioner.name());
 
-        getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
-        getElement().getStyle().setProperty("MozBoxSizing", "border-box");
-        getElement().getStyle().setProperty("boxSizing", "border-box");
-        getElement().getStyle().setZIndex(100);
+        getStyle().setProperty("WebkitBoxSizing", "border-box");
+        getStyle().setProperty("MozBoxSizing", "border-box");
+        getStyle().setProperty("boxSizing", "border-box");
+        getStyle().setZIndex(100);
 
         setHeight(height + "px");
 //        setPixelSize(width, height);

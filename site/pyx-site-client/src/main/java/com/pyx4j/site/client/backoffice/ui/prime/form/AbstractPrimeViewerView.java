@@ -25,13 +25,18 @@ import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeViewerView.IPrimeViewerPresenter;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 
 public abstract class AbstractPrimeViewerView<E extends IEntity> extends AbstractPrimeFormView<E, IPrimeViewerPresenter> implements IPrimeViewerView<E> {
 
     private static final I18n i18n = I18n.get(AbstractPrimeViewerView.class);
 
     public AbstractPrimeViewerView() {
-        super();
+        this(LayoutSystem.LayoutPanels);
+    }
+
+    public AbstractPrimeViewerView(LayoutSystem layoutSystem) {
+        super(layoutSystem);
     }
 
     @Override
@@ -62,4 +67,9 @@ public abstract class AbstractPrimeViewerView<E extends IEntity> extends Abstrac
 
         setCaption(caption);
     }
+
+    public E getValue() {
+        return getForm().getValue();
+    }
+
 }

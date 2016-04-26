@@ -41,19 +41,20 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HasStyle;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.event.shared.HasPasteHandlers;
 import com.pyx4j.widgets.client.event.shared.PasteEvent;
 import com.pyx4j.widgets.client.event.shared.PasteHandler;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidget<E>, IFocusGroup, HasValueChangeHandlers<E>, HasPasteHandlers {
+public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidget<E>, IFocusGroup, HasValueChangeHandlers<E>, HasPasteHandlers, HasStyle {
 
     private E value;
 
@@ -86,10 +87,10 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
     public ValueBoxBase() {
         contentPanel = new FlowPanel();
         contentPanel.setStyleName(WidgetsTheme.StyleName.TextBoxContainer.name());
-        contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        contentPanel.getStyle().setPosition(Position.RELATIVE);
 
         textBoxHolder = new SimplePanel();
-        textBoxHolder.getElement().getStyle().setMarginRight(0, Unit.PX);
+        textBoxHolder.getStyle().setMarginRight(0, Unit.PX);
 
         contentPanel.add(textBoxHolder);
 
@@ -255,7 +256,7 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
             contentPanel.remove(actionButton);
         }
         if (command == null) {
-            textBoxHolder.getElement().getStyle().setMarginRight(0, Unit.PX);
+            textBoxHolder.getStyle().setMarginRight(0, Unit.PX);
             actionButton = null;
         } else {
             actionButton = new Button(imageResource, command) {
@@ -263,14 +264,14 @@ public abstract class ValueBoxBase<E> extends Composite implements IValueBoxWidg
                 @Override
                 protected void onAttach() {
                     super.onAttach();
-                    textBoxHolder.getElement().getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
+                    textBoxHolder.getStyle().setMarginRight(actionButton.getOffsetWidth(), Unit.PX);
                 }
 
             };
             actionButton.setEnabled(isEditable() && isEnabled());
-            actionButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
-            actionButton.getElement().getStyle().setTop(0, Unit.PX);
-            actionButton.getElement().getStyle().setRight(0, Unit.PX);
+            actionButton.getStyle().setPosition(Position.ABSOLUTE);
+            actionButton.getStyle().setTop(0, Unit.PX);
+            actionButton.getStyle().setRight(0, Unit.PX);
 
             actionButton.setStyleName(WidgetsTheme.StyleName.TextBoxActionButton.name());
 

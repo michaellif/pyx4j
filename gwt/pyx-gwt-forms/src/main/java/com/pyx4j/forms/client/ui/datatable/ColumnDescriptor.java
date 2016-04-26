@@ -188,6 +188,8 @@ public class ColumnDescriptor {
 
         IFormatter<IEntity, SafeHtml> formatter;
 
+        private int trimLength = 0;
+
         public Builder(IObject<?> member) {
             this.member = member;
             columnTitle = member.getMeta().getCaption();
@@ -203,6 +205,14 @@ public class ColumnDescriptor {
         }
 
         public Builder columnTitle(String columnTitle) {
+            this.columnTitle = columnTitle;
+            return this;
+        }
+
+        /**
+         * Synonym to columnTitle
+         */
+        public Builder title(String columnTitle) {
             this.columnTitle = columnTitle;
             return this;
         }
@@ -260,6 +270,31 @@ public class ColumnDescriptor {
             return this;
         }
 
+        /**
+         * TODO
+         * Terminate string with "..." if one exceeds specified characters length
+         */
+        public Builder trim(int trimLength) {
+            this.trimLength = trimLength;
+            return this;
+        }
+
+        // TODO this used to work find and replacements
+        @Deprecated
+        public Builder wordWrap(boolean wordWrap) {
+            return this;
+        }
+
+        /**
+         * TODO
+         * make long text wrap by html
+         * e.g. Something that actually working instead of CSS word-wrap:break-word
+         */
+        public Builder ensureWordWrap(int maxNonWrappableWordLenght) {
+            //this.ensureWordWrap = maxNonWrappableWordLenght;
+            return this;
+        }
+
         public ColumnDescriptor build() {
 
             if (formatter == null) {
@@ -287,11 +322,11 @@ public class ColumnDescriptor {
                                 builder.appendHtmlConstant(
                                         ConverterUtils.convertCollection((Collection<IEntity>) memberValue, new ToStringConverter<IEntity>() {
 
-                                    @Override
-                                    public String toString(IEntity value) {
-                                        return value.getStringView();
-                                    }
-                                }));
+                                            @Override
+                                            public String toString(IEntity value) {
+                                                return value.getStringView();
+                                            }
+                                        }));
                             } else {
                                 builder.appendHtmlConstant(memberValue.toString());
                             }

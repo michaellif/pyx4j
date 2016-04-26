@@ -20,7 +20,7 @@
 package com.pyx4j.site.client.backoffice.ui.prime;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HTML;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ImageFactory;

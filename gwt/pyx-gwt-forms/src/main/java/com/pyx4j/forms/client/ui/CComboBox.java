@@ -166,14 +166,17 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     public void setFormat(IFormatter<E, String> format) {
         this.format = format;
-        setValue(getValue(), false);
-        getNativeComponent().refreshOptions();
+        if (isPopulated()) {
+            setValue(getValue(), false);
+            getNativeComponent().refreshOptions();
+        }
     }
 
     @Override
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             super.setMandatory(mandatory);
+            // The call to below is questionable. and will trigger data load on initialization
             getNativeComponent().refreshOptions();
         }
     }

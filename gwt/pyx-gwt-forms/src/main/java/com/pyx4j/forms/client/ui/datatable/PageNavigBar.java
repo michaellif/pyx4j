@@ -26,11 +26,11 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.images.DataTableImages;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ListBox;
@@ -72,7 +72,7 @@ public class PageNavigBar extends Toolbar {
     public PageNavigBar(final DataTableActionsBar actionsBar) {
         this.actionsBar = actionsBar;
 
-        getElement().getStyle().setProperty("textAlign", "right");
+        getStyle().setProperty("textAlign", "right");
 
         firstButton = new Button(DataTableImages.INSTANCE.first(), new Command() {
             @Override
@@ -85,7 +85,7 @@ public class PageNavigBar extends Toolbar {
             }
         });
         firstButton.setVisible(false);
-        firstButton.getElement().getStyle().setMarginRight(5, Unit.PX);
+        firstButton.getStyle().setMarginRight(5, Unit.PX);
         addItem(firstButton);
 
         prevButton = new Button(DataTableImages.INSTANCE.prev(), new Command() {
@@ -99,13 +99,13 @@ public class PageNavigBar extends Toolbar {
             }
         });
         prevButton.setVisible(false);
-        prevButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
-        prevButton.getElement().getStyle().setMarginRight(5, Unit.PX);
+        prevButton.getStyle().setMarginLeft(0, Unit.PX);
+        prevButton.getStyle().setMarginRight(5, Unit.PX);
         addItem(prevButton);
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
-        countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
+        countLabel.getStyle().setFontWeight(FontWeight.BOLD);
+        countLabel.getStyle().setMarginRight(5, Unit.PX);
         addItem(countLabel);
 
         nextButton = new Button(DataTableImages.INSTANCE.next(), new Command() {
@@ -119,8 +119,8 @@ public class PageNavigBar extends Toolbar {
             }
         });
         nextButton.setVisible(false);
-        nextButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
-        nextButton.getElement().getStyle().setMarginRight(5, Unit.PX);
+        nextButton.getStyle().setMarginLeft(0, Unit.PX);
+        nextButton.getStyle().setMarginRight(5, Unit.PX);
         addItem(nextButton);
 
         lastButton = new Button(DataTableImages.INSTANCE.last(), new Command() {
@@ -135,13 +135,13 @@ public class PageNavigBar extends Toolbar {
             }
         });
         lastButton.setVisible(false);
-        lastButton.getElement().getStyle().setMarginLeft(0, Unit.PX);
-        lastButton.getElement().getStyle().setMarginRight(5, Unit.PX);
+        lastButton.getStyle().setMarginLeft(0, Unit.PX);
+        lastButton.getStyle().setMarginRight(5, Unit.PX);
         addItem(lastButton);
 
         pageSizeContentPanel = new HorizontalPanel();
-        pageSizeContentPanel.getElement().getStyle().setMarginLeft(5, Unit.PX);
-        pageSizeContentPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
+        pageSizeContentPanel.getStyle().setMarginLeft(5, Unit.PX);
+        pageSizeContentPanel.getStyle().setMarginRight(5, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
 
@@ -150,7 +150,7 @@ public class PageNavigBar extends Toolbar {
         pageSizeContentPanel.setCellVerticalAlignment(pageSizeLabel, HorizontalPanel.ALIGN_MIDDLE);
 
         pageSizeContentPanel.add(pageSizeSelector);
-        pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
+        pageSizeSelector.getStyle().setMarginLeft(3, Unit.PX);
         addItem(pageSizeContentPanel);
 
         pageSizeSelector.addChangeHandler(new ChangeHandler() {

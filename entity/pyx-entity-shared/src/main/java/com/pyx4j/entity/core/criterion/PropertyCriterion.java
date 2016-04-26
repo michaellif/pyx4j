@@ -26,6 +26,7 @@ import java.util.EnumSet;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
@@ -34,7 +35,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.shared.TextSearchDocument;
 
 @SuppressWarnings("serial")
-public class PropertyCriterion implements Criterion {
+public class PropertyCriterion implements Criterion, CriterionPathBound {
 
     public static final char WILDCARD_CHAR = '*';
 
@@ -100,6 +101,15 @@ public class PropertyCriterion implements Criterion {
 
     public PropertyCriterion(IObject<?> member, Restriction restriction, Class<? extends IEntity> value) {
         this(member, restriction, EntityFactory.create(value));
+    }
+
+    // Filter with To String values / Not just IDs as above so this can be used in presentation
+    public PropertyCriterion(IObject<?> member, Restriction restriction, IEntity value, AttachLevel attachLevel) {
+        this.propertyPath = member.getPath();
+        this.restriction = restriction;
+        value = value.duplicate();
+        value.setAttachLevel(attachLevel);
+        this.value = value;
     }
 
     public PropertyCriterion(IObject<?> member, Restriction restriction, Collection<?> value) {
@@ -176,6 +186,17 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member, Restriction.IN, values);
     }
 
+    // Create collection with To String values / Not just IDs as above so this can be used in presentation
+    public static <E extends IEntity, T extends Collection<E>> PropertyCriterion in(IObject<?> member, T values, AttachLevel attachLevel) {
+        Vector<E> serializableValues = new Vector<>();
+        for (E value : values) {
+            value = value.duplicate();
+            value.setAttachLevel(attachLevel);
+            serializableValues.add(value);
+        }
+        return new PropertyCriterion(member.getPath(), Restriction.IN, (Serializable) serializableValues);
+    }
+
     public static PropertyCriterion in(IObject<?> member, Class<? extends IEntity> values) {
         return new PropertyCriterion(member, Restriction.IN, values);
     }
@@ -220,6 +241,7 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member, Restriction.LESS_THAN_OR_EQUAL, value);
     }
 
+    @Override
     public Path getPropertyPath() {
         return this.propertyPath;
     }
@@ -264,5 +286,14 @@ public class PropertyCriterion implements Criterion {
     @Override
     public boolean isEmpty() {
         return false;
+    }
+
+    @Override
+    public PropertyCriterion duplicated(Path newPath) {
+        PropertyCriterion propertyCriterion = new PropertyCriterion();
+        propertyCriterion.propertyPath = newPath;
+        propertyCriterion.restriction = this.getRestriction();
+        propertyCriterion.value = this.getValue();
+        return propertyCriterion;
     }
 }

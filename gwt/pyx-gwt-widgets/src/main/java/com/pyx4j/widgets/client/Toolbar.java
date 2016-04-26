@@ -20,19 +20,23 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.security.shared.AccessControlContext;
+import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcern;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
+import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HasStyle;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class Toolbar implements IsWidget, HasSecureConcern {
+public class Toolbar implements IsWidget, HasSecureConcern, HasSecureConcernedChildren, HasStyle {
 
     private final FlowPanel panel;
 
-    private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
+    private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
 
     public Toolbar() {
         panel = new FlowPanel();
@@ -50,7 +54,21 @@ public class Toolbar implements IsWidget, HasSecureConcern {
         itemHolder.setWidget(widget);
         panel.insert(itemHolder, beforeIndex);
 
-        secureConcerns.add(widget);
+        addWidgetSecureConcern(widget);
+
+        if (widget instanceof HasWidgetConcerns) {
+            ((HasWidgetConcerns) widget).addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
+                @Override
+                public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
+                    itemHolder.setVisible(((HasWidgetConcerns) widget).isVisible());
+                }
+            });
+        }
+    }
+
+    @Override
+    public SecureConcernsHolder secureConcernsHolder() {
+        return secureConcernsHolder;
     }
 
     public SimplePanel getItemHolder(int index) {
@@ -67,12 +85,7 @@ public class Toolbar implements IsWidget, HasSecureConcern {
 
     public void clear() {
         panel.clear();
-        secureConcerns.clear();
-    }
-
-    @Override
-    public void setSecurityContext(AccessControlContext context) {
-        secureConcerns.setSecurityContext(context);
+        clearSecureConcerns();
     }
 
     @Override

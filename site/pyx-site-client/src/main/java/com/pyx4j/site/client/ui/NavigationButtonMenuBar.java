@@ -22,15 +22,15 @@ package com.pyx4j.site.client.ui;
 import com.pyx4j.security.annotations.ActionId;
 import com.pyx4j.site.client.NavigationCommand;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.Button.ButtonMenuBar;
-import com.pyx4j.widgets.client.Button.SecureMenuItem;
+import com.pyx4j.widgets.client.MenuBar;
+import com.pyx4j.widgets.client.MenuItem;
 
-public class NavigationButtonMenuBar extends ButtonMenuBar {
+public class NavigationButtonMenuBar extends MenuBar {
 
     public NavigationButtonMenuBar() {
     }
 
-    public SecureMenuItem addItem(String text, AppPlace place, Class<? extends ActionId> actionId) {
+    public MenuItem addItem(String text, AppPlace place, Class<? extends ActionId> actionId) {
         return addItem(text, new NavigationCommand(place), actionId);
     }
 }

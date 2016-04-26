@@ -26,9 +26,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
@@ -41,6 +39,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecoratorTheme;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
 
@@ -88,8 +88,8 @@ public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
 
         protected CellDecorator(String width) {
 
-            getElement().getStyle().setPaddingLeft(3, Unit.PX);
-            getElement().getStyle().setPaddingRight(3, Unit.PX);
+            getStyle().setPaddingLeft(3, Unit.PX);
+            getStyle().setPaddingRight(3, Unit.PX);
             setWidth(width);
             setWidget(component);
 

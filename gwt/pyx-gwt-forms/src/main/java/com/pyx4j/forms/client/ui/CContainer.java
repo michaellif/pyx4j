@@ -71,9 +71,9 @@ public abstract class CContainer<SELF_TYPE extends CComponentBase<SELF_TYPE, DAT
                     new EntityViewerDialog(CContainer.this.getValue()).show();
                 }
             });
-            debugButton.getElement().getStyle().setProperty("display", "inline-block");
+            debugButton.getStyle().setProperty("display", "inline-block");
             getNativeComponent().add(debugButton);
-            getNativeComponent().getElement().getStyle().setProperty("border", "red solid 1px");
+            getNativeComponent().getStyle().setProperty("border", "red solid 1px");
         }
 
         applyAccessibilityRules();

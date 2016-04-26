@@ -19,7 +19,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 
 import com.pyx4j.forms.client.validators.ValidationResults;
 

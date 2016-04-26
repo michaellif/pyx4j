@@ -19,29 +19,25 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.List;
-
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
 import com.pyx4j.security.annotations.ActionId;
-import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
-import com.pyx4j.widgets.client.event.shared.SecureConcernStateChangeEvent;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
 public class Button extends ButtonBase {
 
     private ContextMenuHolder menuHolder;
 
-    private ButtonMenuBar menu;
+    private MenuBar menu;
+
+    private HandlerRegistration menuHandlerRegistration;
 
     private final Label buttonMenuIndicator;
 
@@ -93,17 +89,19 @@ public class Button extends ButtonBase {
         setStylePrimaryName(getElement(), WidgetsTheme.StyleName.Button.name());
         getTextLabel().setStyleName(WidgetsTheme.StyleName.ButtonText.name());
 
-        buttonMenuIndicator = new Label("\u25bc");
+        buttonMenuIndicator = new Label(String.valueOf(HtmlUtils.TRIANGLE_DOWN_SMALL_UTF8));
         buttonMenuIndicator.setStyleName(WidgetsTheme.StyleName.ButtonText.name());
         buttonMenuIndicator.addStyleName(WidgetsTheme.StyleName.ButtonMenuIndicator.name());
         buttonMenuIndicator.setVisible(false);
         getImageHolder().add(buttonMenuIndicator);
 
+        visible(() -> (getMenu() == null || (getCommand() != null || (getMenu() != null && !getMenu().isMenuEmpty()))), "Menu|Command");
+
     }
 
     @Override
     protected final void execute(HumanInputInfo humanInputInfo) {
-        if (menu != null) {
+        if ((menu != null) && isEnabled()) {
             menuHolder.togleMenu();
         } else {
             super.execute(humanInputInfo);
@@ -118,15 +116,14 @@ public class Button extends ButtonBase {
     @Override
     protected void updateImageState() {
         if (imageResource != null) {
-            getImageHolder().getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
-            getImageHolder().getElement().getStyle().setProperty("background",
-                    "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
+            getImageHolder().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
+            getImageHolder().getStyle().setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
             super.updateImageState();
         }
     }
 
-    public void setMenu(ButtonMenuBar menu) {
+    public void setMenu(MenuBar menu) {
         if (menuHolder == null && menu != null) {
             menuHolder = new ContextMenuHolder();
             getImageHolder().add(menuHolder);
@@ -134,37 +131,36 @@ public class Button extends ButtonBase {
         if (menuHolder != null) {
             menuHolder.setMenu(menu);
         }
-        this.menu = menu;
 
+        if (this.menu != null) {
+            removeSecureConcern(this.menu);
+            menuHandlerRegistration.removeHandler();
+        }
+
+        this.menu = menu;
         if (menu != null) {
-            setVisibleImpl();
-            menu.addSecureConcernStateChangeHandler(new SecureConcernStateChangeEvent.Handler() {
+            addSecureConcern(menu);
+
+            applyVisibilityRules();
+            menuHandlerRegistration = menu.addConcernStateChangeHandler(new ConcernStateChangeEvent.Handler() {
                 @Override
-                public void onSecureConcernStateChanged(SecureConcernStateChangeEvent event) {
-                    setVisibleImpl();
+                public void onSecureConcernStateChanged(ConcernStateChangeEvent event) {
+                    applyConcernRules();
                 }
             });
         }
     }
 
-    public ButtonMenuBar getMenu() {
+    public MenuBar getMenu() {
         return menu;
     }
 
     @Override
-    public void setSecurityContext(AccessControlContext context) {
-        super.setSecurityContext(context);
-        if (menu != null) {
-            menu.setSecurityContext(context);
-        }
-    }
-
-    @Override
-    protected void setVisibleImpl() {
+    public void applyVisibilityRules() {
         if (buttonMenuIndicator != null) {
-            buttonMenuIndicator.setVisible(this.menu != null && !this.menu.isMenuEmpty());
+            buttonMenuIndicator.setVisible(this.menu != null && this.menu.isVisible());
         }
-        setVisibleUIObject(this.visible.getDecision() && (getCommand() != null || (menu != null && !this.menu.isMenuEmpty())));
+        super.applyVisibilityRules();
     }
 
     @Deprecated
@@ -173,143 +169,41 @@ public class Button extends ButtonBase {
         return menu;
     }
 
-    public static class ButtonMenuBar extends MenuBar implements HasSecureConcern {
-
-        private final SecureConcernsHolder secureConcerns = new SecureConcernsHolder();
-
-        private HumanInputInfo humanInputInfo = HumanInputInfo.robot;
+    /**
+     *
+     * @deprecated renamed to com.pyx4j.widgets.client.MenuBar
+     *
+     */
+    @Deprecated
+    public static class ButtonMenuBar extends com.pyx4j.widgets.client.MenuBar {
 
         public ButtonMenuBar() {
-            super(true);
-            setAutoOpen(true);
-            setAnimationEnabled(true);
-        }
-
-        public HandlerRegistration addSecureConcernStateChangeHandler(SecureConcernStateChangeEvent.Handler handler) {
-            return addHandler(handler, SecureConcernStateChangeEvent.getType());
-        }
-
-        @Override
-        public MenuItem insertItem(MenuItem item, int beforeIndex) {
-            if (item.getScheduledCommand() != null) {
-                final ScheduledCommand origCommand = item.getScheduledCommand();
-                item.setScheduledCommand(new Command() {
-
-                    @Override
-                    public void execute() {
-                        if (origCommand instanceof HumanInputCommand) {
-                            ((HumanInputCommand) origCommand).execute(humanInputInfo);
-                        } else {
-                            origCommand.execute();
-                        }
-
-                    }
-                });
-            }
-            if (item instanceof HasSecureConcern) {
-                secureConcerns.addSecureConcern((HasSecureConcern) item);
-            }
-            try {
-                return super.insertItem(item, beforeIndex);
-            } finally {
-                fireEvent(new SecureConcernStateChangeEvent());
-            }
-        }
-
-        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Permission... permissions) {
-            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, permissions);
-            addItem(menuItem);
-            return menuItem;
-        }
-
-        public SecureMenuItem addItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
-            SecureMenuItem menuItem = new SecureMenuItem(text, cmd, actionId);
-            addItem(menuItem);
-            return menuItem;
-        }
-
-        public boolean isMenuEmpty() {
-            boolean empty = getItems().isEmpty();
-            if (!empty) {
-                empty = true;
-                for (MenuItem item : getItems()) {
-                    if (item.isVisible()) {
-                        empty = false;
-                    }
-                }
-            }
-            return empty;
-        }
-
-        public boolean isControlKeyDown() {
-            return humanInputInfo.isControlKeyDown();
-        }
-
-        @Override
-        public void onBrowserEvent(Event event) {
-            if ((DOM.eventGetType(event) == Event.ONCLICK) && (event.getCtrlKey())) {
-                humanInputInfo = new HumanInputInfo(event);
-            } else {
-                humanInputInfo = HumanInputInfo.robot;
-            }
-            super.onBrowserEvent(event);
-        }
-
-        @Override
-        public List<MenuItem> getItems() {
-            return super.getItems();
-        }
-
-        @Override
-        public void clearItems() {
-            super.clearItems();
-            secureConcerns.clear();
-            fireEvent(new SecureConcernStateChangeEvent());
-        }
-
-        @Override
-        public void setSecurityContext(AccessControlContext context) {
-            secureConcerns.setSecurityContext(context);
-
-            // TODO Fire when state actually changes.
-            fireEvent(new SecureConcernStateChangeEvent());
+            super();
         }
     }
 
-    public static class SecureMenuItem extends MenuItem implements HasSecureConcern {
+    /**
+     *
+     * @deprecated renamed to com.pyx4j.widgets.client.MenuItem
+     *
+     */
+    @Deprecated
+    public static class SecureMenuItem extends com.pyx4j.widgets.client.MenuItem {
 
-        private final SecureConcern visible = new SecureConcern();
+        public SecureMenuItem(String text, Class<? extends ActionId> actionId, ScheduledCommand cmd) {
+            super(text, cmd, actionId);
+        }
 
-        public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
-            super(text, cmd);
-            setPermission(permissions);
+        public SecureMenuItem(String text, ButtonMenuBar subMenu, Permission... permissions) {
+            super(text, subMenu, permissions);
         }
 
         public SecureMenuItem(String text, ScheduledCommand cmd, Class<? extends ActionId> actionId) {
-            this(text, cmd, new ActionPermission(actionId));
+            super(text, cmd, actionId);
         }
 
-        public void setPermission(Permission... permission) {
-            visible.setPermission(permission);
-            setVisibleImpl();
-        }
-
-        private void setVisibleImpl() {
-            super.setVisible(this.visible.getDecision());
-        }
-
-        @Override
-        public void setVisible(boolean visible) {
-            this.visible.setDecision(visible);
-            if (this.visible.hasDecision()) {
-                setVisibleImpl();
-            }
-        }
-
-        @Override
-        public void setSecurityContext(AccessControlContext context) {
-            visible.setContext(context);
-            super.setVisible(visible.getDecision());
+        public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
+            super(text, cmd, permissions);
         }
 
     }

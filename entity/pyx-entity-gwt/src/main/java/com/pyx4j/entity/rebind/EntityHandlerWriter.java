@@ -34,6 +34,7 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.GeneratorIgnore;
 import com.pyx4j.entity.client.impl.EntityImplNativeHelper;
 import com.pyx4j.entity.client.impl.EntityMemberMapCreator;
 import com.pyx4j.entity.core.IEntity;
@@ -149,6 +150,11 @@ public class EntityHandlerWriter {
             writer.indent();
             writer.println("var map = {}");
             nextJSMethod: for (JMethod method : allMethods) {
+                // TODO do better, Ignore Java 8 Default Method
+                if ((method.getAnnotation(GeneratorIgnore.class) != null)) {
+                    continue;
+                }
+
                 JClassType type = (JClassType) method.getReturnType();
                 writer.print("map[\"" + method.getName() + "\"] = ");
 

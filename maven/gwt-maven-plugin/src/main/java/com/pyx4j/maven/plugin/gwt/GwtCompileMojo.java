@@ -109,6 +109,14 @@ public class GwtCompileMojo extends AbstractGWTMojo {
     private boolean disableClassMetadata;
 
     /**
+     * Specifies Java source level.
+     *
+     * @since GWT 2.8
+     */
+    @Parameter(defaultValue = "auto", property = "maven.compiler.source")
+    private String sourceLevel;
+
+    /**
      * GWT 2.0 Enable Story Of Your Compile
      *
      * @since GWT 2.0
@@ -332,6 +340,11 @@ public class GwtCompileMojo extends AbstractGWTMojo {
 
             if (soyc) {
                 argList.add("-soyc");
+            }
+
+            if (sourceLevel != null) {
+                argList.add("-sourceLevel");
+                argList.add(sourceLevel);
             }
 
             if (draftCompile) {

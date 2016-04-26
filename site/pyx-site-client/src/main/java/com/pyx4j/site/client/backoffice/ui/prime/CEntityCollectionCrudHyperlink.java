@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.ICollection;
+import com.pyx4j.entity.core.criterion.EntityFiltersBuilder;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -47,8 +48,22 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
         @Override
         public AppPlace createAppPlace(E value) {
             if (value.getOwner().getPrimaryKey() != null) {
-                CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-                return place.formListerPlace(value.getOwner().getPrimaryKey());
+                CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass).formListerPlace();
+
+                // Consider collection is stored and shown in value.getOwner(), Find how we can filter this entity.
+                // Filter in UI will convert BO to TO when possible
+
+                @SuppressWarnings("rawtypes")
+                EntityFiltersBuilder filters = EntityFiltersBuilder.create(value.getValueClass());
+                String ownerName = filters.proto().getEntityMeta().getOwnerMemberName();
+                assert ownerName != null : "Only @Owned collections supported";
+                filters.entity(filters.proto().getMember(ownerName), value.getOwner());
+
+                //TODO Consider @OwnedConstraint once used widely
+
+                place.setListerInitializeFilters(filters);
+
+                return place;
             } else {
                 return null;
             }

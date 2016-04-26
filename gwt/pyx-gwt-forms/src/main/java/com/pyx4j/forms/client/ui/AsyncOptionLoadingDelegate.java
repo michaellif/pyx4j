@@ -75,7 +75,7 @@ public class AsyncOptionLoadingDelegate<E extends IEntity> {
 
                     @Override
                     public void onSuccess(EntitySearchResult<E> result) {
-                        optionsLoaded = true;
+                        setOptionsLoaded(true);
                         delegator.onOptionsReady(result.getData());
                         if (optionsReadyCallback != null) {
                             optionsReadyCallback.onOptionsReady(result.getData());
@@ -104,7 +104,7 @@ public class AsyncOptionLoadingDelegate<E extends IEntity> {
         if (optionLoadingHandler != null) {
             optionLoadingHandler.cancel();
         }
-        optionsLoaded = false;
+        setOptionsLoaded(false);
     }
 
     public E proto() {

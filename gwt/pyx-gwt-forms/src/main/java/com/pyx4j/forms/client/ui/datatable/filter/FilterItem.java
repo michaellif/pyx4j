@@ -22,6 +22,9 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 import java.io.Serializable;
 import java.util.Collection;
 
+import com.pyx4j.commons.ConverterUtils;
+import com.pyx4j.commons.ConverterUtils.ToStringConverter;
+import com.pyx4j.commons.IStringView;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.RangeCriterion;
@@ -73,46 +76,66 @@ public class FilterItem implements Comparable<FilterItem> {
 
     @Override
     public String toString() {
-        if (criterion == null) {
-            return columnDescriptor.getColumnTitle() + ": '" + i18n.tr("All") + "'";
+        String valueToString = "";
+        if (criterion == null || criterion.isEmpty()) {
+            valueToString = i18n.tr("All");
         } else if (criterion instanceof PropertyCriterion) {
             Serializable value = ((PropertyCriterion) criterion).getValue();
             if (value instanceof Collection) {
-                if (((Collection) value).size() == 0) {
-                    return columnDescriptor.getColumnTitle() + ": 'None'";
-                }
-                if (!columnDescriptor.getMemeber().getValueClass().equals(Boolean.class)) {
-                    return columnDescriptor.getColumnTitle() + ": (" + ((Collection) value).size() + ")";
-                } else {
-                    StringBuilder selected = new StringBuilder();
-                    for (Object val : (Collection) value) {
+                @SuppressWarnings("unchecked")
+                Collection<Object> valuesCollection = (Collection<Object>) value;
+                if (valuesCollection.size() == 0) {
+                    valueToString = i18n.tr("None");
+                } else if (!columnDescriptor.getMemeber().getValueClass().equals(Boolean.class)) {
+                    valueToString = ConverterUtils.convertCollection(valuesCollection, new ToStringConverter<Object>() {
 
-                        if (val == null) {
-                            selected.append(selected.toString().equals("") ? "Empty" : ", Empty");
-
-                        } else if (val.equals(Boolean.TRUE)) {
-                            selected.append(selected.toString().equals("") ? "Yes" : ", Yes");
-                        } else {
-                            selected.append(selected.toString().equals("") ? "No" : ", No");
+                        @Override
+                        public String toString(Object value) {
+                            if (value instanceof IStringView) {
+                                return ((IStringView) value).getStringView();
+                            } else {
+                                return value.toString();
+                            }
                         }
-                    }
-                    return columnDescriptor.getColumnTitle() + ": '" + selected.toString() + "'";
+
+                    }, ",");
+                } else {
+                    valueToString = ConverterUtils.convertCollection(valuesCollection, new ToStringConverter<Object>() {
+
+                        @Override
+                        public String toString(Object value) {
+                            if (value == null) {
+                                return i18n.tr("Empty");
+                            } else if (value.equals(Boolean.TRUE)) {
+                                return i18n.tr("Yes");
+                            } else {
+                                return i18n.tr("No");
+                            }
+                        }
+
+                    }, ",");
                 }
             } else {
-                return columnDescriptor.getColumnTitle() + ": '" + ((value == null) ? i18n.tr("All") : value) + "'";
+                if (value instanceof IStringView) {
+                    valueToString = ((IStringView) value).getStringView();
+                } else {
+                    valueToString = value.toString();
+                }
             }
         } else if (criterion instanceof RangeCriterion) {
             Serializable fromValue = ((RangeCriterion) criterion).getFromValue();
             Serializable toValue = ((RangeCriterion) criterion).getToValue();
-            return columnDescriptor.getColumnTitle() + ": '"
-                    + ((fromValue == null && toValue == null) ? i18n.tr("All")
-                            : //
-                            ((fromValue == null ? "" : fromValue) + ((fromValue != null && toValue != null) ? "'-'" : "") + //
-                                    (toValue == null ? "" : toValue)))
-                    + "'";
+            if (toValue == null) {
+                valueToString = fromValue.toString();
+            } else if (fromValue == null) {
+                valueToString = toValue.toString();
+            } else {
+                valueToString = fromValue.toString() + " - " + toValue.toString();
+            }
         } else {
-            return columnDescriptor.getColumnTitle();
+            //TODO what else?
         }
+        return columnDescriptor.getColumnTitle() + ": " + valueToString;
     }
 
     @Override

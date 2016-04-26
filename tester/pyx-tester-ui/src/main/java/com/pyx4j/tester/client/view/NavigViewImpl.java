@@ -23,7 +23,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -87,7 +87,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
                 }
 
             });
-            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Item, place.getPlaceId()).toString());
+            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navig, place.getPlaceId()).toString());
             setWidget(anchor);
         }
 

@@ -47,4 +47,11 @@ public abstract class AbstractPrimeActivity<E extends IPrimePaneView<?>> extends
     public AppPlace getPlace() {
         return place;
     }
+
+    /**
+     * Called after View was added to Activity but before the view is attached to UI
+     */
+    protected void onStart() {
+
+    }
 }

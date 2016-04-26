@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-18
  * @author Vlad
  */
@@ -22,31 +22,39 @@ package com.pyx4j.site.client.backoffice.ui.prime.lister;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModelEvent;
+import com.pyx4j.forms.client.ui.datatable.DataTableModelListener;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
 import com.pyx4j.site.client.ui.SiteDataTablePanel;
+import com.pyx4j.site.client.ui.layout.LayoutSystem;
 
 public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView<IPrimeListerPresenter<E>> implements IPrimeListerView<E> {
 
     private SiteDataTablePanel<E> dataTablePanel = null;
 
     public AbstractListerView() {
-        super();
+        this(LayoutSystem.LayoutPanels);
+    }
+
+    public AbstractListerView(LayoutSystem layoutSystem) {
+        super(layoutSystem);
     }
 
     /*
-     * Should be called by descendant upon initialisation.
+     * Should be called by descendant upon initialization.
      */
     protected void setDataTablePanel(SiteDataTablePanel<E> dataTablePanel) {
-        if (getContentPane() == null) { // finalise UI here:
-            setContentPane(new ScrollPanel());
+        if (getContentPane() == null) { // finalize UI here:
+            ScrollPanel scrollPanel = new ScrollPanel();
+            setContentPane(scrollPanel);
             setSize("100%", "100%");
         }
 
@@ -54,10 +62,19 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
             return; // already!?.
         }
 
-        dataTablePanel.getElement().getStyle().setPadding(6, Unit.PX);
-        dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
+        dataTablePanel.getStyle().setPadding(6, Unit.PX);
+        dataTablePanel.getStyle().setPaddingBottom(40, Unit.PX);
 
         ((ScrollPanel) getContentPane()).add(this.dataTablePanel = dataTablePanel);
+
+        dataTablePanel.getDataTableModel().addDataTableModelListener(new DataTableModelListener() {
+            @Override
+            public void onDataTableModelChanged(DataTableModelEvent event) {
+                if (event.getType() == DataTableModelEvent.Type.REBUILD) {
+                    onPopulate();
+                }
+            }
+        });
     }
 
     @Override
@@ -70,6 +87,12 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
     public void setPresenter(IPrimeListerView.IPrimeListerPresenter<E> presenter) {
         super.setPresenter(presenter);
         setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
+    }
+
+    /**
+     * Called after data is shown/propagated to UI components
+     */
+    protected void onPopulate() {
     }
 
     @Override

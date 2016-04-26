@@ -29,8 +29,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -57,28 +57,28 @@ public class HoverXYChartTooltip extends FlowPanel implements MouseMoveHandler, 
         chartPanel.addDomHandler(this, MouseOutEvent.getType());
         chartPanel.addDomHandler(this, MouseOverEvent.getType());
 
-        this.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        this.getStyle().setPosition(Position.ABSOLUTE);
 
-        this.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        this.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        this.getElement().getStyle().setBorderColor("#666");
-        this.getElement().getStyle().setProperty("borderRadius", "10px");
-        this.getElement().getStyle().setProperty("background", "rgba(255,255,255,0.8)");
-        this.getElement().getStyle().setPadding(5, Unit.PX);
+        this.getStyle().setBorderStyle(BorderStyle.SOLID);
+        this.getStyle().setBorderWidth(1, Unit.PX);
+        this.getStyle().setBorderColor("#666");
+        this.getStyle().setProperty("borderRadius", "10px");
+        this.getStyle().setProperty("background", "rgba(255,255,255,0.8)");
+        this.getStyle().setPadding(5, Unit.PX);
 
         container.add(this);
 
         this.add(labelY = new HTML(""));
         this.add(labelX = new HTML(""));
-        labelX.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        labelX.getElement().getStyle().setWidth(100, Unit.PCT);
-        labelY.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        labelY.getElement().getStyle().setWidth(100, Unit.PCT);
+        labelX.getStyle().setTextAlign(TextAlign.CENTER);
+        labelX.getStyle().setWidth(100, Unit.PCT);
+        labelY.getStyle().setTextAlign(TextAlign.CENTER);
+        labelY.getStyle().setWidth(100, Unit.PCT);
     }
 
     protected void positionLabels(int x, int y) {
-        this.getElement().getStyle().setTop(y + 30, Unit.PX);
-        this.getElement().getStyle().setLeft(x - this.getOffsetWidth() / 2 + 10, Unit.PX);
+        this.getStyle().setTop(y + 30, Unit.PX);
+        this.getStyle().setLeft(x - this.getOffsetWidth() / 2 + 10, Unit.PX);
     }
 
     @Override

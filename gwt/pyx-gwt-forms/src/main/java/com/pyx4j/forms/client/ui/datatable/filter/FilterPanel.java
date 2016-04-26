@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -31,6 +34,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -44,6 +48,8 @@ import com.pyx4j.widgets.client.selector.SelectorListBox;
 import com.pyx4j.widgets.client.selector.SelectorListBoxValuePanel;
 
 public class FilterPanel extends SelectorListBox<FilterItem> {
+
+    private static final Logger log = LoggerFactory.getLogger(FilterPanel.class);
 
     private static final I18n i18n = I18n.get(FilterPanel.class);
 
@@ -148,8 +154,10 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
                 propertyPath = ((RangeCriterion) criterion).getPropertyPath();
             }
             if (propertyPath != null) {
+                boolean columnFound = false;
                 for (ColumnDescriptor columnDescriptor : columnDescriptors) {
                     if (propertyPath.equals(columnDescriptor.getColumnPath())) {
+                        columnFound = true;
                         FilterItem item = new FilterItem(columnDescriptor);
                         if (items.contains(item)) {
                             items.get(items.indexOf(item)).setCriterion(criterion);
@@ -157,6 +165,14 @@ public class FilterPanel extends SelectorListBox<FilterItem> {
                             item.setCriterion(criterion);
                             items.add(item);
                         }
+                        break;
+                    }
+                }
+                if (!columnFound) {
+                    if (ApplicationMode.isDevelopment()) {
+                        throw new Error("Filter ColumnDescriptor not found for " + criterion);
+                    } else {
+                        log.error("Filter ColumnDescriptor not found for {}", criterion);
                     }
                 }
             }

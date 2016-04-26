@@ -23,7 +23,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.entity.core.query.IDateOffsetCondition;
 import com.pyx4j.entity.core.query.IDateOffsetCondition.DateOffset;
@@ -57,7 +57,7 @@ public class DateOffsetFilterEditor extends FilterEditorBase<IDateOffsetConditio
         }
         contentPanel.add(offsetTypeBox);
         offsetTypeValidationLabel = new ValidationLabel(offsetTypeBox);
-        offsetTypeValidationLabel.getElement().getStyle().setColor("red");
+        offsetTypeValidationLabel.getStyle().setColor("red");
         contentPanel.add(offsetTypeValidationLabel);
 
         contentPanel.add(new Label(i18n.tr("Offset")));
@@ -66,7 +66,7 @@ public class DateOffsetFilterEditor extends FilterEditorBase<IDateOffsetConditio
         offsetBox.setWidth("100px");
         contentPanel.add(offsetBox);
         offsetValidationLabel = new ValidationLabel(offsetBox);
-        offsetValidationLabel.getElement().getStyle().setColor("red");
+        offsetValidationLabel.getStyle().setColor("red");
         contentPanel.add(offsetValidationLabel);
 
         offsetBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {

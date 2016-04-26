@@ -25,7 +25,7 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.Image;
 
 import com.pyx4j.commons.ConverterUtils;
 

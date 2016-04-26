@@ -37,6 +37,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.config.server.ClassFinder;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.GeneratorIgnore;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.impl.SharedEntityHandler;
+import com.pyx4j.entity.core.meta.EntityMeta;
+
 import javassist.CannotCompileException;
 import javassist.ClassClassPath;
 import javassist.ClassPath;
@@ -51,19 +65,6 @@ import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
 import javassist.bytecode.annotation.Annotation;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.pyx4j.commons.GWTJava5Helper;
-import com.pyx4j.config.server.ClassFinder;
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.impl.SharedEntityHandler;
-import com.pyx4j.entity.core.meta.EntityMeta;
 
 public class EntityImplGenerator {
 
@@ -406,6 +407,12 @@ public class EntityImplGenerator {
                 if (type == CtClass.voidType) {
                     throw new Error("Can't create void member '" + method.getName() + "' for class " + name);
                 }
+
+                //Java 8 Default Method
+                if (method.getAnnotation(GeneratorIgnore.class) != null) {
+                    continue;
+                }
+
                 // Do not redeclare PK
                 if (method.getName().equals(IEntity.PRIMARY_KEY)) {
                     continue;

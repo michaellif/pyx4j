@@ -22,8 +22,9 @@ package com.pyx4j.forms.client.ui.datatable.filter;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 
-public interface IFilterEditor extends IsWidget {
+public interface IFilterEditor extends IsWidget, HasStyle {
 
     Criterion getCriterion() throws CriterionInitializationException;
 

@@ -171,11 +171,26 @@ public class AclBuilder implements AclCreator {
         getGroup(behavior).permissions.add(permission);
     }
 
+    /**
+     * Grant permission to two Behaviors at ones
+     *
+     * @param behavior1
+     * @param behavior2
+     * @param permission
+     */
     protected void grant(Behavior behavior1, Behavior behavior2, Permission permission) {
         getGroup(behavior1).permissions.add(permission);
         getGroup(behavior2).permissions.add(permission);
     }
 
+    /**
+     * Grant permission to tree Behaviors at ones
+     *
+     * @param behavior1
+     * @param behavior2
+     * @param behavior3
+     * @param permission
+     */
     protected void grant(Behavior behavior1, Behavior behavior2, Behavior behavior3, Permission permission) {
         getGroup(behavior1).permissions.add(permission);
         getGroup(behavior2).permissions.add(permission);
@@ -186,6 +201,12 @@ public class AclBuilder implements AclCreator {
         getGroup(behavior).grant(accessRuleInterfaceClass, accessRule, subject);
     }
 
+    /**
+     * This will grant all permissions of behaviorGranted to behaviorDest at runtime.
+     *
+     * @param behaviorDest
+     * @param behaviorGranted
+     */
     protected void grant(Behavior behaviorDest, Behavior behaviorGranted) {
         if (behaviorDest.equals(behaviorGranted)) {
             throw new IllegalArgumentException();
@@ -201,6 +222,11 @@ public class AclBuilder implements AclCreator {
         getGroup(behavior).restrictions.add(restriction);
     }
 
+    /**
+     * Used to build complex ACL from multiple ACL classes
+     *
+     * @param aclBuilder
+     */
     protected void merge(AclBuilder aclBuilder) {
         aclBuilder.freeze();
         global.add(aclBuilder.global);

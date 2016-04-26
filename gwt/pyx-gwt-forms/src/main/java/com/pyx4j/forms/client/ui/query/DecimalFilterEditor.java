@@ -26,7 +26,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
@@ -57,7 +57,7 @@ public class DecimalFilterEditor extends FilterEditorBase<IDecimalRangeCondition
         fromBox = new DecimalBox();
         contentPanel.add(fromBox);
         fromBoxValidationLabel = new ValidationLabel(fromBox);
-        fromBoxValidationLabel.getElement().getStyle().setColor("red");
+        fromBoxValidationLabel.getStyle().setColor("red");
         contentPanel.add(fromBoxValidationLabel);
 
         fromBox.addValueChangeHandler(new ValueChangeHandler<Double>() {
@@ -73,7 +73,7 @@ public class DecimalFilterEditor extends FilterEditorBase<IDecimalRangeCondition
         toBox = new DecimalBox();
         contentPanel.add(toBox);
         toBoxValidationLabel = new ValidationLabel(toBox);
-        toBoxValidationLabel.getElement().getStyle().setColor("red");
+        toBoxValidationLabel.getStyle().setColor("red");
         contentPanel.add(toBoxValidationLabel);
 
         toBox.addValueChangeHandler(new ValueChangeHandler<Double>() {
@@ -85,7 +85,7 @@ public class DecimalFilterEditor extends FilterEditorBase<IDecimalRangeCondition
         });
 
         Label descrLabel = new Label(i18n.tr("Enter a minimum, maximum or range limit"));
-        descrLabel.getElement().getStyle().setPaddingTop(10, Unit.PX);
+        descrLabel.getStyle().setPaddingTop(10, Unit.PX);
         contentPanel.add(descrLabel);
 
     }

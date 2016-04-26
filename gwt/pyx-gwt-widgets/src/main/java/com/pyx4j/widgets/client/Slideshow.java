@@ -30,15 +30,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.layout.client.Layout.Alignment;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HasStyle;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class Slideshow extends LayoutPanel {
+public class Slideshow extends LayoutPanel implements HasStyle {
 
     private static final Logger log = LoggerFactory.getLogger(Slideshow.class);
 
@@ -76,7 +77,7 @@ public class Slideshow extends LayoutPanel {
         add(slides);
 
         controlPanel = new ControlPanel();
-        controlPanel.getElement().getStyle().setPadding(5, Unit.PX);
+        controlPanel.getStyle().setPadding(5, Unit.PX);
         add(controlPanel);
         setWidgetHorizontalPosition(controlPanel, Alignment.END);
         setWidgetVerticalPosition(controlPanel, Alignment.END);

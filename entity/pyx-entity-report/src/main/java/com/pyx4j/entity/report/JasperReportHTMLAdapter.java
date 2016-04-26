@@ -50,12 +50,12 @@ import com.steadystate.css.parser.SACParserCSS3;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
-public class JasperReportHTMLAdapter {
+public final class JasperReportHTMLAdapter {
 
     // The css properties supported by jasper without modification
     private static List<String> supportedStyleProperties = Arrays.asList(//
             "font-weight", "font-style", "text-decoration", //
-            "color", "background-color");
+            "color", "background-color", "background");
 
     /**
      * Removes <style> tag and <xml> Microsoft word style definition from
@@ -83,7 +83,7 @@ public class JasperReportHTMLAdapter {
             for (String nameValue : element.attr("style").split(";")) {
                 String[] nameValuParts = nameValue.split(":");
                 if (nameValuParts.length > 1) {
-                    elementStylePropertiesCombined.put(nameValuParts[0], nameValuParts[1]);
+                    elementStylePropertiesCombined.put(nameValuParts[0].trim(), nameValuParts[1].trim());
                 }
             }
 
@@ -100,6 +100,7 @@ public class JasperReportHTMLAdapter {
                 if (propertyValue != null) {
                     elementStylePropertiesNew.put(property, propertyValue);
                 }
+
             }
 
             String newStyle = Joiner.on("; ").withKeyValueSeparator(":").join(elementStylePropertiesNew);
@@ -114,43 +115,17 @@ public class JasperReportHTMLAdapter {
             element.removeAttr("class");
         }
 
-        // Go over unsupported tags and convert them.
-        Elements elements = dirtyDocument.getAllElements();
-        for (int i = 0; i < elements.size(); i++) {
-            Element element = elements.get(i);
-            switch (element.tagName()) {
-            case "p":
-            case "div":
-                element.tagName("span");
-                if (i < (elements.size() - 1)) {
-                    element.after("<br/>"); // avoid extra space at the end.
-                }
-                break;
-            }
-        }
-
         // Base On http://jasperreports.sourceforge.net/sample.reference/styledtext/
         // TODO This may affect presentation in browser; so may be moved to new function or approach can be changed...
         Whitelist whitelist = Whitelist.none()//
-                .addTags("b", "i", "u", "font", "sup", "sub", "li", "br") //
+                .addTags("b", "i", "u", "font", "sup", "sub", "li", "br", "ol", "ul", "strike", "s", "del") //
                 .addAttributes("font", "size", "color") //
-                .addAttributes("span", "style");
+                .addAttributes("span", "style") //
+                .addAttributes("p", "style") //
+                .addAttributes("div", "style");
 
         Cleaner cleaner = new Cleaner(whitelist);
         Document document = cleaner.clean(dirtyDocument);
-
-        // Apply font style inheritance to children elements
-        Elements candidateElements = document.select("body").get(0).getAllElements();
-        for (int i = 1; i < candidateElements.size(); i++) {
-            Element element = candidateElements.get(i);
-            if (!element.tagName().equalsIgnoreCase("br") //
-                    && element.parent() != null //
-                    && !element.parent().tagName().equalsIgnoreCase("body") //
-                    && !hasImplicitStyle(element) //
-                    && hasImplicitStyle(element.parent())) {
-                element.attr("style", element.parent().attr("style"));
-            }
-        }
 
         Document.OutputSettings settings = document.outputSettings();
         settings.prettyPrint(ApplicationMode.isDevelopment());
@@ -158,10 +133,6 @@ public class JasperReportHTMLAdapter {
         settings.charset(StandardCharsets.UTF_8);
 
         return document.select("body").html();
-    }
-
-    private static boolean hasImplicitStyle(Element e) {
-        return e.hasAttr("style");
     }
 
     private static String normalizeFontSize(String fontSize) {

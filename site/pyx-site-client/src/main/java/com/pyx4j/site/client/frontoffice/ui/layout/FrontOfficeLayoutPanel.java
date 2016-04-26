@@ -27,10 +27,10 @@ import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
@@ -98,7 +98,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         headerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutHeaderHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
-        pageScroll.getElement().getStyle().setOverflowY(Overflow.SCROLL);
+        pageScroll.getStyle().setOverflowY(Overflow.SCROLL);
         pageScroll.setHeight("100%");
         pageHolder.add(pageScroll);
 
@@ -109,10 +109,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         inlineExtraHolder = new InlineExtraHolder(this, extra1Caption, extra2Caption);
 
-        getDisplay(DisplayType.notification).getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        getDisplay(DisplayType.content).getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        getDisplay(DisplayType.notification).getStyle().setTextAlign(TextAlign.CENTER);
+        getDisplay(DisplayType.content).getStyle().setTextAlign(TextAlign.CENTER);
 
-        getDisplay(DisplayType.toolbar).getElement().getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
+        getDisplay(DisplayType.toolbar).getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
         getDisplay(DisplayType.toolbar).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         contentHolder = new ContentHolder(this);
@@ -120,12 +120,12 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         // Fix for MCO footer position in IE8
         if (!BrowserType.isIE8()) {
-            contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
+            contentHolder.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
         }
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.ensureDebugId(getClass().getSimpleName() + ".contentPanel");
-        contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        contentPanel.getStyle().setPosition(Position.RELATIVE);
 
         contentPanel.add(contentHolder);
         contentPanel.add(inlineExtraHolder);
@@ -145,7 +145,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         footerHolder = new SimplePanel(getDisplay(DisplayType.footer));
         footerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutFooterHolder.name());
-        getDisplay(DisplayType.footer).getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        getDisplay(DisplayType.footer).getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getDisplay(DisplayType.footer).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         pagePanel.add(headerHolder);
@@ -266,7 +266,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         onScroll();
 
-        contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
+        contentHolder.getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
 
         switch (getLayoutType()) {
         case huge:

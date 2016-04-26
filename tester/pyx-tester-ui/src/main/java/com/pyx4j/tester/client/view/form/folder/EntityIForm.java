@@ -21,7 +21,7 @@ package com.pyx4j.tester.client.view.form.folder;
 
 import java.util.ArrayList;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;

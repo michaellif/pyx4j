@@ -19,9 +19,9 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.Label;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.ui.CComponent;

@@ -25,7 +25,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.pyx4j.gwt.commons.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -52,7 +52,7 @@ public abstract class ReportSettingsManagementVizor extends AbstractVisorPaneVie
 
         HorizontalPanel buttonsPanel = new HorizontalPanel();
         buttonsPanel.setHeight("100%");
-        buttonsPanel.getElement().getStyle().setProperty("margin", "auto");
+        buttonsPanel.getStyle().setProperty("margin", "auto");
         loadButton = new Button(i18n.tr("Load"), new Command() {
             @Override
             public void execute() {
@@ -61,7 +61,7 @@ public abstract class ReportSettingsManagementVizor extends AbstractVisorPaneVie
                 }
             }
         });
-        loadButton.getElement().getStyle().setProperty("marginRight", "1em");
+        loadButton.getStyle().setProperty("marginRight", "1em");
         buttonsPanel.add(loadButton);
         buttonsPanel.setCellVerticalAlignment(loadButton, HasVerticalAlignment.ALIGN_MIDDLE);
 
@@ -73,7 +73,7 @@ public abstract class ReportSettingsManagementVizor extends AbstractVisorPaneVie
                 }
             }
         });
-        deleteButton.getElement().getStyle().setProperty("marginLeft", "1em");
+        deleteButton.getStyle().setProperty("marginLeft", "1em");
         buttonsPanel.add(deleteButton);
         buttonsPanel.setCellVerticalAlignment(deleteButton, HasVerticalAlignment.ALIGN_MIDDLE);
         panel.addSouth(buttonsPanel, 3);

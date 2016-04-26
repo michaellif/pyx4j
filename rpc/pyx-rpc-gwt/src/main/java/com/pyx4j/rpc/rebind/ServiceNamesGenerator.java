@@ -43,6 +43,8 @@ import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.linker.EmittedArtifact.Visibility;
+import com.google.gwt.core.ext.linker.GeneratedResource;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
@@ -190,7 +192,11 @@ public class ServiceNamesGenerator extends Generator {
             }
             writer.close();
 
-            context.commitResource(logger, os);
+            GeneratedResource resource = context.commitResource(logger, os);
+            // TODO: change to Deploy when CodeServer supports copy of files  (also need to change server)
+            if (false) {
+                resource.setVisibility(Visibility.Deploy);
+            }
 
         } catch (IOException e) {
             logger.log(TreeLogger.ERROR, null, e);

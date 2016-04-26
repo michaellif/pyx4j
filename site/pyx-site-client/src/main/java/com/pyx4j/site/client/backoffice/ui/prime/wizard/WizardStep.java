@@ -19,7 +19,7 @@
  */
 package com.pyx4j.site.client.backoffice.ui.prime.wizard;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.validators.IValidatable;

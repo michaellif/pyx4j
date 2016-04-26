@@ -56,23 +56,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-server</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.allen-sauer.gwt.dnd</groupId>
             <artifactId>gwt-dnd</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

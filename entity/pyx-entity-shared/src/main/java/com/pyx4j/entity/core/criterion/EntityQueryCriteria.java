@@ -290,6 +290,34 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return sorts;
     }
 
+    public Sort getFirstSort(IObject<?> member) {
+        List<Sort> sorts = getSorts(member);
+        if (sorts.size() > 0) {
+            return sorts.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public List<Sort> getSorts(IObject<?> member) {
+        List<Sort> sorts = new ArrayList<>();
+        for (Sort sort : getSorts()) {
+            if (member.getPath().equals(sort.getPropertyPath())) {
+                sorts.add(sort);
+            }
+        }
+        return sorts;
+    }
+
+    public boolean hasSort(IObject<?> member) {
+        for (Sort sort : getSorts()) {
+            if (member.getPath().equals(sort.getPropertyPath())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public VersionedCriteria getVersionedCriteria() {
         return versionedCriteria;
     }

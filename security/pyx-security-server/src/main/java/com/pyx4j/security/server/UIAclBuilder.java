@@ -54,25 +54,61 @@ public class UIAclBuilder extends ServletContainerAclBuilder {
         grant(behavior, new ActionPermission(actionClass, protectionDomain));
     }
 
+    /**
+     * Grant DataModelPermission validated in UI and *CrudServiceImpl
+     *
+     * @param behavior
+     * @param entityClass
+     * @param actions
+     */
     protected void grant(Behavior behavior, Class<? extends IEntity> entityClass, int actions) {
         grant(behavior, DataModelPermission.create(entityClass, actions));
     }
 
+    /**
+     * Grant DataModelPermission with InstanceAccess rules validated in UI and *CrudServiceImpl
+     *
+     * @param behavior
+     * @param entityClass
+     * @param instanceAccess
+     * @param actions
+     */
     protected void grant(Behavior behavior, Class<? extends IEntity> entityClass, InstanceAccess instanceAccess, int actions) {
         grant(behavior, DataModelPermission.create(entityClass, instanceAccess, actions));
     }
 
+    /**
+     * Grant DataModelPermission validated in UI and *CrudServiceImpl
+     *
+     * @param behavior
+     * @param entityClass1
+     * @param entityClass2
+     * @param actions
+     */
     protected void grant(Behavior behavior, Class<? extends IEntity> entityClass1, Class<? extends IEntity> entityClass2, int actions) {
         grant(behavior, entityClass1, actions);
         grant(behavior, entityClass2, actions);
     }
 
+    /**
+     * Grant DataModelPermission validated in UI and *CrudServiceImpl
+     *
+     * @param behavior
+     * @param entities
+     * @param actions
+     */
     protected void grant(Behavior behavior, List<Class<? extends IEntity>> entities, int actions) {
         for (Class<? extends IEntity> entityClass : entities) {
             grant(behavior, entityClass, actions);
         }
     }
 
+    /**
+     * Convenience method to use in ACL builder
+     * 
+     * @param classes
+     * @return
+     */
     @SafeVarargs
     protected final List<Class<? extends IEntity>> entities(Class<? extends IEntity>... classes) {
         return Arrays.asList(classes);

@@ -19,7 +19,17 @@
  */
 package com.google.gwt.user.client.ui;
 
-public class AccessibleMenuBar extends MenuBar {
+import com.pyx4j.gwt.commons.ui.HasStyle;
+
+public class AccessibleMenuBar extends MenuBar implements HasStyle {
+
+    public AccessibleMenuBar() {
+        this(false);
+    }
+
+    public AccessibleMenuBar(boolean vertical) {
+        super(vertical);
+    }
 
     public void openItem(MenuItem menuItem) {
         doItemAction(menuItem, true, false);
@@ -27,5 +37,10 @@ public class AccessibleMenuBar extends MenuBar {
 
     public PopupPanel getPopupPanel() {
         return super.getPopup();
+    }
+
+    @Override
+    public void updateSubmenuIcon(MenuItem item) {
+        super.updateSubmenuIcon(item);
     }
 }

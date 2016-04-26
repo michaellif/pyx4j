@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 
-public class RangeCriterion implements Criterion {
+public class RangeCriterion implements Criterion, CriterionPathBound {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,11 @@ public class RangeCriterion implements Criterion {
     }
 
     public RangeCriterion(IObject<?> member, Serializable fromValue, Serializable toValue) {
-        this.propertyPath = member.getPath();
+        this(member.getPath(), fromValue, toValue);
+    }
+
+    public RangeCriterion(Path path, Serializable fromValue, Serializable toValue) {
+        this.propertyPath = path;
         this.fromValue = fromValue;
         this.toValue = toValue;
     }
@@ -58,6 +62,7 @@ public class RangeCriterion implements Criterion {
         return filters;
     }
 
+    @Override
     public Path getPropertyPath() {
         return propertyPath;
     }
@@ -73,5 +78,10 @@ public class RangeCriterion implements Criterion {
     @Override
     public boolean isEmpty() {
         return fromValue == null && toValue == null;
+    }
+
+    @Override
+    public RangeCriterion duplicated(Path newPath) {
+        return new RangeCriterion(newPath, getFromValue(), getToValue());
     }
 }

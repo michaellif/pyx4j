@@ -57,12 +57,13 @@ public class TextQueryFilterEditor extends FilterEditorBase {
 
             PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
-            if (propertyCriterion.getRestriction() != PropertyCriterion.Restriction.RDB_LIKE) {
+            if (!(propertyCriterion.getRestriction() == PropertyCriterion.Restriction.RDB_LIKE
+                    || propertyCriterion.getRestriction() == PropertyCriterion.Restriction.EQUAL)) {
                 throw new Error("Filter criterion isn't supported by editor");
             }
 
             if (!getMember().getPath().equals(propertyCriterion.getPropertyPath())) {
-                throw new Error("Filter editor member doesn't mach filter criterion path");
+                throw new Error("Filter editor member doesn't match filter criterion path");
             }
 
             if (!(propertyCriterion.getValue() instanceof String)) {

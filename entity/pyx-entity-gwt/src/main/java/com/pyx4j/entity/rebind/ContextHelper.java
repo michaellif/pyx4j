@@ -40,6 +40,7 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.GeneratorIgnore;
 import com.pyx4j.entity.annotations.InheritedOnInterface;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.core.IEntity;
@@ -106,7 +107,9 @@ class ContextHelper {
     }
 
     boolean isEntityMember(JMethod method) {
-        return (method.getReturnType() != JPrimitiveType.VOID) && (method.getParameters().length == 0);
+        return (method.getReturnType() != JPrimitiveType.VOID) && (method.getParameters().length == 0) //
+        // TODO do better, Ignore Java 8 Default Method
+                && (method.getAnnotation(GeneratorIgnore.class) == null);
     }
 
     boolean isNumber(JClassType valueClass) {

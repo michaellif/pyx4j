@@ -30,12 +30,12 @@ import com.pyx4j.commons.IParser;
 
 public class TextArea extends ValueBoxBase<String> {
 
-    private final com.google.gwt.user.client.ui.TextArea textBoxWidget;
+    private final com.pyx4j.gwt.commons.ui.TextArea textBoxWidget;
 
     public TextArea() {
-        textBoxWidget = new com.google.gwt.user.client.ui.TextArea();
+        textBoxWidget = new com.pyx4j.gwt.commons.ui.TextArea();
 
-        textBoxWidget.getElement().getStyle().setProperty("resize", "vertical");
+        textBoxWidget.getStyle().setProperty("resize", "vertical");
         setTextBoxWidget(textBoxWidget);
     }
 

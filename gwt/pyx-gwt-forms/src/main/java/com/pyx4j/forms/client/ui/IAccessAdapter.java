@@ -19,14 +19,32 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface IAccessAdapter {
+import com.pyx4j.forms.client.ui.concerns.EditabilityConcern;
+import com.pyx4j.forms.client.ui.concerns.ViewabilityConcern;
+import com.pyx4j.gwt.commons.concerns.EnablingConcern;
+import com.pyx4j.gwt.commons.concerns.VisibilityConcern;
 
+/**
+ * Original adapter is combination of fore functional interfaces (Concerns)
+ *
+ * There are converters functions in CComponent to enable usage of individual Concerns
+ *
+ * TODO migrate completely to AbstractConcern once performance effects can be estimated:
+ *
+ * @see EnablingConcern.isEnabled if (concern instanceof EnablingConcern)
+ */
+public interface IAccessAdapter extends VisibilityConcern, EnablingConcern, ViewabilityConcern, EditabilityConcern {
+
+    @Override
     public Boolean isEnabled();
 
+    @Override
     public Boolean isEditable();
 
+    @Override
     public Boolean isVisible();
 
+    @Override
     public Boolean isViewable();
 
 }

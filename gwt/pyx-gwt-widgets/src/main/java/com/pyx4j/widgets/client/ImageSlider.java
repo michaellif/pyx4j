@@ -22,7 +22,7 @@ package com.pyx4j.widgets.client;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.commons.IDebugId;

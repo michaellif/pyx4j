@@ -17,14 +17,16 @@
  * Created on Aug 23, 2012
  * @author michaellif
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.forms.client.ui.svg;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ColorUtil;
-import com.pyx4j.forms.client.ui.NColorPicker.ColorButton;
+import com.pyx4j.forms.client.ui.INativeFocusField;
+import com.pyx4j.forms.client.ui.NFocusField;
+import com.pyx4j.forms.client.ui.svg.NColorPicker.ColorButton;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.svg.basic.Group;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -150,13 +152,13 @@ public class NColorPicker extends NFocusField<Integer, ColorButton, CColorPicker
             super("");
 
             //TODO move to style
-            getTextLabelComponent().getElement().getStyle().setProperty("margin", "2px 5px");
-            getTextLabelComponent().getElement().getStyle().setProperty("padding", "0 2px");
-            getTextLabelComponent().getElement().getStyle().setProperty("textAlign", "center");
-            getTextLabelComponent().getElement().getStyle().setProperty("width", "60px");
-            getTextLabelComponent().getElement().getStyle().setProperty("height", "1.5em");
-            getTextLabelComponent().getElement().getStyle().setProperty("border", "1px inset #C2C2C2");
-            getElement().getStyle().setProperty("opacity", "1");
+            getTextLabelComponent().getStyle().setProperty("margin", "2px 5px");
+            getTextLabelComponent().getStyle().setProperty("padding", "0 2px");
+            getTextLabelComponent().getStyle().setProperty("textAlign", "center");
+            getTextLabelComponent().getStyle().setProperty("width", "60px");
+            getTextLabelComponent().getStyle().setProperty("height", "1.5em");
+            getTextLabelComponent().getStyle().setProperty("border", "1px inset #C2C2C2");
+            getStyle().setProperty("opacity", "1");
 
             setCommand(new Command() {
 
@@ -177,13 +179,13 @@ public class NColorPicker extends NFocusField<Integer, ColorButton, CColorPicker
 
         public void onColorChange() {
             Integer color = toColor(getNativeValue());
-            getTextLabelComponent().getElement().getStyle().setBackgroundColor(color == null ? "" : ColorUtil.rgbToHex(color));
+            getTextLabelComponent().getStyle().setBackgroundColor(color == null ? "" : ColorUtil.rgbToHex(color));
             setTextLabel(getNativeValue() == null ? "" : String.valueOf(getNativeValue()));
 
             // TODO calculate contrast color for text label
             if (color != null) {
                 int hue = Math.round(ColorUtil.rgbToHsb(color)[0] * 360);
-                getTextLabelComponent().getElement().getStyle().setProperty("color", (hue > 40 && hue < 190) ? "inherit" : "white");
+                getTextLabelComponent().getStyle().setProperty("color", (hue > 40 && hue < 190) ? "inherit" : "white");
             }
 
         }

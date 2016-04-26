@@ -25,11 +25,26 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.ui.CComponentBase.NoteStyle;
+import com.pyx4j.forms.client.ui.concerns.EditabilityConcern;
+import com.pyx4j.forms.client.ui.concerns.EditabilityConcernAccessAdapterConvertor;
+import com.pyx4j.forms.client.ui.concerns.EditabilitySecureConcern;
+import com.pyx4j.forms.client.ui.concerns.EnablingConcernAccessAdapterConvertor;
+import com.pyx4j.forms.client.ui.concerns.ViewabilityConcern;
+import com.pyx4j.forms.client.ui.concerns.ViewabilityConcernAccessAdapterConvertor;
+import com.pyx4j.forms.client.ui.concerns.ViewabilitySecureConcern;
+import com.pyx4j.forms.client.ui.concerns.VisibilityConcernAccessAdapterConvertor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
+import com.pyx4j.gwt.commons.concerns.EnablingConcern;
+import com.pyx4j.gwt.commons.concerns.EnablingSecureConcern;
+import com.pyx4j.gwt.commons.concerns.VisibilityConcern;
+import com.pyx4j.gwt.commons.concerns.VisibilitySecureConcern;
+import com.pyx4j.gwt.commons.ui.HasStyle;
+import com.pyx4j.security.annotations.ActionId;
+import com.pyx4j.security.shared.Permission;
 
-public interface CComponent<DATA_TYPE> extends IsWidget, HasPropertyChangeHandlers, HasValueChangeHandlers<DATA_TYPE> {
+public interface CComponent<DATA_TYPE> extends IsWidget, HasPropertyChangeHandlers, HasValueChangeHandlers<DATA_TYPE>, HasStyle {
 
     // -- Data
 
@@ -44,6 +59,11 @@ public interface CComponent<DATA_TYPE> extends IsWidget, HasPropertyChangeHandle
     public void setValue(DATA_TYPE value, boolean fireEvent); // TODO remove
 
     public void setValue(DATA_TYPE value, boolean fireEvent, boolean populate);
+
+    /**
+     * Set value again and refresh its visual presentation
+     */
+    public void refresh(boolean fireEvent);
 
     /**
      * Remove all values from this component; in case of entity, preserves ownership relationships.
@@ -165,4 +185,123 @@ public interface CComponent<DATA_TYPE> extends IsWidget, HasPropertyChangeHandle
 
     public void applyViewabilityRules();
 
+    // Concerns to AccessAdapter converters to be moved to 'ConcernBuilderPermissionsBase'?
+
+    /**
+     * Component will become Visible when function returns true.
+     *
+     * Multiple concerns:
+     * - all concerns of the same type should return true for component to become Visible.
+     * - if any of concerns returns false the component will not become Visible.
+     */
+    default void visible(VisibilityConcern concern, String... debuggingAdapterName) {
+        addAccessAdapter(new VisibilityConcernAccessAdapterConvertor(concern));
+    }
+
+    /**
+     * Permit component to become Visible when one (any) of the Permission is satisfied.
+     * Mind other 'visible' concerns.
+     *
+     * N.B. Permission with InstanceAccess rules not supported in CComponent hierarchy.
+     *
+     * @param permissions
+     *            not null and not empty
+     */
+    default void visible(Permission... permissions) {
+        visible(new VisibilitySecureConcern(permissions), permissions[0].toString());
+    }
+
+    /**
+     * Permit component to become Visible when ActionId is permitted.
+     * Mind other 'visible' concerns.
+     *
+     */
+    default void visible(Class<? extends ActionId> actionId) {
+        visible(new VisibilitySecureConcern(actionId), actionId.toString());
+    }
+
+    /**
+     * Component will become Enabled when function returns true.
+     *
+     * Multiple concerns:
+     * - all concerns of the same type should return true for component to become Enabled.
+     * - if any of concerns returns false the component will not become Enabled.
+     */
+    default void enabled(EnablingConcern concern, String... debuggingAdapterName) {
+        addAccessAdapter(new EnablingConcernAccessAdapterConvertor(concern));
+    }
+
+    /**
+     * Permit component to become Enabled when one (any) of the Permission is satisfied.
+     * Mind other 'enabled' concerns.
+     *
+     * N.B. Permission with InstanceAccess rules not supported in CComponent hierarchy.
+     *
+     * @param permissions
+     *            not null and not empty
+     */
+    default void enabled(Permission... permissions) {
+        enabled(new EnablingSecureConcern(permissions), permissions[0].toString());
+    }
+
+    /**
+     * Permit component to become Enabled when ActionId is permitted.
+     * Mind other 'enabled' concerns.
+     *
+     */
+    default void enabled(Class<? extends ActionId> actionId) {
+        enabled(new EnablingSecureConcern(actionId), actionId.toString());
+    }
+
+    default void editable(EditabilityConcern concern, String... debuggingAdapterName) {
+        addAccessAdapter(new EditabilityConcernAccessAdapterConvertor(concern));
+    }
+
+    /**
+     * Permit component to become Editable when one (any) of the Permission is satisfied.
+     * Mind other 'editable' concerns.
+     *
+     * N.B. Permission with InstanceAccess rules not supported in CComponent hierarchy.
+     *
+     * @param permissions
+     *            not null and not empty
+     */
+    default void editable(Permission... permissions) {
+        editable(new EditabilitySecureConcern(permissions), permissions[0].toString());
+    }
+
+    /**
+     * Permit component to become Enabled when ActionId is permitted.
+     * Mind other 'editable' concerns.
+     *
+     */
+    default void editable(Class<? extends ActionId> actionId) {
+        editable(new EditabilitySecureConcern(actionId), actionId.toString());
+    }
+
+    default void viewable(ViewabilityConcern concern, String... debuggingAdapterName) {
+        addAccessAdapter(new ViewabilityConcernAccessAdapterConvertor(concern));
+    }
+
+    /**
+     * Permit component to become Viewable when one (any) of the Permission is satisfied.
+     * Mind other 'viewable' concerns.
+     *
+     * N.B. Permission with InstanceAccess rules not supported in CComponent hierarchy.
+     *
+     * @param permissions
+     *            not null and not empty
+     */
+    default void viewable(Permission... permissions) {
+        viewable(new ViewabilitySecureConcern(permissions), permissions[0].toString());
+    }
+
+    /**
+     * Permit component to become Viewable when ActionId is permitted.
+     * Mind other 'viewable' concerns.
+     *
+     */
+    default void viewable(Class<? extends ActionId> actionId) {
+        viewable(new ViewabilitySecureConcern(actionId), actionId.toString());
+    }
 }

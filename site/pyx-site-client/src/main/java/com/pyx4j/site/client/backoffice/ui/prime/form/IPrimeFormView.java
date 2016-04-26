@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-06-09
  * @author Vlad
  */
@@ -31,7 +31,10 @@ public interface IPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormP
 
     void populate(E value);
 
+    //Test the populated flag to false
     void reset();
+
+    boolean isPopulated();
 
     void setActiveTab(int index);
 

@@ -23,11 +23,13 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
+import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 
 /**
  *
@@ -117,8 +119,22 @@ public abstract class FiltersBuilder {
         return this;
     }
 
+    /**
+     * Create Filter with To String values / Not just IDs as above so this can be used in presentation
+     */
+    public final <E extends IEntity> FiltersBuilder entity(IObject<?> member, E value) {
+        addCriterion(new PropertyCriterion(member, Restriction.EQUAL, value, AttachLevel.ToStringMembers));
+        return this;
+    }
+
     public final <T extends Collection<?>> FiltersBuilder in(IObject<?> criteria_proto_member, T values) {
         addCriterion(PropertyCriterion.in(criteria_proto_member, values));
+        return this;
+    }
+
+    // Create collection with To String values / Not just IDs as above so this can be used in presentation
+    public final <E extends IEntity, T extends Collection<E>> FiltersBuilder in(IObject<?> member, T values, AttachLevel attachLevel) {
+        addCriterion(PropertyCriterion.in(member, values, attachLevel));
         return this;
     }
 
@@ -169,6 +185,11 @@ public abstract class FiltersBuilder {
 
     public final FiltersBuilder le(IObject<?> criteria_proto_member, IPrimitive<?> value) {
         addCriterion(PropertyCriterion.le(criteria_proto_member, value));
+        return this;
+    }
+
+    public final FiltersBuilder range(IObject<?> criteria_proto_member, Serializable fromValue, Serializable toValue) {
+        addCriterion(new RangeCriterion(criteria_proto_member, fromValue, toValue));
         return this;
     }
 

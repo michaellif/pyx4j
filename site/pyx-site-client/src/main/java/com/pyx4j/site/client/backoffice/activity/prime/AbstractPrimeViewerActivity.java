@@ -104,9 +104,14 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
         return (IPrimeViewerView<E>) super.getView();
     }
 
+    protected E getValue() {
+        return populatedValue;
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         getView().setPresenter(this);
+        onStart();
         populate();
         panel.setWidget(getView());
         MementoManager.restoreState(getView(), getPlace());
@@ -139,7 +144,11 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
             @Override
             public void onSuccess(E result) {
                 if (!discarded) {
+                    if (getView().isPopulated()) {
+                        getView().reset();
+                    }
                     onPopulateSuccess(result);
+                    onPopulate();
                 }
             }
         }, entityId, AbstractCrudService.RetrieveOperation.View);
@@ -151,12 +160,28 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
             @Override
             public void onSuccess(E result) {
                 if (!discarded) {
+                    if (getView().isPopulated()) {
+                        getView().reset();
+                    }
                     onPopulateSuccess(result);
+                    onPopulate();
                 }
             }
         }, entityId, AbstractCrudService.RetrieveOperation.View);
     }
 
+    /**
+     * Called after data is shown/propagated to UI components
+     */
+    protected void onPopulate() {
+    }
+
+    /**
+     * TODO refactoring will be done at EOD 1.4.5
+     *
+     * @deprecated use onPopulate
+     */
+    @Deprecated
     protected void onPopulateSuccess(E result) {
         populateView(result);
     }
@@ -169,10 +194,6 @@ public abstract class AbstractPrimeViewerActivity<E extends IEntity> extends Abs
         populatedValue = result;
         getView().populate(result);
         getView().setActiveTab(activeTab);
-    }
-
-    protected E getValue() {
-        return populatedValue;
     }
 
     @Override

@@ -19,6 +19,9 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -33,16 +36,21 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.concerns.AbstractConcern;
+import com.pyx4j.gwt.commons.concerns.ConcernStateChangeEvent;
+import com.pyx4j.gwt.commons.concerns.HasSecureConcernedChildren;
+import com.pyx4j.gwt.commons.concerns.HasWidgetConcerns;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 import com.pyx4j.security.shared.AccessControlContext;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public abstract class ButtonBase extends FocusPanel implements IFocusWidget, HasSecureConcern {
+public abstract class ButtonBase extends FocusPanel implements HasWidgetConcerns, IFocusWidget, HasSecureConcernedChildren, HasStyle {
 
     private final HTML textLabel;
 
@@ -54,7 +62,9 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     private boolean active = false;
 
-    protected final SecureConcern visible = new SecureConcern();
+    protected final List<AbstractConcern> concerns = new ArrayList<>();
+
+    private final SecureConcernsHolder secureConcernsHolder = new SecureConcernsHolder();
 
     private String captionText;
 
@@ -68,7 +78,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         setTextLabel(text);
 
         imageHolder = new FlowPanel();
-        imageHolder.getElement().getStyle().setProperty("height", "100%");
+        imageHolder.getStyle().setProperty("height", "100%");
 
         imageHolder.add(textLabel);
 
@@ -109,7 +119,7 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     public void setCommand(Command command) {
         this.command = command;
-        setVisibleImpl();
+        applyVisibilityRules();
     }
 
     public Command getCommand() {
@@ -156,38 +166,78 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         return imageHolder;
     }
 
-    public void setPermission(Permission... permission) {
-        visible.setPermission(permission);
-        setVisibleImpl();
-    }
-
     protected void updateImageState() {
-        getImageHolder().getElement().getStyle().setProperty("paddingLeft", "0px");
-        getImageHolder().getElement().getStyle().setProperty("background", "none");
+        getImageHolder().getStyle().setProperty("paddingLeft", "0px");
+        getImageHolder().getStyle().setProperty("background", "none");
     }
 
-    protected void setVisibleImpl() {
-        setVisibleUIObject(this.visible.getDecision());
-    }
+    // --- concerns implementation - start
 
-    protected void setVisibleUIObject(boolean visible) {
-        super.setVisible(visible);
+    @Override
+    public List<AbstractConcern> concerns() {
+        return concerns;
     }
 
     @Override
-    public void setVisible(boolean visible) {
-        this.visible.setDecision(visible);
-        if (this.visible.hasDecision()) {
-            setVisibleImpl();
+    public SecureConcernsHolder secureConcernsHolder() {
+        return secureConcernsHolder;
+    }
+
+    @Override
+    public void applyVisibilityRules() {
+        if (this.isAttached()) {
+            boolean state = HasWidgetConcerns.super.isVisible();
+            if (super.isVisible() != state) {
+                super.setVisible(state);
+                fireEvent(new ConcernStateChangeEvent());
+            }
         }
     }
 
     @Override
-    public void setSecurityContext(AccessControlContext context) {
-        visible.setContext(context);
-        setVisibleImpl();
+    protected void onAttach() {
+        super.onAttach();
+        applyConcernRules();
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        setConcernsVisible(visible);
+    }
+
+    // Historic method to avoid refactoring
+    public void setPermission(Permission... permission) {
+        setVisibilityPermission(permission);
+    }
+
+    @Override
+    public void applyEnablingRules() {
+        boolean enabled = HasWidgetConcerns.super.isEnabled();
+        getElement().setPropertyBoolean("disabled", !enabled);
+        facesHandler.setEnabled(enabled);
+    }
+
+    @Override
+    public void setSecurityContext(AccessControlContext context) {
+        HasWidgetConcerns.super.setSecurityContext(context);
+        HasSecureConcernedChildren.super.setSecurityContext(context);
+    }
+
+    @Override
+    public void inserConcernedParent(AbstractConcern parentConcern) {
+        HasWidgetConcerns.super.inserConcernedParent(parentConcern);
+        HasSecureConcernedChildren.super.inserConcernedParent(parentConcern);
+    }
+
+    @Override
+    public void applyConcernRules() {
+        HasWidgetConcerns.super.applyConcernRules();
+        HasSecureConcernedChildren.super.applyConcernRules();
+    }
+
+    // --- concerns implementation - end
+
+    // This is used for Toggle buttons
     public boolean isActive() {
         return active;
     }
@@ -200,17 +250,6 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
 
     public void click() {
         DomEvent.fireNativeEvent(Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false), this);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return !getElement().getPropertyBoolean("disabled");
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        getElement().setPropertyBoolean("disabled", !enabled);
-        facesHandler.setEnabled(enabled);
     }
 
     @Override
@@ -230,11 +269,19 @@ public abstract class ButtonBase extends FocusPanel implements IFocusWidget, Has
         facesHandler.onUnload();
     }
 
+    /**
+     * Not implemented in button
+     */
     @Override
+    @Deprecated
     public void setEditable(boolean editable) {
     }
 
+    /**
+     * Not implemented in button
+     */
     @Override
+    @Deprecated
     public boolean isEditable() {
         return false;
     }

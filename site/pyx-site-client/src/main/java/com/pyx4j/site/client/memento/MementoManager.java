@@ -61,8 +61,8 @@ public class MementoManager {
             ((IMementoAware) widget).saveState(mementoInput);
             storeMemento(mementoInput.getState(), place, widget);
         }
-        if (widget instanceof HasWidgets) {
-            for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
+        if (widget.asWidget() instanceof HasWidgets) {
+            for (Iterator<Widget> iterator = ((HasWidgets) widget.asWidget()).iterator(); iterator.hasNext();) {
                 saveState(iterator.next(), place);
             }
         }
@@ -74,8 +74,8 @@ public class MementoManager {
             SiteMementoOutput mementoOutput = new SiteMementoOutput(state);
             ((IMementoAware) widget).restoreState(mementoOutput);
         }
-        if (widget instanceof HasWidgets) {
-            for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
+        if (widget.asWidget() instanceof HasWidgets) {
+            for (Iterator<Widget> iterator = ((HasWidgets) widget.asWidget()).iterator(); iterator.hasNext();) {
                 restoreState(iterator.next(), place);
             }
         }

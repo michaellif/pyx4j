@@ -47,16 +47,13 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -64,6 +61,9 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.gwt.commons.layout.ILayoutable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -147,7 +147,7 @@ public class Dialog implements ProvidesResize, IsWidget {
 
         container = new FlowPanel();
         container.setStylePrimaryName(DialogTheme.StyleName.Dialog.name());
-        container.getElement().getStyle().setProperty("cursor", "default");
+        container.getStyle().setProperty("cursor", "default");
 
         captionPanel = new CaptionPanel();
         container.add(captionPanel);
@@ -404,8 +404,8 @@ public class Dialog implements ProvidesResize, IsWidget {
         } else {
             button.ensureDebugId(debugID.debugId());
         }
-        button.getElement().getStyle().setMargin(3, Unit.PX);
-        button.getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+        button.getStyle().setMargin(3, Unit.PX);
+        button.getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
         if (canHaveFocus && defaultButton == null) {
             defaultButton = button;
         }
@@ -685,8 +685,8 @@ public class Dialog implements ProvidesResize, IsWidget {
         public CaptionPanel() {
             setWordWrap(false);
             setStylePrimaryName(DialogTheme.StyleName.DialogCaption.name());
-            getElement().getStyle().setHeight(1.5, Unit.EM);
-            getElement().getStyle().setLineHeight(1.5, Unit.EM);
+            getStyle().setHeight(1.5, Unit.EM);
+            getStyle().setLineHeight(1.5, Unit.EM);
         }
 
     }

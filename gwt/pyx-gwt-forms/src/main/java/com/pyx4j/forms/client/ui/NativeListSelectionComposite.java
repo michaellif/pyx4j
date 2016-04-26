@@ -46,9 +46,9 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlexTable;
+import com.pyx4j.gwt.commons.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.pyx4j.gwt.commons.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.commons.IDebugId;
@@ -254,11 +254,11 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         });
 
         // Layout corrections
-        removeButton.getElement().getStyle().setProperty("padding", "3px");
-        addButton.getElement().getStyle().setProperty("padding", "3px");
+        removeButton.getStyle().setProperty("padding", "3px");
+        addButton.getStyle().setProperty("padding", "3px");
 
         // Remove table offset in form
-        content.getElement().getStyle().setProperty("borderCollapse", "collapse");
+        content.getStyle().setProperty("borderCollapse", "collapse");
 
         addFocusableGroup(addButton, removeButton, selectedListBox, optionsListBox);
 

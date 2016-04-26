@@ -21,8 +21,8 @@ package com.pyx4j.site.client.ui.layout;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.pyx4j.site.client.DisplayPanel;
 
 public class SidePanelHolder extends SimplePanel {
@@ -35,8 +35,8 @@ public class SidePanelHolder extends SimplePanel {
         getWidget().getElement().getStyle().setPosition(Position.STATIC);
         getWidget().getElement().getStyle().setProperty("width", "auto");
         getWidget().getElement().getStyle().setProperty("height", "100%");
-        getElement().getStyle().setProperty("height", "100%");
-        getElement().getStyle().setProperty("width", "100%");
+        getStyle().setProperty("height", "100%");
+        getStyle().setProperty("width", "100%");
     }
 
     @Override

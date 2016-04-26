@@ -26,9 +26,10 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.ui.HasStyle;
 import com.pyx4j.widgets.client.style.theme.WidgetsTheme;
 
-public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFocusWidget {
+public class Anchor extends com.google.gwt.user.client.ui.Anchor implements IFocusWidget, HasStyle {
 
     public static final String DEFAULT_HREF = "javascript:;";
 

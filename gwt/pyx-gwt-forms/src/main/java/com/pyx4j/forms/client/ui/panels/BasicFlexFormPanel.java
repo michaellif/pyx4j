@@ -40,14 +40,14 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.gwt.commons.ui.FlexTable;
+import com.pyx4j.gwt.commons.ui.FlowPanel;
+import com.pyx4j.gwt.commons.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.gwt.commons.ui.Label;
+import com.pyx4j.gwt.commons.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -121,26 +121,26 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
         getFlexCellFormatter().setColSpan(row, col, span);
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());
-        header.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        header.getStyle().setTextAlign(TextAlign.LEFT);
 
         if (imageResource != null) {
             Image image = new Image(imageResource);
             image.setStyleName(imageStyle.name());
-            image.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            image.getStyle().setDisplay(Display.INLINE_BLOCK);
+            image.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             header.add(image);
         }
 
         Label label = new Label(caption);
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        label.getStyle().setDisplay(Display.INLINE_BLOCK);
+        label.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         label.setStyleName(labelStyle.name());
         header.add(label);
 
         if (actionWidget != null) {
             SimplePanel actionWidgetHolder = new SimplePanel();
-            actionWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            actionWidgetHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            actionWidgetHolder.getStyle().setDisplay(Display.INLINE_BLOCK);
+            actionWidgetHolder.getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             actionWidgetHolder.setWidget(actionWidget);
             actionWidgetHolder.setStyleName(FormFlexPanelActionWidget.name());
             header.add(actionWidgetHolder);
