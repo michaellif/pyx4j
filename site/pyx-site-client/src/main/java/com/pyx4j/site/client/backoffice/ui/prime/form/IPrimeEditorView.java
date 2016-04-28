@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-04
  * @author Vlad
  */
@@ -39,18 +39,16 @@ public interface IPrimeEditorView<E extends IEntity> extends IPrimeFormView<E, I
 
     /**
      * Notifies view about supposed editing mode - view can select appropriate from here.
-     * 
+     *
      * @param mode
      */
     void setEditMode(EditMode mode);
-
-    public E getValue();
 
     public boolean isDirty();
 
     /**
      * @param caught
-     * 
+     *
      * @return may return TRUE in case of processed event and no need to re-throw the exception further.
      *         FALSE - re-throws the exception (new UnrecoverableClientError(caught)).
      */

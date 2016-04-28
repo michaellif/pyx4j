@@ -23,25 +23,39 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.StringDebugId;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.meta.NavigNode;
 
 public class AppPlaceInfo {
+
+    private static I18n i18n = I18n.get(AppPlaceInfo.class);
 
     private final String navigLabel;
 
     private final String caption;
 
-    public String getNavigLabel() {
-        return navigLabel;
+    private final String captionPlural;
+
+    public AppPlaceInfo(String navigLabel, String caption, String captionPlural) {
+        this.navigLabel = navigLabel;
+        this.caption = caption;
+        this.captionPlural = captionPlural;
     }
 
     public String getCaption() {
+        return i18n.tr(caption);
+    }
+
+    public String getCaptionNL() {
         return caption;
     }
 
-    public AppPlaceInfo(String navigLabel, String caption) {
-        this.navigLabel = navigLabel != null && !navigLabel.equals("") ? navigLabel : null;
-        this.caption = caption != null && !caption.equals("") ? caption : null;
+    public String getCaptionPlural() {
+        return i18n.tr(captionPlural);
+    }
+
+    public String getNavigLabel() {
+        return i18n.tr(navigLabel);
     }
 
     public static String getPlaceId(Class<? extends Place> clazz) {

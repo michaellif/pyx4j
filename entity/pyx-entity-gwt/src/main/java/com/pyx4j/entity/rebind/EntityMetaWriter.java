@@ -116,15 +116,6 @@ public class EntityMetaWriter {
         }
     }
 
-    static String i18nEscapeSourceString(String value) {
-        String s = escapeSourceString(value);
-        if (s.equals("\"\"") || s.equals("null")) {
-            return s;
-        } else {
-            return "i18n.translate(null, " + s + ")";
-        }
-    }
-
     static int writeEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType)
             throws UnableToCompleteException {
 
@@ -226,13 +217,10 @@ public class EntityMetaWriter {
         writer.print(escapeSourceString(caption));
         writer.print(", ");
 
-        writer.print(i18nEscapeSourceString(caption));
+        writer.print(escapeSourceString(description));
         writer.print(", ");
 
-        writer.print(i18nEscapeSourceString(description));
-        writer.print(", ");
-
-        writer.print(i18nEscapeSourceString(watermark));
+        writer.print(escapeSourceString(watermark));
         writer.print(", ");
 
         writer.print(persistenceTransient.toString());
@@ -243,9 +231,9 @@ public class EntityMetaWriter {
 
         ToStringFormat toStringFormatAnnotation = contextHelper.getInheritedAnnotation(interfaceType, ToStringFormat.class);
         if (toStringFormatAnnotation != null) {
-            writer.print(i18nEscapeSourceString(toStringFormatAnnotation.value()));
+            writer.print(escapeSourceString(toStringFormatAnnotation.value()));
             writer.print(", ");
-            writer.print(i18nEscapeSourceString(toStringFormatAnnotation.nil()));
+            writer.print(escapeSourceString(toStringFormatAnnotation.nil()));
         } else {
             writer.print("null, \"\"");
         }
@@ -512,11 +500,9 @@ public class EntityMetaWriter {
             writer.print(", ");
             writer.print(escapeSourceString(memberCaption));
             writer.print(", ");
-            writer.print(i18nEscapeSourceString(memberCaption));
+            writer.print(escapeSourceString(memberDescription));
             writer.print(", ");
-            writer.print(i18nEscapeSourceString(memberDescription));
-            writer.print(", ");
-            writer.print(i18nEscapeSourceString(memberWatermark));
+            writer.print(escapeSourceString(memberWatermark));
             writer.println(", ");
             writer.indent();
 
@@ -620,9 +606,9 @@ public class EntityMetaWriter {
         writer.print(Boolean.valueOf(data.embedded).toString() + ", ");
         writer.print(Boolean.valueOf(indexed).toString() + ", ");
         writer.print(data.stringLength + ", ");
-        writer.print(i18nEscapeSourceString(data.format) + ", ");
+        writer.print(escapeSourceString(data.format) + ", ");
         writer.print(Boolean.valueOf(data.useMessageFormat).toString() + ", ");
-        writer.print(i18nEscapeSourceString(data.nullString) + ", ");
+        writer.print(escapeSourceString(data.nullString) + ", ");
         writer.print(Boolean.valueOf(data.isToStringMember).toString() + ", ");
         if (data.ownedConstraints.isEmpty()) {
             writer.print("null");

@@ -45,10 +45,9 @@ public abstract class AbstractPrimeViewerView<E extends IEntity> extends Abstrac
     }
 
     @Override
-    public void populate(E value) {
-        super.populate(value);
-
-        String caption = (getCaptionBase() + value.getStringView());
+    protected void updateCaption() {
+        E value = getValue();
+        String caption = (getEntityBaseName() + ": " + value.getStringView());
         if (value instanceof IVersionedEntity) {
             IVersionData<?> version = ((IVersionedEntity<?>) value).version();
 
@@ -64,12 +63,7 @@ public abstract class AbstractPrimeViewerView<E extends IEntity> extends Abstrac
             }
             caption = caption + ")";
         }
-
         setCaption(caption);
-    }
-
-    public E getValue() {
-        return getForm().getValue();
     }
 
 }

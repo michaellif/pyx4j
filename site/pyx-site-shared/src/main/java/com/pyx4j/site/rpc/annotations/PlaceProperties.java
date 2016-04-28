@@ -36,7 +36,13 @@ public @interface PlaceProperties {
     String caption() default I18nAnnotation.DEFAULT_VALUE;
 
     /**
-     * If not specified the navigLabel is taken from @PlaceProperties.caption
+     * If not specified the plural form of caption is automatically generated from caption plural form.
+     */
+    @I18n
+    String captionPlural() default I18nAnnotation.DEFAULT_VALUE;
+
+    /**
+     * If not specified the navigLabel is taken as plural from @PlaceProperties.captionPlural
      */
     @I18n
     String navigLabel() default I18nAnnotation.DEFAULT_VALUE;

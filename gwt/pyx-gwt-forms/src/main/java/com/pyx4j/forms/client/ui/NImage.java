@@ -25,19 +25,19 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.pyx4j.gwt.commons.ui.Image;
 
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
+import com.pyx4j.gwt.commons.ui.Image;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.ImageSlider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderDataProvider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
+import com.pyx4j.widgets.client.MenuBar;
 
 public class NImage extends NField<IFile<?>, ImageSlider, CImage, ImageSlider> {
 
@@ -104,7 +104,7 @@ public class NImage extends NField<IFile<?>, ImageSlider, CImage, ImageSlider> {
                 }
             });
         } else {
-            ButtonMenuBar editMenu = new ButtonMenuBar();
+            MenuBar editMenu = new MenuBar();
             editMenu.addItem(i18n.tr("Remove"), new Command() {
                 @Override
                 public void execute() {
