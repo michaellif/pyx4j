@@ -33,12 +33,13 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.entity.core.meta.OwnedConstraint;
 import com.pyx4j.entity.core.validator.Validator;
+import com.pyx4j.i18n.shared.I18n;
 
 public class ClientMemberMetaImpl implements MemberMeta {
 
-    private final String fieldName;
+    private static final I18n i18n = I18n.get(ClientMemberMetaImpl.class);
 
-    private final String captionNL;
+    private final String fieldName;
 
     private final String caption;
 
@@ -65,7 +66,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
     /**
      * Generic constructor
      */
-    public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, Class<?> valueClass,
+    public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
             @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
             boolean persistenceTransient, boolean rpcTransient, boolean logTransient, AttachLevel attachLevel, boolean ownedRelationships,
             boolean cascadePersist, boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat,
@@ -86,7 +87,6 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.indexed = indexed;
         this.data.objectClass = objectClass;
         this.data.objectClassType = objectClassType;
-        this.captionNL = captionNL;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
@@ -104,10 +104,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
         }
     }
 
-    public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, boolean indexed,
-            MemberMetaData data) {
+    public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, boolean indexed, MemberMetaData data) {
         this.fieldName = fieldName;
-        this.captionNL = captionNL;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
@@ -125,22 +123,22 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     @Override
     public String getCaption() {
-        return caption;
+        return i18n.tr(caption);
     }
 
     @Override
     public String getCaptionNL() {
-        return captionNL;
+        return caption;
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return i18n.tr(description);
     }
 
     @Override
     public String getWatermark() {
-        return watermark;
+        return i18n.tr(watermark);
     }
 
     @Override
@@ -239,6 +237,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public <T extends Annotation> T[] getAnnotations(Class<T> annotationClass) {
+        throw new UnsupportedOperationException();
+    }
+
     public void addAnnotation(Class<? extends Annotation> annotationClass) {
         if (annotations == null) {
             annotations = new HashSet<Class<?>>();
@@ -257,7 +260,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     @Override
     public String getFormat() {
-        return data.format;
+        return i18n.tr(data.format);
     }
 
     @Override
@@ -267,7 +270,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     @Override
     public String getNullString() {
-        return data.nullString;
+        return i18n.tr(data.nullString);
     }
 
     @Override

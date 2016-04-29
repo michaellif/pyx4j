@@ -249,6 +249,13 @@
                 <version>19.0</version>
             </dependency>
 
+            <!-- pluralizer/depluralizer -->
+            <dependency>
+                <groupId>org.atteo</groupId>
+                <artifactId>evo-inflector</artifactId>
+                <version>1.2</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-api-stubs</artifactId>
@@ -595,6 +602,12 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>3.13</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.googlecode.jatl</groupId>
+                <artifactId>jatl</artifactId>
+                <version>0.2.2</version>
             </dependency>
 
             <!-- use the latest version instead of one ref by poi -->

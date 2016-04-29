@@ -33,7 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.backoffice.ui.prime.form.IPrimeEditorView.IPrimeEditorPresenter;
 import com.pyx4j.site.client.ui.layout.LayoutSystem;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.MenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class AbstractPrimeEditorView<E extends IEntity> extends AbstractPrimeFormView<E, IPrimeEditorPresenter> implements IPrimeEditorView<E> {
@@ -130,7 +130,7 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
         enableButtons(false);
 
         if (value instanceof ILooseVersioning && value.getPrimaryKey() != null) {
-            ButtonMenuBar menu = btnSave.createMenu();
+            MenuBar menu = new MenuBar();
             menu.addItem(i18n.tr("Save as New Version"), new Command() {
                 @Override
                 public void execute() {
@@ -149,12 +149,16 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
         }
 
         if (EditMode.newItem.equals(mode)) {
-            // TODO VladS this needs do be reviewed and generalized
-            // There is also an option to add Plural forms to Lister Places
-            setCaption(getCaptionBase() + i18n.tr("New Item..."));
             getForm().setActiveFirstTab();
+        }
+    }
+
+    @Override
+    protected void updateCaption() {
+        if (EditMode.newItem.equals(mode)) {
+            setCaption(i18n.tr("New {0}", getEntityBaseName()));
         } else {
-            setCaption(getCaptionBase() + value.getStringView());
+            super.updateCaption();
         }
     }
 
@@ -174,11 +178,6 @@ public abstract class AbstractPrimeEditorView<E extends IEntity> extends Abstrac
     @Override
     public IPrimeEditorView.IPrimeEditorPresenter getPresenter() {
         return super.getPresenter();
-    }
-
-    @Override
-    public E getValue() {
-        return getForm().getValue();
     }
 
     @Override

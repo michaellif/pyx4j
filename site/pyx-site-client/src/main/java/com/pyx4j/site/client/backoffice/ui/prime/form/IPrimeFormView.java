@@ -36,6 +36,8 @@ public interface IPrimeFormView<E extends IEntity, PRESENTER extends IPrimeFormP
 
     boolean isPopulated();
 
+    public E getValue();
+
     void setActiveTab(int index);
 
     int getActiveTab();

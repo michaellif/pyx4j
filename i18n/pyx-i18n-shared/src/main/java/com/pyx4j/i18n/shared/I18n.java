@@ -50,18 +50,18 @@ public abstract class I18n {
     /**
      * Returns <code>text</code> translated into the currently selected
      * language.
-     * 
+     *
      * @param text
-     *            Dynamically obtained text to translate that is known to be extraced and in translation table.
+     *            Dynamically obtained text to translate that is known to be extracted and in translation table.
      * @return the translation
      */
     public abstract String translate(final String context, final String text);
 
     /**
      * Returns <code>text</code> not translated.
-     * 
+     *
      * This is marker function for text extraction
-     * 
+     *
      * @param text
      * @return original text
      */
@@ -73,7 +73,7 @@ public abstract class I18n {
      * Returns <code>text</code> translated into the currently selected
      * language. Every user-visible string in the program must be wrapped into
      * this function.
-     * 
+     *
      * @param text
      *            Constant text to translate
      * @return the translation
@@ -86,10 +86,10 @@ public abstract class I18n {
      * Returns <code>text</code> translated into the currently selected
      * language.
      * <p>
-     * Occurrences of {number} placeholders in text are replaced by <code>objects</code>.
+     * Occurrences of {number} placeholder in text are replaced by <code>objects</code>.
      * <p>
      * Invokes {@link SimpleMessageFormat#format(java.lang.String, java.lang.Object[])}.
-     * 
+     *
      * @param text
      *            text to translate
      * @param objects
@@ -102,7 +102,7 @@ public abstract class I18n {
 
     /**
      * Disambiguates translation keys.
-     * 
+     *
      * @param context
      *            the context of the text to be translated
      * @param text

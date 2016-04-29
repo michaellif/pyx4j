@@ -34,7 +34,7 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
 
     private PrimeEntityForm<E> form;
 
-    private String captionBase;
+    private String entityBaseName;
 
     private final VisibilityConcern controllerVisibilityConcern = new ControllerVisibilityConcern();
 
@@ -56,18 +56,30 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
     public void setPresenter(PRESENTER presenter) {
         super.setPresenter(presenter);
         if (presenter != null && presenter.getPlace() != null) {
-            setCaptionBase(AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() + ": ");
+            setEntityBaseName(AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption());
         } else {
-            setCaptionBase("");
+            setEntityBaseName("");
         }
     }
 
-    protected String getCaptionBase() {
-        return captionBase;
+    protected final String getEntityBaseName() {
+        return entityBaseName;
     }
 
+    protected final void setEntityBaseName(String captionBase) {
+        this.entityBaseName = captionBase;
+    }
+
+    /**
+     * @deprecated used setEntityBaseName
+     */
+    @Deprecated
     protected void setCaptionBase(String captionBase) {
-        this.captionBase = captionBase;
+        setEntityBaseName(captionBase);
+    }
+
+    protected void updateCaption() {
+        setCaption((getEntityBaseName() + ": " + getValue().getStringView()));
     }
 
     @Override
@@ -104,6 +116,7 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
         assert (form != null);
         form.populate(value);
         setSecurityContext(value);
+        updateCaption();
         onPopulate();
     }
 
@@ -127,6 +140,11 @@ public abstract class AbstractPrimeFormView<E extends IEntity, PRESENTER extends
     @Override
     public boolean isPopulated() {
         return (form == null) ? false : form.isPopulated();
+    }
+
+    @Override
+    public E getValue() {
+        return getForm().getValue();
     }
 
     @Override

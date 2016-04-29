@@ -22,7 +22,6 @@ package com.pyx4j.site.client.backoffice.ui.prime.lister;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.pyx4j.gwt.commons.ui.ScrollPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
@@ -30,6 +29,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.DataTableModelEvent;
 import com.pyx4j.forms.client.ui.datatable.DataTableModelListener;
+import com.pyx4j.gwt.commons.ui.ScrollPanel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.backoffice.ui.prime.AbstractPrimePaneView;
 import com.pyx4j.site.client.backoffice.ui.prime.lister.IPrimeListerView.IPrimeListerPresenter;
@@ -86,7 +86,7 @@ public class AbstractListerView<E extends IEntity> extends AbstractPrimePaneView
     @Override
     public void setPresenter(IPrimeListerView.IPrimeListerPresenter<E> presenter) {
         super.setPresenter(presenter);
-        setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
+        setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaptionPlural() : "");
     }
 
     /**
